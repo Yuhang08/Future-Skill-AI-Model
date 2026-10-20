@@ -1,0 +1,281 @@
+{
+  "project": "FutureSkill AI",
+  "historical_period": "2021-2025",
+  "forecast_period": "2026-2030",
+  "model_type": "Rule-based Scenario",
+  "geographic_scope": "Global",
+  "categories": [
+    {
+      "category": "AI & Data Science",
+      "historical_period": "2021-2025",
+      "historical_trend": "Growing",
+      "forecast_period": "2026-2030",
+      "future_trend": "Strong Growth",
+      "direction": "Increase",
+      "scenario_score": 2,
+      "major_drivers": [
+        "AI adoption",
+        "Big data demand",
+        "Digital transformation"
+      ],
+      "employment_impact": "More demand for AI and data skills",
+      "future_skills": [
+        "Python",
+        "Machine Learning",
+        "Statistics",
+        "Data Analysis"
+      ],
+      "example_careers": [
+        "AI Engineer",
+        "Data Scientist"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Software & IT",
+      "historical_period": "2021-2025",
+      "historical_trend": "Growing",
+      "forecast_period": "2026-2030",
+      "future_trend": "Growing",
+      "direction": "Increase",
+      "scenario_score": 1,
+      "major_drivers": [
+        "Digital transformation",
+        "AI-assisted development",
+        "Cloud computing"
+      ],
+      "employment_impact": "Routine coding changes; system skills grow",
+      "future_skills": [
+        "Programming",
+        "Cloud",
+        "System Design",
+        "AI Tools"
+      ],
+      "example_careers": [
+        "Software Developer",
+        "Cloud Engineer"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Cybersecurity",
+      "historical_period": "2021-2025",
+      "historical_trend": "Growing",
+      "forecast_period": "2026-2030",
+      "future_trend": "Strong Growth",
+      "direction": "Increase",
+      "scenario_score": 2,
+      "major_drivers": [
+        "Cyber threats",
+        "Data protection",
+        "AI security risks"
+      ],
+      "employment_impact": "Greater demand for security expertise",
+      "future_skills": [
+        "Cybersecurity",
+        "Networking",
+        "Risk Analysis",
+        "AI Security"
+      ],
+      "example_careers": [
+        "Security Analyst",
+        "Security Engineer"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Healthcare",
+      "historical_period": "2021-2025",
+      "historical_trend": "Growing",
+      "forecast_period": "2026-2030",
+      "future_trend": "Growing",
+      "direction": "Increase",
+      "scenario_score": 1,
+      "major_drivers": [
+        "Population ageing",
+        "Healthcare demand",
+        "Medical technology"
+      ],
+      "employment_impact": "More care demand and AI-assisted tasks",
+      "future_skills": [
+        "Clinical Knowledge",
+        "Communication",
+        "AI Literacy"
+      ],
+      "example_careers": [
+        "Nurse",
+        "Healthcare Specialist"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Education",
+      "historical_period": "2021-2025",
+      "historical_trend": "Transforming",
+      "forecast_period": "2026-2030",
+      "future_trend": "Growing",
+      "direction": "Increase",
+      "scenario_score": 1,
+      "major_drivers": [
+        "Education demand",
+        "Digital learning",
+        "AI-assisted teaching"
+      ],
+      "employment_impact": "Teaching roles increasingly use AI",
+      "future_skills": [
+        "Teaching",
+        "Digital Literacy",
+        "Critical Thinking"
+      ],
+      "example_careers": [
+        "Teacher",
+        "Education Specialist"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Engineering & Green Energy",
+      "historical_period": "2021-2025",
+      "historical_trend": "Growing",
+      "forecast_period": "2026-2030",
+      "future_trend": "Strong Growth",
+      "direction": "Increase",
+      "scenario_score": 2,
+      "major_drivers": [
+        "Green transition",
+        "Renewable energy investment",
+        "Infrastructure demand"
+      ],
+      "employment_impact": "More opportunities in energy engineering",
+      "future_skills": [
+        "Engineering",
+        "Sustainability",
+        "Energy Systems"
+      ],
+      "example_careers": [
+        "Environmental Engineer",
+        "Renewable Energy Engineer"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Business & Finance",
+      "historical_period": "2021-2025",
+      "historical_trend": "Transforming",
+      "forecast_period": "2026-2030",
+      "future_trend": "Mixed",
+      "direction": "Mixed / Uncertain",
+      "scenario_score": 0,
+      "major_drivers": [
+        "Fintech innovation",
+        "Process automation",
+        "Economic change"
+      ],
+      "employment_impact": "Routine finance tasks change",
+      "future_skills": [
+        "Financial Analysis",
+        "Fintech",
+        "Risk Management"
+      ],
+      "example_careers": [
+        "Financial Analyst",
+        "Bank Teller"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Sales & Customer Service",
+      "historical_period": "2021-2025",
+      "historical_trend": "Transforming",
+      "forecast_period": "2026-2030",
+      "future_trend": "Mixed",
+      "direction": "Mixed / Uncertain",
+      "scenario_score": 0,
+      "major_drivers": [
+        "E-commerce",
+        "AI customer service",
+        "Consumer demand"
+      ],
+      "employment_impact": "Routine service tasks become automated",
+      "future_skills": [
+        "Communication",
+        "Digital Marketing",
+        "CRM"
+      ],
+      "example_careers": [
+        "Salesperson",
+        "Customer Service Agent"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Manufacturing & Logistics",
+      "historical_period": "2021-2025",
+      "historical_trend": "Transforming",
+      "forecast_period": "2026-2030",
+      "future_trend": "Mixed",
+      "direction": "Mixed / Uncertain",
+      "scenario_score": 0,
+      "major_drivers": [
+        "Robotics",
+        "Supply chain restructuring",
+        "Delivery demand"
+      ],
+      "employment_impact": "Some routine tasks automated",
+      "future_skills": [
+        "Automation",
+        "Logistics",
+        "Technical Maintenance"
+      ],
+      "example_careers": [
+        "Factory Worker",
+        "Delivery Driver"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    },
+    {
+      "category": "Administrative & Clerical",
+      "historical_period": "2021-2025",
+      "historical_trend": "Automation Pressure",
+      "forecast_period": "2026-2030",
+      "future_trend": "Declining",
+      "direction": "Decrease",
+      "scenario_score": -1,
+      "major_drivers": [
+        "AI automation",
+        "Digital documents",
+        "Workflow software"
+      ],
+      "employment_impact": "Lower demand for repetitive clerical tasks",
+      "future_skills": [
+        "Digital Tools",
+        "Coordination",
+        "Communication"
+      ],
+      "example_careers": [
+        "Data Entry Clerk",
+        "Administrative Assistant"
+      ],
+      "model_type": "rule_based_scenario",
+      "forecast_is_quantitative": false
+    }
+  ],
+  "sources": [
+    "WEF Future of Jobs Report 2025"
+  ],
+  "limitations": [
+    "Historical labels are qualitative",
+    "Future outcomes are scenario estimates",
+    "No annual employment counts supplied",
+    "Country-specific results may differ"
+  ]
+}
