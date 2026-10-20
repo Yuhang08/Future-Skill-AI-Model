@@ -44,45 +44,48 @@ This problem statement is a hypothesis to validate, not a claim that all fresh g
 We shall develop a prototype that allows a fresh graduate to:
 
 S1- Enter their current skills manually or submit a CV through a tested and clearly explained workflow.
+
 S2- Review and correct the skills identified from their profile.
+
 S3- Select a target role from a small, curated set of roles with sourced skill requirements.
+
 S4- Compare their stated skills with the selected role's requirements.
+
 S5- View a prioritised reskilling roadmap with explanations and relevant learning resources.
+
 S6- See a concise explanation of the role's relevant SDG connection where a defensible link exists.
 
 Contribution of AI to the solution is also listed as shown:
 1. AI-assisted skill extraction and normalisation
-
 The system analyses a user's CV or manually entered experience to identify potential skills and map different expressions of similar skills to standardised skill categories. Users can review and correct the extracted profile before it is used for recommendations.
 
 2. Context-aware skill-gap analysis
-
 The system compares the user's reviewed skill profile with documented requirements for a selected career role. AI assists in interpreting related terminology and transferable skills, while transparent matching rules classify requirements as existing matches, potential gaps or uncertain. Each result is linked to the relevant role requirement.
 
 3. Personalised reskilling recommendations
-
 Based on identified gaps, the user's existing capabilities, preferred learning time and verified learning resources, AI helps construct an ordered learning roadmap. Each recommendation explains which skill gap it addresses and why the learning step is relevant. Time estimates are presented only where sufficient information supports them.
 
 4. Evidence-grounded career and SDG explanations
-
 The platform provides concise explanations of how a selected role relates to relevant UN Sustainable Development Goal targets. AI may assist with explanation, but the mapping is constrained by predefined target information and supporting evidence rather than generated freely.
 
 5. Optional labour-market trend summaries
-
 If time and reliable data permit, the platform may summarise published reports and dated job-skill information to show reported changes in demand. These summaries will distinguish observed data and published projections from speculative scenarios; the prototype will not claim validated future-job predictions without an appropriate forecasting method and evidence.
 
 AI implementation principle
 The platform uses a hybrid approach: AI interprets unstructured information and generates contextual explanations, while curated data and transparent rules anchor role requirements, skill-gap classifications, learning resources and SDG mappings. This makes recommendations more traceable and reduces unsupported claims. The platform is intended to support career planning and learning decisions, not guarantee employment or replace professional career advice.
 
-The preliminary prototype will focus on transparent skill matching and learning guidance. It will not claim to predict future employment, guarantee job placement, or measure job satisfaction.
-
 ### Key Features
 
 F1. Curated Skills and Job Dataset: A small, sourced set of target roles and their stated skill requirements.
+
 F2. Personal Skill Profile: Manual skill entry or a tested CV-input flow with user review.
+
 F3. Skill Gap Analysis: Transparent comparison of the user's stated skills with the selected role's requirements.
+
 F4. Personalised Reskilling Roadmap: Prioritised learning steps and relevant resources based on the identified gaps.
+
 F5. Explainable Recommendations: A clear explanation of the criteria behind each gap and recommendation.
+
 F6. Relevant SDG Mapping: A short, justified mapping to relevant SDG targets where appropriate.
 
 ### Tech Stack
