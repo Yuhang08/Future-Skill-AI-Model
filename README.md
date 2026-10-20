@@ -49,7 +49,7 @@ S3- Select a target role from a small, curated set of roles with sourced skill r
 S4- Compare their stated skills with the selected role's requirements.
 S5- View a prioritised reskilling roadmap with explanations and relevant learning resources.
 S6- See a concise explanation of the role's relevant SDG connection where a defensible link exists.
----------------------------------------------------------------------------------------------------------------
+
 Contribution of AI to the solution is also listed as shown:
 1. AI-assisted skill extraction and normalisation
 
@@ -72,9 +72,8 @@ The platform provides concise explanations of how a selected role relates to rel
 If time and reliable data permit, the platform may summarise published reports and dated job-skill information to show reported changes in demand. These summaries will distinguish observed data and published projections from speculative scenarios; the prototype will not claim validated future-job predictions without an appropriate forecasting method and evidence.
 
 AI implementation principle
-
 The platform uses a hybrid approach: AI interprets unstructured information and generates contextual explanations, while curated data and transparent rules anchor role requirements, skill-gap classifications, learning resources and SDG mappings. This makes recommendations more traceable and reduces unsupported claims. The platform is intended to support career planning and learning decisions, not guarantee employment or replace professional career advice.
----------------------------------------------------------------------------------------------------------------
+
 The preliminary prototype will focus on transparent skill matching and learning guidance. It will not claim to predict future employment, guarantee job placement, or measure job satisfaction.
 
 ### Key Features
