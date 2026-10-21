@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FutureSkill AI | AI Trend Explorer</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #edf3fa;
+    color: #18364b;
+}
+
+header {
+    background: #123447;
+    padding: 22px 6%;
+}
+
+header a {
+    color: #9de4da;
+    text-decoration: none;
+}
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+h1 { font-size: 36px; }
+
+.subtitle {
+    color: #64748b;
+    line-height: 1.7;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin: 28px 0;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 28px #102a4310;
+}
+
+.stat {
+    color: white;
+    background: linear-gradient(135deg,#2468db,#56a3fb);
+}
+
+.stat:nth-child(2) {
+    background: linear-gradient(135deg,#7046c8,#af84f0);
+}
+
+.number {
+    font-size: 35px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+th {
+    background: #e7f0ff;
+    color: #275fc0;
+}
+
+pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    max-height: 350px;
+    overflow-y: auto;
+    font-size: 12px;
+}
+
+@media(max-width:650px) {
+    .stats { grid-template-columns: 1fr; }
+}
+
+/* =====================================
+   AI TREND RESEARCH CARDS
+===================================== */
+
+.report-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        3, minmax(0, 1fr)
+    );
+    gap: 18px;
+    margin-top: 25px;
+}
+
+/* Research card */
+
+.report-item {
+    background: linear-gradient(
+        145deg, #ffffff, #edf5ff
+    );
+
+    border: 1px solid #dce8f7;
+    border-radius: 18px;
+
+    padding: 24px;
+    min-height: 160px;
+
+    box-shadow: 0 6px 20px rgba(25, 70, 120, 0.07);
+
+    transition: 0.3s ease;
+}
+
+/* Card heading */
+
+.report-item h3 {
+    color: #2768cc;
+    font-size: 17px;
+    margin: 0 0 15px;
+}
+
+/* Card text */
+
+.report-item p {
+    color: #31495d;
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Hover animation */
+
+.report-item:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 15px 30px rgba(25, 70, 120, 0.14);
+
+    border-color: #3578e5;
+}
+
+/* Mobile */
+
+@media (max-width: 750px) {
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="/">← Back to FutureSkill AI</a>
+</header>
+
+<main>
+
+    <h1>📈 AI Career Trend Explorer</h1>
+
+    <p class="subtitle">
+        Explore historical AI development and
+        scenario-based future career trends.
+    </p>
+
+    <p id="status">Loading AI Trend data...</p>
+
+    <div class="stats">
+
+        <div class="card stat">
+            <div>Career Data Records</div>
+            <div class="number" id="records">—</div>
+        </div>
+
+        <div class="card stat">
+            <div>Dataset Columns</div>
+            <div class="number" id="columns">—</div>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h2>Career Trend Data</h2>
+
+        <div class="table-wrap">
+            <table id="trendTable"></table>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top:25px">
+        <h2>AI Trend Research Report</h2>
+        <div id="report" class="report-grid"></div>
+    </div>
+
+    <p class="subtitle">
+        Trend projections are not guaranteed
+        employment outcomes.
+    </p>
+
+</main>
+
+<script>
+async function loadTrends() {
+
+    const status = document.getElementById("status");
+
+    try {
+
+        const response = await fetch("/api/ai-trends");
+
+        if (!response.ok) {
+            throw new Error(
+                "Could not load AI trend data"
+            );
+        }
+
+        const data = await response.json();
+
+        const rows = data.rows || [];
+        const columns = data.columns || [];
+
+        document.getElementById("records")
+            .textContent = rows.length;
+
+        document.getElementById("columns")
+            .textContent = columns.length;
+
+        const table = document.getElementById(
+            "trendTable"
+        );
+
+        table.replaceChildren();
+
+        const headerRow = document.createElement("tr");
+
+        columns.forEach(column => {
+
+            const th = document.createElement("th");
+            th.textContent = column;
+            headerRow.appendChild(th);
+
+        });
+
+        table.appendChild(headerRow);
+
+        rows.slice(0, 100).forEach(row => {
+
+            const tr = document.createElement("tr");
+
+            columns.forEach(column => {
+
+                const td = document.createElement("td");
+
+                td.textContent =
+                    row[column] ?? "";
+
+                tr.appendChild(td);
+
+            });
+
+            table.appendChild(tr);
+
+        });
+
+        if (rows.length === 0) {
+            const note = document.createElement("p");
+            note.textContent =
+                "No CSV records found.";
+            table.replaceWith(note);
+        }
+
+
+const report = data.report || {};
+const history = report.historical_trends || {};
+
+const container = document.getElementById("report");
+container.replaceChildren();
+
+function addCard(title, value) {
+    const card = document.createElement("div");
+    card.className = "report-item";
+
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+
+    const content = document.createElement("p");
+    content.textContent = String(value ?? "N/A");
+
+    card.appendChild(heading);
+    card.appendChild(content);
+    container.appendChild(card);
+}
+
+addCard("Research Period", history.period);
+
+addCard(
+    "AI Adoption Change",
+    history.total_change_percentage_points != null
+        ? history.total_change_percentage_points +
+          " percentage points"
+        : "N/A"
+);
+
+const annualData = history.annual_data || [];
+
+annualData.forEach(item => {
+    addCard(
+        `${item.year} — ${item.stage || "AI Trend"}`,
+        item.main_change || "No description available"
+    );
+});
+
+if (history.source) {
+    addCard("Research Sources", history.source);
+}
+
+        status.textContent =
+            "AI Trend data loaded successfully.";
+
+    } catch (error) {
+
+        status.textContent =
+            "Error: " + error.message;
+
+    }
+}
+
+loadTrends();
+</script>
+
+</body>
+</html>

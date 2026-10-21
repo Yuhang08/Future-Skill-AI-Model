@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FutureSkill AI | SDG Impact Map</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #edf4f7;
+    color: #153444;
+}
+
+header {
+    padding: 22px 6%;
+    background: #123447;
+    color: white;
+}
+
+header a {
+    color: #91e5ce;
+    text-decoration: none;
+}
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+h1 { margin-bottom: 8px; }
+
+.subtitle { color: #64748b; }
+
+.controls {
+    display: flex;
+    gap: 12px;
+    margin: 25px 0;
+    flex-wrap: wrap;
+}
+
+input {
+    flex: 1;
+    min-width: 200px;
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 16px;
+}
+
+button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 12px;
+    padding: 14px 22px;
+    background: #119b80;
+    color: white;
+    font-weight: bold;
+}
+
+.stage {
+    position: relative;
+    height: 570px;
+    background: radial-gradient(
+        circle at center,
+        #ffffff,
+        #e0f2f1
+    );
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px #15344418;
+}
+
+.lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 195px;
+    min-height: 120px;
+    background: #123f4a;
+    color: white;
+    border-radius: 22px;
+    padding: 20px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 10px 30px #123f4a38;
+}
+
+.goal {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 185px;
+    min-height: 135px;
+    padding: 16px;
+    border: 0;
+    border-radius: 18px;
+    color: white;
+    text-align: left;
+    box-shadow: 0 10px 25px #102a4325;
+    transition: transform .2s;
+}
+
+.goal:hover {
+    transform: translate(-50%, -50%) scale(1.07);
+}
+
+.goal strong {
+    display: block;
+    font-size: 29px;
+    margin-bottom: 7px;
+}
+
+.goal small {
+    display: block;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+.skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.skill {
+    font-size: 10px;
+    padding: 5px 7px;
+    border-radius: 7px;
+    background: #ffffff30;
+}
+
+.details {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+#message { color: #64748b; }
+
+@media(max-width:720px) {
+    .stage {
+        height: auto;
+        min-height: 350px;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .center, .goal {
+        position: static;
+        transform: none !important;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .lines { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="/">← Back to FutureSkill AI</a>
+</header>
+
+<main>
+    <h1>🌍 Career Impact Mind Map</h1>
+    <p class="subtitle">
+        Discover how your career connects to the
+        17 UN Sustainable Development Goals.
+    </p>
+
+    <div class="controls">
+        <input
+            id="careerInput"
+            placeholder="Enter a career"
+            value="Environmental Engineer"
+        >
+        <button onclick="generateMap()">
+            Generate Mind Map ✦
+        </button>
+    </div>
+
+    <p id="message" role="status"></p>
+
+    <div class="stage" id="mindmap"></div>
+
+    <section class="details" id="details">
+        Select an SDG node to explore its potential impact.
+    </section>
+
+    <p class="subtitle">
+        SDG links are illustrative, not verified social impact.
+    </p>
+</main>
+
+<script>
+let lastData = null;
+
+async function generateMap() {
+
+    const career = document.getElementById(
+        "careerInput"
+    ).value.trim();
+
+    const message = document.getElementById("message");
+
+    if (!career) {
+        message.textContent = "Please enter a career.";
+        return;
+    }
+
+    message.textContent = "Generating mind map...";
+
+    try {
+        const response = await fetch(
+            "/api/sdg/mindmap",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    title: career,
+                    skills: {
+                        MathSkill: 4,
+                        CodingSkill: 4,
+                        DataSkill: 5,
+                        CommunicationSkill: 3,
+                        LeadershipSkill: 3,
+                        CreativeSkill: 4
+                    }
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                typeof data.detail === "string"
+                    ? data.detail
+                    : "Unable to generate map"
+            );
+        }
+
+        lastData = data;
+        renderMap(data);
+        message.textContent = "Mind map generated.";
+
+    } catch (error) {
+        message.textContent = "Error: " + error.message;
+    }
+}
+
+function renderMap(data) {
+
+    const area = document.getElementById("mindmap");
+    const details = document.getElementById("details");
+
+    area.replaceChildren();
+    details.textContent =
+        "Select a coloured SDG node to view its impact.";
+
+    const svg = document.createElementNS(
+        "http://www.w3.org/2000/svg", "svg"
+    );
+
+    svg.classList.add("lines");
+    area.appendChild(svg);
+
+    const center = document.createElement("div");
+    center.className = "center";
+    center.textContent = data.career;
+    area.appendChild(center);
+
+    const goals = data.goals || [];
+
+    goals.forEach((goal, index) => {
+
+        const angle =
+            -Math.PI / 2 +
+            (2 * Math.PI * index / goals.length);
+
+        const x = 50 + 34 * Math.cos(angle);
+        const y = 50 + 34 * Math.sin(angle);
+
+        const node = document.createElement("button");
+        node.className = "goal";
+        node.style.background = goal.color;
+        node.style.left = x + "%";
+        node.style.top = y + "%";
+
+        const number = document.createElement("strong");
+        number.textContent = goal.id;
+
+        const name = document.createElement("small");
+        name.textContent = goal.name;
+
+        node.appendChild(number);
+        node.appendChild(name);
+
+        const skillBox = document.createElement("div");
+        skillBox.className = "skills";
+
+        (data.skills || []).forEach(skill => {
+
+            const related = skill.sdgs.some(
+                g => g.id === goal.id
+            );
+
+            if (related) {
+                const tag = document.createElement("span");
+                tag.className = "skill";
+                tag.textContent =
+                    skill.skill.replace("Skill", "");
+                skillBox.appendChild(tag);
+            }
+        });
+
+        node.appendChild(skillBox);
+
+        node.onclick = () => {
+
+            details.replaceChildren();
+
+            const title = document.createElement("h2");
+            title.textContent =
+                "SDG " + goal.id + ": " + goal.name;
+
+            const desc = document.createElement("p");
+            desc.textContent = goal.reason;
+
+            const link = document.createElement("a");
+            link.href = goal.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = "Explore the UN Goal ↗";
+
+            details.append(title, desc, link);
+
+            if (goal.provisional) {
+                const warning = document.createElement("p");
+                warning.textContent =
+                    "Provisional mapping: review needed.";
+                details.appendChild(warning);
+            }
+        };
+
+        area.appendChild(node);
+    });
+
+    // SVG lines connecting career to SDGs
+    function drawLines() {
+
+        svg.replaceChildren();
+
+        if (window.innerWidth <= 720) return;
+
+        const width = area.clientWidth;
+        const height = area.clientHeight;
+
+        svg.setAttribute(
+            "viewBox", `0 0 ${width} ${height}`
+        );
+
+        goals.forEach((goal, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                (2 * Math.PI * index / goals.length);
+
+            const x = width * (
+                0.5 + 0.34 * Math.cos(angle)
+            );
+
+            const y = height * (
+                0.5 + 0.34 * Math.sin(angle)
+            );
+
+            const line = document.createElementNS(
+                "http://www.w3.org/2000/svg", "line"
+            );
+
+            line.setAttribute("x1", width / 2);
+            line.setAttribute("y1", height / 2);
+            line.setAttribute("x2", x);
+            line.setAttribute("y2", y);
+            line.setAttribute("stroke", goal.color);
+            line.setAttribute("stroke-width", "4");
+            line.setAttribute("stroke-opacity", "0.65");
+
+            svg.appendChild(line);
+        });
+    }
+
+    drawLines();
+}
+
+window.addEventListener("resize", () => {
+    if (lastData) renderMap(lastData);
+});
+
+// Show a sample career on page load
+generateMap();
+</script>
+
+</body>
+</html>
