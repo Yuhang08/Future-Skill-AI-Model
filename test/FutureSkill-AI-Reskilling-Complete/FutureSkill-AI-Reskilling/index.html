@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101f23">
+  <meta name="description" content="FutureSkill AI — build a flexible, personalised learning roadmap with a growing tree of progress.">
+  <title>FutureSkill AI · Grow your next chapter</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="FutureSkill AI home">
+        <span class="brand-icon">✳</span>
+        <span>FutureSkill<span class="brand-green">AI</span></span>
+      </a>
+      <div class="header-right"><span class="tiny-label">PERSONALISED RESKILLING STUDIO</span><span class="status-dot" title="Local demo"></span></div>
+    </header>
+
+    <main>
+      <section id="hero" class="hero-section">
+        <div class="hero-copy">
+          <span class="eyebrow"><span class="dot"></span> YOUR FUTURE IS A SKILL YOU CAN GROW</span>
+          <h1>Don't just plan your future.<br><em>Grow into it.</em></h1>
+          <p>Discover your skill gaps, build an achievable weekly learning plan, and grow a digital tree with every step forward.</p>
+          <div class="hero-tags"><span>✦ Your pace</span><span>✦ Real objectives</span><span>✦ Flexible planning</span></div>
+        </div>
+        <div class="hero-illustration" aria-hidden="true">
+          <div class="orbit orbit-outer"></div><div class="orbit orbit-inner"></div>
+          <div class="hero-spark spark-a">✦</div><div class="hero-spark spark-b">✧</div>
+          <div class="hero-tree">🌳</div>
+          <span class="hero-bubble bubble-one">+ Skills</span><span class="hero-bubble bubble-two">+ Growth</span>
+        </div>
+      </section>
+
+      <section id="questionnaire" class="panel assessment-panel" hidden>
+        <div class="section-title-row"><div><span class="section-eyebrow">01 — GETTING TO KNOW YOU</span><h2>Build your learning profile</h2></div><div class="heading-actions"><button type="button" class="btn btn-ghost" id="cancelEdit" hidden>← Return to dashboard</button><span class="pill">About 2–3 minutes</span></div></div>
+        <div class="steps" role="tablist" aria-label="Questionnaire steps">
+          <button type="button" class="step-label active" data-go-step="0">1 <span>About you</span></button>
+          <div class="step-connector"></div>
+          <button type="button" class="step-label" data-go-step="1">2 <span>Your skills</span></button>
+          <div class="step-connector"></div>
+          <button type="button" class="step-label" data-go-step="2">3 <span>Your schedule</span></button>
+        </div>
+        <form id="assessmentForm" novalidate>
+          <div class="step-panel" data-step="0">
+            <div class="field-grid">
+              <div class="field"><label for="userType">Which best describes you?</label><select id="userType" required><option value="student">Student / fresh graduate</option><option value="employed">Currently employed</option><option value="career_changer">Planning a career change</option><option value="returning">Returning to work or learning</option></select></div>
+              <div class="field"><label for="industry">Your current industry or community <span class="optional">optional</span></label><input id="industry" maxlength="80" placeholder="e.g. Education, Retail, Technology"></div>
+              <div class="field"><label for="experience">Your general experience</label><select id="experience"><option value="beginner">Beginner</option><option value="some">Some practical experience</option><option value="experienced">Experienced learner</option></select></div>
+              <div class="field"><label for="targetCareer">Your target career</label><select id="targetCareer" required></select></div>
+            </div>
+            <div class="field"><label for="personalGoal">What would you like to achieve? <span class="optional">optional</span></label><textarea id="personalGoal" maxlength="200" rows="3" placeholder="e.g. Build my first data analysis portfolio project"></textarea></div>
+          </div>
+
+          <div class="step-panel" data-step="1" hidden>
+            <div class="insight-box">Rate each skill from <b>0 = haven't learned it yet</b> to <b>5 = very confident</b>. This is a self-assessment, not a verified test.</div>
+            <div id="skillsForm" class="skill-inputs"></div>
+          </div>
+
+          <div class="step-panel" data-step="2" hidden>
+            <div class="field-grid">
+              <div class="field"><label for="weeklyHours">How many hours can you study per week?</label><div class="range-row"><input id="weeklyHours" type="range" min="1" max="40" step="1" value="6"><output id="weeklyHoursOutput" class="range-output">6 hours</output></div><p class="field-hint">20% is reserved for review and catch-up.</p></div>
+              <div class="field"><label for="targetWeeks">How many weeks do you want to plan?</label><input id="targetWeeks" type="number" min="1" max="52" value="8" required><p class="field-hint">You can change this anytime.</p></div>
+            </div>
+            <div class="field"><span class="field-label">Which days work best for you?</span><div class="day-selector" id="preferredDays"></div></div>
+            <div class="field"><label for="learningStyle">How do you like to learn?</label><select id="learningStyle"><option value="project">Hands-on projects</option><option value="video">Video tutorials + practice</option><option value="reading">Reading + practice</option></select></div>
+          </div>
+          <div class="form-footer"><button type="button" class="btn btn-ghost" id="prevStep" hidden>← Back</button><span id="formError" class="form-error" role="alert"></span><button type="button" class="btn btn-primary" id="nextStep">Continue →</button><button type="submit" class="btn btn-primary" id="submitPlan" hidden>✦ Generate my pathway</button></div>
+        </form>
+      </section>
+
+      <section id="dashboard" class="dashboard" hidden>
+        <div class="dashboard-heading"><div><span class="section-eyebrow">YOUR PERSONALISED LEARNING SPACE</span><h2>Your pathway to <span id="careerName">new skills</span></h2><p id="dashboardIntro" class="muted"></p></div><div class="heading-actions"><button type="button" class="btn btn-outline" id="editProfile">✎ Edit assessment</button></div></div>
+        <div class="stats-grid">
+          <div class="stat-card"><span class="stat-icon">◎</span><span class="stat-label">Study hours completed</span><strong id="hoursStat">0 / 0 h</strong><span class="stat-note">Estimated practice hours</span></div>
+          <div class="stat-card"><span class="stat-icon">☑</span><span class="stat-label">Tasks completed</span><strong id="tasksStat">0 / 0</strong><span class="stat-note">Your active pathway</span></div>
+          <div class="stat-card"><span class="stat-icon">◷</span><span class="stat-label">Your weekly learning time</span><strong id="weekStat">6 h</strong><span class="stat-note">Includes flexible review time</span></div>
+          <div class="stat-card"><span class="stat-icon">✧</span><span class="stat-label">Growth points</span><strong id="pointsStat">0 XP</strong><span class="stat-note">Celebrating completed effort</span></div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dashboard-main">
+            <section class="panel card-section" id="gapsSection">
+              <div class="card-header"><div><span class="section-eyebrow">02 — KNOW YOUR STARTING POINT</span><h3>Your skill gaps</h3></div><span class="pill soft">Self-rated</span></div>
+              <div class="insight-box small">A gap is the difference between your self-rated level and the example career target. Study hours alone do not verify mastery.</div>
+              <div id="gapList" class="gaps-list"></div>
+            </section>
+            <section class="panel card-section" id="pathwaySection">
+              <div class="card-header"><div><span class="section-eyebrow">03 — TAKE THE NEXT STEP</span><h3>Weekly learning plan</h3></div><span id="planDuration" class="pill soft">8 weeks</span></div>
+              <div id="planNote" class="plan-note"></div>
+              <div class="progress-label"><span>Planned practice completed</span><strong id="overallProgressText">0%</strong></div>
+              <div class="progress-track large"><div id="overallProgress" class="progress-fill" style="width:0%"></div></div>
+              <p class="field-hint">Progress measures completed scheduled practice hours, not proven proficiency.</p>
+              <div class="week-bar"><label for="weekSelect">View learning week</label><select id="weekSelect"></select></div>
+              <div id="todoList" class="todo-list"></div>
+              <div id="emptyTasks" class="empty-state" hidden>🎉 All planned tasks are completed — consider a practice project or skill reassessment.</div>
+              <h4 class="recent-heading">Completed wins <span id="winsCount" class="subtle-count"></span></h4>
+              <div id="completedWins" class="completed-wins"></div>
+            </section>
+          </div>
+          <aside class="dashboard-side">
+            <section class="panel tree-card">
+              <span class="section-eyebrow">YOUR LEARNING GARDEN</span><h3>Grow with every step 🌿</h3>
+              <div class="tree-scene"><div class="tree-glow"></div><div id="treeEmoji" class="tree-emoji" role="img" aria-label="Your learning tree">🌰</div><div class="tree-ground"></div></div>
+              <div class="tree-level"><strong id="treeName">Seed</strong><span id="treePoints">0 XP</span></div>
+              <div class="progress-track"><div id="treeProgress" class="progress-fill" style="width:0%"></div></div>
+              <p id="treeNext" class="muted tiny"></p><p id="treeMessage" class="tree-encouragement"></p>
+              <div class="privacy-tip">🌼 Your tree never wilts when you take a break. Growth celebrates effort, not perfect streaks.</div>
+            </section>
+            <section class="panel replan-card">
+              <span class="section-eyebrow">FLEXIBLE BY DESIGN</span><h3>Adjust your schedule</h3><p class="muted tiny">Busy week? Shift your unfinished tasks without losing completed work or your learning tree.</p>
+              <form id="replanForm"><div class="field"><label for="replanHours">Hours per week</label><input id="replanHours" type="number" min="1" max="40" step="0.5" required></div><div class="field"><label for="replanWeeks">Weeks to schedule from today</label><input id="replanWeeks" type="number" min="1" max="52" required></div><div class="field"><span class="field-label">Study days</span><div id="replanDays" class="day-selector compact"></div></div><button class="btn btn-primary full" type="submit">↻ Rebuild my timetable</button></form>
+            </section>
+            <section class="panel clarity-card"><span class="section-eyebrow">HOW IT WORKS</span><h3>Why these tasks?</h3><p>Your plan prioritises larger and more important skill gaps, then respects foundational prerequisites. It leaves room for review and can adapt when your availability changes.</p><p class="tiny muted">Career requirements and learning-time estimates in this demo are illustrative. Photos are evidence uploads, not automatically verified skill assessments.</p></section>
+          </aside>
+        </div>
+      </section>
+      <section class="footer-note"><span>✳ FutureSkill AI</span><span>Prototype • Skill growth, not job security guarantees • Local browser-session data</span></section>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
