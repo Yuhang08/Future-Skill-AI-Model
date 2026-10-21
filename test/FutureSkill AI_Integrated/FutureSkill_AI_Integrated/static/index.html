@@ -8,6 +8,8 @@
 
 <title>FutureSkill AI | Discover Your Future</title>
 
+
+
 <style>
 
 /* =====================================
@@ -341,6 +343,140 @@ button:disabled {
 
 }
 
+/* ====================================
+   COLOURFUL FEATURE CARDS
+==================================== */
+
+/* Three cards in one row */
+
+.extra-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(225px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+    margin-bottom: 40px;
+    padding: 10px 4px 20px;
+    overflow-x: auto;
+}
+
+/* Main card design */
+
+.extra-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    min-height: 260px;
+    padding: 28px 24px;
+
+    border-radius: 22px;
+    border: none;
+    text-decoration: none;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+
+    transition: transform 0.3s ease,
+                box-shadow 0.3s ease;
+
+    overflow: hidden;
+}
+
+/* BLUE - AI TREND */
+
+.extra-card:nth-child(1) {
+    background: linear-gradient(
+        135deg, #2468db, #56a3fb
+    );
+}
+
+/* PURPLE - UNCERTAINTY */
+
+.extra-card:nth-child(2) {
+    background: linear-gradient(
+        135deg, #7046c8, #af84f0
+    );
+}
+
+/* GREEN - SDG */
+
+.extra-card:nth-child(3) {
+    background: linear-gradient(
+        135deg, #087d70, #35b88e
+    );
+}
+
+/* Remove older decorative circle */
+
+.extra-card::before {
+    display: none;
+}
+
+/* Card heading */
+
+.extra-card h3 {
+    color: white;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 12px 0;
+}
+
+/* Card description */
+
+.extra-card p {
+    color: rgba(255,255,255,0.9);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0 0 25px;
+}
+
+/* Explore label */
+
+.extra-card span {
+    margin-top: auto;
+    align-self: flex-start;
+
+    background: rgba(255,255,255,0.2);
+    color: white;
+
+    padding: 11px 18px;
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+/* Hover animation */
+
+.extra-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+}
+
+.extra-card:hover span {
+    background: white;
+    color: #17374b;
+    transform: translateX(4px);
+}
+
+.extra-card:focus-visible {
+    outline: 3px solid #17374b;
+    outline-offset: 3px;
+}
+
+/* Small screens: remain in one row,
+   users can scroll horizontally */
+
+@media (max-width: 750px) {
+    .extra-features {
+        grid-template-columns: repeat(3, 235px);
+        overflow-x: auto;
+    }
+}
+
+
 </style>
 </head>
 
@@ -420,6 +556,32 @@ button:disabled {
         </div>
 
     </div>
+
+<!-- EXTRA FEATURES SECTION -->
+
+<h2>Explore More Features</h2>
+
+<div class="extra-features">
+
+    <a href="/ai-trend" class="extra-card">
+        <h3>📈 AI Trend Explorer</h3>
+        <p>Explore past and future career trends.</p>
+        <span>Explore →</span>
+    </a>
+
+    <a href="/uncertainty" class="extra-card">
+        <h3>📊 AI Uncertainty Lab</h3>
+        <p>Explore different employment scenarios.</p>
+        <span>Explore →</span>
+    </a>
+
+    <a href="/sdg-impact" class="extra-card">
+        <h3>🌍 SDG Impact Map</h3>
+        <p>Visualise your career's SDG impact.</p>
+        <span>Explore →</span>
+    </a>
+
+</div>
 
 </section>
 
