@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FutureSkill AI | Uncertainty Lab</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#e6edf7;background:#0b1020}body{margin:0;padding:25px}main{max-width:1150px;margin:auto}h1{margin-bottom:4px}p{color:#a9b6ca}section{background:#161e30;border:1px solid #34405a;padding:20px;border-radius:16px;margin-top:20px}select,button,input{font:inherit}select,button{background:#24324d;color:white;border:1px solid #53617a;padding:10px;border-radius:8px}button{cursor:pointer}button:hover{background:#334666}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}label{display:block;color:#d3dcef;font-size:14px}input[type=range]{width:100%}.metric{font-size:32px;font-weight:bold;color:#7ed8b0}.small{font-size:13px}.chartbox{height:320px}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:10px;border-bottom:1px solid #354058}th{color:#b5c5dc}.note{background:#2b2943;padding:14px;border-radius:10px;color:#ded8ff}
+</style></head><body><main>
+<h1>FutureSkill AI — Uncertainty Lab</h1><p>独立于 RIASEC · 六个综合情境 · 全国就业率与职业人数增长率</p>
+<section><label for="preset">选择综合情境 / Combined Scenario</label><p><select id="preset"></select></p>
+<div class="controls" id="controls"></div>
+<p><button id="run">运行模拟 / Simulate</button> <button id="compare">比较六种情境 / Compare all</button></p></section>
+<section><h2>全国就业人口比率 / Employment-to-Population Ratio</h2><p>2031 年模拟结果：<span class="metric" id="result">—</span></p><div class="chartbox"><canvas id="chart"></canvas></div></section>
+<section><h2>职业就业人数年增长率 / Occupational Headcount Growth</h2><div id="jobs"></div></section>
+<section class="note"><b>研究限制</b>：68.9% 是可修改的演示基准值；所有系数和情境参数均为人工假设，并非以就业数据校准的预测。全国就业率与各职业人数增长率是不同指标；AI 目标错位强度也不是其发生概率。运行正式研究前应核实同一口径的历史数据、估计系数并评估误差。</section>
+</main>
+<script>
+let models=null, chart=null;
+const descriptors={ai_growth:'AI 发展速度',automation:'自动化强度',adaptation:'劳动力适应能力',economy:'经济环境',alignment:'AI 目标错位严重程度',other_factors:'人口/政策等其他条件'};
+let selected='A';
+const preset=document.getElementById('preset'), controls=document.getElementById('controls');
+function makeControls(s){controls.innerHTML='';Object.entries(descriptors).forEach(([k,label])=>{let div=document.createElement('div');div.innerHTML=`<label>${label}：<strong id="v_${k}">${s[k]}</strong>/100</label><input type="range" min="0" max="100" step="5" value="${s[k]}" id="${k}">`;controls.appendChild(div);div.querySelector('input').oninput=e=>document.getElementById('v_'+k).textContent=e.target.value;});}
+function values(){return Object.fromEntries(Object.keys(descriptors).map(k=>[k,Number(document.getElementById(k).value)]));}
+function render(series,jobs){let first=series[0], last=Object.values(first.data).at(-1);document.getElementById('result').textContent=series.length===1?last.toFixed(2)+'%':'多情境比较';
+let years=Object.keys(first.data);if(chart) chart.destroy(); chart=new Chart(document.getElementById('chart'),{type:'line',data:{labels:years,datasets:series.map((x,i)=>({label:x.label,data:Object.values(x.data),borderWidth:3,tension:.2}))},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'就业人口比率 (%)'}}}}});
+const rows=Object.entries(jobs).sort((a,b)=>b[1]-a[1]);document.getElementById('jobs').innerHTML='<table><thead><tr><th>职业</th><th>假设年增长率</th></tr></thead><tbody>'+rows.map(([j,g])=>`<tr><td>${j}</td><td>${g>0?'+':''}${g.toFixed(2)}%</td></tr>`).join('')+'</tbody></table>';
+}
+async function run(){const r=await fetch('/api/simulate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(values())});const out=await r.json();if(!r.ok){alert(out.error);return;}render([{label:'自定义情境',data:out.employment_rate}],out.occupational_growth);}
+async function start(){const r=await fetch('/api/scenarios');models=await r.json();const base={A:{ai_growth:85,automation:65,adaptation:85,economy:85,alignment:10,other_factors:60},B:{ai_growth:85,automation:80,adaptation:35,economy:25,alignment:15,other_factors:45},C:{ai_growth:25,automation:30,adaptation:65,economy:85,alignment:10,other_factors:60},D:{ai_growth:20,automation:25,adaptation:30,economy:20,alignment:10,other_factors:40},E:{ai_growth:95,automation:95,adaptation:20,economy:70,alignment:20,other_factors:50},F:{ai_growth:85,automation:75,adaptation:50,economy:60,alignment:90,other_factors:50}};
+Object.entries(models).forEach(([k,v])=>preset.add(new Option(`${k} — ${v.name}`,k)));makeControls(base.A);preset.onchange=()=>{selected=preset.value;makeControls(base[selected]);render([{label:models[selected].name,data:models[selected].employment_rate}],models[selected].occupational_growth);};document.getElementById('run').onclick=run;document.getElementById('compare').onclick=()=>render(Object.entries(models).map(([k,v])=>({label:k+' — '+v.name,data:v.employment_rate})),models[preset.value].occupational_growth);preset.onchange();}
+start().catch(err=>{document.getElementById('result').textContent='无法连接 API：'+err.message});
+</script></body></html>

@@ -1,0 +1,219 @@
+{
+  "career": "Environmental Engineer",
+  "goals": [
+    {
+      "id": 13,
+      "name": "Climate Action",
+      "short": "Climate solutions",
+      "color": "#3F7E44",
+      "reason": "Develop climate solutions",
+      "url": "https://sdgs.un.org/goals/goal13",
+      "provisional": false
+    },
+    {
+      "id": 9,
+      "name": "Industry, Innovation and Infrastructure",
+      "short": "Innovation",
+      "color": "#FD6925",
+      "reason": "Build innovative technologies and infrastructure",
+      "url": "https://sdgs.un.org/goals/goal9",
+      "provisional": false
+    }
+  ],
+  "skills": [
+    {
+      "skill": "MathSkill",
+      "self_rating": 5,
+      "sdgs": [
+        {
+          "id": 9,
+          "name": "Industry, Innovation and Infrastructure",
+          "short": "Innovation",
+          "color": "#FD6925",
+          "reason": "Build innovative technologies and infrastructure",
+          "url": "https://sdgs.un.org/goals/goal9",
+          "provisional": false
+        }
+      ]
+    },
+    {
+      "skill": "CodingSkill",
+      "self_rating": 4,
+      "sdgs": [
+        {
+          "id": 9,
+          "name": "Industry, Innovation and Infrastructure",
+          "short": "Innovation",
+          "color": "#FD6925",
+          "reason": "Build innovative technologies and infrastructure",
+          "url": "https://sdgs.un.org/goals/goal9",
+          "provisional": false
+        }
+      ]
+    },
+    {
+      "skill": "DataSkill",
+      "self_rating": 5,
+      "sdgs": [
+        {
+          "id": 9,
+          "name": "Industry, Innovation and Infrastructure",
+          "short": "Innovation",
+          "color": "#FD6925",
+          "reason": "Build innovative technologies and infrastructure",
+          "url": "https://sdgs.un.org/goals/goal9",
+          "provisional": false
+        },
+        {
+          "id": 13,
+          "name": "Climate Action",
+          "short": "Climate solutions",
+          "color": "#3F7E44",
+          "reason": "Develop climate solutions",
+          "url": "https://sdgs.un.org/goals/goal13",
+          "provisional": false
+        }
+      ]
+    },
+    {
+      "skill": "CommunicationSkill",
+      "self_rating": 3,
+      "sdgs": [
+        {
+          "id": 4,
+          "name": "Quality Education",
+          "short": "Better learning",
+          "color": "#C5192D",
+          "reason": "Expand access to education",
+          "url": "https://sdgs.un.org/goals/goal4",
+          "provisional": false
+        },
+        {
+          "id": 16,
+          "name": "Peace, Justice and Strong Institutions",
+          "short": "Justice",
+          "color": "#00689D",
+          "reason": "Advance justice and effective institutions",
+          "url": "https://sdgs.un.org/goals/goal16",
+          "provisional": false
+        }
+      ]
+    },
+    {
+      "skill": "LeadershipSkill",
+      "self_rating": 4,
+      "sdgs": [
+        {
+          "id": 8,
+          "name": "Decent Work and Economic Growth",
+          "short": "Decent work",
+          "color": "#A21942",
+          "reason": "Support decent jobs and livelihoods",
+          "url": "https://sdgs.un.org/goals/goal8",
+          "provisional": false
+        },
+        {
+          "id": 17,
+          "name": "Partnerships for the Goals",
+          "short": "Partnerships",
+          "color": "#19486A",
+          "reason": "Build partnerships for shared goals",
+          "url": "https://sdgs.un.org/goals/goal17",
+          "provisional": false
+        }
+      ]
+    },
+    {
+      "skill": "CreativeSkill",
+      "self_rating": 4,
+      "sdgs": [
+        {
+          "id": 11,
+          "name": "Sustainable Cities and Communities",
+          "short": "Better cities",
+          "color": "#FD9D24",
+          "reason": "Make communities more sustainable",
+          "url": "https://sdgs.un.org/goals/goal11",
+          "provisional": false
+        },
+        {
+          "id": 12,
+          "name": "Responsible Consumption and Production",
+          "short": "Resource efficiency",
+          "color": "#BF8B2E",
+          "reason": "Reduce waste and resource use",
+          "url": "https://sdgs.un.org/goals/goal12",
+          "provisional": false
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "career",
+      "type": "career",
+      "label": "Environmental Engineer"
+    },
+    {
+      "id": "sdg-13",
+      "type": "sdg",
+      "label": "SDG 13",
+      "name": "Climate Action",
+      "color": "#3F7E44",
+      "short": "Climate solutions"
+    },
+    {
+      "id": "sdg-9",
+      "type": "sdg",
+      "label": "SDG 9",
+      "name": "Industry, Innovation and Infrastructure",
+      "color": "#FD6925",
+      "short": "Innovation"
+    },
+    {
+      "id": "skill-MathSkill",
+      "type": "skill",
+      "label": "MathSkill",
+      "rating": 5
+    },
+    {
+      "id": "skill-CodingSkill",
+      "type": "skill",
+      "label": "CodingSkill",
+      "rating": 4
+    },
+    {
+      "id": "skill-DataSkill",
+      "type": "skill",
+      "label": "DataSkill",
+      "rating": 5
+    }
+  ],
+  "links": [
+    {
+      "from": "career",
+      "to": "sdg-13"
+    },
+    {
+      "from": "career",
+      "to": "sdg-9"
+    },
+    {
+      "from": "sdg-9",
+      "to": "skill-MathSkill"
+    },
+    {
+      "from": "sdg-9",
+      "to": "skill-CodingSkill"
+    },
+    {
+      "from": "sdg-9",
+      "to": "skill-DataSkill"
+    },
+    {
+      "from": "sdg-13",
+      "to": "skill-DataSkill"
+    }
+  ],
+  "note": "Possible SDG associations only; not verified impact or UN endorsement."
+}

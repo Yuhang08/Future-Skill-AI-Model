@@ -1,0 +1,1536 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FutureSkill AI | Discover Your Future</title>
+
+
+
+<style>
+
+/* =====================================
+   1. GENERAL WEBSITE DESIGN
+===================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f7fb;
+    color: #203647;
+}
+
+header {
+    background: #123447;
+    color: white;
+    padding: 20px 7%;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+main {
+    max-width: 1050px;
+    margin: auto;
+    padding: 45px 20px;
+}
+
+h1 {
+    color: #123447;
+}
+
+p {
+    line-height: 1.7;
+    color: #64748b;
+}
+
+button {
+    background: #109b80;
+    color: white;
+    border: none;
+    padding: 13px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    background: #e6eef3;
+    color: #294354;
+}
+
+
+/* =====================================
+   2. HOME PAGE
+===================================== */
+
+.hero {
+    background: white;
+    border-radius: 22px;
+    text-align: center;
+    padding: 65px 25px;
+    box-shadow: 0 8px 30px #102a430a;
+}
+
+.hero h1 {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 17px;
+}
+
+.hero button {
+    margin-top: 20px;
+    padding: 16px 32px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.feature-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.feature-card h3 {
+    color: #123447;
+}
+
+
+/* =====================================
+   3. ASSESSMENT POPUP
+===================================== */
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 30, 45, 0.75);
+    z-index: 100;
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 780px;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn {
+    background: transparent;
+    color: #64748b;
+    font-size: 25px;
+    padding: 5px 10px;
+}
+
+.part-label {
+    color: #109b80;
+    font-weight: bold;
+}
+
+.progress-background {
+    height: 10px;
+    background: #e4edf1;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    background: #109b80;
+    height: 100%;
+    width: 0%;
+    transition: width 0.2s;
+}
+
+.question {
+    border-bottom: 1px solid #e5ebef;
+    padding: 20px 0;
+}
+
+.question-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.answer-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #d4e0e7;
+    border-radius: 9px;
+    padding: 11px 16px;
+    cursor: pointer;
+}
+
+.answer-option:has(input:checked) {
+    background: #e0f6ed;
+    border-color: #109b80;
+}
+
+.answer-option input {
+    accent-color: #109b80;
+}
+
+.scale-guide {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 12px;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.error {
+    color: #ca3030;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+
+/* =====================================
+   4. CAREER RESULTS
+===================================== */
+
+#results {
+    display: none;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    margin: 20px 0;
+}
+
+.profile-title {
+    color: #109b80;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.profile-item {
+    padding: 15px;
+    border-radius: 10px;
+    background: #f2f7fa;
+    text-align: center;
+}
+
+.profile-item strong {
+    font-size: 24px;
+    color: #109b80;
+}
+
+.career-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin: 16px 0;
+    border: 1px solid #e0e9ef;
+}
+
+.career-card h3 {
+    margin-top: 0;
+}
+
+.match-score {
+    font-size: 25px;
+    font-weight: bold;
+    color: #109b80;
+}
+
+.score-bar-background {
+    background: #e6edf1;
+    height: 9px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.score-bar {
+    background: #109b80;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.disclaimer {
+    font-size: 13px;
+    color: #718096;
+}
+
+
+/* =====================================
+   5. MOBILE RESPONSIVENESS
+===================================== */
+
+@media (max-width: 650px) {
+
+    .hero h1 {
+        font-size: 29px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .modal {
+        padding: 20px;
+    }
+
+    .profile-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .answer-option {
+        padding: 9px 12px;
+    }
+
+}
+
+/* ====================================
+   COLOURFUL FEATURE CARDS
+==================================== */
+
+/* Three cards in one row */
+
+.extra-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(225px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+    margin-bottom: 40px;
+    padding: 10px 4px 20px;
+    overflow-x: auto;
+}
+
+/* Main card design */
+
+.extra-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    min-height: 260px;
+    padding: 28px 24px;
+
+    border-radius: 22px;
+    border: none;
+    text-decoration: none;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+
+    transition: transform 0.3s ease,
+                box-shadow 0.3s ease;
+
+    overflow: hidden;
+}
+
+/* BLUE - AI TREND */
+
+.extra-card:nth-child(1) {
+    background: linear-gradient(
+        135deg, #2468db, #56a3fb
+    );
+}
+
+/* PURPLE - UNCERTAINTY */
+
+.extra-card:nth-child(2) {
+    background: linear-gradient(
+        135deg, #7046c8, #af84f0
+    );
+}
+
+/* GREEN - SDG */
+
+.extra-card:nth-child(3) {
+    background: linear-gradient(
+        135deg, #087d70, #35b88e
+    );
+}
+
+/* Remove older decorative circle */
+
+.extra-card::before {
+    display: none;
+}
+
+/* Card heading */
+
+.extra-card h3 {
+    color: white;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 12px 0;
+}
+
+/* Card description */
+
+.extra-card p {
+    color: rgba(255,255,255,0.9);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0 0 25px;
+}
+
+/* Explore label */
+
+.extra-card span {
+    margin-top: auto;
+    align-self: flex-start;
+
+    background: rgba(255,255,255,0.2);
+    color: white;
+
+    padding: 11px 18px;
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+/* Hover animation */
+
+.extra-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+}
+
+.extra-card:hover span {
+    background: white;
+    color: #17374b;
+    transform: translateX(4px);
+}
+
+.extra-card:focus-visible {
+    outline: 3px solid #17374b;
+    outline-offset: 3px;
+}
+
+/* Small screens: remain in one row,
+   users can scroll horizontally */
+
+@media (max-width: 750px) {
+    .extra-features {
+        grid-template-columns: repeat(3, 235px);
+        overflow-x: auto;
+    }
+}
+
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================
+     WEBSITE HEADER
+===================================== -->
+
+<header>
+    ✦ FutureSkill AI
+</header>
+
+<main>
+
+<!-- =====================================
+     HOME PAGE
+===================================== -->
+
+<section id="homePage">
+
+    <div class="hero">
+
+        <h1>Discover Your Future Career</h1>
+
+        <p>
+            Discover your interests, explore your
+            strengths, and find career opportunities
+            that align with your future.
+        </p>
+
+        <p>
+            42 Questions | 3 Assessment Parts
+        </p>
+
+        <button onclick="startAssessment()">
+            Start Career Assessment
+        </button>
+
+    </div>
+
+        <p style="margin-top:24px"><a href="/reskilling" style="color:#087f6d;font-weight:bold">🌱 Already know your goal? Explore your reskilling pathway →</a></p>
+
+    <div class="features">
+
+        <div class="feature-card">
+
+            <h3>RIASEC Assessment</h3>
+
+            <p>
+                Explore your six occupational
+                interest dimensions.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>Subject Preferences</h3>
+
+            <p>
+                Discover which academic
+                fields interest you most.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>Career Recommendations</h3>
+
+            <p>
+                Explore careers based on your
+                interests and preferences.
+            </p>
+
+        </div>
+
+    </div>
+
+<!-- EXTRA FEATURES SECTION -->
+
+<h2>Explore More Features</h2>
+
+<div class="extra-features">
+
+    <a href="/ai-trend" class="extra-card">
+        <h3>📈 AI Trend Explorer</h3>
+        <p>Explore past and future career trends.</p>
+        <span>Explore →</span>
+    </a>
+
+    <a href="/uncertainty" class="extra-card">
+        <h3>📊 AI Uncertainty Lab</h3>
+        <p>Explore different employment scenarios.</p>
+        <span>Explore →</span>
+    </a>
+
+    <a href="/sdg-impact" class="extra-card">
+        <h3>🌍 SDG Impact Map</h3>
+        <p>Visualise your career's SDG impact.</p>
+        <span>Explore →</span>
+    </a>
+
+</div>
+
+</section>
+
+
+<!-- =====================================
+     ASSESSMENT POPUP
+===================================== -->
+
+<div
+    class="overlay"
+    id="assessmentOverlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="partTitle"
+>
+
+    <div class="modal" id="assessmentModal">
+
+        <div class="modal-header">
+
+            <span class="part-label" id="partLabel">
+                Part 1 of 3
+            </span>
+
+            <button
+                class="close-btn"
+                onclick="closeAssessment()"
+                aria-label="Close assessment"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <h2 id="partTitle"></h2>
+
+        <p id="partDescription"></p>
+
+        <div class="progress-background">
+
+            <div
+                class="progress-bar"
+                id="progressBar"
+            ></div>
+
+        </div>
+
+        <p id="progressText"></p>
+
+        <div id="questionContainer"></div>
+
+        <p
+            id="errorMessage"
+            class="error"
+            role="alert"
+        ></p>
+
+        <div class="navigation">
+
+            <button
+                class="secondary-btn"
+                id="previousButton"
+                onclick="previousPart()"
+            >
+                Previous
+            </button>
+
+            <button
+                id="nextButton"
+                onclick="nextPart()"
+            >
+                Next
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     RESULT PAGE
+===================================== -->
+
+<section id="results">
+
+    <h1>Your Career Assessment Results</h1>
+
+    <div
+        class="profile-card"
+        id="userProfile"
+    ></div>
+
+    <h2>Top 10 Career Recommendations</h2>
+
+    <div id="careerResults"></div>
+        <div class="career-card" style="border-color:#bce3d6;background:#f1fbf7">
+          <h3>🌱 Build your personalised learning pathway</h3>
+          <p>Not sure what to study next? Explore skill gaps, a flexible weekly timetable, learning objectives, to-do tasks, photo evidence and your growing learning tree.</p>
+          <a href="/reskilling" style="display:inline-block;text-decoration:none;background:#109b80;color:white;padding:13px 20px;border-radius:10px;font-weight:bold">Explore Reskilling Pathways →</a>
+        </div>
+
+    <p class="disclaimer">
+        These scores are experimental career matching
+        indices, not validated probabilities of
+        career success or suitability.
+    </p>
+
+    <button onclick="restartAssessment()">
+        Retake Assessment
+    </button>
+
+</section>
+
+</main>
+
+
+<script>
+
+// ==========================================
+// 1. QUESTIONNAIRE DATABASE
+// ==========================================
+
+const assessmentParts = [
+
+    // =====================================
+    // PART A: 24 RIASEC QUESTIONS
+    // =====================================
+
+    {
+        title: "Part A: RIASEC Interests",
+
+        description:
+            "How much would you enjoy doing these activities?",
+
+        questions: [
+
+            // REALISTIC
+            ["R", "Build or repair a simple electronic device."],
+            ["R", "Use tools to assemble a physical product."],
+            ["R", "Test or troubleshoot a piece of equipment."],
+            ["R", "Work with machines or practical technology."],
+
+            // INVESTIGATIVE
+            ["I", "Solve challenging mathematical problems."],
+            ["I", "Investigate why a scientific phenomenon happens."],
+            ["I", "Analyse data to discover patterns."],
+            ["I", "Develop logical explanations for complex problems."],
+
+            // ARTISTIC
+            ["A", "Create an original visual design."],
+            ["A", "Write creative stories or scripts."],
+            ["A", "Develop new artistic concepts."],
+            ["A", "Express ideas through art or creative media."],
+
+            // SOCIAL
+            ["S", "Explain difficult concepts to other people."],
+            ["S", "Help someone understand a new skill."],
+            ["S", "Support people facing a problem."],
+            ["S", "Collaborate with others to help a community."],
+
+            // ENTERPRISING
+            ["E", "Lead a team to complete a project."],
+            ["E", "Persuade others to support an idea."],
+            ["E", "Start a business or new initiative."],
+            ["E", "Organise people to achieve a goal."],
+
+            // CONVENTIONAL
+            ["C", "Organise information into clear records."],
+            ["C", "Check data carefully for errors."],
+            ["C", "Follow detailed procedures accurately."],
+            ["C", "Maintain an organised database or system."]
+
+        ]
+    },
+
+
+    // =====================================
+    // PART B: 12 SUBJECT QUESTIONS
+    // =====================================
+
+    {
+        title: "Part B: Subject Preferences",
+
+        description:
+            "How interested are you in these subjects?",
+
+        questions: [
+
+            // IT
+            ["IT", "Developing software or mobile applications."],
+            ["IT", "Learning about artificial intelligence and cybersecurity."],
+
+            // MATHEMATICS
+            ["Math", "Studying advanced mathematics and statistics."],
+            ["Math", "Using mathematical models to solve real problems."],
+
+            // EDUCATION
+            ["Education", "Teaching students and explaining complex ideas."],
+            ["Education", "Designing learning activities and educational materials."],
+
+            // HEALTHCARE
+            ["Health", "Learning about medicine and human health."],
+            ["Health", "Working in healthcare or medical research."],
+
+            // BUSINESS
+            ["Business", "Studying entrepreneurship, finance and management."],
+            ["Business", "Developing business strategies and marketing plans."],
+
+            // ENGINEERING
+            ["Engineering", "Designing engineering systems and technology."],
+            ["Engineering", "Applying physics to practical engineering problems."]
+
+        ]
+    },
+
+
+    // =====================================
+    // PART C: 6 SKILL QUESTIONS
+    // =====================================
+
+    {
+        title: "Part C: Skills Self-Assessment",
+
+        description:
+            "How confident are you in your current abilities?",
+
+        questions: [
+
+            ["MathSkill", "Solving mathematical and logical problems."],
+
+            ["CodingSkill", "Writing and debugging computer programs."],
+
+            ["DataSkill", "Analysing data and interpreting results."],
+
+            ["CommunicationSkill", "Explaining information clearly to others."],
+
+            ["LeadershipSkill", "Planning projects and leading a team."],
+
+            ["CreativeSkill", "Generating original solutions to problems."]
+
+        ]
+    }
+
+];
+
+
+// ==========================================
+// 2. INITIALISE ASSESSMENT
+// ==========================================
+
+let currentPart = 0;
+
+let answers = {};
+
+const totalQuestions = assessmentParts.reduce(
+    (total, part) => total + part.questions.length,
+    0
+);
+
+function makeKey(partIndex, questionIndex) {
+
+    return `${partIndex}_${questionIndex}`;
+
+}
+
+
+// ==========================================
+// 3. OPEN AND CLOSE POPUP
+// ==========================================
+
+function startAssessment() {
+
+    document.getElementById(
+        "assessmentOverlay"
+    ).style.display = "flex";
+
+    document.body.style.overflow = "hidden";
+
+    displayQuestions();
+
+}
+
+function closeAssessment() {
+
+    document.getElementById(
+        "assessmentOverlay"
+    ).style.display = "none";
+
+    document.body.style.overflow = "";
+
+}
+
+
+// ==========================================
+// 4. DISPLAY CURRENT QUESTIONS
+// ==========================================
+
+function displayQuestions() {
+
+    const part = assessmentParts[currentPart];
+
+    document.getElementById(
+        "partLabel"
+    ).textContent = `Part ${currentPart + 1} of 3`;
+
+    document.getElementById(
+        "partTitle"
+    ).textContent = part.title;
+
+    document.getElementById(
+        "partDescription"
+    ).textContent = part.description;
+
+    const container = document.getElementById(
+        "questionContainer"
+    );
+
+    container.innerHTML = "";
+
+    part.questions.forEach((question, index) => {
+
+        const key = makeKey(
+            currentPart, index
+        );
+
+        const questionDiv = document.createElement(
+            "div"
+        );
+
+        questionDiv.className = "question";
+
+        const title = document.createElement("div");
+
+        title.className = "question-title";
+
+        title.textContent =
+            `${index + 1}. ${question[1]}`;
+
+        questionDiv.appendChild(title);
+
+        const optionsDiv = document.createElement(
+            "div"
+        );
+
+        optionsDiv.className = "answer-options";
+
+        for (let number = 1; number <= 5; number++) {
+
+            const label = document.createElement(
+                "label"
+            );
+
+            label.className = "answer-option";
+
+            const radio = document.createElement(
+                "input"
+            );
+
+            radio.type = "radio";
+
+            radio.name = key;
+
+            radio.value = number;
+
+            if (answers[key] === number) {
+                radio.checked = true;
+            }
+
+            radio.addEventListener(
+                "change",
+                () => {
+
+                    answers[key] = number;
+
+                    updateProgress();
+
+                    document.getElementById(
+                        "errorMessage"
+                    ).textContent = "";
+
+                }
+            );
+
+            label.appendChild(radio);
+
+            label.appendChild(
+                document.createTextNode(
+                    String(number)
+                )
+            );
+
+            optionsDiv.appendChild(label);
+
+        }
+
+        questionDiv.appendChild(optionsDiv);
+
+        if (index === 0) {
+
+            const guide = document.createElement(
+                "div"
+            );
+
+            guide.className = "scale-guide";
+
+            guide.innerHTML = currentPart === 2
+                ? "<span>1 = Not confident</span><span>5 = Very confident</span>"
+                : "<span>1 = Strongly dislike</span><span>5 = Strongly like</span>";
+
+            questionDiv.appendChild(guide);
+
+        }
+
+        container.appendChild(questionDiv);
+
+    });
+
+    document.getElementById(
+        "previousButton"
+    ).disabled = currentPart === 0;
+
+    document.getElementById(
+        "nextButton"
+    ).textContent = currentPart === 2
+        ? "Get Recommendations"
+        : "Next";
+
+    document.getElementById(
+        "errorMessage"
+    ).textContent = "";
+
+    updateProgress();
+
+}
+
+
+// ==========================================
+// 5. UPDATE PROGRESS BAR
+// ==========================================
+
+function updateProgress() {
+
+    const answered = Object.keys(
+        answers
+    ).length;
+
+    const percentage = (
+        answered / totalQuestions
+    ) * 100;
+
+    document.getElementById(
+        "progressBar"
+    ).style.width = `${percentage}%`;
+
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        `${answered} / ${totalQuestions} questions answered`;
+
+}
+
+
+// ==========================================
+// 6. PREVIOUS PART
+// ==========================================
+
+function previousPart() {
+
+    if (currentPart > 0) {
+
+        currentPart--;
+
+        displayQuestions();
+
+        document.getElementById(
+            "assessmentModal"
+        ).scrollTop = 0;
+
+    }
+
+}
+
+
+// ==========================================
+// 7. NEXT PART
+// ==========================================
+
+async function nextPart() {
+
+    const questions = assessmentParts[
+        currentPart
+    ].questions;
+
+    const incomplete = questions.some(
+        (_, index) => {
+
+            const key = makeKey(
+                currentPart, index
+            );
+
+            return answers[key] === undefined;
+
+        }
+    );
+
+    if (incomplete) {
+
+        document.getElementById(
+            "errorMessage"
+        ).textContent =
+            "Please answer all questions before continuing.";
+
+        return;
+
+    }
+
+    if (currentPart < 2) {
+
+        currentPart++;
+
+        displayQuestions();
+
+        document.getElementById(
+            "assessmentModal"
+        ).scrollTop = 0;
+
+    } else {
+
+        await submitAssessment();
+
+    }
+
+}
+
+
+// ==========================================
+// 8. ORGANISE QUESTIONNAIRE ANSWERS
+// ==========================================
+
+function prepareAssessmentData() {
+
+    const riasecAnswers = {};
+
+    const subjectAnswers = {};
+
+    const skillAnswers = {};
+
+    assessmentParts.forEach(
+        (part, partIndex) => {
+
+            part.questions.forEach(
+                (question, questionIndex) => {
+
+                    const category = question[0];
+
+                    const key = makeKey(
+                        partIndex,
+                        questionIndex
+                    );
+
+                    const value = answers[key];
+
+                    if (partIndex === 0) {
+
+                        if (!riasecAnswers[category]) {
+                            riasecAnswers[category] = [];
+                        }
+
+                        riasecAnswers[category].push(
+                            value
+                        );
+
+                    } else if (partIndex === 1) {
+
+                        if (!subjectAnswers[category]) {
+                            subjectAnswers[category] = [];
+                        }
+
+                        subjectAnswers[category].push(
+                            value
+                        );
+
+                    } else {
+
+                        skillAnswers[category] = value;
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+    return {
+
+        answers: riasecAnswers,
+
+        subject_answers: subjectAnswers,
+
+        skill_answers: skillAnswers
+
+    };
+
+}
+
+
+// ==========================================
+// 9. SEND RESULTS TO PYTHON BACKEND
+// ==========================================
+
+async function submitAssessment() {
+
+    const button = document.getElementById(
+        "nextButton"
+    );
+
+    button.disabled = true;
+
+    button.textContent = "Calculating...";
+
+    try {
+
+        const questionnaireData = prepareAssessmentData();
+
+        const response = await fetch(
+            "/api/recommend",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(
+                    questionnaireData
+                )
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+
+            const message = typeof result.detail === "string"
+                ? result.detail
+                : "Unable to calculate career recommendations.";
+
+            throw new Error(message);
+
+        }
+
+        displayResults(result);
+
+        closeAssessment();
+
+        document.getElementById(
+            "homePage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "results"
+        ).style.display = "block";
+
+        window.scrollTo(0, 0);
+
+    } catch (error) {
+
+        document.getElementById(
+            "errorMessage"
+        ).textContent =
+            "Error: " + error.message;
+
+        console.error(error);
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent = "Get Recommendations";
+
+    }
+
+}
+
+
+// ==========================================
+// 10. DISPLAY RIASEC RESULTS
+// ==========================================
+
+function displayResults(data) {
+
+    const profile = document.getElementById(
+        "userProfile"
+    );
+
+    profile.replaceChildren();
+
+    const profileHeading = document.createElement(
+        "h2"
+    );
+
+    profileHeading.textContent =
+        "Your RIASEC Profile";
+
+    profile.appendChild(profileHeading);
+
+    const top3 = document.createElement("div");
+
+    top3.className = "profile-title";
+
+    top3.textContent = data.top3;
+
+    profile.appendChild(top3);
+
+    const grid = document.createElement("div");
+
+    grid.className = "profile-grid";
+
+    for (const [dimension, score] of Object.entries(
+        data.riasec_scores
+    )) {
+
+        const item = document.createElement("div");
+
+        item.className = "profile-item";
+
+        const name = document.createElement("div");
+
+        name.textContent = dimension;
+
+        const value = document.createElement("strong");
+
+        value.textContent = score.toFixed(1);
+
+        item.appendChild(name);
+
+        item.appendChild(value);
+
+        grid.appendChild(item);
+
+    }
+
+    profile.appendChild(grid);
+
+
+    // =====================================
+    // SUBJECT PREFERENCES
+    // =====================================
+
+    const subjectHeading = document.createElement(
+        "h3"
+    );
+
+    subjectHeading.textContent =
+        "Your Subject Preferences";
+
+    profile.appendChild(subjectHeading);
+
+    for (const [subject, value] of Object.entries(
+        data.subject_preferences
+    )) {
+
+        const item = document.createElement("p");
+
+        item.textContent =
+            `${subject}: ${Number(value).toFixed(1)} / 5`;
+
+        profile.appendChild(item);
+
+    }
+
+
+    // =====================================
+    // SKILLS SELF-ASSESSMENT
+    // =====================================
+
+    const skillsHeading = document.createElement(
+        "h3"
+    );
+
+    skillsHeading.textContent =
+        "Your Self-Reported Skills";
+
+    profile.appendChild(skillsHeading);
+
+    for (const [skill, value] of Object.entries(
+        data.skills
+    )) {
+
+        const item = document.createElement("p");
+
+        item.textContent =
+            `${skill}: ${value} / 5`;
+
+        profile.appendChild(item);
+
+    }
+
+
+    // =====================================
+    // TOP 10 CAREER RECOMMENDATIONS
+    // =====================================
+
+    const careerContainer = document.getElementById(
+        "careerResults"
+    );
+
+    careerContainer.replaceChildren();
+
+    if (!data.recommendations ||
+        data.recommendations.length === 0) {
+
+        careerContainer.textContent =
+            "No career recommendations available.";
+
+        return;
+
+    }
+
+    data.recommendations.forEach(
+        (career, index) => {
+
+            const card = document.createElement("div");
+
+            card.className = "career-card";
+
+            const title = document.createElement("h3");
+
+            title.textContent =
+                `${index + 1}. ${career.title}`;
+
+            card.appendChild(title);
+
+            const score = document.createElement("div");
+
+            score.className = "match-score";
+
+            score.textContent =
+                `Match Index: ${Number(career.match_index).toFixed(2)}`;
+
+            card.appendChild(score);
+
+            // Matching score progress bar
+            const barBackground = document.createElement(
+                "div"
+            );
+
+            barBackground.className =
+                "score-bar-background";
+
+            const bar = document.createElement("div");
+
+            bar.className = "score-bar";
+
+            bar.style.width = (
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        Number(career.match_index)
+                    )
+                )
+            ) + "%";
+
+            barBackground.appendChild(bar);
+
+            card.appendChild(barBackground);
+
+            const types = document.createElement("p");
+
+            types.textContent =
+                `Career RIASEC: ${career.riasec}`;
+
+            card.appendChild(types);
+
+            const interest = document.createElement(
+                "p"
+            );
+
+            interest.textContent =
+                `RIASEC Similarity: ${Number(career.interest_index).toFixed(2)}`;
+
+            card.appendChild(interest);
+
+            const subject = document.createElement(
+                "p"
+            );
+
+            subject.textContent =
+                `Subject Similarity: ${Number(career.subject_index).toFixed(2)}`;
+
+            card.appendChild(subject);
+
+            const fields = document.createElement("p");
+
+            fields.textContent =
+                `Related Fields: ${career.fields}`;
+
+            card.appendChild(fields);
+
+            const explanation = document.createElement(
+                "p"
+            );
+
+            explanation.textContent =
+                career.explanation;
+
+            card.appendChild(explanation);
+
+            const pathwayLink = document.createElement("a");
+            pathwayLink.href = "/reskilling?career=" + encodeURIComponent(career.title);
+            pathwayLink.textContent = "🌱 Explore reskilling options →";
+            pathwayLink.style.cssText = "display:inline-block;margin-top:12px;padding:12px 18px;background:#109b80;color:white;border-radius:9px;font-weight:bold;text-decoration:none";
+            card.appendChild(pathwayLink);
+
+            careerContainer.appendChild(card);
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// 11. RETAKE ASSESSMENT
+// ==========================================
+
+function restartAssessment() {
+
+    currentPart = 0;
+
+    answers = {};
+
+    document.getElementById(
+        "results"
+    ).style.display = "none";
+
+    document.getElementById(
+        "homePage"
+    ).style.display = "block";
+
+    startAssessment();
+
+}
+
+</script>
+
+</body>
+</html>
