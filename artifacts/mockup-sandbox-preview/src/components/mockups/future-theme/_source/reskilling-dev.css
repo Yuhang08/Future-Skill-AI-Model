@@ -1,0 +1,91 @@
+.dev-demo-banner {
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: #153f34;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
+
+.dev-demo-banner a {
+  color: #d5f1dc;
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+.dev-inventory-shortcut {
+  display: flex;
+  justify-content: center;
+  padding: 7px 12px;
+  background: #eaf4ed;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.dev-inventory-shortcut a {
+  color: #217453;
+}
+
+.dev-bridge-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.dev-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgb(13 34 30 / 44%);
+}
+
+.dev-loading-panel {
+  width: min(100%, 400px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 30px;
+  border-radius: 18px;
+  background: #fff;
+  color: #193b32;
+  box-shadow: 0 20px 70px rgb(0 0 0 / 20%);
+  text-align: center;
+}
+
+.dev-loading-panel p {
+  margin: 0;
+  color: #677b71;
+  font-size: 13px;
+}
+
+.dev-spinner {
+  width: 38px;
+  height: 38px;
+  border: 4px solid #e1eee4;
+  border-top-color: #277a57;
+  border-radius: 50%;
+  animation: dev-spin 0.85s linear infinite;
+}
+
+@keyframes dev-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 620px) {
+  .dev-demo-banner {
+    gap: 6px 10px;
+    font-size: 11px;
+  }
+}

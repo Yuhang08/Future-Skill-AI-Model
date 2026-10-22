@@ -1,0 +1,854 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;650;700;750;800&family=Space+Mono:wght@400;700&display=swap");
+
+/* FutureSkill · Quiet orbital lab
+   A single, measured palette system with parallel light and dark surfaces. */
+:root[data-future-theme="light"] {
+  color-scheme: light;
+  --fs-canvas: #edf3f5;
+  --fs-canvas-glow: #e5eef1;
+  --fs-surface: #f8faf9;
+  --fs-raised: #ffffff;
+  --fs-raised-alt: #f0f5f6;
+  --fs-ink: #1c3040;
+  --fs-ink-soft: #465e6d;
+  --fs-muted: #617783;
+  --fs-dim: #788b95;
+  --fs-line: #d2dfe3;
+  --fs-line-strong: #b9cbd2;
+  --fs-accent: #276e9e;
+  --fs-accent-hover: #1c5e8b;
+  --fs-on-accent: #ffffff;
+  --fs-accent-soft: #e3f0f6;
+  --fs-accent-ink: #164c70;
+  --fs-mint: #168474;
+  --fs-mint-soft: #e1f2ef;
+  --fs-amber: #8c6428;
+  --fs-amber-soft: #faf1df;
+  --fs-danger: #a33e4a;
+  --fs-danger-soft: #f8e9e9;
+  --fs-shadow: 0 14px 40px rgba(27, 57, 74, .075);
+  --fs-shadow-small: 0 4px 14px rgba(27, 57, 74, .07);
+}
+:root[data-future-theme="dark"] {
+  color-scheme: dark;
+  --fs-canvas: #111b2a;
+  --fs-canvas-glow: #152338;
+  --fs-surface: #172335;
+  --fs-raised: #1d2b40;
+  --fs-raised-alt: #202f44;
+  --fs-ink: #e6eef6;
+  --fs-ink-soft: #c0cfdd;
+  --fs-muted: #a5b6c6;
+  --fs-dim: #8fa3b4;
+  --fs-line: #33465c;
+  --fs-line-strong: #465d76;
+  --fs-accent: #68b2e2;
+  --fs-accent-hover: #8ac8ed;
+  --fs-on-accent: #11263a;
+  --fs-accent-soft: #233e57;
+  --fs-accent-ink: #d6efff;
+  --fs-mint: #76cdbb;
+  --fs-mint-soft: #203e41;
+  --fs-amber: #e3bd79;
+  --fs-amber-soft: #403a30;
+  --fs-danger: #ed9da4;
+  --fs-danger-soft: #492f3b;
+  --fs-shadow: 0 16px 40px rgba(2, 8, 17, .24);
+  --fs-shadow-small: 0 5px 16px rgba(2, 8, 17, .2);
+}
+
+html[data-preview-page] {
+  min-height: 100%;
+  background: var(--fs-canvas);
+  color: var(--fs-ink);
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+html[data-preview-page] *,
+html[data-preview-page] *::before,
+html[data-preview-page] *::after { box-sizing: border-box; }
+html[data-preview-page] body {
+  margin: 0;
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse at 88% 0%, var(--fs-canvas-glow), transparent 34rem),
+    var(--fs-canvas);
+  color: var(--fs-ink);
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.55;
+}
+html[data-preview-page] h1,
+html[data-preview-page] h2,
+html[data-preview-page] h3,
+html[data-preview-page] h4 { color: var(--fs-ink); }
+html[data-preview-page] p { color: var(--fs-ink-soft); }
+html[data-preview-page] a { color: var(--fs-accent); }
+html[data-preview-page] button,
+html[data-preview-page] input,
+html[data-preview-page] select,
+html[data-preview-page] textarea { font: inherit; }
+html[data-preview-page] button,
+html[data-preview-page] a,
+html[data-preview-page] input,
+html[data-preview-page] select,
+html[data-preview-page] textarea,
+html[data-preview-page] summary { -webkit-tap-highlight-color: transparent; }
+html[data-preview-page] :focus-visible {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 3px;
+}
+html[data-preview-page] ::selection { color: var(--fs-ink); background: var(--fs-accent-soft); }
+html[data-preview-page] [hidden] { display: none !important; }
+
+/* Shared reading surfaces and control language */
+html[data-preview-page] .panel,
+html[data-preview-page] .search-panel,
+html[data-preview-page] .trend-card,
+html[data-preview-page] .meta > div,
+html[data-preview-page] .card,
+html[data-preview-page] .profile-card,
+html[data-preview-page] .career-card,
+html[data-preview-page] .feature-card {
+  background: var(--fs-raised);
+  color: var(--fs-ink);
+  border-color: var(--fs-line);
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-preview-page] button {
+  min-height: 42px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--fs-accent);
+  color: var(--fs-on-accent);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color .16s ease, border-color .16s ease, transform .16s ease;
+}
+html[data-preview-page] button:hover { background: var(--fs-accent-hover); }
+html[data-preview-page] button:active { transform: translateY(1px); }
+html[data-preview-page] button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
+html[data-preview-page] input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+html[data-preview-page] select,
+html[data-preview-page] textarea {
+  color: var(--fs-ink);
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 10px;
+}
+html[data-preview-page] input::placeholder,
+html[data-preview-page] textarea::placeholder { color: var(--fs-dim); }
+html[data-preview-page] input[type="range"] { accent-color: var(--fs-accent); }
+html[data-preview-page] table { color: var(--fs-ink-soft); }
+html[data-preview-page] th,
+html[data-preview-page] td { border-color: var(--fs-line); }
+html[data-preview-page] th { color: var(--fs-muted); }
+html[data-preview-page] code,
+html[data-preview-page] .mono,
+html[data-preview-page] .goal-index { font-family: "Space Mono", ui-monospace, monospace; }
+
+/* Shared legacy page headers retain all original navigation links. */
+html[data-preview-page="trends"] header,
+html[data-preview-page="uncertainty"] header,
+html[data-preview-page="sdg"] header {
+  background: var(--fs-surface);
+  color: var(--fs-ink);
+  border-bottom: 1px solid var(--fs-line);
+  box-shadow: 0 3px 16px rgba(21, 44, 61, .04);
+}
+html[data-preview-page="trends"] header a,
+html[data-preview-page="uncertainty"] header a,
+html[data-preview-page="sdg"] header a { color: var(--fs-accent); }
+html[data-preview-page="trends"] main,
+html[data-preview-page="uncertainty"] main,
+html[data-preview-page="sdg"] main { padding-top: clamp(26px, 4vw, 48px); }
+
+/* Home · a confident entry point, with the questionnaire treated as a real flow. */
+html[data-preview-page="home"] body { --ink: var(--fs-ink); }
+html[data-preview-page="home"] header {
+  position: relative;
+  z-index: 1;
+  padding: 18px max(22px, calc((100vw - 1120px)/2));
+  background: var(--fs-surface);
+  border-bottom: 1px solid var(--fs-line);
+  color: var(--fs-ink);
+  font-size: 21px;
+  letter-spacing: -.045em;
+}
+html[data-preview-page="home"] main { max-width: 1120px; padding-top: clamp(28px, 5vw, 58px); }
+html[data-preview-page="home"] h1 { color: var(--fs-ink); }
+html[data-preview-page="home"] .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 330px;
+  padding: clamp(36px, 7vw, 78px) clamp(26px, 7vw, 82px);
+  border: 1px solid var(--fs-line);
+  border-radius: 22px;
+  text-align: left;
+  background: var(--fs-raised);
+  box-shadow: var(--fs-shadow);
+}
+html[data-preview-page="home"] .hero::after {
+  width: 280px; height: 280px;
+  right: 5%; top: -95px;
+  border-color: color-mix(in srgb, var(--fs-accent) 22%, transparent);
+  box-shadow: 0 0 0 28px color-mix(in srgb, var(--fs-accent) 6%, transparent),
+              0 0 0 58px color-mix(in srgb, var(--fs-accent) 3%, transparent);
+}
+html[data-preview-page="home"] .hero h1 {
+  max-width: 690px;
+  margin: 0 0 20px;
+  font-size: clamp(38px, 5.6vw, 66px);
+  line-height: 1.02;
+  letter-spacing: -.055em;
+}
+html[data-preview-page="home"] .hero p { max-width: 580px; font-size: 16px; }
+html[data-preview-page="home"] .hero p:nth-of-type(2) {
+  color: var(--fs-accent);
+  font: 700 11px/1.5 "Space Mono", monospace;
+  letter-spacing: .04em;
+}
+html[data-preview-page="home"] .hero button { position: relative; z-index: 1; margin-top: 14px; }
+html[data-preview-page="home"] .features { gap: 14px; margin-top: 18px; }
+html[data-preview-page="home"] .feature-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 164px;
+  padding: 23px;
+  border-radius: 14px;
+  text-align: left;
+}
+html[data-preview-page="home"] .feature-card::before {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 3px;
+  margin: 0 0 19px;
+  background: var(--fs-mint);
+}
+html[data-preview-page="home"] .feature-card h3 { margin-top: 0; }
+html[data-preview-page="home"] .secondary-btn,
+html[data-preview-page="home"] .close-btn {
+  background: var(--fs-raised-alt);
+  color: var(--fs-ink-soft);
+  border-color: var(--fs-line);
+}
+html[data-preview-page="home"] .overlay { background: rgba(8, 19, 32, .66); padding: 16px; }
+html[data-preview-page="home"] .modal {
+  background: var(--fs-surface);
+  color: var(--fs-ink);
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(3, 13, 24, .32);
+}
+html[data-preview-page="home"] .modal-header { padding-bottom: 12px; border-bottom: 1px solid var(--fs-line); }
+html[data-preview-page="home"] .part-label,
+html[data-preview-page="home"] .profile-title,
+html[data-preview-page="home"] .profile-item strong,
+html[data-preview-page="home"] .match-score { color: var(--fs-mint); }
+html[data-preview-page="home"] .progress-background,
+html[data-preview-page="home"] .score-bar-background { background: var(--fs-raised-alt); }
+html[data-preview-page="home"] .progress-bar,
+html[data-preview-page="home"] .score-bar { background: var(--fs-accent); }
+html[data-preview-page="home"] .question { border-color: var(--fs-line); }
+html[data-preview-page="home"] .answer-option { border-color: var(--fs-line-strong); color: var(--fs-ink-soft); }
+html[data-preview-page="home"] .answer-option:has(input:checked) {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+}
+html[data-preview-page="home"] .answer-option input { accent-color: var(--fs-accent); }
+html[data-preview-page="home"] .profile-item { background: var(--fs-raised-alt); }
+html[data-preview-page="home"] .disclaimer { color: var(--fs-muted); }
+html[data-preview-page="home"] .sdg-alignment { background: var(--fs-surface); border-color: var(--fs-line); }
+html[data-preview-page="home"] .sdg-alignment-head { border-color: var(--fs-line); }
+html[data-preview-page="home"] .sdg-kicker,
+html[data-preview-page="home"] .sdg-more { color: var(--fs-accent); }
+html[data-preview-page="home"] .sdg-status,
+html[data-preview-page="home"] .sdg-chip { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-preview-page="home"] .sdg-status.unreviewed { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-preview-page="home"] .sdg-note { color: var(--fs-muted) !important; }
+html[data-preview-page="home"] .feature-hub-card,
+html[data-preview-page="home"] .feature-hub-card:nth-child(n) {
+  background: var(--fs-raised-alt) !important;
+  color: var(--fs-ink);
+  border-color: var(--fs-line);
+}
+html[data-preview-page="home"] .feature-hub-card h3 { color: var(--fs-ink); }
+html[data-preview-page="home"] .feature-hub-card p { color: var(--fs-ink-soft); }
+html[data-preview-page="home"] .feature-hub-card small { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-preview-page="home"] .error { color: var(--fs-danger); }
+
+/* Career trends · editorial dataset index with clear sample-data boundaries. */
+html[data-preview-page="trends"] .eyebrow { color: var(--fs-mint); font: 700 11px "Space Mono", monospace; }
+html[data-preview-page="trends"] h1 { letter-spacing: -.05em; }
+html[data-preview-page="trends"] .subtle,
+html[data-preview-page="trends"] .source { color: var(--fs-muted); }
+html[data-preview-page="trends"] .notice {
+  background: var(--fs-amber-soft);
+  border: 1px solid color-mix(in srgb, var(--fs-amber) 32%, var(--fs-line));
+  border-radius: 12px;
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="trends"] .meta > div {
+  min-height: 88px;
+  padding: 16px;
+  border-radius: 12px;
+  color: var(--fs-muted);
+}
+html[data-preview-page="trends"] .meta strong { color: var(--fs-ink); font-size: 19px; }
+html[data-preview-page="trends"] .toolbar label { color: var(--fs-ink-soft); font-weight: 700; }
+html[data-preview-page="trends"] #status { color: var(--fs-muted); }
+html[data-preview-page="trends"] .trend-card {
+  padding: 20px;
+  border-radius: 14px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+html[data-preview-page="trends"] .trend-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--fs-line-strong);
+  box-shadow: var(--fs-shadow);
+}
+html[data-preview-page="trends"] .trend-card p { color: var(--fs-ink-soft); }
+html[data-preview-page="trends"] .badge { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-preview-page="trends"] .badge.mixed { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-preview-page="trends"] .badge.down { background: var(--fs-danger-soft); color: var(--fs-danger); }
+html[data-preview-page="trends"] .chip { background: var(--fs-raised-alt); color: var(--fs-ink-soft); }
+html[data-preview-page="trends"] .source { border-top: 1px solid var(--fs-line); padding-top: 22px; }
+
+/* Uncertainty lab · reference-inspired slate instrument, never presented as forecast. */
+html[data-preview-page="uncertainty"] .eyebrow {
+  color: var(--fs-accent);
+  font: 700 10px "Space Mono", monospace;
+  letter-spacing: .08em;
+}
+html[data-preview-page="uncertainty"] h1 { letter-spacing: -.045em; }
+html[data-preview-page="uncertainty"] .subtle { color: var(--fs-muted); }
+html[data-preview-page="uncertainty"] .warning {
+  padding: 16px 18px;
+  background: var(--fs-amber-soft);
+  border: 1px solid color-mix(in srgb, var(--fs-amber) 35%, var(--fs-line));
+  border-radius: 12px;
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="uncertainty"] .panel {
+  margin: 14px 0;
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: 15px;
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-preview-page="uncertainty"] .panel h2 { margin-bottom: 17px; }
+html[data-preview-page="uncertainty"] label { color: var(--fs-ink-soft); }
+html[data-preview-page="uncertainty"] select,
+html[data-preview-page="uncertainty"] input[type="number"] { min-height: 46px; }
+html[data-preview-page="uncertainty"] input[type="range"] { accent-color: var(--fs-accent); }
+html[data-preview-page="uncertainty"] .range-value { color: var(--fs-accent); font-variant-numeric: tabular-nums; }
+html[data-preview-page="uncertainty"] button.secondary {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  border-color: var(--fs-line);
+}
+html[data-preview-page="uncertainty"] button.secondary:hover { background: var(--fs-raised-alt); }
+html[data-preview-page="uncertainty"] #status { color: var(--fs-muted); }
+html[data-preview-page="uncertainty"] .metric {
+  color: var(--fs-mint);
+  font-size: clamp(30px, 4vw, 42px);
+  letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums;
+}
+html[data-preview-page="uncertainty"] .metric-label { color: var(--fs-muted); }
+html[data-preview-page="uncertainty"] table { min-width: 350px; }
+html[data-preview-page="uncertainty"] th { font-family: "Space Mono", monospace; font-size: 11px; }
+html[data-preview-page="uncertainty"] td { font-variant-numeric: tabular-nums; }
+html[data-preview-page="uncertainty"] .table-wrap { overflow-x: auto; }
+/* Grid children must shrink below their table's intrinsic minimum width. */
+html[data-preview-page="uncertainty"] .results > div { min-width: 0; max-width: 100%; }
+html[data-preview-page="uncertainty"] .table-wrap { max-width: 100%; }
+
+/* SDG explorer · preserve UN color marks, photographs, and collapsed disclosure text. */
+html[data-preview-page="sdg"] { --fs-sdg-surface: var(--fs-raised); }
+html[data-preview-page="sdg"] .brand-mark { background: var(--fs-amber); color: #1d3041; }
+html[data-preview-page="sdg"] .eyebrow,
+html[data-preview-page="sdg"] .mono,
+html[data-preview-page="sdg"] .goal-index { font-family: "Space Mono", monospace; }
+html[data-preview-page="sdg"] .eyebrow { color: var(--fs-accent); }
+html[data-preview-page="sdg"] h1 { color: var(--fs-ink); letter-spacing: -.05em; }
+html[data-preview-page="sdg"] p { color: var(--fs-ink-soft); }
+html[data-preview-page="sdg"] .status-pill { background: var(--fs-raised-alt); border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-preview-page="sdg"] .distinction {
+  background: var(--fs-amber-soft);
+  border-left-color: var(--fs-amber);
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="sdg"] .distinction strong { color: var(--fs-ink); }
+html[data-preview-page="sdg"] details.about { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-preview-page="sdg"] details.about summary,
+html[data-preview-page="sdg"] .evidence-full summary { color: var(--fs-accent); }
+html[data-preview-page="sdg"] .search-panel { border-radius: 13px; }
+html[data-preview-page="sdg"] .helper,
+html[data-preview-page="sdg"] .state-message,
+html[data-preview-page="sdg"] .section-label span { color: var(--fs-muted); }
+html[data-preview-page="sdg"] .state-message.error { color: var(--fs-danger); }
+html[data-preview-page="sdg"] .mapping {
+  background: var(--fs-raised);
+  border-color: var(--fs-line);
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-preview-page="sdg"] .mapping-head { background: var(--fs-raised-alt); }
+html[data-preview-page="sdg"] .mapping-head p { color: var(--fs-ink-soft); }
+html[data-preview-page="sdg"] .target-tag { background: color-mix(in srgb, var(--sdg-color) 13%, var(--fs-raised)); }
+html[data-preview-page="sdg"] .mapping-details-trigger { min-height: 42px; }
+html[data-preview-page="sdg"] .mapping-drawer,
+html[data-preview-page="sdg"] .mapping-drawer-header { background: var(--fs-surface); color: var(--fs-ink); border-color: var(--fs-line); }
+html[data-preview-page="sdg"] .mapping-drawer-header h2 { color: var(--fs-ink); }
+html[data-preview-page="sdg"] .mapping-drawer-close { background: var(--fs-raised-alt); color: var(--fs-ink-soft); border-color: var(--fs-line); }
+html[data-preview-page="sdg"] .evidence-stat,
+html[data-preview-page="sdg"] .evidence-box,
+html[data-preview-page="sdg"] .evidence-detail,
+html[data-preview-page="sdg"] .evidence-node,
+html[data-preview-page="sdg"] .goal-info-dialog { background: var(--fs-raised-alt); color: var(--fs-ink-soft); border-color: var(--fs-line); }
+html[data-preview-page="sdg"] .evidence-stat span,
+html[data-preview-page="sdg"] .field-label,
+html[data-preview-page="sdg"] .drawer-target { color: var(--fs-muted); }
+html[data-preview-page="sdg"] .evidence-node { color: var(--fs-ink-soft); }
+html[data-preview-page="sdg"] .evidence-node.practice { color: var(--fs-amber); }
+html[data-preview-page="sdg"] .evidence-node:hover { background: var(--fs-accent-soft); }
+html[data-preview-page="sdg"] .evidence-full li { color: var(--fs-ink-soft); }
+html[data-preview-page="sdg"] .sources a { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-preview-page="sdg"] .limit-box { background: var(--fs-amber-soft); border-color: color-mix(in srgb, var(--fs-amber) 35%, var(--fs-line)); color: var(--fs-ink-soft); }
+html[data-preview-page="sdg"] .action-box { background: var(--fs-mint-soft); border-color: var(--fs-line); }
+html[data-preview-page="sdg"] .action-box p { color: var(--fs-ink-soft); }
+html[data-preview-page="sdg"] .pathway { background: var(--fs-raised-alt); color: var(--fs-ink); border: 1px solid var(--fs-line); }
+html[data-preview-page="sdg"] .pathway h2,
+html[data-preview-page="sdg"] .skill-name { color: var(--fs-ink); }
+html[data-preview-page="sdg"] .pathway-intro,
+html[data-preview-page="sdg"] .not-assessed { color: var(--fs-muted); }
+html[data-preview-page="sdg"] .pathway-toggle::after { color: var(--fs-accent); }
+html[data-preview-page="sdg"] .skill-row { background: var(--fs-surface); border-color: var(--fs-line); }
+html[data-preview-page="sdg"] .skill-level,
+html[data-preview-page="sdg"] .skill-description { color: var(--fs-ink-soft); }
+html[data-preview-page="sdg"] .skill-description p { color: var(--fs-muted); }
+html[data-preview-page="sdg"] .not-assessed { border-color: var(--fs-line); }
+html[data-preview-page="sdg"] .not-assessed a { color: var(--fs-accent); }
+html[data-preview-page="sdg"] .empty-card { background: var(--fs-raised); border-color: var(--fs-line-strong); color: var(--fs-muted); }
+html[data-preview-page="sdg"] .empty-card strong { color: var(--fs-ink); }
+html[data-preview-page="sdg"] .footnote { border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-preview-page="sdg"] .mindmap-shell { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-preview-page="sdg"] .map-legend,
+html[data-preview-page="sdg"] .map-caption { color: var(--fs-muted); }
+html[data-preview-page="sdg"] .legend-dot { background: var(--fs-accent); }
+html[data-preview-page="sdg"] .legend-dot.muted { background: var(--fs-dim); }
+html[data-preview-page="sdg"] .map-lines line { stroke: var(--fs-accent); }
+html[data-preview-page="sdg"] .career-center { background: var(--fs-accent-ink); border-color: var(--fs-accent); }
+html[data-preview-page="sdg"] .career-center small { color: #d7ebf5; }
+html[data-preview-page="sdg"] .goal-node { background: var(--fs-surface); color: var(--fs-ink); border-color: var(--fs-line); }
+html[data-preview-page="sdg"] .goal-node:hover { background: var(--fs-raised); }
+html[data-preview-page="sdg"] .goal-node-status { color: var(--fs-muted); }
+html[data-preview-page="sdg"] .goal-info-dialog { color: var(--fs-ink); }
+html[data-preview-page="sdg"] .goal-info-heading h2 { color: var(--fs-ink); }
+html[data-preview-page="sdg"] .goal-info-heading p { color: var(--fs-muted); }
+html[data-preview-page="sdg"] .skeleton { background: linear-gradient(90deg, var(--fs-raised-alt), var(--fs-surface), var(--fs-raised-alt)); }
+
+/* Inventory · dense development reference, clearly differentiated from learner flow. */
+html[data-preview-page="inventory"] body { background: var(--fs-canvas); }
+html[data-preview-page="inventory"] .top {
+  background: var(--fs-accent-ink);
+  border-bottom: 1px solid var(--fs-line);
+  color: var(--fs-ink);
+}
+html[data-preview-page="inventory"] .top small { color: var(--fs-accent); font-family: "Space Mono", monospace; }
+html[data-preview-page="inventory"] .top h1,
+html[data-preview-page="inventory"] .top p { color: var(--fs-ink); }
+html[data-preview-page="inventory"] .safety {
+  background: var(--fs-amber-soft);
+  border-color: color-mix(in srgb, var(--fs-amber) 35%, var(--fs-line));
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="inventory"] .toolbar a,
+html[data-preview-page="inventory"] .toolbar button,
+html[data-preview-page="inventory"] .card-actions a,
+html[data-preview-page="inventory"] .card-actions button {
+  min-height: 42px;
+  background: var(--fs-raised);
+  border-color: var(--fs-line-strong);
+  color: var(--fs-accent);
+}
+html[data-preview-page="inventory"] .toolbar a.primary,
+html[data-preview-page="inventory"] .card-actions a.primary { background: var(--fs-accent); border-color: var(--fs-accent); color: var(--fs-on-accent); }
+html[data-preview-page="inventory"] .group-intro,
+html[data-preview-page="inventory"] .meta { color: var(--fs-muted); }
+html[data-preview-page="inventory"] .meta strong,
+html[data-preview-page="inventory"] .card h3 { color: var(--fs-ink); }
+html[data-preview-page="inventory"] .id { color: var(--fs-accent); font-family: "Space Mono", monospace; }
+html[data-preview-page="inventory"] .status.existing { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-preview-page="inventory"] .status.demo,
+html[data-preview-page="inventory"] .status.prototype { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-preview-page="inventory"] .status.proposed { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-preview-page="inventory"] .card p { color: var(--fs-ink-soft); }
+html[data-preview-page="inventory"] .note { color: var(--fs-amber); }
+html[data-preview-page="inventory"] details summary { color: var(--fs-accent); }
+html[data-preview-page="inventory"] footer { border-color: var(--fs-line); color: var(--fs-muted); }
+
+/* Reskilling · layered workspace, with semantic recoloring rather than inversion. */
+html[data-preview-page="reskilling"] body,
+html[data-preview-page="reskilling"] :root { color: var(--fs-ink); }
+html[data-preview-page="reskilling"] .site-shell { max-width: 1500px; }
+html[data-preview-page="reskilling"] .site-header { border-color: var(--fs-line); }
+html[data-preview-page="reskilling"] .brand { color: var(--fs-ink); }
+html[data-preview-page="reskilling"] .brand-icon { background: var(--fs-accent-ink); color: #d9effb; border-radius: 11px; }
+html[data-preview-page="reskilling"] .brand-green,
+html[data-preview-page="reskilling"] .dashboard-heading h2 span { color: var(--fs-mint); }
+html[data-preview-page="reskilling"] .tiny-label,
+html[data-preview-page="reskilling"] .section-eyebrow { color: var(--fs-accent); }
+html[data-preview-page="reskilling"] .assessment-link,
+html[data-preview-page="reskilling"] .proof-link { color: var(--fs-accent); }
+html[data-preview-page="reskilling"] .status-dot,
+html[data-preview-page="reskilling"] .dot { background: var(--fs-mint); }
+html[data-preview-page="reskilling"] .hero-copy h1 { color: var(--fs-ink); }
+html[data-preview-page="reskilling"] .hero-copy h1 em { color: var(--fs-accent); }
+html[data-preview-page="reskilling"] .hero-copy p,
+html[data-preview-page="reskilling"] .muted { color: var(--fs-ink-soft); }
+html[data-preview-page="reskilling"] .hero-tags span,
+html[data-preview-page="reskilling"] .hero-bubble { background: var(--fs-raised); border-color: var(--fs-line); color: var(--fs-accent-ink); box-shadow: var(--fs-shadow-small); }
+html[data-preview-page="reskilling"] .orbit { border-color: color-mix(in srgb, var(--fs-accent) 26%, transparent); }
+html[data-preview-page="reskilling"] .orbit-inner { background: radial-gradient(circle, var(--fs-accent-soft) 20%, var(--fs-raised-alt) 68%, transparent 75%); }
+html[data-preview-page="reskilling"] .hero-spark { color: var(--fs-amber); }
+html[data-preview-page="reskilling"] .panel,
+html[data-preview-page="reskilling"] .stat-card { background: var(--fs-raised); border-color: var(--fs-line); box-shadow: var(--fs-shadow-small); }
+html[data-preview-page="reskilling"] .workspace-sidebar { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-preview-page="reskilling"] .workspace-sidebar-heading p { color: var(--fs-ink); }
+html[data-preview-page="reskilling"] .workspace-overline { color: var(--fs-accent); }
+html[data-preview-page="reskilling"] .workspace-nav-item { color: var(--fs-ink-soft); }
+html[data-preview-page="reskilling"] .workspace-nav-item:hover { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-preview-page="reskilling"] .workspace-nav-item.active { background: var(--fs-raised); color: var(--fs-accent-ink); box-shadow: var(--fs-shadow-small); }
+html[data-preview-page="reskilling"] .workspace-nav-item.active::before { background: var(--fs-accent); }
+html[data-preview-page="reskilling"] .nav-external { color: var(--fs-dim); }
+html[data-preview-page="reskilling"] .sidebar-note,
+html[data-preview-page="reskilling"] .settings-nav-item { border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-preview-page="reskilling"] .sidebar-note-mark { background: var(--fs-mint); box-shadow: 0 0 0 4px var(--fs-mint-soft); }
+html[data-preview-page="reskilling"] .workspace-notice,
+html[data-preview-page="reskilling"] .insight-box { background: var(--fs-accent-soft); border-color: var(--fs-line); color: var(--fs-ink-soft); }
+html[data-preview-page="reskilling"] .pill { background: var(--fs-raised-alt); border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-preview-page="reskilling"] .pill.soft,
+html[data-preview-page="reskilling"] .btn-ghost { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-preview-page="reskilling"] .step-label { color: var(--fs-dim); }
+html[data-preview-page="reskilling"] .step-label.active,
+html[data-preview-page="reskilling"] .progress-label strong { color: var(--fs-accent); }
+html[data-preview-page="reskilling"] .step-connector,
+html[data-preview-page="reskilling"] .form-footer,
+html[data-preview-page="reskilling"] .footer-note { border-color: var(--fs-line); }
+html[data-preview-page="reskilling"] .field input:not([type="range"]):not([type="checkbox"]),
+html[data-preview-page="reskilling"] .field select,
+html[data-preview-page="reskilling"] .field textarea,
+html[data-preview-page="reskilling"] .week-bar select { background: var(--fs-surface); border-color: var(--fs-line-strong); color: var(--fs-ink); }
+html[data-preview-page="reskilling"] .field-hint,
+html[data-preview-page="reskilling"] .optional { color: var(--fs-muted); }
+html[data-preview-page="reskilling"] .range-output { background: var(--fs-accent-soft); border-color: var(--fs-line); color: var(--fs-accent-ink); }
+html[data-preview-page="reskilling"] .day-selector label,
+html[data-preview-page="reskilling"] .skill-rating { background: var(--fs-surface); border-color: var(--fs-line); color: var(--fs-ink-soft); }
+html[data-preview-page="reskilling"] .day-selector label:has(input:checked) { background: var(--fs-accent-soft); border-color: var(--fs-accent); color: var(--fs-accent-ink); }
+html[data-preview-page="reskilling"] .day-selector label:focus-within { outline-color: var(--fs-accent); }
+html[data-preview-page="reskilling"] .rating-head span,
+html[data-preview-page="reskilling"] .stat-icon { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-preview-page="reskilling"] .stat-label,
+html[data-preview-page="reskilling"] .stat-note { color: var(--fs-muted); }
+html[data-preview-page="reskilling"] .gap-bar,
+html[data-preview-page="reskilling"] .progress-track { background: var(--fs-raised-alt); }
+html[data-preview-page="reskilling"] .gap-current { background: var(--fs-mint); }
+html[data-preview-page="reskilling"] .gap-require { background: var(--fs-amber); }
+html[data-preview-page="reskilling"] .plan-note,
+html[data-preview-page="reskilling"] .day-group,
+html[data-preview-page="reskilling"] .empty-state { background: var(--fs-raised-alt); border-color: var(--fs-line); color: var(--fs-ink-soft); }
+html[data-preview-page="reskilling"] .task-row { border-color: var(--fs-line); }
+html[data-preview-page="reskilling"] .task-description,
+html[data-preview-page="reskilling"] .gap-footer,
+html[data-preview-page="reskilling"] .gap-top span { color: var(--fs-muted); }
+html[data-preview-page="reskilling"] .task-tag { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-preview-page="reskilling"] .task-tag.review { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-preview-page="reskilling"] .task-photo,
+html[data-preview-page="reskilling"] .win-item { background: var(--fs-mint-soft); border-color: var(--fs-line); color: var(--fs-mint); }
+html[data-preview-page="reskilling"] .tree-card { background: var(--fs-raised); }
+html[data-preview-page="reskilling"] .tree-scene { background: radial-gradient(circle at 50% 73%, var(--fs-mint-soft), var(--fs-raised-alt) 75%); }
+html[data-preview-page="reskilling"] .tree-glow { background: radial-gradient(circle, color-mix(in srgb, var(--fs-mint) 22%, transparent), transparent 70%); }
+html[data-preview-page="reskilling"] .tree-ground { background: color-mix(in srgb, var(--fs-mint) 52%, var(--fs-raised-alt)); }
+html[data-preview-page="reskilling"] .tree-level span,
+html[data-preview-page="reskilling"] .tree-encouragement { color: var(--fs-mint); }
+html[data-preview-page="reskilling"] .privacy-tip,
+html[data-preview-page="reskilling"] .footer-note { color: var(--fs-muted); }
+html[data-preview-page="reskilling"] .footer-note span:first-child { color: var(--fs-accent); }
+html[data-preview-page="reskilling"] .settings-dialog { background: var(--fs-surface); border-color: var(--fs-line); color: var(--fs-ink); }
+html[data-preview-page="reskilling"] .settings-dialog-header,
+html[data-preview-page="reskilling"] .settings-section,
+html[data-preview-page="reskilling"] .settings-availability li { border-color: var(--fs-line); }
+html[data-preview-page="reskilling"] .settings-dialog-header h2,
+html[data-preview-page="reskilling"] .settings-section-heading h3,
+html[data-preview-page="reskilling"] .settings-availability li strong { color: var(--fs-ink); }
+html[data-preview-page="reskilling"] .settings-close,
+html[data-preview-page="reskilling"] .theme-options label span { background: var(--fs-raised-alt); border-color: var(--fs-line); color: var(--fs-ink-soft); }
+html[data-preview-page="reskilling"] .theme-options input:checked + span { background: var(--fs-accent-soft); border-color: var(--fs-accent); color: var(--fs-accent-ink); }
+html[data-preview-page="reskilling"] .settings-section-heading p,
+html[data-preview-page="reskilling"] .settings-availability li small { color: var(--fs-muted); }
+html[data-preview-page="reskilling"] .availability-status { background: var(--fs-raised-alt); color: var(--fs-muted); }
+html[data-preview-page="reskilling"] .btn-primary { background: var(--fs-accent); color: var(--fs-on-accent); }
+html[data-preview-page="reskilling"] .btn-primary:hover { background: var(--fs-accent-hover); }
+html[data-preview-page="reskilling"] .btn-outline { background: var(--fs-raised); border-color: var(--fs-line-strong); color: var(--fs-accent-ink); }
+html[data-preview-page="reskilling"] .form-error { color: var(--fs-danger); }
+html[data-preview-page="reskilling"] .toast { background: var(--fs-accent-ink); }
+html[data-preview-page="reskilling"] .toast.error { background: var(--fs-danger); }
+html[data-preview-page="reskilling"] .settings-dialog::backdrop { background: rgba(4, 13, 24, .62); }
+html[data-preview-page="reskilling"] .settings-close { min-width: 42px; min-height: 42px; }
+html[data-preview-page="reskilling"] .workspace-toggle { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-preview-page="reskilling"] .workspace-toggle span { background: var(--fs-ink-soft); }
+html[data-preview-page="reskilling"] .workspace-nav-item { min-height: 46px; }
+
+@media (max-width: 760px) {
+  html[data-preview-page="home"] .features { grid-template-columns: 1fr; }
+  html[data-preview-page="home"] .hero { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-preview-page] *,
+  html[data-preview-page] *::before,
+  html[data-preview-page] *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Final QA corrections: override the legacy reskilling dark-theme selectors.
+   They target :root[data-theme="dark"] with higher specificity than the first pass. */
+html[data-preview-page="reskilling"][data-future-theme] body {
+  background: var(--fs-canvas);
+  color: var(--fs-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .site-header {
+  border-color: var(--fs-line);
+}
+html[data-preview-page="reskilling"][data-future-theme] .brand,
+html[data-preview-page="reskilling"][data-future-theme] .hero-copy h1,
+html[data-preview-page="reskilling"][data-future-theme] .dashboard-heading h2,
+html[data-preview-page="reskilling"][data-future-theme] .card-header h3,
+html[data-preview-page="reskilling"][data-future-theme] .tree-card h3,
+html[data-preview-page="reskilling"][data-future-theme] .replan-card h3,
+html[data-preview-page="reskilling"][data-future-theme] .clarity-card h3,
+html[data-preview-page="reskilling"][data-future-theme] .task-title,
+html[data-preview-page="reskilling"][data-future-theme] .stat-card strong {
+  color: var(--fs-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .site-header,
+html[data-preview-page="reskilling"][data-future-theme] .workspace-layout,
+html[data-preview-page="reskilling"][data-future-theme] .workspace-main { color: var(--fs-ink); }
+html[data-preview-page="reskilling"][data-future-theme] .workspace-sidebar {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+}
+html[data-preview-page="reskilling"][data-future-theme] .workspace-sidebar-heading p { color: var(--fs-ink); }
+html[data-preview-page="reskilling"][data-future-theme] .workspace-nav-item {
+  background: transparent;
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="reskilling"][data-future-theme] .workspace-nav-item:hover {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .workspace-nav-item.active {
+  background: var(--fs-raised);
+  color: var(--fs-accent-ink);
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-preview-page="reskilling"][data-future-theme] .workspace-nav-item.active::before { background: var(--fs-accent); }
+html[data-preview-page="reskilling"][data-future-theme] .sidebar-note,
+html[data-preview-page="reskilling"][data-future-theme] .settings-nav-item { border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-preview-page="reskilling"][data-future-theme] .panel,
+html[data-preview-page="reskilling"][data-future-theme] .stat-card {
+  background: var(--fs-raised);
+  border-color: var(--fs-line);
+}
+html[data-preview-page="reskilling"][data-future-theme] .workspace-notice,
+html[data-preview-page="reskilling"][data-future-theme] .insight-box {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="reskilling"][data-future-theme] .hero-tags span,
+html[data-preview-page="reskilling"][data-future-theme] .hero-bubble {
+  background: var(--fs-raised);
+  border-color: var(--fs-line);
+  color: var(--fs-accent-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .pill {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+  color: var(--fs-muted);
+}
+html[data-preview-page="reskilling"][data-future-theme] .pill.soft,
+html[data-preview-page="reskilling"][data-future-theme] .btn-ghost,
+html[data-preview-page="reskilling"][data-future-theme] .range-output {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-line);
+  color: var(--fs-accent-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .step-connector,
+html[data-preview-page="reskilling"][data-future-theme] .form-footer,
+html[data-preview-page="reskilling"][data-future-theme] .footer-note { border-color: var(--fs-line); }
+html[data-preview-page="reskilling"][data-future-theme] .step-label { color: var(--fs-muted); }
+html[data-preview-page="reskilling"][data-future-theme] .step-label.active,
+html[data-preview-page="reskilling"][data-future-theme] .progress-label strong { color: var(--fs-accent); }
+html[data-preview-page="reskilling"][data-future-theme] .field input:not([type="range"]):not([type="checkbox"]),
+html[data-preview-page="reskilling"][data-future-theme] .field select,
+html[data-preview-page="reskilling"][data-future-theme] .field textarea,
+html[data-preview-page="reskilling"][data-future-theme] .week-bar select {
+  background: var(--fs-surface);
+  border-color: var(--fs-line-strong);
+  color: var(--fs-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .field-hint,
+html[data-preview-page="reskilling"][data-future-theme] .optional,
+html[data-preview-page="reskilling"][data-future-theme] .stat-label,
+html[data-preview-page="reskilling"][data-future-theme] .stat-note,
+html[data-preview-page="reskilling"][data-future-theme] .muted { color: var(--fs-muted); }
+html[data-preview-page="reskilling"][data-future-theme] .day-selector label,
+html[data-preview-page="reskilling"][data-future-theme] .skill-rating {
+  background: var(--fs-surface);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="reskilling"][data-future-theme] .day-selector label:has(input:checked) {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+  color: var(--fs-accent-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .rating-head span,
+html[data-preview-page="reskilling"][data-future-theme] .stat-icon {
+  background: var(--fs-mint-soft);
+  color: var(--fs-mint);
+}
+html[data-preview-page="reskilling"][data-future-theme] .gap-bar,
+html[data-preview-page="reskilling"][data-future-theme] .progress-track { background: var(--fs-raised-alt); }
+html[data-preview-page="reskilling"][data-future-theme] .gap-current { background: var(--fs-mint); }
+html[data-preview-page="reskilling"][data-future-theme] .gap-require { background: var(--fs-amber); }
+html[data-preview-page="reskilling"][data-future-theme] .plan-note,
+html[data-preview-page="reskilling"][data-future-theme] .day-group,
+html[data-preview-page="reskilling"][data-future-theme] .empty-state {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="reskilling"][data-future-theme] .task-row { border-color: var(--fs-line); }
+html[data-preview-page="reskilling"][data-future-theme] .task-description,
+html[data-preview-page="reskilling"][data-future-theme] .gap-footer,
+html[data-preview-page="reskilling"][data-future-theme] .gap-top span { color: var(--fs-muted); }
+html[data-preview-page="reskilling"][data-future-theme] .task-tag { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-preview-page="reskilling"][data-future-theme] .task-tag.review { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-preview-page="reskilling"][data-future-theme] .task-photo,
+html[data-preview-page="reskilling"][data-future-theme] .win-item { background: var(--fs-mint-soft); border-color: var(--fs-line); color: var(--fs-mint); }
+html[data-preview-page="reskilling"][data-future-theme] .tree-card { background: var(--fs-raised); }
+html[data-preview-page="reskilling"][data-future-theme] .tree-scene { background: radial-gradient(circle at 50% 73%, var(--fs-mint-soft), var(--fs-raised-alt) 75%); }
+html[data-preview-page="reskilling"][data-future-theme] .tree-ground { background: color-mix(in srgb, var(--fs-mint) 52%, var(--fs-raised-alt)); }
+html[data-preview-page="reskilling"][data-future-theme] .tree-level span,
+html[data-preview-page="reskilling"][data-future-theme] .tree-encouragement,
+html[data-preview-page="reskilling"][data-future-theme] .footer-note span:first-child { color: var(--fs-mint); }
+html[data-preview-page="reskilling"][data-future-theme] .privacy-tip,
+html[data-preview-page="reskilling"][data-future-theme] .footer-note { color: var(--fs-muted); }
+html[data-preview-page="reskilling"][data-future-theme] .settings-dialog {
+  background: var(--fs-surface);
+  border-color: var(--fs-line);
+  color: var(--fs-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .settings-dialog-header,
+html[data-preview-page="reskilling"][data-future-theme] .settings-section,
+html[data-preview-page="reskilling"][data-future-theme] .settings-availability li { border-color: var(--fs-line); }
+html[data-preview-page="reskilling"][data-future-theme] .settings-dialog-header h2,
+html[data-preview-page="reskilling"][data-future-theme] .settings-section-heading h3,
+html[data-preview-page="reskilling"][data-future-theme] .settings-availability li strong { color: var(--fs-ink); }
+html[data-preview-page="reskilling"][data-future-theme] .settings-close,
+html[data-preview-page="reskilling"][data-future-theme] .theme-options label span {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-preview-page="reskilling"][data-future-theme] .theme-options input:checked + span {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+  color: var(--fs-accent-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .settings-section-heading p,
+html[data-preview-page="reskilling"][data-future-theme] .settings-availability li small { color: var(--fs-muted); }
+html[data-preview-page="reskilling"][data-future-theme] .availability-status { background: var(--fs-raised-alt); color: var(--fs-muted); }
+html[data-preview-page="reskilling"][data-future-theme] .settings-close {
+  min-width: 42px;
+  min-height: 42px;
+}
+html[data-preview-page="reskilling"][data-future-theme] .btn-primary {
+  background: var(--fs-accent);
+  color: var(--fs-on-accent);
+}
+html[data-preview-page="reskilling"][data-future-theme] .btn-primary:hover { background: var(--fs-accent-hover); }
+html[data-preview-page="reskilling"][data-future-theme] .btn-outline {
+  background: var(--fs-raised);
+  border-color: var(--fs-line-strong);
+  color: var(--fs-accent-ink);
+}
+html[data-preview-page="reskilling"][data-future-theme] .workspace-toggle { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-preview-page="reskilling"][data-future-theme] .workspace-toggle span { background: var(--fs-ink-soft); }
+
+/* SDG drawer controls are quiet secondary actions, not primary blue buttons. */
+html[data-preview-page="sdg"][data-future-theme] .mapping-drawer-close {
+  min-height: 42px;
+  padding: 8px 12px;
+  background: var(--fs-raised-alt);
+  border: 1px solid var(--fs-line-strong);
+  color: var(--fs-ink);
+  font: 700 12px/1.25 "DM Sans", sans-serif;
+}
+html[data-preview-page="sdg"][data-future-theme] .mapping-drawer-close:hover {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+html[data-preview-page="sdg"][data-future-theme] .goal-node {
+  background: var(--fs-surface);
+  color: var(--fs-ink);
+  font: 700 10px/1.25 "DM Sans", sans-serif;
+}
+html[data-preview-page="sdg"][data-future-theme] .evidence-node {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 7px 6px;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  background: var(--fs-raised-alt);
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 8px;
+  color: var(--fs-ink);
+  font: 700 10px/1.3 "DM Sans", sans-serif;
+  text-align: center;
+}
+html[data-preview-page="sdg"][data-future-theme] .evidence-node.practice { color: var(--fs-amber); }
+html[data-preview-page="sdg"][data-future-theme] .evidence-node:hover,
+html[data-preview-page="sdg"][data-future-theme] .evidence-node[aria-pressed="true"] {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+  color: var(--fs-accent-ink);
+}
+html[data-preview-page="sdg"][data-future-theme] .evidence-node.practice:hover,
+html[data-preview-page="sdg"][data-future-theme] .evidence-node.practice[aria-pressed="true"] { color: var(--fs-amber); }
+html[data-preview-page="sdg"][data-future-theme="dark"] .evidence-stat strong { color: #f0a1ad; }
+html[data-preview-page="sdg"][data-future-theme="dark"] .evidence-stat span { color: var(--fs-ink-soft); }
+
+/* The home demo result contains legacy inline color surfaces; keep its content intact. */
+html[data-preview-page="home"][data-future-theme="dark"] .career-card[style] {
+  background: var(--fs-raised) !important;
+  border-color: var(--fs-line) !important;
+}
+html[data-preview-page="home"][data-future-theme="dark"] #homePage a[style*="color"] {
+  color: var(--fs-accent) !important;
+}
+html[data-preview-page="home"][data-future-theme="dark"] .career-card a[style*="background"],
+html[data-preview-page="home"][data-future-theme="dark"] .career-card a[style*="cssText"] {
+  background: var(--fs-accent) !important;
+  color: var(--fs-on-accent) !important;
+}

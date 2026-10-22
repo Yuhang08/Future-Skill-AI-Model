@@ -1,0 +1,19 @@
+kind = "design"
+previewPath = "/__mockup/"
+title = "FutureSkill Mockup Preview"
+description = "Isolated preview runtime for FutureSkill design variants."
+version = "1.0.0"
+id = "artifacts/mockup-sandbox-preview"
+router = "path"
+
+[[services]]
+name = "Component Preview Server"
+paths = [ "/__mockup/" ]
+localPort = 22117
+
+[services.development]
+run = "npm run dev"
+
+[services.env]
+PORT = "22117"
+BASE_PATH = "/__mockup/"

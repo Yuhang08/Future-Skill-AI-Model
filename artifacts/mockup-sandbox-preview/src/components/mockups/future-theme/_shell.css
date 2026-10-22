@@ -1,0 +1,221 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap");
+
+.fs-preview {
+  --shell-bg: #e9eff2;
+  --shell-top: #f7f9f9;
+  --shell-panel: #ffffff;
+  --shell-ink: #203647;
+  --shell-muted: #607786;
+  --shell-line: #d2dfe4;
+  --shell-accent: #286f9e;
+  --shell-accent-soft: #e6f1f6;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100dvh;
+  min-height: 460px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 95% 0%, rgba(74, 137, 171, .09), transparent 28rem),
+    var(--shell-bg);
+  color: var(--shell-ink);
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+.fs-preview[data-mode="dark"] {
+  color-scheme: dark;
+  --shell-bg: #101a28;
+  --shell-top: #152235;
+  --shell-panel: #1b2a3e;
+  --shell-ink: #e4edf5;
+  --shell-muted: #a5b7c7;
+  --shell-line: #35485e;
+  --shell-accent: #77bee8;
+  --shell-accent-soft: #253e55;
+  background:
+    radial-gradient(ellipse at 95% 0%, rgba(72, 139, 177, .13), transparent 30rem),
+    var(--shell-bg);
+}
+.fs-preview[data-mode="current"] {
+  color-scheme: light;
+  --shell-bg: #eceff1;
+  --shell-top: #fafbfc;
+  --shell-panel: #ffffff;
+  --shell-ink: #24313a;
+  --shell-muted: #5c6870;
+  --shell-line: #d6dde1;
+  --shell-accent: #476b80;
+  --shell-accent-soft: #e9eff2;
+  background: var(--shell-bg);
+}
+.fs-preview *,
+.fs-preview *::before,
+.fs-preview *::after { box-sizing: border-box; }
+.fs-preview-bar {
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 2vw, 28px);
+  min-height: 68px;
+  padding: 10px clamp(14px, 2.6vw, 36px);
+  background: var(--shell-top);
+  border-bottom: 1px solid var(--shell-line);
+  box-shadow: 0 3px 16px rgba(16, 38, 55, .045);
+}
+.fs-preview-brand {
+  display: flex;
+  min-width: 170px;
+  align-items: center;
+  gap: 10px;
+  color: var(--shell-ink);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+}
+.fs-preview-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--shell-accent) 42%, var(--shell-line));
+  border-radius: 11px;
+  background: var(--shell-accent-soft);
+  color: var(--shell-accent);
+  font: 700 11px "Space Mono", monospace;
+  letter-spacing: -.08em;
+}
+.fs-preview-nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--shell-line) transparent;
+}
+.fs-preview-nav button,
+.fs-mode-toggle {
+  min-height: 40px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--shell-muted);
+  font: 650 12px "DM Sans", sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .15s ease, background-color .15s ease, border-color .15s ease, transform .15s ease;
+}
+.fs-preview-nav button { padding: 8px 11px; }
+.fs-preview-nav button:hover,
+.fs-mode-toggle:hover { background: var(--shell-accent-soft); color: var(--shell-ink); }
+.fs-preview-nav button[data-active="true"] {
+  background: var(--shell-accent-soft);
+  color: var(--shell-accent);
+  border-color: color-mix(in srgb, var(--shell-accent) 20%, var(--shell-line));
+}
+.fs-preview-nav button:focus-visible,
+.fs-mode-toggle:focus-visible {
+  outline: 3px solid var(--shell-accent);
+  outline-offset: 2px;
+}
+.fs-preview-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.fs-preview-status {
+  color: var(--shell-muted);
+  font: 10px "Space Mono", monospace;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.fs-preview[data-mode="current"] .fs-preview-status::before {
+  content: "SOURCE · ";
+  color: var(--shell-accent);
+}
+.fs-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-color: var(--shell-line);
+  background: var(--shell-panel);
+  color: var(--shell-ink);
+  line-height: 1.2;
+}
+.fs-mode-toggle::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--shell-accent);
+  vertical-align: 1px;
+}
+.fs-preview-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: 12px;
+}
+.fs-source-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--shell-line);
+  border-radius: 12px;
+  background: var(--shell-bg);
+  box-shadow: 0 8px 28px rgba(16, 38, 55, .07);
+}
+.fs-preview[data-mode="current"] .fs-source-frame { border-radius: 7px; }
+
+@media (max-width: 920px) {
+  .fs-preview-bar {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 7px 14px;
+    padding: 8px 14px;
+  }
+  .fs-preview-brand { min-width: 0; grid-column: 1; grid-row: 1; }
+  .fs-preview-controls { grid-column: 2; grid-row: 1; }
+  .fs-preview-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    margin: 0 -2px;
+  }
+  .fs-preview-stage { padding: 8px; }
+}
+@media (max-width: 520px) {
+  .fs-preview { min-height: 380px; }
+  .fs-preview-bar { gap: 5px 8px; padding: 7px 10px 6px; }
+  .fs-preview-brand { gap: 7px; font-size: 12px; }
+  .fs-preview-mark { width: 30px; height: 30px; flex-basis: 30px; }
+  .fs-preview-controls { gap: 7px; }
+  .fs-preview-status {
+    display: inline;
+    max-width: 92px;
+    overflow-wrap: anywhere;
+    font-size: 9px;
+    line-height: 1.2;
+    text-align: right;
+    white-space: normal;
+  }
+  .fs-preview-nav { gap: 2px; }
+  .fs-preview-nav button { min-height: 38px; padding: 7px 9px; font-size: 11px; }
+  .fs-mode-toggle { min-height: 38px; padding: 7px 9px; font-size: 11px; }
+  .fs-mode-toggle::before { margin-right: 5px; }
+  .fs-preview-stage { padding: 5px; }
+  .fs-source-frame { border-radius: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fs-preview *,
+  .fs-preview *::before,
+  .fs-preview *::after { transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

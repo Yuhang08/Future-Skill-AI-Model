@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FutureSkill AI · Career and SDG explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{font-family:"DM Sans",sans-serif;color:#263b3d;background:#f4f7f2;font-synthesis:none;--ink:#263b3d;--muted:#647673;--paper:#fffefa;--line:#dce5dc;--mint:#dceee5;--teal:#176a61;--deep:#164a48}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100dvh}
+    a{color:#12685e}
+    header{height:64px;background:#164a48;color:#fff;display:flex;align-items:center;padding:0 max(20px,calc((100vw - 1120px)/2))}
+    header a{color:#f2fff8;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:11px}
+    .brand-mark{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#e2ad3d;color:#173e3c;font:700 12px "Space Mono",monospace}
+    main{max-width:1120px;margin:auto;padding:30px 20px 64px}
+    .topline{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px}
+    .eyebrow,.mono,.goal-index{font-family:"Space Mono",monospace}
+    .eyebrow{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#34756a;font-weight:700}
+    .status-pill{font-size:11px;font-weight:700;color:#526b60;background:#e8f0e8;border:1px solid #d9e5d8;padding:7px 10px;border-radius:999px;white-space:nowrap}
+    .intro{display:flex;justify-content:space-between;align-items:end;gap:26px;margin-bottom:20px}
+    h1{font-size:clamp(31px,4.7vw,45px);line-height:1.04;letter-spacing:-.045em;margin:7px 0 8px;color:#203e3d}
+    h2{font-size:19px;letter-spacing:-.025em;margin:0 0 10px}
+    h3{font-size:16px;letter-spacing:-.02em;margin:0 0 8px}
+    p{line-height:1.55;color:var(--muted);margin:7px 0}
+    .intro p{max-width:570px;font-size:14px}
+    .distinction{max-width:300px;border-left:3px solid #d4a334;padding:10px 13px;background:#fff4d9;border-radius:0 10px 10px 0;color:#615633;font-size:12px;line-height:1.5}
+    .distinction strong{display:block;color:#51461e;margin-bottom:3px}
+    details.about{margin:0 0 16px;border:1px solid var(--line);background:#eff4ed;border-radius:10px}
+    details.about summary{cursor:pointer;padding:10px 13px;font-size:12px;font-weight:700;color:#42645c}
+    .about-copy{padding:0 13px 12px;font-size:12px}
+    .about-copy p{font-size:12px;margin:5px 0}
+    .search-panel{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:14px;box-shadow:0 6px 18px #21433d08;margin:16px 0 8px}
+    .controls{display:flex;gap:9px}
+    .controls input{min-width:0;flex:1;font:inherit;color:#263b3d;border:1px solid #cfdcd2;border-radius:8px;padding:11px 13px;background:#fbfcf7}
+    button{font:700 13px "DM Sans",sans-serif;border:0;border-radius:8px;padding:11px 16px;background:#176a61;color:#fff;cursor:pointer;transition:transform .16s ease,background-color .16s ease}
+    button:hover{background:#10544d;transform:translateY(-1px)}
+    button:disabled{opacity:.62;cursor:wait;transform:none}
+    button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #d4a334;outline-offset:3px}
+    .helper{font-size:11px;margin:8px 2px 0;color:#718078}
+    .state-message{min-height:22px;margin:10px 2px;color:#51655e;font-size:13px}
+    .state-message.error{color:#9d3c48}
+    .state-message.loading{color:#176a61}
+    .loading-line{height:3px;background:#e5eee6;overflow:hidden;border-radius:5px;margin-top:7px}
+    .loading-line span{display:block;width:35%;height:100%;background:#43947b;animation:load 1.1s ease-in-out infinite alternate}
+    @keyframes load{to{transform:translateX(185%)}}
+    .section-label{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 10px}
+    .section-label h2{margin:0}
+    .section-label span{font-size:10px;color:#718078}
+    .mapping-list{display:grid;gap:9px}
+    .mapping{--sdg-color:#176a61;background:var(--paper);border:1px solid #e0e7dd;border-radius:12px;overflow:hidden;box-shadow:0 5px 16px #21433d08}
+    .mapping-head{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:13px;min-height:76px;padding:12px 15px 12px 17px;background:linear-gradient(100deg,color-mix(in srgb,var(--sdg-color) 7%,#fffefa),#fffefa 67%)}
+    .mapping-head::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--sdg-color)}
+    .goal-number{width:46px;height:46px;display:grid;place-items:center;border-radius:9px;overflow:hidden;background:var(--sdg-color);flex:none}
+    .goal-number img{width:100%;height:100%;object-fit:cover}
+    .mapping-head h3{margin:0;font-size:15px}
+    .mapping-head p{margin:3px 0 0;max-width:690px;font-size:12px;line-height:1.4;color:#5c6c65}
+    .mapping-head-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+    .target-tag{font:700 10px "Space Mono",monospace;color:var(--sdg-color);background:color-mix(in srgb,var(--sdg-color) 9%,#fff);border-radius:6px;padding:7px 8px;white-space:nowrap}
+    .mapping-details-trigger{flex:none;border-radius:7px;background:var(--sdg-color);color:#fff;padding:9px 11px;font:700 11px "DM Sans",sans-serif;white-space:nowrap}
+    .mapping-details-trigger:hover{filter:brightness(.93)}
+    .mapping-drawer{--sdg-color:#176a61;position:fixed;inset:0 0 0 auto;margin:0;width:min(790px,100vw);height:100dvh;max-height:100dvh;padding:0;border:0;border-left:1px solid #e2e1ed;border-radius:0;background:#fffefa;color:#263b3d;box-shadow:-18px 0 55px #1b3b3622}
+    .mapping-drawer::backdrop{background:#102c2b70;backdrop-filter:blur(2px)}
+    .mapping-drawer[open]{animation:drawer-enter .2s ease-out}
+    @keyframes drawer-enter{from{transform:translateX(18px);opacity:.75}to{transform:translateX(0);opacity:1}}
+    .mapping-drawer-panel{height:100%;overflow:auto;padding:0 27px 30px}
+    .mapping-drawer-header{position:sticky;top:0;z-index:3;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:16px 0 13px;border-bottom:1px solid #e7ece4;background:#fffefa}
+    .mapping-drawer-header h2{margin:4px 0 0;font-size:21px;line-height:1.25}
+    .drawer-target{font:700 10px "Space Mono",monospace;letter-spacing:.04em;text-transform:uppercase;color:#718078}
+    .mapping-drawer-close{flex:none;border:1px solid #dce5dc;border-radius:8px;background:#f1f5ee;color:#405b52;padding:8px 11px;font-weight:700;font-size:12px}
+    .mapping-drawer-close:hover{background:#e8f0e8}
+    .drawer-visual{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(220px,.9fr);min-height:250px;margin:18px 0 0;border-radius:15px;overflow:hidden;background:var(--sdg-color);color:#fff}
+    .drawer-visual-copy{position:relative;z-index:1;padding:25px}
+    .drawer-icon{width:68px;height:68px;border-radius:11px;box-shadow:0 8px 18px #14132b2b}
+    .drawer-visual h3{margin:15px 0 8px;color:#fff;font-size:25px;line-height:1.08}
+    .drawer-visual p{margin:0;color:#fff;font-size:13px;line-height:1.55}
+    .drawer-photo-wrap{position:relative;min-height:250px}
+    .drawer-photo{width:100%;height:100%;object-fit:cover}
+    .drawer-photo-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--sdg-color),transparent 38%)}
+    .drawer-photo-credit{position:absolute;right:10px;bottom:10px;z-index:1;border-radius:6px;background:#14132bcc;padding:5px 7px;color:#fff;font-size:10px;text-decoration:none}
+    .drawer-photo-credit:hover{text-decoration:underline}
+    .evidence-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:12px 0 3px}
+    .evidence-stat{padding:11px;border:1px solid #e1e8df;border-radius:9px;background:#f6f8f2}
+    .evidence-stat strong{display:block;color:var(--sdg-color);font-size:20px;line-height:1}
+    .evidence-stat span{display:block;margin-top:6px;color:#6d7a70;font-size:10px;line-height:1.35}
+    .mapping-content{padding:16px 0 8px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    .field-label{font:700 10px "Space Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:#718078;margin-bottom:6px}
+    .mapping-content p{margin:0;color:#455953;font-size:13px}
+    .evidence-box{background:#f2f5ef;border-radius:9px;padding:12px;margin-top:11px}
+    .evidence-map{display:grid;gap:8px;margin-top:9px}
+    .evidence-root{position:relative;display:flex;align-items:center;gap:9px;width:max-content;max-width:100%;margin:0 auto 4px;padding:7px 12px;border-radius:9px;background:var(--sdg-color);color:#fff;font-size:11px;font-weight:700}
+    .evidence-root::after{content:"";position:absolute;top:100%;left:50%;height:22px;border-left:1px solid #9ab7a3}
+    .evidence-root img{width:27px;height:27px;border-radius:4px}
+    .evidence-branches{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding-top:14px}
+    .evidence-branches::before{content:"";position:absolute;top:7px;left:16.6%;right:16.6%;border-top:1px solid #9ab7a3}
+    .evidence-branch{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:7px;padding-top:14px}
+    .evidence-branch::before{content:"";position:absolute;top:0;left:50%;width:1px;height:9px;background:#9ab7a3}
+    .evidence-branch::after{content:"";position:absolute;top:8px;left:25%;right:25%;height:1px;background:#9ab7a3}
+    .evidence-node{position:relative;z-index:1;min-width:0;background:#fffefa;color:#315d54;border:1px solid #dce7db;padding:8px 7px;font-size:10px;font-weight:700;line-height:1.3;box-shadow:none;transform:none}
+    .evidence-node:hover{background:#e8f3e9;transform:none}
+    .evidence-node.practice{color:#6b5b31}
+    .evidence-detail{min-height:46px;margin-top:10px;padding:9px 10px;border-left:3px solid var(--sdg-color);background:#fffefa;border-radius:0 7px 7px 0;color:#43564c;font-size:11px;line-height:1.45}
+    .evidence-full{margin-top:9px;font-size:11px}
+    .evidence-full summary{cursor:pointer;color:#4a6a5e;font-weight:700}
+    .evidence-full ul{margin:6px 0 0;padding-left:18px}
+    .evidence-full li{padding:3px 0;color:#505f58;font-size:12px;line-height:1.5}
+    .sources{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+    .sources a{font-size:11px;font-weight:700;text-decoration:none;background:#eaf1e7;padding:6px 8px;border-radius:6px}
+    .sources a:hover{text-decoration:underline}
+    .limit-box{padding:12px;border:1px solid #eadcae;background:#fff8e5;border-radius:9px;color:#66552f;font-size:12px;line-height:1.55}
+    .action-box{padding:12px;border:1px solid #d8e6d8;background:#eff6ec;border-radius:9px;margin-top:10px}
+    .action-box p{color:#405c4f}
+    .pathway{margin-top:20px;background:#204f4b;color:#fff;border-radius:13px;padding:16px}
+    .pathway h2{color:#fff;margin:0}
+    .pathway-intro{color:#d0e3d8;font-size:12px;margin:5px 0 11px}
+    .pathway-toggle{display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer;list-style:none}
+    .pathway-toggle::-webkit-details-marker{display:none}
+    .pathway-toggle::after{content:"+";font:18px "Space Mono",monospace;color:#f3cf75}
+    details[open]>.pathway-toggle::after{content:"−"}
+    .skills-list{display:grid;gap:8px}
+    .skill-row{display:grid;grid-template-columns:minmax(110px,.8fr) 1.2fr;gap:12px;align-items:start;padding:11px;border:1px solid #557570;background:#2b5c56;border-radius:8px}
+    .skill-name{color:#fff;font-weight:700;font-size:13px}
+    .skill-level{font:10px "Space Mono",monospace;color:#d2e5d8;margin-top:5px}
+    .skill-description{color:#f0f4ed;font-size:12px;line-height:1.45}
+    .skill-description p{color:#d6e4dc;font-size:11px;margin:4px 0 0}
+    .not-assessed{margin-top:12px;border-top:1px solid #557570;padding-top:11px;display:flex;justify-content:space-between;align-items:center;gap:12px;color:#e0eee5;font-size:12px}
+    .not-assessed a{color:#f3d27d;font-weight:700}
+    .empty-card{background:#fffefa;border:1px dashed #cbd9ce;border-radius:12px;padding:18px;color:#5e7067;font-size:13px}
+    .empty-card strong{display:block;color:#31524b;margin-bottom:5px}
+    .skeleton{height:120px;border-radius:12px;background:linear-gradient(90deg,#e8eee7,#f7f8f2,#e8eee7);background-size:200% 100%;animation:skeleton 1.2s ease-in-out infinite}
+    @keyframes skeleton{to{background-position:-200% 0}}
+    .footnote{margin-top:18px;padding-top:12px;border-top:1px solid #dce5dc;color:#718078;font-size:11px;line-height:1.55}
+    .retry{margin-top:8px}
+    .mindmap-shell{margin-top:18px;background:#eaf2e9;border:1px solid #d8e5d9;border-radius:16px;padding:16px;overflow:hidden}
+    .mindmap-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:11px}
+    .mindmap-heading h2{margin:0;font-size:17px}
+    .map-legend{display:flex;align-items:center;gap:12px;color:#6a7a70;font-size:10px;flex-wrap:wrap}
+    .legend-key{display:inline-flex;align-items:center;gap:5px}
+    .legend-dot{width:8px;height:8px;border-radius:50%;background:#315f54}
+    .legend-dot.muted{background:#aebbb0}
+    .mindmap-stage{position:relative;isolation:isolate}
+    .map-lines{position:absolute;inset:0;width:100%;height:100%;z-index:-1;overflow:visible;pointer-events:none}
+    .map-lines line{stroke:#759b83;stroke-width:2;stroke-dasharray:5 5;opacity:.76;animation:line-in .35s ease-out both}
+    @keyframes line-in{from{opacity:0}to{opacity:.76}}
+    .career-center{position:relative;width:min(300px,100%);min-height:54px;margin:0 auto 12px;padding:11px 16px;border-radius:12px;background:#164a48;color:white;text-align:center;box-shadow:0 7px 18px #1e55431a}
+    .career-center small{display:block;color:#cde1d6;font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:700}
+    .career-center strong{display:block;font-size:14px;margin-top:3px;overflow-wrap:anywhere}
+    .goal-grid{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(5,minmax(78px,auto));gap:8px}
+    .career-center{grid-area:3/3/4/4;position:relative;z-index:1;width:auto;min-height:70px;margin:0;padding:11px 12px;border:1px solid #6c9b86;display:flex;flex-direction:column;justify-content:center;box-shadow:0 7px 18px #1e55431a}
+    .goal-node{--goal-color:#777;background:#fffefa;color:#324842;border:1px solid #dce5dc;border-radius:10px;padding:7px 8px;min-width:0;min-height:68px;display:grid;grid-template-columns:31px minmax(0,1fr);align-items:center;gap:7px;text-align:left;box-shadow:none;transform:none;transition:transform .16s ease,border-color .16s ease,background-color .16s ease}
+    .goal-node:hover{background:#fff;transform:translateY(-2px);border-color:var(--goal-color)}
+    .goal-node.linked{border-color:color-mix(in srgb,var(--goal-color) 65%,#dce5dc);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--goal-color) 20%,transparent)}
+    .goal-node img{width:31px;height:31px;object-fit:cover;border-radius:5px;background:var(--goal-color)}
+    .goal-node-copy{min-width:0}
+    .goal-index{font-size:9px;color:var(--goal-color);font-weight:700}
+    .goal-name{display:block;font-size:10px;line-height:1.2;font-weight:700;overflow-wrap:anywhere;margin-top:2px}
+    .goal-node-status{display:block;font-size:9px;line-height:1.2;color:#839088;margin-top:3px}
+    .goal-node.linked .goal-node-status{color:var(--goal-color);font-weight:700}
+    .map-caption{font-size:11px;margin:11px 2px 0;color:#6e7c73}
+    .goal-info-dialog{width:min(420px,calc(100vw - 28px));padding:0;border:1px solid #dce5dc;border-radius:14px;background:#fffefa;color:#263b3d;box-shadow:0 20px 65px #1b3b3633}
+    .goal-info-dialog::backdrop{background:#102c2b70;backdrop-filter:blur(2px)}
+    .goal-info-dialog[open]{animation:drawer-enter .18s ease-out}
+    .goal-info-content{padding:20px}
+    .goal-info-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+    .goal-info-heading{display:flex;align-items:center;gap:11px}
+    .goal-info-heading img{width:48px;height:48px;border-radius:7px}
+    .goal-info-heading h2{margin:0;font-size:18px}
+    .goal-info-heading p{margin:3px 0 0;font-size:11px}
+    .goal-info-copy{font-size:13px;margin:16px 0}
+    .goal-info-link{display:inline-block;font-size:12px;font-weight:700}
+    @media(max-width:720px){main{padding:22px 15px 44px}.intro{display:block}.distinction{max-width:none;margin-top:11px}.mapping-content{grid-template-columns:1fr}.topline{align-items:flex-start;flex-direction:column}.goal-grid{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto}.career-center{grid-area:auto;grid-column:1/-1;order:-1;min-height:54px}.map-lines{display:none}.evidence-branches{grid-template-columns:repeat(2,minmax(0,1fr))}.evidence-branches::before{left:25%;right:25%}.evidence-root::after{height:22px}}
+    @media(max-width:520px){.controls{flex-direction:column}.controls button{width:100%}.mapping-head{grid-template-columns:42px minmax(0,1fr)}.goal-number{width:42px;height:42px}.mapping-head-actions{grid-column:1/-1;justify-content:space-between}.mapping-head p{font-size:11px}.mapping-drawer-panel{padding:0 15px 20px}.mapping-drawer-header h2{font-size:18px}.drawer-visual{grid-template-columns:1fr}.drawer-photo-wrap{min-height:180px;order:-1}.drawer-photo-wrap::after{background:linear-gradient(0deg,var(--sdg-color),transparent 45%)}.drawer-visual-copy{padding:20px}.drawer-visual h3{font-size:23px}.evidence-overview{grid-template-columns:1fr}.evidence-stat{display:flex;align-items:center;gap:10px}.evidence-stat span{margin-top:0}.skill-row{grid-template-columns:1fr;gap:6px}.not-assessed{align-items:flex-start;flex-direction:column}.goal-grid{gap:6px}.goal-node{grid-template-columns:27px minmax(0,1fr);gap:5px;padding:6px;min-height:63px}.goal-node img{width:27px;height:27px}.goal-name{font-size:9px}.goal-node-status{font-size:8px}.mindmap-shell{padding:12px}.mindmap-heading{align-items:flex-start;flex-direction:column}.map-caption{line-height:1.45}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+</head>
+<body>
+  <header><a href="/"><span class="brand-mark" aria-hidden="true">FS</span> FutureSkill AI</a></header>
+  <main>
+    <div class="topline">
+      <span class="eyebrow">Career pathway explorer</span>
+      <span class="status-pill">Prototype · selected targets only</span>
+    </div>
+    <section class="intro">
+      <div>
+        <h1>Explore the work<br>behind the goals.</h1>
+        <p>See where career preparation may connect to the UN Sustainable Development Goals.</p>
+      </div>
+      <aside class="distinction"><strong>Potential alignment is not impact.</strong>These are illustrative learning links, not proof of real-world change.</aside>
+    </section>
+    <details class="about">
+      <summary>About this prototype and how to read it</summary>
+      <div class="about-copy">
+        <p>Explore how a role’s skill requirements and learning pathway may relate to selected UN targets. Each reviewed mapping includes its reasoning, supporting evidence, suggested action and limits.</p>
+        <p>Prototype mappings currently connect selected learning pathways to SDG 4.4 and SDG 8.5. Skill requirements are illustrative; other roles are not assigned targets.</p>
+        <p>Evidence availability varies by role. Employment outcomes, equitable access and broader SDG-level contribution require separate evidence and follow-up data. A mapping does not show that a learner, career or product has caused measurable progress.</p>
+        <p>Official UN goal icons identify the goals; their use does not imply UN endorsement. Photographs are representative, not evidence of FutureSkill outcomes.</p>
+      </div>
+    </details>
+    <section class="search-panel" aria-label="Choose a career">
+      <form id="careerForm" class="controls">
+        <label class="sr-only" for="career">Career or role</label>
+        <input id="career" maxlength="100" value="Data Analyst" placeholder="Enter a career or role" autocomplete="off">
+        <button id="submitButton" type="submit">Explore career</button>
+      </form>
+    </section>
+    <p id="message" class="state-message" role="status" aria-live="polite">Loading career connections…</p>
+    <div id="loading" hidden aria-label="Loading career evidence"><div class="skeleton"></div><div class="loading-line"><span></span></div></div>
+    <section id="results" hidden>
+      <div class="section-label">
+        <h2 id="roleTitle">Career connections</h2>
+        <span id="reviewStatus" class="mono"></span>
+      </div>
+      <div id="mappingList" class="mapping-list"></div>
+      <section class="mindmap-shell" aria-labelledby="mindmapTitle">
+        <div class="mindmap-heading">
+          <h2 id="mindmapTitle">Career connections · 17 goals</h2>
+          <div class="map-legend" aria-label="Map legend">
+            <span class="legend-key"><i class="legend-dot"></i>Reviewed potential link</span>
+            <span class="legend-key"><i class="legend-dot muted"></i>Not assessed</span>
+          </div>
+        </div>
+        <div id="mindmapStage" class="mindmap-stage">
+          <svg id="mapLines" class="map-lines" aria-hidden="true"></svg>
+          <div id="careerCenter" class="career-center"><small>Exploring</small><strong id="mapCareerName">Career</strong></div>
+          <div id="goalGrid" class="goal-grid" aria-label="United Nations Sustainable Development Goals"></div>
+        </div>
+        <p class="map-caption">Select any goal to explore it. Only reviewed career links are connected; other goals are not assessed for this role.</p>
+      </section>
+      <details id="pathway" class="pathway" hidden>
+        <summary class="pathway-toggle"><span><h2>Learning pathway</h2><span class="pathway-intro">Skills and practice connected to preparation for this role.</span></span></summary>
+        <p class="pathway-intro">These skills and learning actions describe preparation for the selected role. Completion does not guarantee employment or SDG outcomes.</p>
+        <div id="skillsList" class="skills-list"></div>
+        <div id="assessmentStatus" class="not-assessed"></div>
+      </details>
+    </section>
+    <p class="footnote">Potential relationship only. This prototype does not evaluate impact.</p>
+  </main>
+  <dialog id="goalInfoDialog" class="goal-info-dialog" aria-labelledby="goalInfoTitle">
+    <div class="goal-info-content">
+      <div class="goal-info-head">
+        <div class="goal-info-heading"><img id="goalInfoIcon" alt=""><div><h2 id="goalInfoTitle"></h2><p id="goalInfoNumber"></p></div></div>
+        <button id="goalInfoClose" type="button" class="mapping-drawer-close" aria-label="Close goal information">Close</button>
+      </div>
+      <p id="goalInfoCopy" class="goal-info-copy"></p>
+      <a id="goalInfoLink" class="goal-info-link" target="_blank" rel="noopener noreferrer">Explore the UN goal</a>
+    </div>
+  </dialog>
+  <script>
+    const careerInput = document.getElementById("career");
+    const message = document.getElementById("message");
+    const submitButton = document.getElementById("submitButton");
+    const results = document.getElementById("results");
+    const loading = document.getElementById("loading");
+    const mappingList = document.getElementById("mappingList");
+    const pathway = document.getElementById("pathway");
+    const goalGrid = document.getElementById("goalGrid");
+    const mapLines = document.getElementById("mapLines");
+    const mindmapStage = document.getElementById("mindmapStage");
+    const careerCenter = document.getElementById("careerCenter");
+    const mapCareerName = document.getElementById("mapCareerName");
+    const goalInfoDialog = document.getElementById("goalInfoDialog");
+    const goalInfoClose = document.getElementById("goalInfoClose");
+
+    const goals = [
+      ["No Poverty","#E5243B","End poverty in all its forms everywhere."],
+      ["Zero Hunger","#DDA63A","End hunger, achieve food security and improved nutrition, and promote sustainable agriculture."],
+      ["Good Health and Well-being","#4C9F38","Ensure healthy lives and promote well-being for all at all ages."],
+      ["Quality Education","#C5192D","Ensure inclusive and equitable quality education and promote lifelong learning opportunities for all."],
+      ["Gender Equality","#FF3A21","Achieve gender equality and empower all women and girls."],
+      ["Clean Water and Sanitation","#26BDE2","Ensure availability and sustainable management of water and sanitation for all."],
+      ["Affordable and Clean Energy","#FCC30B","Ensure access to affordable, reliable, sustainable and modern energy for all."],
+      ["Decent Work and Economic Growth","#A21942","Promote sustained, inclusive and sustainable economic growth, full and productive employment and decent work for all."],
+      ["Industry, Innovation and Infrastructure","#FD6925","Build resilient infrastructure, promote inclusive and sustainable industrialization and foster innovation."],
+      ["Reduced Inequalities","#DD1367","Reduce inequality within and among countries."],
+      ["Sustainable Cities and Communities","#FD9D24","Make cities and human settlements inclusive, safe, resilient and sustainable."],
+      ["Responsible Consumption and Production","#BF8B2E","Ensure sustainable consumption and production patterns."],
+      ["Climate Action","#3F7E44","Take urgent action to combat climate change and its impacts."],
+      ["Life Below Water","#0A97D9","Conserve and sustainably use the oceans, seas and marine resources."],
+      ["Life on Land","#56C02B","Protect, restore and promote sustainable use of terrestrial ecosystems."],
+      ["Peace, Justice and Strong Institutions","#00689D","Promote peaceful and inclusive societies, provide access to justice and build effective institutions."],
+      ["Partnerships for the Goals","#19486A","Strengthen the means of implementation and revitalize the global partnership for sustainable development."]
+    ];
+    let activeMappings = [];
+    let activeCareer = "";
+    let lastFocusedGoal = null;
+
+    function node(parent, tag, text, className) {
+      const element = document.createElement(tag);
+      element.textContent = text == null ? "" : String(text);
+      if (className) element.className = className;
+      parent.appendChild(element);
+      return element;
+    }
+
+    function safeSourceUrl(value) {
+      if (typeof value !== "string") return "";
+      if (value.startsWith("/") && !value.startsWith("//")) return value;
+      try {
+        const parsed = new URL(value, window.location.origin);
+        if (parsed.origin === window.location.origin) return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+        return parsed.protocol === "https:" ? parsed.href : "";
+      } catch (_) { return ""; }
+    }
+
+    function renderSources(parent, sources) {
+      const valid = Array.isArray(sources) ? sources : [];
+      if (!valid.length) return;
+      const wrap = node(parent, "div", "", "sources");
+      valid.forEach(source => {
+        const url = safeSourceUrl(source && source.url);
+        if (!url) return;
+        const link = node(wrap, "a", source.label || "Evidence source");
+        link.href = url;
+        if (!url.startsWith("/")) { link.target = "_blank"; link.rel = "noopener noreferrer"; }
+      });
+    }
+
+    function goalVisual(sdgId) {
+      const index = Number(sdgId) - 1;
+      const goal = goals[index];
+      return {
+        color: goal ? goal[1] : "#526c63",
+        icon: `/static/assets/sdg/sdg-${Number(sdgId)}-icon.png`,
+        photo: sdgId === 4 ? "/static/assets/sdg/sdg-4-education.jpg" : sdgId === 8 ? "/static/assets/sdg/sdg-8-work.jpg" : "",
+        photoAlt: sdgId === 4 ? "University students listening during an in-person class" : "A group of colleagues collaborating in a modern office",
+        photoCredit: sdgId === 4 ? "Education photo on Pexels" : "Workplace photo on Pexels",
+        photoUrl: sdgId === 4 ? "https://www.pexels.com/photo/7092344/" : "https://www.pexels.com/photo/7658273/",
+        iconCredit: "Official SDG icon from the United Nations",
+        iconUrl: "https://www.un.org/sustainabledevelopment/news/communications-material/"
+      };
+    }
+
+    function sdgVisual(sdgId) {
+      return goalVisual(sdgId);
+    }
+
+    function openDialog(dialog, opener) {
+      if (!dialog.open) dialog.showModal();
+      dialog.addEventListener("close", () => {
+        if (opener && opener.isConnected) opener.focus();
+      }, {once:true});
+    }
+
+    function evidenceLabel(text) {
+      const value = String(text || "");
+      const requirement = value.match(/Illustrative pathway requirement: (.+?) \(self-rating target/);
+      if (requirement) return `Skill · ${requirement[1]}`;
+      const activity = value.match(/Practice activity: (.+)\.?$/);
+      if (activity) return `Practice · ${activity[1].replace(/\.$/,"")}`;
+      return value.length > 36 ? `${value.slice(0,33)}…` : value;
+    }
+
+    function renderMapping(mapping, index) {
+      const visual = goalVisual(mapping.sdg_id);
+      const goalInfo = goals[Number(mapping.sdg_id)-1];
+      const article = node(mappingList, "article", "", "mapping");
+      article.dataset.sdgId = String(mapping.sdg_id);
+      article.style.setProperty("--sdg-color", visual.color);
+      const head = node(article, "div", "", "mapping-head");
+      const goalMark = node(head, "span", "", "goal-number");
+      const icon = node(goalMark, "img");
+      icon.src = visual.icon;
+      icon.alt = `United Nations Sustainable Development Goal ${mapping.sdg_id} icon`;
+      icon.loading = "lazy";
+      const headCopy = node(head, "div");
+      node(headCopy, "h3", mapping.sdg_name || (goalInfo && goalInfo[0]) || "Sustainable Development Goal");
+      node(headCopy, "p", `Potential link through career skill practice${mapping.target_id ? ` · target ${mapping.target_id}` : ""}.`);
+      const headActions = node(head, "div", "", "mapping-head-actions");
+      node(headActions, "span", `TARGET ${mapping.target_id || "—"}`, "target-tag");
+      const drawerId = `mapping-drawer-${index}`;
+      const titleId = `mapping-drawer-title-${index}`;
+      const openButton = node(headActions, "button", "Show more", "mapping-details-trigger");
+      openButton.type = "button";
+      openButton.setAttribute("aria-haspopup", "dialog");
+      openButton.setAttribute("aria-controls", drawerId);
+      openButton.setAttribute("aria-label", `Show more about SDG ${mapping.sdg_id}, Target ${mapping.target_id || ""}`);
+      const drawer = node(article, "dialog", "", "mapping-drawer");
+      drawer.style.setProperty("--sdg-color", visual.color);
+      drawer.id = drawerId;
+      drawer.setAttribute("aria-labelledby", titleId);
+      const drawerPanel = node(drawer, "div", "", "mapping-drawer-panel");
+      const drawerHeader = node(drawerPanel, "div", "", "mapping-drawer-header");
+      const drawerHeading = node(drawerHeader, "div");
+      node(drawerHeading, "span", `SDG ${mapping.sdg_id} · TARGET ${mapping.target_id || "—"}`, "drawer-target");
+      const drawerTitle = node(drawerHeading, "h2", mapping.sdg_name || "Sustainable Development Goal");
+      drawerTitle.id = titleId;
+      const closeButton = node(drawerHeader, "button", "Close", "mapping-drawer-close");
+      closeButton.type = "button";
+      closeButton.setAttribute("aria-label", `Close details for Target ${mapping.target_id || ""}`);
+      openButton.addEventListener("click", () => openDialog(drawer, openButton));
+      closeButton.addEventListener("click", () => drawer.close());
+      drawer.addEventListener("click", event => { if (event.target === drawer) drawer.close(); });
+
+      const visualPanel = node(drawerPanel, "section", "", "drawer-visual");
+      const visualCopy = node(visualPanel, "div", "", "drawer-visual-copy");
+      const largeIcon = node(visualCopy, "img", "", "drawer-icon");
+      largeIcon.src = visual.icon;
+      largeIcon.alt = `United Nations Sustainable Development Goal ${mapping.sdg_id} icon`;
+      node(visualCopy, "h3", `Target ${mapping.target_id || "—"}`);
+      node(visualCopy, "p", mapping.target_summary || "Target summary not provided.");
+      if (visual.photo) {
+        const photoWrap = node(visualPanel, "div", "", "drawer-photo-wrap");
+        const photo = node(photoWrap, "img", "", "drawer-photo");
+        photo.src = visual.photo;
+        photo.alt = visual.photoAlt;
+        const photoCredit = node(photoWrap, "a", visual.photoCredit, "drawer-photo-credit");
+        photoCredit.href = visual.photoUrl;
+        photoCredit.target = "_blank";
+        photoCredit.rel = "noopener noreferrer";
+      }
+      const evidence = Array.isArray(mapping.supporting_evidence) ? mapping.supporting_evidence : [];
+      const sources = Array.isArray(mapping.evidence_source) ? mapping.evidence_source : [];
+      const overview = node(drawerPanel, "div", "", "evidence-overview");
+      [[evidence.length,"Evidence statements"],[sources.length,"Reference links"],[mapping.user_action ? 1 : 0,"Suggested next step"]].forEach(([value,label]) => {
+        const stat = node(overview,"div","","evidence-stat");
+        node(stat,"strong",value);
+        node(stat,"span",label);
+      });
+      const content = node(drawerPanel, "div", "", "mapping-content");
+      const evidenceColumn = node(content, "div");
+      node(evidenceColumn, "div", "Why this relationship is shown", "field-label");
+      node(evidenceColumn, "p", mapping.relevance_reason || "A role-specific explanation has not been provided.");
+      if (evidence.length) {
+        const evidenceBox = node(evidenceColumn, "div", "", "evidence-box");
+        node(evidenceBox, "div", "Evidence map · choose a node", "field-label");
+        const evidenceMap = node(evidenceBox, "div", "", "evidence-map");
+        const root = node(evidenceMap,"div",`SDG ${mapping.sdg_id} · Target ${mapping.target_id || "—"}`,"evidence-root");
+        const rootIcon = node(root,"img");
+        rootIcon.src = visual.icon;
+        rootIcon.alt = "";
+        const branchWrap = node(evidenceMap,"div","","evidence-branches");
+        const pairs = [];
+        for (let evidenceIndex = 0; evidenceIndex < evidence.length; evidenceIndex += 2) {
+          const first = evidence[evidenceIndex];
+          const second = evidence[evidenceIndex + 1];
+          const requirement = String(first).match(/Illustrative pathway requirement: (.+?) \(self-rating target/);
+          pairs.push({
+            skill: first,
+            practice: second,
+            skillLabel: requirement ? `Skill · ${requirement[1]}` : "Skill evidence",
+            practiceLabel: second ? "Practice activity" : null
+          });
+        }
+        const sharedDetail = node(evidenceBox,"div","Select a skill or practice node to read its full source statement.","evidence-detail");
+        sharedDetail.id = `evidence-detail-${index}`;
+        sharedDetail.setAttribute("role", "status");
+        sharedDetail.setAttribute("aria-live", "polite");
+        pairs.forEach(pair => {
+          const branch = node(branchWrap,"div","","evidence-branch");
+          [[pair.skill,pair.skillLabel,"skill"],[pair.practice,pair.practiceLabel,"practice"]].forEach(([source,label,kind]) => {
+            if (!source) return;
+            const evidenceButton = node(branch,"button",label,"evidence-node");
+            evidenceButton.type = "button";
+            evidenceButton.setAttribute("aria-controls", sharedDetail.id);
+            evidenceButton.setAttribute("aria-label", `Read ${kind} statement for ${pair.skillLabel.replace(/^Skill · /, "")}`);
+            if (kind === "practice") evidenceButton.classList.add("practice");
+            evidenceButton.addEventListener("click",() => {
+              sharedDetail.textContent = source;
+              branchWrap.querySelectorAll(".evidence-node").forEach(button => button.setAttribute("aria-pressed",String(button === evidenceButton)));
+            });
+            evidenceButton.setAttribute("aria-pressed","false");
+          });
+        });
+        const full = node(evidenceBox,"details","","evidence-full");
+        node(full,"summary","Read all full evidence wording");
+        const ul = node(full,"ul");
+        evidence.forEach(item => node(ul,"li",item));
+      }
+      renderSources(evidenceColumn, mapping.evidence_source);
+      if (visual.iconUrl) {
+        const mediaSources = node(evidenceColumn, "div", "", "sources");
+        const iconSource = node(mediaSources, "a", visual.iconCredit);
+        iconSource.href = visual.iconUrl;
+        iconSource.target = "_blank";
+        iconSource.rel = "noopener noreferrer";
+        if (visual.photo) {
+          const photoSource = node(mediaSources, "a", visual.photoCredit);
+          photoSource.href = visual.photoUrl;
+          photoSource.target = "_blank";
+          photoSource.rel = "noopener noreferrer";
+        }
+      }
+      const limitationColumn = node(content, "div");
+      const limitation = node(limitationColumn, "div", "", "limit-box");
+      node(limitation, "div", "What this does not establish", "field-label");
+      node(limitation, "div", mapping.impact_limitations || "This alignment alone does not establish real-world SDG impact.");
+      if (mapping.user_action) {
+        const action = node(limitationColumn, "div", "", "action-box");
+        node(action, "div", "A practical next step", "field-label");
+        node(action, "p", mapping.user_action);
+      }
+    }
+
+    function renderGoals() {
+      goalGrid.replaceChildren(careerCenter);
+      const desktopSlots = [
+        [1,1],[1,2],[1,3],[1,4],[1,5],
+        [2,5],[3,5],[4,5],[5,5],
+        [5,4],[5,3],[5,2],[5,1],
+        [4,1],[3,1],[2,1],[2,2]
+      ];
+      goals.forEach((goal,index) => {
+        const id = index + 1;
+        const mapping = activeMappings.find(item => Number(item.sdg_id) === id);
+        const button = node(goalGrid,"button","","goal-node");
+        button.type = "button";
+        button.dataset.sdgId = String(id);
+        button.dataset.gridRow = String(desktopSlots[index][0]);
+        button.dataset.gridColumn = String(desktopSlots[index][1]);
+        button.style.gridArea = `${desktopSlots[index][0]} / ${desktopSlots[index][1]}`;
+        button.style.setProperty("--goal-color",goal[1]);
+        if (mapping) button.classList.add("linked");
+        button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Reviewed potential career link. Open details." : "Not assessed for this career. Open goal information."}`);
+        const icon = node(button,"img");
+        icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
+        icon.alt = "";
+        icon.loading = "lazy";
+        const copy = node(button,"span","","goal-node-copy");
+        node(copy,"span",`GOAL ${String(id).padStart(2,"0")}`,"goal-index");
+        node(copy,"span",goal[0],"goal-name");
+        node(copy,"span",mapping ? "Potential link" : "Not assessed","goal-node-status");
+        button.addEventListener("click",() => {
+          lastFocusedGoal = button;
+          if (mapping) {
+            const card = mappingList.querySelectorAll(".mapping")[activeMappings.indexOf(mapping)];
+            const dialog = card && card.querySelector("dialog");
+            if (dialog) openDialog(dialog,button);
+          } else {
+            showGoalInfo(id,goal,button);
+          }
+        });
+      });
+      requestAnimationFrame(drawMapLines);
+    }
+
+    function drawMapLines() {
+      if (results.hidden) return;
+      if (window.matchMedia("(max-width: 720px)").matches) {
+        goalGrid.querySelectorAll(".goal-node").forEach(button => { button.style.gridArea = ""; });
+        mapLines.replaceChildren();
+        return;
+      }
+      goalGrid.querySelectorAll(".goal-node").forEach(button => {
+        button.style.gridArea = `${button.dataset.gridRow} / ${button.dataset.gridColumn}`;
+      });
+      const rect = mindmapStage.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      mapLines.setAttribute("viewBox",`0 0 ${rect.width} ${rect.height}`);
+      mapLines.replaceChildren();
+      const center = careerCenter.getBoundingClientRect();
+      const sx = center.left + center.width/2 - rect.left;
+      const sy = center.top + center.height/2 - rect.top;
+      activeMappings.forEach(mapping => {
+        const button = goalGrid.querySelector(`.goal-node[data-sdg-id="${Number(mapping.sdg_id)}"]`);
+        if (!button) return;
+        const target = button.getBoundingClientRect();
+        const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+        line.setAttribute("x1",String(sx));
+        line.setAttribute("y1",String(sy));
+        line.setAttribute("x2",String(target.left + target.width/2 - rect.left));
+        line.setAttribute("y2",String(target.top + target.height/2 - rect.top));
+        mapLines.appendChild(line);
+      });
+    }
+
+    function showGoalInfo(id,goal,opener) {
+      document.getElementById("goalInfoIcon").src = `/static/assets/sdg/sdg-${id}-icon.png`;
+      document.getElementById("goalInfoIcon").alt = "";
+      document.getElementById("goalInfoTitle").textContent = goal[0];
+      document.getElementById("goalInfoNumber").textContent = `Sustainable Development Goal ${id}`;
+      document.getElementById("goalInfoCopy").textContent = `${goal[2]} No reviewed career-to-target link is available for ${activeCareer || "this role"}; no target or evidence has been assigned.`;
+      const link = document.getElementById("goalInfoLink");
+      link.href = `https://sdgs.un.org/goals/goal${id}`;
+      openDialog(goalInfoDialog,opener);
+    }
+    goalInfoClose.addEventListener("click",() => goalInfoDialog.close());
+    goalInfoDialog.addEventListener("click",event => { if(event.target === goalInfoDialog) goalInfoDialog.close(); });
+
+    function normalize(value) { return String(value || "").trim().toLowerCase().replace(/\s+/g, " "); }
+    function profileCareer(state) {
+      if (!state || typeof state !== "object") return "";
+      const profile = state.reskilling_profile || state.saved_reskilling_profile || state.profile || state.saved_profile;
+      if (!profile || typeof profile !== "object") return "";
+      return profile.career_title || profile.career || profile.title || profile.role || profile.target_career || "";
+    }
+    function profileSkills(state) {
+      if (!state || typeof state !== "object") return {};
+      const profile = state.reskilling_profile || state.saved_reskilling_profile || state.profile || state.saved_profile || {};
+      return profile.skill_levels || profile.skills || profile.assessed_skills || state.skill_levels || state.gaps || {};
+    }
+    async function loadState() {
+      try {
+        const response = await fetch("/api/state");
+        if (!response.ok) return null;
+        return await response.json();
+      } catch (_) { return null; }
+    }
+    function currentLevelFor(skill,profile) {
+      if (Array.isArray(profile)) {
+        const gap = profile.find(item => item && normalize(item.name || item.skill) === normalize(skill.name));
+        return gap ? (gap.current_level ?? gap.current ?? gap.current_skill_level) : undefined;
+      }
+      if (!profile || typeof profile !== "object") return undefined;
+      const direct = profile[skill.name];
+      if (direct !== undefined) return direct;
+      const entry = Object.entries(profile).find(([name]) => normalize(name) === normalize(skill.name));
+      if (!entry) return undefined;
+      const value = entry[1];
+      return value && typeof value === "object" ? (value.current_level ?? value.level ?? value.current) : value;
+    }
+    async function renderPathway(data,career) {
+      const skills = Array.isArray(data.pathway_skills) ? data.pathway_skills : [];
+      if (!skills.length) { pathway.hidden = true; pathway.open = false; return; }
+      const pathwayCareer = data.pathway_career || career;
+      pathway.hidden = false;
+      pathway.open = false;
+      const list = document.getElementById("skillsList");
+      list.replaceChildren();
+      const state = await loadState();
+      const isMatchingProfile = normalize(profileCareer(state)) === normalize(pathwayCareer);
+      const currentSkills = isMatchingProfile ? profileSkills(state) : null;
+      skills.forEach(skill => {
+        const row = node(list,"div","","skill-row");
+        const name = node(row,"div");
+        node(name,"div",skill.name || "Skill","skill-name");
+        const current = isMatchingProfile ? currentLevelFor(skill,currentSkills) : undefined;
+        const required = Number(skill.required_level);
+        const hasCurrent = current !== undefined && current !== null && current !== "";
+        const gap = hasCurrent && Number.isFinite(required) ? Math.max(0,required-Number(current)) : null;
+        const levelText = hasCurrent
+          ? `Current ${current}/5 · Target ${skill.required_level}/5 · ${gap === 0 ? "At target" : `Develop ${gap} level${gap === 1 ? "" : "s"}`}`
+          : `Target ${skill.required_level ?? "not set"}/5 · Not assessed`;
+        node(name,"div",levelText,"skill-level");
+        const description = node(row,"div","","skill-description");
+        if (skill.objective) node(description,"div",skill.objective);
+        if (skill.project) node(description,"p",`Practice project: ${skill.project}`);
+      });
+      const assessmentStatus = document.getElementById("assessmentStatus");
+      assessmentStatus.replaceChildren();
+      node(assessmentStatus,"span",isMatchingProfile
+        ? "Saved profile matches this career; current levels appear where available."
+        : "Current skill levels: not assessed for this career.");
+      if (!isMatchingProfile) {
+        const link = node(assessmentStatus,"a","Open reskilling pathway");
+        link.href = `/reskilling?career=${encodeURIComponent(pathwayCareer)}`;
+      }
+    }
+
+    async function reviewCareer(event) {
+      if (event) event.preventDefault();
+      const staleRetry = message.parentElement.querySelector(".retry");
+      if (staleRetry) staleRetry.remove();
+      const career = careerInput.value.trim();
+      if (!career) {
+        message.textContent = "Enter a career or role to continue.";
+        message.className = "state-message error";
+        careerInput.focus();
+        return;
+      }
+      submitButton.disabled = true;
+      message.textContent = "Loading reviewed career connections…";
+      message.className = "state-message loading";
+      loading.hidden = false;
+      results.hidden = true;
+      mappingList.replaceChildren();
+      goalGrid.replaceChildren(careerCenter);
+      mapLines.replaceChildren();
+      pathway.hidden = true;
+      pathway.open = false;
+      activeMappings = [];
+      try {
+        const response = await fetch("/api/sdg/mindmap",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({title:career})
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Could not load role evidence.");
+        activeMappings = data.status === "curated" && Array.isArray(data.mappings) ? data.mappings : [];
+        activeCareer = data.career || career;
+        document.getElementById("roleTitle").textContent = activeCareer;
+        mapCareerName.textContent = activeCareer;
+        document.getElementById("reviewStatus").textContent = data.status === "curated" && activeMappings.length ? "POTENTIAL LINKS · PROTOTYPE" : "NOT REVIEWED";
+        results.hidden = false;
+        if (data.status === "curated" && activeMappings.length) {
+          activeMappings.forEach(renderMapping);
+          message.textContent = `${activeMappings.length} reviewed potential links. Select a goal to explore.`;
+          await renderPathway(data,activeCareer);
+        } else {
+          const empty = node(mappingList,"div","","empty-card");
+          node(empty,"strong","No reviewed role-to-target mapping");
+          node(empty,"span","This career has not been reviewed against the currently curated targets. No target relationship is inferred.");
+          pathway.hidden = true;
+          message.textContent = "Not reviewed for this role. Goals are available to explore; no career links are assigned.";
+        }
+        renderGoals();
+      } catch (error) {
+        results.hidden = true;
+        message.textContent = `Unable to load role evidence: ${error.message || "Please try again."}`;
+        message.className = "state-message error";
+        const priorRetry = message.parentElement.querySelector(".retry");
+        if (priorRetry) priorRetry.remove();
+        const retry = node(message.parentElement,"button","Try again","retry");
+        retry.type = "button";
+        retry.addEventListener("click",() => { retry.remove(); reviewCareer(); });
+      } finally {
+        loading.hidden = true;
+        submitButton.disabled = false;
+      }
+    }
+    document.getElementById("careerForm").addEventListener("submit",reviewCareer);
+    window.addEventListener("resize",drawMapLines);
+    document.addEventListener("keydown",event => {
+      if (event.key === "Escape" && goalInfoDialog.open && lastFocusedGoal && lastFocusedGoal.isConnected) lastFocusedGoal.focus();
+    });
+    const initialCareer = new URLSearchParams(window.location.search).get("career");
+    if (initialCareer) careerInput.value = initialCareer.slice(0,100);
+    reviewCareer();
+  </script>
+</body>
+</html>
