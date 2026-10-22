@@ -193,19 +193,20 @@ button {
     </p>
 
     <div class="controls">
-        <input
-            id="careerInput"
-            placeholder="Enter a career"
-            value="Environmental Engineer"
-        >
-        <button onclick="generateMap()">
-            Generate Mind Map ✦
-        </button>
+        <div style="flex:1;min-width:220px">
+            <label for="careerInput">Search supported careers</label>
+            <input id="careerInput" role="combobox" aria-autocomplete="list"
+                   aria-expanded="false" aria-controls="careerOptions" autocomplete="off"
+                   placeholder="Type a career, then select a result" maxlength="120" style="width:100%">
+            <ul id="careerOptions" role="listbox" aria-label="Career results" hidden></ul>
+        </div>
+        <button id="exploreCareer" disabled>Explore career</button>
     </div>
 
     <p id="message" role="status"></p>
 
     <div class="stage" id="mindmap"></div>
+    <details><summary>Browse all 17 goals independently</summary><div id="allGoals"></div></details>
 
     <section class="details" id="details">
         Select an SDG node to explore its potential impact.
@@ -218,61 +219,117 @@ button {
 
 <script>
 let lastData = null;
+let selectedCareer = null;
+let results = [];
+let activeIndex = -1;
+let searchVersion = 0;
+let debounce;
+const input = document.getElementById('careerInput');
+const options = document.getElementById('careerOptions');
+const explore = document.getElementById('exploreCareer');
+const message = document.getElementById('message');
+
+function closeOptions() {
+    options.hidden = true;
+    input.setAttribute('aria-expanded', 'false');
+    input.removeAttribute('aria-activedescendant');
+}
+function choose(index) {
+    selectedCareer = results[index];
+    input.value = selectedCareer.title;
+    explore.disabled = false;
+    closeOptions();
+    message.textContent = 'Selected ' + selectedCareer.title + '. ' +
+        (selectedCareer.mapping_status === 'reviewed' ? 'Curated mapping available.' : 'Not yet reviewed.');
+    input.focus();
+}
+input.addEventListener('input', () => {
+    selectedCareer = null;
+    lastData = null;
+    document.getElementById('mindmap').replaceChildren();
+    document.getElementById('details').textContent = 'Select a supported career to inspect its connections.';
+    explore.disabled = true;
+    activeIndex = -1;
+    closeOptions();
+    clearTimeout(debounce);
+    const version = ++searchVersion;
+    const query = input.value.trim();
+    if (!query) { message.textContent = 'Search and select a supported career.'; return; }
+    message.textContent = 'Searching careers…';
+    debounce = setTimeout(async () => {
+        try {
+            const response = await fetch('/api/careers?q=' + encodeURIComponent(query));
+            if (!response.ok) throw new Error('Career search failed. Edit the search to retry.');
+            const payload = await response.json();
+            if (version !== searchVersion) return;
+            results = payload.results;
+            options.replaceChildren();
+            results.forEach((career, index) => {
+                const item = document.createElement('li');
+                item.id = 'career-option-' + index;
+                item.setAttribute('role', 'option');
+                item.setAttribute('aria-selected', 'false');
+                item.textContent = career.title + ' — ' + career.kind + ' — ' +
+                    (career.mapping_status === 'reviewed' ? 'curated mapping available' : 'not yet reviewed');
+                item.style.cssText = 'padding:12px;cursor:pointer;background:white;color:#153444';
+                item.addEventListener('mousedown', event => event.preventDefault());
+                item.addEventListener('click', () => choose(index));
+                options.appendChild(item);
+            });
+            options.hidden = !results.length;
+            input.setAttribute('aria-expanded', String(!!results.length));
+            message.textContent = results.length ? 'Select a result. Use arrow keys and Enter, or click.' :
+                'No supported career found. Try another title or keyword.';
+        } catch (error) { if (version === searchVersion) message.textContent = error.message; }
+    }, 200);
+});
+input.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { ++searchVersion; clearTimeout(debounce); closeOptions(); return; }
+    if (!options.hidden && ['ArrowDown', 'ArrowUp'].includes(event.key)) {
+        event.preventDefault();
+        activeIndex = (activeIndex + (event.key === 'ArrowDown' ? 1 : -1) + results.length) % results.length;
+        [...options.children].forEach((node, i) => {
+            node.setAttribute('aria-selected', String(i === activeIndex));
+            node.style.background = i === activeIndex ? '#cce8f0' : 'white';
+        });
+        input.setAttribute('aria-activedescendant', options.children[activeIndex].id);
+        options.children[activeIndex].scrollIntoView({block:'nearest'});
+    }
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        if (!options.hidden && activeIndex >= 0) choose(activeIndex);
+        else if (selectedCareer) generateMap();
+    }
+});
+input.addEventListener('blur', closeOptions);
+explore.addEventListener('click', generateMap);
 
 async function generateMap() {
-
-    const career = document.getElementById(
-        "careerInput"
-    ).value.trim();
-
-    const message = document.getElementById("message");
-
-    if (!career) {
-        message.textContent = "Please enter a career.";
-        return;
-    }
-
-    message.textContent = "Generating mind map...";
-
+    if (!selectedCareer) { message.textContent = 'Choose a career from the search results.'; return; }
+    const careerId = selectedCareer.id;
+    explore.disabled = true;
+    message.textContent = 'Loading career connections…';
     try {
-        const response = await fetch(
-            "/api/sdg/mindmap",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title: career,
-                    skills: {
-                        MathSkill: 4,
-                        CodingSkill: 4,
-                        DataSkill: 5,
-                        CommunicationSkill: 3,
-                        LeadershipSkill: 3,
-                        CreativeSkill: 4
-                    }
-                })
-            }
-        );
-
+        const response = await fetch('/api/sdg/mindmap', {
+            method: 'POST', headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({career_id: careerId})
+        });
         const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(
-                typeof data.detail === "string"
-                    ? data.detail
-                    : "Unable to generate map"
-            );
-        }
-
+        if (selectedCareer?.id !== careerId) return;
+        if (!response.ok) throw new Error(typeof data.detail === 'string' ? data.detail : 'Unable to load career.');
         lastData = data;
         renderMap(data);
-        message.textContent = "Mind map generated.";
-
-    } catch (error) {
-        message.textContent = "Error: " + error.message;
-    }
+        message.textContent = data.note;
+        const all = document.getElementById('allGoals');
+        all.replaceChildren();
+        data.all_goals.forEach(goal => {
+            const link = document.createElement('a');
+            link.href = goal.url; link.target = '_blank'; link.rel = 'noopener noreferrer';
+            link.textContent = 'SDG ' + goal.id + ': ' + goal.name;
+            const row = document.createElement('p'); row.appendChild(link); all.appendChild(row);
+        });
+    } catch (error) { message.textContent = 'Error: ' + error.message; }
+    finally { explore.disabled = !selectedCareer; }
 }
 
 function renderMap(data) {
@@ -296,7 +353,8 @@ function renderMap(data) {
     center.textContent = data.career;
     area.appendChild(center);
 
-    const goals = data.goals || [];
+    const goals = data.goals.length ? data.goals : data.suggestions;
+    if (!goals.length) details.textContent = "Career found; no reviewed mappings or keyword suggestions. Browse the goals independently.";
 
     goals.forEach((goal, index) => {
 
@@ -317,7 +375,7 @@ function renderMap(data) {
         number.textContent = goal.id;
 
         const name = document.createElement("small");
-        name.textContent = goal.name;
+        name.textContent = goal.name + (goal.provisional ? ' · Unreviewed suggestion' : ' · Reviewed potential link');
 
         node.appendChild(number);
         node.appendChild(name);
@@ -360,11 +418,17 @@ function renderMap(data) {
             link.textContent = "Explore the UN Goal ↗";
 
             details.append(title, desc, link);
+            if (goal.target_id) {
+                const evidence = document.createElement('p');
+                evidence.textContent = 'Target ' + goal.target_id + ' · Evidence: ' +
+                    JSON.stringify(goal.evidence) + ' · Limitations: ' + goal.limitations;
+                details.appendChild(evidence);
+            }
 
             if (goal.provisional) {
                 const warning = document.createElement("p");
                 warning.textContent =
-                    "Provisional mapping: review needed.";
+                    "Keyword suggestion only. No reviewed target-level evidence; not measured impact.";
                 details.appendChild(warning);
             }
         };
@@ -423,8 +487,7 @@ window.addEventListener("resize", () => {
     if (lastData) renderMap(lastData);
 });
 
-// Show a sample career on page load
-generateMap();
+message.textContent = 'Search and select a career to explore supported connections.';
 </script>
 
 </body>

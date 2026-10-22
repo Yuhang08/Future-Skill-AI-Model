@@ -133,8 +133,8 @@ def map_career(title, max_sdgs=4):
 
     if not matches:
         # A placeholder, NOT a confident classification; must be reviewed.
-        return [_goal(8, provisional=True)]
-    return [_goal(sdg_id) for sdg_id in matches[:max_sdgs]]
+        return []
+    return [_goal(sdg_id, provisional=True) for sdg_id in matches[:max_sdgs]]
 
 
 def map_skills(skill_scores):

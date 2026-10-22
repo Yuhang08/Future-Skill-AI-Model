@@ -209,25 +209,49 @@ app.include_router(uncertainty_router)
 from sdg_mapping import build_mindmap
 
 
+from fastapi import Query
+from pydantic import Field
+from career_catalogue import catalogue, public_record, resolve_title, search, reviewed_mappings
+from sdg_mapping import get_all_sdgs
+
+
+@app.get("/api/careers")
+def search_careers(q: str = Query(default="", max_length=120),
+                   limit: int = Query(default=20, ge=1, le=50)):
+    return {"results": search(q, limit), "total_careers": len(catalogue())}
+
+
 class MindmapRequest(BaseModel):
-    title: str
+    career_id: str | None = Field(default=None, max_length=120)
+    title: str | None = Field(default=None, max_length=120)
     skills: dict[str, int] | None = None
 
 
 @app.post("/api/sdg/mindmap")
 def create_sdg_mindmap(request: MindmapRequest):
-
+    # Explicit IDs are authoritative. Never fall back from an invalid ID to a title.
+    career = catalogue().get(request.career_id) if request.career_id else resolve_title(request.title or "")
+    if career is None:
+        raise HTTPException(422, detail="Choose a supported career from the search results.")
     try:
-        return build_mindmap(
-            request.title,
-            request.skills or {}
-        )
-
+        result = build_mindmap(career['title'], request.skills or {})
     except (ValueError, TypeError, KeyError) as error:
-        raise HTTPException(
-            status_code=422,
-            detail=str(error)
-        ) from error
+        raise HTTPException(422, detail=str(error)) from error
+    reviewed = reviewed_mappings().get(career['id'], [])
+    # Legacy keyword matches are suggestions, not reviewed evidence.
+    suggestions = [{**goal, 'provisional': True, 'mapping_status': 'keyword_suggestion'}
+                   for goal in result['goals']]
+    goals_by_id = {goal['id']: goal for goal in get_all_sdgs()}
+    goals = [{**goals_by_id[g['id']], **g, 'provisional': False,
+              'mapping_status': 'reviewed'} for g in reviewed]
+    return {
+        'career': career['title'], 'career_id': career['id'],
+        'mapping_status': public_record(career)['mapping_status'],
+        'goals': goals, 'suggestions': suggestions, 'skills': result['skills'],
+        'all_goals': get_all_sdgs(),
+        'note': ('Reviewed potential links; not measured impact.' if goals else
+                 'Career found; SDG connections have not been reviewed. Keyword suggestions are not evidence.'),
+    }
 
 
 # ==========================================

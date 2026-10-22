@@ -66,3 +66,61 @@ python -m unittest discover -s tests -v
 - `POST /api/plan`, `POST /api/replan` → personalised timetable generator
 - `POST /api/tasks/{id}/status` → to-do completion and growth points
 - `POST /api/tasks/{id}/proof` → attached learning photograph
+
+## Career catalogue and SDG search
+
+The SDG page now searches `GET /api/careers?q=environmental&limit=20`.
+The catalogue reads the existing occupational CSV and adds five separately
+namespaced prototype roles. Occupational IDs are `onet:<O*NET-SOC Code>`;
+prototype IDs begin with `prototype:`. Explicit aliases live in
+`career_catalogue.py`; ambiguous or fuzzy results require selection.
+
+Submit `POST /api/sdg/mindmap` with a selected `career_id`. Legacy exact titles
+and explicit aliases remain accepted, but arbitrary titles are rejected with
+422. Invalid IDs never fall back to a supplied title. Search is bounded to
+120 characters and 50 results per request.
+
+Mapping status is separate from career membership. `goals` contains reviewed
+potential links; `suggestions` contains unreviewed keyword associations;
+`all_goals` allows independent goal exploration. No match automatically assigns
+SDG 8. Skill ratings are no longer fabricated by this page.
+
+### Adding reviewed mappings
+
+`sdg_reviewed_mappings.json` is intentionally empty: this GitHub version has no
+reviewed evidence records to migrate. Replit-only reviewed records must be
+exported and reconciled before they can appear here. Do not relabel legacy
+keyword matches as reviewed evidence. Each entry uses this structure:
+
+```json
+{
+  "career_id": "onet:17-2081.00",
+  "goals": [{
+    "id": 13,
+    "target_id": "13.3",
+    "reason": "REPLACE with a supported role/activity-specific rationale",
+    "evidence": [{"source_id": "REPLACE", "url": "REPLACE with an authoritative source", "retrieved_at": "YYYY-MM-DD"}],
+    "limitations": "REPLACE with evidence limitations; alignment is not measured impact",
+    "reviewed_at": "YYYY-MM-DD"
+  }]
+}
+```
+
+This is a schema illustration, not an approved Environmental Engineers mapping.
+Add genuine reviewed records to the JSON array, then restart the server (the
+catalogue and mappings are cached). A UN target page alone does not demonstrate
+an occupational relationship. Keep source provenance and dates with the record.
+
+### Validation
+
+Install requirements and `httpx` in your development environment, then run
+`python -m unittest discover -s tests -v` from this directory. Tests cover
+canonical aliases, input bounds, unknown IDs, unmapped careers, separate
+prototype identities, mapping status and the original integration journey.
+
+In the browser, open `/sdg-impact`, type `environmental engineer`, select a
+result with arrow keys and Enter (or click), then choose Explore career.
+The current dataset displays unreviewed suggestions for goals 9 and 13.
+Entering `the invalid` disables exploration. Editing a selected title clears
+the selection. Search failures explain how to retry. Desktop and mobile use
+the same selected ID and API response.
