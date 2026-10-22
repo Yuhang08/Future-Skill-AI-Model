@@ -1,276 +1,157 @@
+"""Standalone Flask HR Interview; add these /api/interview routes to your existing app if merging."""
+import os, time, uuid, threading
+from flask import Flask, request, jsonify, render_template, make_response
+from dotenv import load_dotenv
+from career_data import get_careers, find_career
+from history_store import init, all_text, insert, global_count
+from interview_engine import initial_question, generate_question, feedback_for, report, adaptive_plan
+from semantic_validator import check_question, embed
+from question_policy import exact_duplicate,word_duplicate
+from speech_service import transcribe
+load_dotenv()
+app=Flask(__name__)
+app.config['MAX_CONTENT_LENGTH']=11*1024*1024
+init()
+sessions={}; lock=threading.RLock(); TTL=3600
+MODES={'HR','Technical','Mixed'}
+LANGUAGES={'English','中文'}
 
-from pathlib import Path
-from functools import lru_cache
+def fail(message,code=400):return jsonify(error=message),code
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
-from pydantic import BaseModel
+def guest_id():
+    """Cookie ID is random/opaque, never supplied by user request body."""
+    val=request.cookies.get('fs_guest')
+    if val and len(val)==64 and all(c in '0123456789abcdef' for c in val):return val
+    return None
 
-from assessment_scoring import calculate_assessment
-from career_engine import load_careers, match_careers
+def ensure_guest(resp,gid):
+    if not guest_id():
+        resp.set_cookie('fs_guest',gid,httponly=True,secure=request.is_secure,
+                        samesite='Lax',max_age=365*24*3600)
+    return resp
 
+def session(data):
+    sid=str(data.get('session_id',''))
+    with lock:
+        s=sessions.get(sid)
+        if s and (time.time()-s['created']>TTL or s['guest']!=guest_id()):return None
+        return s
 
-# ======================================
-# 1. CREATE WEBSITE SERVER
-# ======================================
+def cache_embedding(question):
+    # Persisted DB embedding cache can replace this simple request/session cache.
+    return embed(question)
 
-app = FastAPI(
-    title="FutureSkill AI"
-)
+@app.get('/')
+def home():return render_template('interview.html')
 
-BASE_DIR = Path(__file__).resolve().parent
+@app.get('/api/careers')
+def careers():
+    items=get_careers()
+    return jsonify(careers=[x['title'] for x in items],count=len(items),
+                   source='career_profiles_clean.csv' if os.path.exists('career_profiles_clean.csv') else 'careers_demo.csv')
 
+@app.get('/api/interview/history-count')
+def count_history():
+    return jsonify(personal_count=len(all_text(guest_id())) if guest_id() else 0,global_count=global_count())
 
-# ======================================
-# 2. LOAD CAREER DATABASE
-# ======================================
-
-@lru_cache(maxsize=1)
-def get_careers():
-
-    return load_careers(
-        BASE_DIR / "career_profiles_clean.csv"
-    )
-
-
-# ======================================
-# 3. QUESTIONNAIRE INPUT FORMAT
-# ======================================
-
-class AssessmentRequest(BaseModel):
-
-    answers: dict[str, list[int]]
-
-    subject_answers: dict[str, list[int]]
-
-    skill_answers: dict[str, int]
-
-
-# ======================================
-# 4. SUBJECT LABEL CONVERSION
-# ======================================
-
-SUBJECT_MAPPING = {
-    "IT": "it",
-    "Math": "math",
-    "Education": "education",
-    "Health": "health",
-    "Business": "business",
-    "Engineering": "engineering"
-}
-
-
-# ======================================
-# 5. DISPLAY WEBSITE
-# ======================================
-
-@app.get("/")
-def home():
-
-    return FileResponse(
-        BASE_DIR / "static" / "index.html"
-    )
-
-# ======================================
-# INDEPENDENT FEATURE PAGES
-# ======================================
-
-@app.get("/ai-trend", include_in_schema=False)
-def ai_trend_page():
-    return FileResponse(
-        BASE_DIR / "static" / "ai-trend.html"
-    )
-
-
-@app.get("/sdg-impact", include_in_schema=False)
-def sdg_impact_page():
-    return FileResponse(
-        BASE_DIR / "static" / "sdg-impact.html"
-    )
-
-
-
-# ======================================
-# 6. CAREER RECOMMENDATION API
-# ======================================
-
-@app.post("/api/recommend")
-def recommend(request: AssessmentRequest):
-
+@app.post('/api/interview/start')
+def start():
+    data=request.get_json(silent=True) or {}
+    role=str(data.get('role',''))
+    mode=str(data.get('mode','Mixed'))
+    language=str(data.get('language','English'))
+    try:nq=int(data.get('question_count',5))
+    except (ValueError,TypeError):return fail('Invalid question count')
+    if not find_career(role):return fail('Choose a career in the database')
+    if mode not in MODES or language not in LANGUAGES or nq not in (3,5,10):return fail('Invalid configuration')
+    if not os.getenv('OPENAI_API_KEY'):return fail('Configure OPENAI_API_KEY',503)
+    gid=guest_id() or uuid.uuid4().hex+uuid.uuid4().hex
+    sid=uuid.uuid4().hex; previous=all_text(gid)
+    facts=find_career(role)
     try:
+        q=pick(role,mode,language,facts,previous,[],None)
+    except Exception:
+        app.logger.exception('Question generation failed');return fail('Could not generate a verified question',503)
+    with lock:
+        sessions[sid]={'created':time.time(),'guest':gid,'role':role,'mode':mode,'language':language,
+                       'question':q,'history':[],'awaiting_next':False,'max_questions':nq,'previous':previous,'facts':facts}
+    resp=make_response(jsonify(session_id=sid,question_number=1,max_questions=nq,**q))
+    return ensure_guest(resp,gid)
 
-        # A. Calculate questionnaire scores
-        assessment = calculate_assessment(
-            riasec_answers=request.answers,
-            subject_answers=request.subject_answers,
-            skill_answers=request.skill_answers
-        )
+def pick(role,mode,language,facts,previous,current,adaptive):
+    # Full semantic checks only on previous 100 (or all if under 150) and current session.
+    # All older questions still checked for exact duplicate.
+    recent_answer=adaptive.get('last_answer','') if adaptive else ''
+    difficulty=adaptive.get('difficulty','standard') if adaptive else 'standard'
+    focus_history=previous[-20:]+current
+    for attempt in range(3):
+        q=generate_question(role,mode,language,focus_history,facts,difficulty,recent_answer)
+        text=q['question']
+        approved,reason=check_question(text,previous,current,cache_embedding)
+        if approved:
+            # In production also add a distinct fact-check of user claims + sources.
+            return q
+        focus_history.append(text)
+    raise ValueError('All generated questions were too similar; add curated fallback questions')
 
-        # B. Get user RIASEC
-        riasec_scores = assessment[
-            "riasec_scores"
-        ]
+@app.post('/api/interview/transcribe')
+def transcript():
+    s=session(request.form)
+    if not s:return fail('Session expired',404)
+    audio=request.files.get('audio')
+    if not audio:return fail('Audio missing')
+    try:return jsonify(transcript=transcribe(audio))
+    except Exception:
+        app.logger.exception('Transcription failed');return fail('Cannot transcribe audio',503)
 
-        # C. Convert subject preferences
-        subject_preferences = {
-            SUBJECT_MAPPING[k]: v
-            for k, v in assessment[
-                "subject_preferences"
-            ].items()
-        }
-
-        # D. Call career matching engine
-        careers = get_careers()
-
-        recommendations = match_careers(
-            df=careers,
-            user_scores=riasec_scores,
-            subject_preferences=subject_preferences,
-            top_n=10
-        )
-
-        # E. Prepare career recommendations
-        career_results = []
-
-        for _, career in recommendations.iterrows():
-
-            career_results.append({
-                "title": str(career["Title"]),
-
-                "riasec": str(
-                    career["Career_Top3"]
-                ),
-
-                "match_index": float(
-                    career["Match_Index"]
-                ),
-
-                "interest_index": float(
-                    career["Interest_Index"]
-                ),
-
-                "subject_index": float(
-                    career["Subject_Index"]
-                ),
-
-                "fields": str(
-                    career["Fields"]
-                ),
-
-                "explanation": str(
-                    career["Explanation"]
-                )
-            })
-
-        # F. Return results to website
-        return {
-            "top3": assessment["riasec_top3"],
-
-            "riasec_scores": riasec_scores,
-
-            "subject_preferences": assessment[
-                "subject_preferences"
-            ],
-
-            "skills": assessment["skills"],
-
-            "recommendations": career_results
-        }
-
-    except (ValueError, KeyError, TypeError) as error:
-
-        raise HTTPException(
-            status_code=422,
-            detail=str(error)
-        ) from error
-
-
-# One FastAPI application hosts both the original assessment and the reskilling studio.
-from fastapi.staticfiles import StaticFiles
-from reskilling.api import router as reskilling_router, session_cookie_middleware
-
-app.mount("/reskill-static", StaticFiles(directory=BASE_DIR / "reskilling" / "static"), name="reskill-static")
-app.middleware("http")(session_cookie_middleware)
-app.include_router(reskilling_router)
-
-# ======================================
-# CONNECT UNCERTAINTY LAB
-# ======================================
-
-from uncertainty.api import router as uncertainty_router
-
-app.include_router(uncertainty_router)
-
-
-# ==========================================
-# SDG IMPACT MAP API
-# ==========================================
-
-from sdg_mapping import build_mindmap
-
-
-class MindmapRequest(BaseModel):
-    title: str
-    skills: dict[str, int] | None = None
-
-
-@app.post("/api/sdg/mindmap")
-def create_sdg_mindmap(request: MindmapRequest):
-
+@app.post('/api/interview/feedback')
+def feedback():
+    data=request.get_json(silent=True) or {}; s=session(data)
+    if not s:return fail('Session expired',404)
+    answer=str(data.get('answer','')).strip()
+    if not 3<=len(answer)<=3500:return fail('Answer must be 3–3500 characters')
+    with lock:
+        if s['awaiting_next']:return fail('Already answered',409)
+        s['awaiting_next']=True
     try:
-        return build_mindmap(
-            request.title,
-            request.skills or {}
-        )
+        fb=feedback_for(s['question']['question'],answer,s['role'],s['mode'],s['language'])
+        with lock:
+            s['history'].append({'question':s['question']['question'],'answer':answer,'feedback':fb})
+            # No answers, transcript, or audio stored on server database.
+            insert(s['guest'],str(data['session_id']),s['question']['question'],s['role'])
+        return jsonify(feedback=fb,finished=len(s['history'])>=s['max_questions'])
+    except Exception:
+        with lock:s['awaiting_next']=False
+        app.logger.exception('Feedback failed');return fail('Feedback generation failed',503)
 
-    except (ValueError, TypeError, KeyError) as error:
-        raise HTTPException(
-            status_code=422,
-            detail=str(error)
-        ) from error
+@app.post('/api/interview/next')
+def next_question():
+    data=request.get_json(silent=True) or {};s=session(data)
+    if not s:return fail('Session expired',404)
+    if not s['awaiting_next']:return fail('Submit your answer first',409)
+    if len(s['history'])>=s['max_questions']:
+        rep=report(s['history'],s['role'],s['language'])
+        return jsonify(finished=True,report=rep)
+    past=list(s['history']); adaptive=adaptive_plan(past)
+    adaptive['last_answer']=past[-1]['answer']
+    try:
+        question=pick(s['role'],s['mode'],s['language'],s['facts'],s['previous'],
+                      [i['question'] for i in past],adaptive)
+    except Exception:
+        app.logger.exception('Next question failed');return fail('No non-repeating question was found',503)
+    s['question']=question;s['awaiting_next']=False
+    return jsonify(finished=False,question_number=len(past)+1,max_questions=s['max_questions'],**question)
 
+@app.post('/api/interview/end')
+def end():
+    data=request.get_json(silent=True) or {};s=session(data)
+    if not s:return fail('Session expired',404)
+    if not s['history']:return fail('Answer a question first')
+    rep=report(s['history'],s['role'],s['language'])
+    with lock:sessions.pop(str(data['session_id']),None)
+    return jsonify(report=rep)
 
-# ==========================================
-# AI TREND DATA API
-# ==========================================
+@app.errorhandler(413)
+def large(_):return fail('Maximum upload 10MB',413)
 
-@app.get("/api/ai-trends")
-def get_ai_trends():
-
-    import json
-    import csv
-
-    folder = BASE_DIR.parent / "AI-development-trend"
-
-    report_path = folder / "ai_trend_report.json"
-    table_path = folder / "ai_trend_table.csv"
-
-    if not report_path.exists():
-        raise HTTPException(
-            status_code=404,
-            detail="AI trend report not found"
-        )
-
-    with open(report_path, encoding="utf-8-sig") as file:
-        report = json.load(file)
-
-    columns = []
-    rows = []
-
-    if table_path.exists():
-
-        with open(
-            table_path,
-            encoding="utf-8-sig",
-            newline=""
-        ) as file:
-
-            reader = csv.DictReader(file)
-            columns = reader.fieldnames or []
-            rows = list(reader)
-
-    return {
-        "report": report,
-        "columns": columns,
-        "rows": rows
-    }
+if __name__=='__main__':app.run(port=5000,debug=False)

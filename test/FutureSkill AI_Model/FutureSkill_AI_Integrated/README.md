@@ -1,68 +1,42 @@
-# FutureSkill AI — Integrated Website
+# FutureSkill AI — HR Interview (Modules 1–10)
 
-This is the **merged** version of the user's existing FastAPI RIASEC website and the separate personalised reskilling module. They now run under **one server / one URL**.
+## Important career data
+Place your **existing** `career_profiles_clean.csv` next to `app.py`. Its `Title` column drives the **complete** searchable A–Z target career list. Search is case-insensitive, all matches appear with a 7-row scroll window. No careers are manually capped.
 
-## Start on Windows (PyCharm)
+Without that file, the app loads `careers_demo.csv` (seven illustrative careers). The full 293 titles cannot be guaranteed unless you provide the original CSV, which was not attached to this conversation.
 
-1. **Back up your old PyCharm project first**. Extract this ZIP as its own folder to avoid overwriting your previous work.
-2. In PyCharm, select **File → Open** and choose the extracted `FutureSkill_AI_Integrated` folder.
-3. Open PyCharm Terminal (bottom panel) and enter:
+If your file has another name set `CAREER_CSV=your_filename.csv` in `.env`.
 
-   ```bash
-   python -m pip install -r requirements.txt
-   python -m uvicorn app:app --host 127.0.0.1 --port 8000
-   ```
+## Run
+1. Python 3.10+ recommended.
+2. `pip install -r requirements.txt`
+3. Copy `.env.example` to `.env` and enter `OPENAI_API_KEY`.
+4. `python app.py` and open http://127.0.0.1:5000
 
-   You can alternatively double-click `start_windows.bat` after installing requirements.
-4. Open **http://127.0.0.1:8000/** (original assessment) or **http://127.0.0.1:8000/reskilling** (new pathway).
-5. If port 8000 is already in use, stop the old website's PyCharm Run process first.
+## Features (1–10)
+1. Career selection
+2. Personal facts: optional skills/description from CSV; no invented experience
+3. Searchable A-Z dropdown, seven visible options, scroll for all
+4. LLM question generation
+5. Career CSV grounding (NOT independently fact checked)
+6. Mic → submit recording → transcribe → evaluate; browser speech synthesis for interviewer
+7. Per-question weighted score and coaching
+8. Adaptive prompts based on weakest dimension
+9. Readiness, proficiency, strengths/weaknesses with evidence counts
+10. Persistent browser personal interview reports and server question history
+Plus semantic embeddings with <150 / >=150 / recent100 policy
 
-## How to use
+## Limitations and safety
+- The example CSV is **illustrative**, not a verified occupational source. Full source checking and curated fallbacks remain to be added.
+- Real API key and network are needed. API calls cost money; set account budgets and rate limits.
+- Browser report history is local; it may be deleted by clearing site data. Server stores question text associated with an anonymous opaque cookie. SQLite may be ephemeral on Render; use managed PostgreSQL for deployment.
+- Cookie uses HttpOnly SameSite Lax; add CSRF protections, stronger privacy policy, request rate limiting, durable session storage, GDPR-style deletion hooks and production authentication/abuse controls before public release.
+- Embedding uses one API request per comparison for previous questions in this MVP: cache/persist vectors before a large deployment. It is expensive for long histories.
+- Scores are subjective practice indicators; not hiring decisions.
+- Your original FastAPI website cannot simply replace its app.py with this Flask example; mount equivalent endpoints or migrate the module.
 
-- The home page retains the **42-question RIASEC + subject + skills** assessment.
-- After completing the assessment, browse career recommendations. Each recommendation now includes an **Explore reskilling options** link.
-- The link takes you to `/reskilling?career=...` and selects a supported reskilling template **only when an explicit mapping exists** (the five prototype template titles plus Software Developers and Information Security Analysts). Other occupations receive an honest message and a choice of 5 prototype roles; **the app does not fake occupation-specific skill requirements**.
-- Complete the 3-step skills/timetable form and select **Generate my pathway** to view your skill-gap scores, weekly tasks, objectives, progress bars and learning tree.
-- Mark tasks done to gain cumulative XP; upload a photo (5 MB JPG/PNG/WEBP) as evidence; change timetable to reschedule unfinished tasks.
-
-## Technical layout
-
-```
-FutureSkill_AI_Integrated/
-  app.py                     Original FastAPI /api/recommend + integrated router
-  assessment_scoring.py      Original assessment algorithm
-  career_engine.py           Original career matching algorithm (923-row dataset)
-  career_profiles_clean.csv  Original provided career database
-  static/index.html          Original 42-question frontend, with new links
-  reskilling/api.py          Integrated FastAPI endpoints, session, photo uploads
-  reskilling/engine.py       Skill-gap calculations, priorities, scheduling, XP
-  reskilling/catalog.py      5 illustrative skill-template careers
-  reskilling/storage.py      SQLite persistence
-  reskilling/index.html      Learning pathway UI
-  reskilling/static/         Separate CSS/JS for pathway UI
-  instance/                  Created on run (private data — never commit)
-```
-
-## Important notes
-
-- The original career matching formula and 42 questions are unchanged.
-- The existing 6 skill self-reports are broad skills **not** the occupational competencies used for each pathway. Pathway users are asked to self-rate specific skills; we do not falsely equate interest scores with mastery.
-- Sample skill demands, scheduling time estimates and learning resources are a **rule-based prototype**, not trained AI or verified forecasts.
-- This demo uses an anonymous signed browser cookie, not a real account. Clear cookies and you may lose access to earlier tasks. Photos and SQLite remain locally under `instance/`.
-- **Do not deploy as-is to public production**. Add individual user accounts, real auth, HTTPS, secure cookies, consent/data retention, image transcoding and rate limiting before allowing public photo uploads.
-
-## Run automated checks
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-## One-server architecture
-
-- `GET /`  → old Career Assessment
-- `POST /api/recommend` → old career assessment and career matching
-- `GET /reskilling` → new skills and timetable questionnaire/dashboard
-- `GET /api/state` → anonymous user's learning data
-- `POST /api/plan`, `POST /api/replan` → personalised timetable generator
-- `POST /api/tasks/{id}/status` → to-do completion and growth points
-- `POST /api/tasks/{id}/proof` → attached learning photograph
+## Section 6 — Text and Voice Answer
+- Choose **Text Answer** to type into an expanded, editable answer area.
+- Choose **Voice Answer** to record and transcribe your speech. The transcript is editable before submission.
+- Both modes share the same AI feedback, scoring, and interview report.
+- A word and character counter appears beneath the input.
