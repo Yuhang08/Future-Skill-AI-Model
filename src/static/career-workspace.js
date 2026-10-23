@@ -581,6 +581,8 @@
       panel.append(el("h1", "career-page-heading", "Career information unavailable"), el("p", "", error.message));
       addLink(panel, "/careers", "Return to career search", "career-button-secondary");
       content.appendChild(panel);
+    } finally {
+      content.querySelector(".career-loading")?.remove();
     }
   }
 

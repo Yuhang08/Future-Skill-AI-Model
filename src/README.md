@@ -93,6 +93,7 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 node tests/assessment_progress.test.cjs
 node tests/assessment_report.test.cjs
 node tests/language_packs.test.cjs
+node tests/pathway_confirmation.test.cjs
 # Requires a running app, Chromium and Node with built-in WebSocket support.
 node --experimental-websocket tests/assessment_report_browser.cjs
 ```

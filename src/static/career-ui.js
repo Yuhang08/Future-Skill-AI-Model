@@ -89,6 +89,12 @@
       "career-skill-boundary",
       "Broad self-reported confidence ratings do not establish proficiency or occupational readiness."
     ));
+    const activity = element("details", "career-why");
+    activity.append(
+      element("summary", "", "Try it before choosing"),
+      element("p", "", "Open the official profile, choose one listed work activity to investigate, and write down a question about what it involves. This is an exploration exercise, not a proficiency test.")
+    );
+    card.appendChild(activity);
 
     const actions = element("div", "career-card-actions");
     if (CAREER_ID.test(String(career.id || ""))) {

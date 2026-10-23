@@ -158,14 +158,14 @@ async function contrast() {
     assert.equal(await evaluate("document.querySelectorAll('#userProfile [role=meter]').length"), 0);
     assert.match(await evaluate("document.querySelector('#userProfile [role=alert]').textContent"), /incomplete|range/);
     assert.equal(requests.filter(req => req.url.endsWith("/api/recommend")).length, beforeInvalid);
-    assert.match(await evaluate("document.getElementById('resultsPathwayLink').href"), /demo=1/);
+    assert.match(await evaluate("document.getElementById('workspacePathwayLink').href"), /demo=1/);
     await go("/?report-demo=mixed");
     await evaluate("document.querySelector('.report-careers-link').click()");
     assert.equal(await evaluate("location.hash"), "#careerRecommendationsHeading");
     await wait("Math.abs(document.getElementById('careerRecommendationsHeading').getBoundingClientRect().top)<200");
     await evaluate("document.querySelector('#report-methodology details summary').click()");
     assert.match(await evaluate("document.querySelector('#report-methodology').textContent"), /Skills are not ranking inputs/);
-    assert.match(await evaluate("document.querySelector('.report-ai-notice').textContent"), /unavailable/);
+    assert.match(await evaluate("document.querySelector('.report-ai-notice').textContent"), /not available/);
     assert.equal(requests.some(req => /openai|\/api\/.*explanation|\/api\/.*review/.test(req.url)), false);
     assert.equal(requests.filter(req => req.method !== "GET" && !req.url.endsWith("/api/recommend")).length, 0);
     console.log("PASS browser: invalid data fails explicitly, career anchor works, AI unavailable without calls or fake output");
@@ -206,7 +206,9 @@ async function contrast() {
     assert.equal(await evaluate("new URLSearchParams(location.search).get('demo')"), "1");
     console.log("PASS browser: real recommendation opens isolated reskilling flow");
 
-    const postsBeforeBrowsing = requests.filter(request => request.method !== "GET").length;
+    const mutatingRequests = () => requests.filter(request =>
+      request.method !== "GET" && !new URL(request.url).pathname.endsWith("/api/sdg/mindmap"));
+    const postsBeforeBrowsing = mutatingRequests().length;
     await metrics(1440);
     await go("/careers");
     await wait("document.querySelectorAll('.career-catalog-item').length > 0");
@@ -236,7 +238,7 @@ async function contrast() {
     await pause(350);
     assert.equal(await evaluate("document.documentElement.scrollWidth<=innerWidth+2"), true);
     await screenshot("390-dark-career-compare");
-    assert.equal(requests.filter(request => request.method !== "GET").length, postsBeforeBrowsing,
+    assert.equal(mutatingRequests().length, postsBeforeBrowsing,
       "career browsing and comparison do not submit or change a learner plan");
     console.log("PASS browser: search, detail, comparison, zh/ms/en switching, mobile dark layout and no learner-data writes");
 

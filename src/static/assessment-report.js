@@ -299,7 +299,7 @@
         link.href = href;
         jumpLinks.appendChild(link);
       });
-    intro.appendChild(jumpLinks);
+    if (!options.hideJumpNavigation) intro.appendChild(jumpLinks);
     report.appendChild(intro);
 
     const careerSection = section(
@@ -319,7 +319,7 @@
       "report-interests");
     const code = node("div", "report-code");
     code.append(node("span", "", "Calculated interest code"), node("strong", "", data.top3));
-    interestSection.appendChild(code);
+    if (!model.hasInterestTies) interestSection.appendChild(code);
     interestSection.appendChild(node("p", "report-intro",
       "These scores are not percentiles, probabilities of career success, or percentages of your personality. The bars share a 20–100 axis; 20 is the minimum possible response score, not an absence of interests."));
     const sourceCaveat = node("p", "report-citation",
@@ -332,6 +332,7 @@
     const codeDetails = node("details", "report-details");
     codeDetails.append(node("summary", "", "Why this code?"),
       node("p", "", codeNote));
+    if (model.hasInterestTies) codeDetails.appendChild(code);
     interestSection.appendChild(codeDetails);
     if (model.combinedAreas.length >= 2) {
       const first = TYPES.find(type => type.key === model.combinedAreas[0].key);

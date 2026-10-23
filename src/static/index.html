@@ -621,10 +621,7 @@ button:hover { background: #4432c0; opacity: 1; }
         </div>
         <nav aria-label="Results sections">
           <a href="#report-overview" data-results-nav="report-overview">My career overview</a>
-          <a href="#report-careers" data-results-nav="report-careers">Career possibilities</a>
-          <a href="#report-interests" data-results-nav="report-interests">Interests</a>
-          <a href="#report-subjects" data-results-nav="report-subjects">Subjects</a>
-          <a href="#report-confidence" data-results-nav="report-confidence">Confidence</a>
+          <a href="/careers">Explore careers</a>
           <a href="/my-profile">My profile &amp; assessment</a>
           <a href="/reskilling" id="workspacePathwayLink">My learning pathway</a>
           <details>
@@ -1365,6 +1362,7 @@ function displayResults(data) {
     const demoMode = params.has("report-demo") || params.has("screen");
     const model = FutureSkillReport.render(document.getElementById("userProfile"), data, {
         demo: demoMode,
+        hideJumpNavigation: true,
         onReview: openFilledAssessmentReview
     });
     const careerContainer = document.getElementById("careerResults");
@@ -1444,7 +1442,7 @@ async function openInventoryPreview() {
         const selector = document.getElementById("reportDemoScenario");
         const status = document.getElementById("reportDemoStatus");
         control.hidden = false;
-        document.getElementById("resultsPathwayLink").href =
+        document.getElementById("workspacePathwayLink").href =
             "/reskilling?demo=1&demo_scenario=fresh";
         selector.value = params.get("report-demo") || "equal-high";
         selector.addEventListener("change", () => {
