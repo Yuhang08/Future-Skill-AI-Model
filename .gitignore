@@ -38,3 +38,4 @@ attached_assets/
 zipFile.zip
 /generated-artifacts/
 /artifacts/mockup-sandbox-preview/dist/
+/artifacts/mockup-sandbox/dist/
