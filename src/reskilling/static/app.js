@@ -90,7 +90,7 @@ function setWorkspaceNotice(message) {
   notice.hidden = !message;
 }
 function setWorkspaceActive(action) {
-  if (action === 'settings' || action === 'edit-profile') return;
+  if (action === 'edit-profile') return;
   const items = document.querySelectorAll('#workspaceNav [data-workspace-action]');
   items.forEach(item => {
     const active = item.dataset.workspaceAction === action;
@@ -98,12 +98,6 @@ function setWorkspaceActive(action) {
     if (active) item.setAttribute('aria-current', 'location');
     else item.removeAttribute('aria-current');
   });
-}
-function updateSdgNavLink() {
-  const link = $('sdgNavLink');
-  if (!link) return;
-  const career = appState?.profile?.target_career || $('targetCareer')?.value;
-  link.href = career ? `/sdg-impact?career=${encodeURIComponent(career)}` : '/sdg-impact';
 }
 function closeWorkspaceSidebar() {
   const toggle = $('workspaceToggle');
@@ -113,33 +107,24 @@ function closeWorkspaceSidebar() {
   toggle?.setAttribute('aria-expanded', 'false');
   toggle?.setAttribute('aria-label', 'Open workspace navigation');
 }
-function openWorkspaceSettings() {
-  const dialog = $('settingsDialog');
-  if (!dialog) return;
-  if (typeof dialog.showModal === 'function') dialog.showModal();
-  else dialog.setAttribute('open', '');
-}
 function closeWorkspaceSettings() {
-  const dialog = $('settingsDialog');
+  const dialog = $('fsSettingsDialog');
   if (!dialog) return;
   if (typeof dialog.close === 'function' && dialog.open) dialog.close();
   else dialog.removeAttribute('open');
 }
-function handleWorkspaceAction(action) {
-  closeWorkspaceSidebar();
-  if (action === 'settings') {
-    openWorkspaceSettings();
+function openLearningProfile() {
+  closeWorkspaceSettings();
+  if (appState?.profile) {
+    $('editProfile').click();
     return;
   }
+  handleWorkspaceAction('begin-setup');
+}
+function handleWorkspaceAction(action) {
+  closeWorkspaceSidebar();
   if (action === 'edit-profile') {
-    closeWorkspaceSettings();
-    if (appState?.profile) {
-      $('editProfile').click();
-    } else {
-      setWorkspaceActive('plan');
-      setWorkspaceNotice('Create your learning profile to begin. You can enter your skills manually in setup.');
-      $('workspaceNotice')?.scrollIntoView({behavior:'smooth', block:'start'});
-    }
+    openLearningProfile();
     return;
   }
   if (action === 'overview') {
@@ -202,20 +187,13 @@ function initWorkspaceNavigation() {
   document.querySelectorAll('[data-workspace-action]').forEach(item => {
     item.addEventListener('click', () => handleWorkspaceAction(item.dataset.workspaceAction));
   });
-  $('workspaceNav')?.addEventListener('click', event => {
-    if (event.target.closest('a.workspace-nav-item')) closeWorkspaceSidebar();
-  });
-  $('settingsClose')?.addEventListener('click', closeWorkspaceSettings);
-  $('settingsDialog')?.addEventListener('click', event => {
-    if (event.target === $('settingsDialog')) closeWorkspaceSettings();
-  });
-  $('themePreference')?.addEventListener('change', event => {
-    if (event.target.matches('input[name="themePreference"]')) {
-      applyThemePreference(event.target.value);
-    }
+  document.addEventListener('click', event => {
+    const profileLink = event.target.closest('#editProfileFromSettings');
+    if (!profileLink) return;
+    event.preventDefault();
+    openLearningProfile();
   });
   setWorkspaceActive('overview');
-  updateSdgNavLink();
 }
 function showDemoBanner() {
   if (!demoMode) return;
@@ -395,7 +373,6 @@ function renderDashboard(state, animateTree=false) {
 }
 function showApp(state) {
   appState = state;
-  updateSdgNavLink();
   if (state.profile) {
     $('questionnaire').hidden = true;
     $('cancelEdit').hidden = true;
@@ -480,7 +457,7 @@ async function submitReplan(event) {
 function initListeners() {
   initWorkspaceNavigation();
   $('weeklyHours').addEventListener('input',()=>{$('weeklyHoursOutput').textContent=`${$('weeklyHours').value} hours`;});
-  $('targetCareer').addEventListener('change',()=>{drawSkillInputs();updateSdgNavLink();});
+  $('targetCareer').addEventListener('change',()=>drawSkillInputs());
   $('nextStep').addEventListener('click',()=>setSteps(step+1));
   $('prevStep').addEventListener('click',()=>setSteps(step-1));
   document.querySelectorAll('[data-go-step]').forEach(b=>b.addEventListener('click',()=>setSteps(Number(b.dataset.goStep))));
@@ -634,8 +611,8 @@ async function init() {
       `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
     showApp(response);
     showCareerBridge(response, pageParams.get('career'));
-    updateSdgNavLink();
     openInventoryScreen(pageParams.get('screen'));
+    if (pageParams.get('editProfile') === '1') openLearningProfile();
   } catch(error) {
     $('questionnaire').hidden=false;
     toast(`Cannot reach the Python server: ${error.message}`,true);

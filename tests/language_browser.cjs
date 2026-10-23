@@ -134,14 +134,64 @@ async function picture(name) {
       if (route === "/ai-trend") assert.notEqual(await evaluate("document.querySelector('h1').textContent"), "AI Career Trend Explorer");
       if (route === "/uncertainty") assert.notEqual(await evaluate("document.querySelector('h1').textContent"), "AI Uncertainty Lab");
     }
-    await wait("!!document.getElementById('fsWorkspaceLanguageSelect')");
-    await evaluate("document.querySelector('[data-workspace-action=\"settings\"]').click()");
-    assert.equal(await evaluate("document.getElementById('settingsDialog').open"), true);
-    await evaluate("document.getElementById('fsWorkspaceLanguageSelect').value='zh-CN';document.getElementById('fsWorkspaceLanguageSelect').dispatchEvent(new Event('change',{bubbles:true}))");
+    await wait("!!window.appState || !!document.querySelector('#questionnaire:not([hidden])') || !!document.querySelector('#dashboard:not([hidden])')");
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('#workspaceNav [data-workspace-action]')].map(el=>el.dataset.workspaceAction)"),
+      ["overview", "plan", "progress"]);
+    assert.equal(await evaluate("document.querySelectorAll('#workspaceSidebar a[href],#workspaceSidebar [data-workspace-action=\"settings\"]').length"), 0);
+    assert.equal(await evaluate("document.querySelectorAll('#settingsDialog,#fsWorkspaceLanguageSelect').length"), 0);
+    assert.equal(await evaluate("document.querySelectorAll('#fsSettingsDialog').length"), 1);
+    assert.equal(await evaluate("!!document.querySelector('#fsSettingsButton svg')"), true);
+    await settings();
+    assert.equal(await evaluate("!!document.querySelector('#fsSettingsDialog #editProfileFromSettings')"), true);
+    assert.equal(await evaluate("document.querySelectorAll('#fsSettingsDialog input[name=\"themePreference\"]').length"), 3);
+    assert.equal(await evaluate("document.querySelectorAll('#fsSettingsDialog .fs-availability li').length"), 3);
+    assert.equal(await evaluate("[...document.querySelectorAll('#fsSettingsDialog h3')].some(el=>el.textContent===FutureSkillI18n.translateText('Privacy and data'))"), true);
+    await evaluate("document.getElementById('fsLanguageSelect').value='zh-CN';document.getElementById('fsLanguageSelect').dispatchEvent(new Event('change',{bubbles:true}))");
     await wait("FutureSkillI18n.getLanguage()==='zh-CN'");
-    assert.equal(await evaluate("document.getElementById('fsLanguageSelect').value"), "zh-CN");
+    await evaluate("document.querySelector('#fsSettingsDialog input[name=\"themePreference\"][value=\"dark\"]').click()");
+    assert.equal(await evaluate("FutureSkillTheme.getState().preference"), "dark");
+    await evaluate("document.getElementById('editProfileFromSettings').click()");
+    await wait("!document.getElementById('fsSettingsDialog').open && !document.getElementById('questionnaire').hidden");
     await go("/"); assert.equal(await evaluate("FutureSkillI18n.getLanguage()"), "zh-CN");
-    console.log("PASS browser: preference survives page navigation/reload and existing reskilling Settings uses the same language preference");
+    await settings();
+    assert.equal(await evaluate("document.querySelectorAll('#fsSettingsDialog input[name=\"themePreference\"]').length"), 3);
+    assert.equal(await evaluate("[...document.querySelectorAll('#fsSettingsDialog h3')].some(el=>el.textContent===FutureSkillI18n.translateText('Privacy and data'))"), true);
+    await evaluate("document.getElementById('editProfileFromSettings').click()");
+    await wait("location.pathname==='/reskilling' && new URLSearchParams(location.search).get('editProfile')==='1' && !!document.querySelector('#questionnaire:not([hidden])')");
+    console.log("PASS browser: cleaned sidebar, gear-and-label header, one merged Settings dialog, profile flow, appearance and shared language preference");
+
+    await go("/reskilling");
+    await wait("!!appState?.catalog");
+    // Browser-only returning-learner fixture: never submitted to the API or
+    // written to storage. The live catalogue and real page handlers are reused.
+    await evaluate(`showApp({
+      ...appState,
+      profile: { target_career:Object.keys(appState.catalog)[0], skills:{},
+        user_type:'career_changer', current_industry:'Browser-only test fixture',
+        experience:'some', personal_goal:'Automated Settings test; not a learner record.',
+        weekly_hours:7, target_weeks:9, preferred_days:['Tuesday','Thursday','Saturday'],
+        learning_style:'project' },
+      stats:{learning_hours_completed:0,estimated_learning_hours:0,completed_tasks:0,
+        total_tasks:0,study_progress_pct:0,remaining_hours:0},tasks:[],gaps:[]
+    })`);
+    await wait("!!document.querySelector('#dashboard:not([hidden])') && !!appState?.profile");
+    const existingProfile = await evaluate("JSON.stringify(appState.profile)");
+    const mutationsBefore = requests.filter(request => !["GET", "HEAD"].includes(request.method)).length;
+    await settings();
+    await evaluate("document.getElementById('editProfileFromSettings').click()");
+    await wait("!document.getElementById('fsSettingsDialog').open && !document.getElementById('questionnaire').hidden");
+    assert.equal(await evaluate("document.getElementById('userType').value"), "career_changer");
+    assert.equal(await evaluate("String(document.getElementById('weeklyHours').value)===String(appState.profile.weekly_hours)"), true);
+    assert.equal(await evaluate("String(document.getElementById('targetWeeks').value)===String(appState.profile.target_weeks)"), true);
+    assert.equal(await evaluate("JSON.stringify(appState.profile)"), existingProfile);
+    assert.equal(requests.filter(request => !["GET", "HEAD"].includes(request.method)).length, mutationsBefore);
+    await evaluate("document.getElementById('cancelEdit').click()");
+    for (const action of ["overview", "plan", "progress"]) {
+      await evaluate(`document.querySelector('#workspaceNav [data-workspace-action="${action}"]').click()`);
+      assert.equal(await evaluate(`document.querySelector('#workspaceNav [data-workspace-action="${action}"]').getAttribute('aria-current')`), "location");
+    }
+    console.log("PASS browser: in-memory returning-learner fixture opens prefilled without saving; cancel preserves values and all three internal sidebar actions work");
+    await go("/");
 
     for (const width of [1440, 390]) {
       await send("Emulation.setDeviceMetricsOverride", { width, height: 1000, deviceScaleFactor: 1, mobile: width < 700 });
@@ -151,8 +201,8 @@ async function picture(name) {
           await language(code); await settings(); await pause(180);
           assert.equal(await evaluate("document.documentElement.scrollWidth<=innerWidth+2"), true);
           assert.equal(await evaluate("document.getElementById('fsSettingsDialog').scrollWidth<=document.getElementById('fsSettingsDialog').clientWidth+2"), true);
-          assert.equal(await evaluate("Math.abs(document.getElementById('fsSettingsButton').getBoundingClientRect().top-document.querySelector('[data-theme-toggle]').getBoundingClientRect().top)<5"), true,
-            "Settings and theme controls stay in the same navigation row");
+          assert.equal(await evaluate("Math.abs(document.getElementById('fsSettingsButton').getBoundingClientRect().top+document.getElementById('fsSettingsButton').getBoundingClientRect().height/2-document.querySelector('.fs-site-brand').getBoundingClientRect().top-document.querySelector('.fs-site-brand').getBoundingClientRect().height/2)<5"), true,
+            "Settings stays in the main navigation row alongside the brand");
           await picture(`${width}-${theme}-${code}`);
           await evaluate("document.getElementById('fsSettingsDialog').close()");
         }

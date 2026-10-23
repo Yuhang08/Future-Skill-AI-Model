@@ -68,18 +68,29 @@ class IntegratedWebTests(unittest.TestCase):
         self.assertIn('careerBridgeNote', new.text)
         for label in (
             'Overview', 'My Reskilling Plan', 'Progress Tracking',
-            'AI &amp; Career Trends', 'Explore Careers', 'SDG Alignment', 'Settings',
         ):
             self.assertIn(label, new.text)
         for element_id in (
             'workspaceSidebar', 'workspaceToggle', 'workspaceNav',
-            'settingsDialog', 'themePreference', 'beginSetup', 'sdgNavLink',
+            'beginSetup',
         ):
             self.assertIn(f'id="{element_id}"', new.text)
-        self.assertIn('href="/ai-trend"', new.text)
-        self.assertIn('id="sdgNavLink" data-nav-sdg href="/sdg-impact"', new.text)
-        self.assertIn('CV import', new.text)
-        self.assertIn('Cross-device sync', new.text)
+        sidebar = re.search(
+            r'<aside\b[^>]*id="workspaceSidebar"[\s\S]*?</aside>', new.text
+        ).group(0)
+        self.assertNotIn('href=', sidebar)
+        self.assertNotIn('data-workspace-action="settings"', sidebar)
+        self.assertEqual(sidebar.count('data-workspace-action='), 3)
+        self.assertNotIn('id="settingsDialog"', new.text)
+        shared_settings = self.client.get('/static/future-theme.js').text
+        for feature in (
+            'fsSettingsDialog', 'fsSettingsButton', 'editProfileFromSettings',
+            'themePreference', 'fsLanguageSelect', 'Privacy and data',
+            'CV import', 'Notifications', 'Cross-device sync',
+        ):
+            self.assertIn(feature, shared_settings)
+        for route in ('/', '/reskilling', '/ai-trend', '/uncertainty', '/sdg-impact'):
+            self.assertIn(f'["{route}",', shared_settings)
         self.assertEqual(self.client.get('/reskill-static/app.js').status_code, 200)
         self.assertEqual(self.client.get('/reskill-static/style.css').status_code, 200)
 

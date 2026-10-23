@@ -1,4 +1,5 @@
 {
+  "Appearance preference": "Keutamaan rupa paparan",
   "Explore More Features": "Terokai Lagi Ciri",
   "AI Trend Explorer": "Peneroka Trend AI",
   "Explore qualitative career and skill scenarios; not validated demand forecasts.": "Terokai senario kerjaya dan kemahiran secara kualitatif; ini bukan ramalan permintaan yang telah disahkan.",
@@ -53,4 +54,9 @@
   ,"Your answers do not identify a clear leading interest area. All six interest scores are {score} / 100.":"Jawapan anda tidak menunjukkan bidang minat yang jelas mendahului yang lain. Kesemua enam skor minat ialah {score} / 100."
   ,"Your highest interest areas are tied: {areas}.":"Bidang minat tertinggi anda seri: {areas}."
   ,"Your highest interest area is {area}. This is a starting point for exploration, not a label.":"Bidang minat tertinggi anda ialah {area}. Ini titik permulaan penerokaan, bukan label tetap."
- }
+  ,"Review the details shaping your learning plan.":"Semak butiran yang membentuk pelan pembelajaran anda."
+  ,"Choose how FutureSkill looks on this browser.":"Pilih rupa FutureSkill pada pelayar ini."
+  ,"Unavailable; enter skills manually during setup":"Tidak tersedia; masukkan kemahiran secara manual semasa persediaan"
+  ,"Choose learning reminders":"Pilih peringatan pembelajaran"
+  ,"Continue your plan on another device":"Teruskan pelan anda pada peranti lain"
+  }

@@ -1,4 +1,5 @@
 {
+  "Appearance preference": "外观偏好",
   "Explore More Features": "探索更多功能",
   "AI Trend Explorer": "人工智能趋势探索",
   "Explore qualitative career and skill scenarios; not validated demand forecasts.": "探索定性的职业与技能情景；这些并非经过验证的需求预测。",
@@ -40,4 +41,9 @@
   ,"Your answers do not identify a clear leading interest area. All six interest scores are {score} / 100.":"你的回答没有显示明显领先的兴趣领域。六项兴趣分数均为 {score} / 100。"
   ,"Your highest interest areas are tied: {areas}.":"你的最高兴趣领域并列：{areas}。"
   ,"Your highest interest area is {area}. This is a starting point for exploration, not a label.":"你的最高兴趣领域是 {area}。这只是探索的起点，并非固定标签。"
- }
+  ,"Review the details shaping your learning plan.":"查看影响你学习计划的个人信息。"
+  ,"Choose how FutureSkill looks on this browser.":"选择此浏览器中 FutureSkill 的外观。"
+  ,"Unavailable; enter skills manually during setup":"暂不可用；请在设置过程中手动输入技能"
+  ,"Choose learning reminders":"选择学习提醒"
+  ,"Continue your plan on another device":"在另一台设备上继续学习计划"
+  }

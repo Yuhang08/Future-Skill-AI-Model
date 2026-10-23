@@ -1,4 +1,5 @@
 {
+  "Appearance preference": "Appearance preference",
   "Explore More Features": "Explore More Features",
   "AI Trend Explorer": "AI Trend Explorer",
   "Explore qualitative career and skill scenarios; not validated demand forecasts.": "Explore qualitative career and skill scenarios; not validated demand forecasts.",
@@ -71,4 +72,9 @@
   ,"Your answers do not identify a clear leading interest area. All six interest scores are {score} / 100.":"Your answers do not identify a clear leading interest area. All six interest scores are {score} / 100."
   ,"Your highest interest areas are tied: {areas}.":"Your highest interest areas are tied: {areas}."
   ,"Your highest interest area is {area}. This is a starting point for exploration, not a label.":"Your highest interest area is {area}. This is a starting point for exploration, not a label."
- }
+  ,"Review the details shaping your learning plan.":"Review the details shaping your learning plan."
+  ,"Choose how FutureSkill looks on this browser.":"Choose how FutureSkill looks on this browser."
+  ,"Unavailable; enter skills manually during setup":"Unavailable; enter skills manually during setup"
+  ,"Choose learning reminders":"Choose learning reminders"
+  ,"Continue your plan on another device":"Continue your plan on another device"
+  }

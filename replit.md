@@ -83,9 +83,18 @@ The deterministic report remains available and sends no answers to an LLM.
 ## Interface languages
 
 The shared navigation Settings button offers English (`en`), Simplified Chinese
-(`zh-CN`) and Bahasa Melayu (`ms`). The reskilling workspace's existing Settings
-panel uses the same language preference. This preference is local to the current
-browser, not an account setting or cross-device synchronization feature.
+(`zh-CN`) and Bahasa Melayu (`ms`). One shared Settings dialog now includes
+learning-profile access, Light/Dark/System appearance, language, privacy
+information, and clearly unavailable workspace options. It is opened by the
+top-right gear-and-Settings button; there is no separate sidebar Settings panel.
+Preferences are local to the current browser, not account settings or
+cross-device synchronization.
+
+The reskilling sidebar contains only Overview, My Reskilling Plan, and Progress
+Tracking. Global page navigation stays in the top bar. The Profile action opens
+the existing profile editor in reskilling, or navigates there using
+`/reskilling?editProfile=1` from other pages. New learners see the real setup
+form; existing learners retain their saved values until they submit an edit.
 
 The language packs are editable local JSON files under `src/static/locales/`.
 Keep their English phrase keys and named interpolation slots synchronized.
@@ -100,3 +109,7 @@ Language-specific checks:
 node tests/language_packs.test.cjs
 node --experimental-websocket tests/language_browser.cjs
 ```
+
+The browser checks also cover unified Settings, internal sidebar navigation,
+and profile-entry links. Returning-learner UI checks use an explicitly labeled
+in-memory fixture; it is never submitted or stored as a learner record.

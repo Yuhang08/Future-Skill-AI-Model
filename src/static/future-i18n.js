@@ -146,13 +146,9 @@
     translateTree(document.body);
     const select = document.getElementById("fsLanguageSelect");
     if (select) { select.value = language; select.disabled = loading; }
-    const workspaceSelect = document.getElementById("fsWorkspaceLanguageSelect");
-    if (workspaceSelect) { workspaceSelect.value = language; workspaceSelect.disabled = loading; }
     const statusText = loading ? "Loading language pack…" : initialError;
-    for (const id of ["fsLanguageStatus", "fsWorkspaceLanguageStatus"]) {
-      const status = document.getElementById(id);
-      if (status) status.textContent = statusText;
-    }
+    const status = document.getElementById("fsLanguageStatus");
+    if (status) status.textContent = statusText;
     window.dispatchEvent(new CustomEvent("futureskill:languagechange", { detail: { language } }));
   }
   async function setLanguage(code) {
@@ -181,15 +177,11 @@
     return getState();
   }
   function syncSelectors() {
-    for (const id of ["fsLanguageSelect", "fsWorkspaceLanguageSelect"]) {
-      const select = document.getElementById(id);
-      if (select) { select.value = language; select.disabled = loading; }
-    }
+    const select = document.getElementById("fsLanguageSelect");
+    if (select) { select.value = language; select.disabled = loading; }
     if (loading) {
-      for (const id of ["fsLanguageStatus", "fsWorkspaceLanguageStatus"]) {
-        const status = document.getElementById(id);
-        if (status) status.textContent = "Loading language pack…";
-      }
+      const status = document.getElementById("fsLanguageStatus");
+      if (status) status.textContent = "Loading language pack…";
     }
   }
   function getState() {
@@ -199,35 +191,12 @@
     const message = state.persistence === "blocked"
       ? "Language changed for this visit. Browser storage is blocked, so your preference could not be saved."
       : "";
-    for (const id of ["fsLanguageStatus", "fsWorkspaceLanguageStatus"]) {
-      const status = document.getElementById(id);
-      if (status) status.textContent = message;
-    }
+    const status = document.getElementById("fsLanguageStatus");
+    if (status) status.textContent = message;
   }
   function wireSettings() {
     const dialog = document.getElementById("fsSettingsDialog");
     const note = dialog?.querySelector(".fs-translation-note");
-    const existing = document.getElementById("settingsDialog");
-    if (existing && !document.getElementById("fsWorkspaceLanguageSelect")) {
-      const section = document.createElement("section");
-      section.className = "settings-section fs-workspace-language";
-      section.innerHTML = '<div class="settings-section-heading"><h3>Language</h3><p>Choose the language used for the learner interface.</p></div><label class="fs-settings-label" for="fsWorkspaceLanguageSelect">Language</label><select id="fsWorkspaceLanguageSelect" aria-describedby="fsWorkspaceLanguageStatus"><option value="en">English</option><option value="zh-CN">简体中文</option><option value="ms">Bahasa Melayu</option></select><p id="fsWorkspaceLanguageStatus" class="fs-language-status" role="status" aria-live="polite"></p><p class="fs-translation-note">Occupational titles, imported career information, and external source titles may remain in English.</p>';
-      const themeSection = existing.querySelector("#themePreference")?.closest(".settings-section");
-      if (themeSection) themeSection.after(section);
-      else existing.querySelector(".settings-content")?.prepend(section);
-      const select = section.querySelector("select");
-      select.addEventListener("change", async () => {
-        const status = section.querySelector(".fs-language-status");
-        status.textContent = "";
-        try {
-          const state = await setLanguage(select.value);
-          setPersistenceStatus(state);
-        } catch (_) {
-          select.value = language;
-          status.textContent = "This language pack could not be loaded. Your previous language is still active.";
-        }
-      });
-    }
     if (!dialog || !note) return;
     if (dialog.dataset.i18nWired) return;
     dialog.dataset.i18nWired = "true";
@@ -278,13 +247,9 @@
     applyLanguage();
     const select = document.getElementById("fsLanguageSelect");
     if (select) { select.value = language; select.disabled = false; }
-    const workspaceSelect = document.getElementById("fsWorkspaceLanguageSelect");
-    if (workspaceSelect) { workspaceSelect.value = language; workspaceSelect.disabled = false; }
     if (initialError) {
-      ["fsLanguageStatus", "fsWorkspaceLanguageStatus"].forEach(id => {
-        const status = document.getElementById(id);
-        if (status) status.textContent = initialError;
-      });
+      const status = document.getElementById("fsLanguageStatus");
+      if (status) status.textContent = initialError;
     }
     return getState();
   })();
