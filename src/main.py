@@ -148,8 +148,17 @@ def career_catalog(
     if query:
         records = [item for item in records if query in item["title"].casefold()]
     records.sort(key=lambda item: item["title"].casefold())
+    page = records[offset:offset + limit]
+    for item in page:
+        alignment = get_sdg_alignment_by_id(item["id"])
+        template = alignment.get("pathway_career")
+        item["pathway"] = {
+            "available": bool(template),
+            "template": template,
+            "status": "illustrative_template" if template else "not_available",
+        }
     return {
-        "results": records[offset:offset + limit],
+        "results": page,
         "total": len(records),
         "limit": limit,
         "offset": offset,
@@ -187,7 +196,7 @@ def career_detail(career_id: str):
 @app.get("/favicon.ico", include_in_schema=False)
 def favicon():
     return FileResponse(
-        BASE_DIR / "static" / "favicon.svg",
+        BASE_DIR / "static" / "brand-forward.svg",
         media_type="image/svg+xml",
     )
 

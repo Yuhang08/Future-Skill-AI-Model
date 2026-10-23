@@ -21,12 +21,15 @@ class IntegratedWebTests(unittest.TestCase):
         self.client = TestClient(app)
 
     def test_shared_brand_asset(self):
-        asset = self.client.get('/static/futureskill-atom.svg')
+        asset = self.client.get('/static/brand-forward.svg')
         self.assertEqual(asset.status_code, 200)
         self.assertIn('image/svg+xml', asset.headers['content-type'])
-        self.assertIn('<ellipse', asset.text)
+        self.assertIn('<path', asset.text)
         shell = self.client.get('/static/future-theme.js').text
-        self.assertIn('/static/futureskill-atom.svg?v=1', shell)
+        self.assertIn('/static/brand-forward.svg', shell)
+        self.assertIn('/static/brand-forward-dark.svg', shell)
+        self.assertEqual(self.client.get('/__dev/brand').status_code, 200)
+        self.assertEqual(self.client.get('/static/brand-preview.html').status_code, 404)
         for route, selector in (
             ('/reskilling', 'class="brand-icon"'),
             ('/sdg-impact', 'class="brand-mark"'),
@@ -34,7 +37,7 @@ class IntegratedWebTests(unittest.TestCase):
             page = self.client.get(route)
             self.assertEqual(page.status_code, 200)
             self.assertIn(selector, page.text)
-            self.assertIn('/static/futureskill-atom.svg?v=1', page.text)
+            self.assertIn('/static/brand-forward.svg', page.text)
             self.assertNotIn('>✳</span>', page.text)
             self.assertNotIn('>FS</span>', page.text)
 
@@ -64,8 +67,9 @@ class IntegratedWebTests(unittest.TestCase):
         self.assertIn('/static/career-ui.js?v=2', old.text)
         career_ui = self.client.get('/static/career-ui.js')
         self.assertEqual(career_ui.status_code, 200)
-        self.assertIn('pathwayQuery.set("career"', career_ui.text)
-        self.assertIn('`/reskilling?${pathwayQuery}`', career_ui.text)
+        self.assertIn('demo_scenario=fresh', career_ui.text)
+        self.assertIn('Why this match?', career_ui.text)
+        self.assertIn('career-card-controls', career_ui.text)
         new = self.client.get('/reskilling')
         self.assertEqual(new.status_code, 200)
         self.assertIn('Generate my pathway', new.text)
@@ -82,9 +86,11 @@ class IntegratedWebTests(unittest.TestCase):
         sidebar = re.search(
             r'<aside\b[^>]*id="workspaceSidebar"[\s\S]*?</aside>', new.text
         ).group(0)
-        self.assertNotIn('href=', sidebar)
+        self.assertIn('href="/careers"', sidebar)
+        for offsite_navigation in ('/ai-trend', '/sdg-impact', '/uncertainty'):
+            self.assertNotIn(f'href="{offsite_navigation}"', sidebar)
         self.assertNotIn('data-workspace-action="settings"', sidebar)
-        self.assertEqual(sidebar.count('data-workspace-action='), 3)
+        self.assertEqual(sidebar.count('data-workspace-action='), 4)
         self.assertNotIn('id="settingsDialog"', new.text)
         shared_settings = self.client.get('/static/future-theme.js').text
         for feature in (

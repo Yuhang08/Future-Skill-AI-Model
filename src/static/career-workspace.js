@@ -9,6 +9,7 @@
     ["S", "Social"], ["E", "Enterprising"], ["C", "Conventional"]
   ];
   const params = new URLSearchParams(window.location.search);
+  let previewContext = null;
 
   function el(tag, className, text) {
     const node = document.createElement(tag);
@@ -50,6 +51,7 @@
   }
 
   function readSessionContext() {
+    if (previewContext) return previewContext;
     try {
       const raw = sessionStorage.getItem("futureskill-career-context");
       if (!raw) return null;
@@ -99,7 +101,8 @@
   function renderRecommendations(target, list, isPersonalized, showAll = false) {
     window.FutureSkillCareers?.renderRecommendations(target, list, {
       personalized: isPersonalized,
-      showAll
+      showAll,
+      demo: Boolean(previewContext)
     });
   }
 
@@ -127,15 +130,17 @@
       ["Interests", model.interestSummary],
       ["Subjects", model.subjectSummary],
       ["Self-reported confidence", model.confidenceSummary]
-    ].forEach(([label, copy]) => {
+    ].forEach(([label, copy], index) => {
       const card = el("article", "career-observation");
-      card.append(el("h3", "", label), el("p", "", copy));
+      const kind = ["interest", "subject", "confidence"][index];
+      const headingLabel = kind === "confidence" && !model.allSkillsEqual ? "Highest reported confidence" : label;
+      card.append(el("h3", "", headingLabel), window.FutureSkillReport.compactSummary(model, kind));
       observations.appendChild(card);
     });
     summary.appendChild(observations);
     const recs = section(
       "Three careers to explore first",
-      "These are the first three entries in the existing engine order, not statistically established best careers."
+      "Suggestions to explore, in engine order—not predictions of career success."
     );
     const list = el("div", "career-recommendation-grid");
     recs.appendChild(list);
@@ -162,7 +167,9 @@
     const report = el("div", "career-profile-report");
     content.appendChild(report);
     const model = window.FutureSkillReport.render(report, context.data, {
-      onReview: () => { window.location.href = "/?review=1"; }
+      onReview: () => { window.location.href = previewContext ? `/?report-demo=${encodeURIComponent(params.get("profile") || "mixed")}` : "/?review=1"; },
+      profileOnly: true,
+      demo: Boolean(previewContext)
     });
     const cards = report.querySelector("#careerResults");
     renderRecommendations(cards, context.data.recommendations || [], true);
@@ -175,16 +182,16 @@
     if (isRecommended) title.textContent = `${rank}. ${item.title}`;
     else title.textContent = item.title;
     card.appendChild(title);
-    card.appendChild(el("p", "career-catalog-meta", `O*NET-SOC ${item.id} · catalogue RIASEC code ${item.riasec_top3 || "not supplied"}`));
-    card.appendChild(el(
-      "p",
-      "career-muted",
-      "The local catalogue has no sourced duties for this role. Its official occupation profile is linked for further research."
-    ));
+    const metadata = el("details", "career-catalog-meta");
+    metadata.append(el("summary", "", "Catalogue information"),
+      el("p", "", `O*NET-SOC ${item.id} · catalogue RIASEC code ${item.riasec_top3 || "not supplied"}`));
+    card.appendChild(metadata);
+    const hasPathway = item.pathway?.available || item.pathway_career;
+    card.appendChild(el("p", "career-pathway-status", hasPathway ? "Example pathway available · readiness not assessed" : "No linked pathway · readiness not assessed"));
     const actions = el("div", "career-catalog-actions");
-    addLink(actions, `/career/${encodeURIComponent(item.id)}`, "Explore this career");
-    addLink(actions, `/compare?ids=${encodeURIComponent(item.id)}`, "Compare");
-    addLink(actions, `https://www.onetonline.org/link/summary/${encodeURIComponent(item.id)}`, "O*NET profile");
+    addLink(actions, `/career/${encodeURIComponent(item.id)}`, "Explore this career", "career-button");
+    addLink(actions, `/compare?ids=${encodeURIComponent(item.id)}`, "Compare", "career-button-secondary");
+    addLink(actions, `https://www.onetonline.org/link/summary/${encodeURIComponent(item.id)}`, "Role details: O*NET", "career-action-text");
     card.appendChild(actions);
     return card;
   }
@@ -192,7 +199,7 @@
   async function renderCatalogue(initialQuery = "") {
     heading(
       params.get("mode") === "target" ? "Choose your target career" : "Explore careers",
-      "Search the existing occupation catalogue by title. Search results are catalogue entries, not personalized recommendations or verified pathway requirements."
+      "Browse occupations, not personalized recommendations. Role details are linked to O*NET; learning pathway coverage varies."
     );
     const context = readSessionContext();
     if (params.get("view") === "recommendations" && context) {
@@ -202,7 +209,7 @@
       renderRecommendations(list, context.data.recommendations || [], true, true);
     }
 
-    const searchPanel = section("Search the catalogue", "Search is limited to the career exploration catalogue; it does not search learner data.");
+    const searchPanel = section("Find a role to explore");
     const form = el("form", "career-search-form");
     form.setAttribute("role", "search");
     const input = el("input");
@@ -214,10 +221,18 @@
     input.placeholder = "Search careers by title";
     input.setAttribute("aria-label", "Search careers by title");
     input.value = initialQuery;
+    const searchLabel = el("label", "career-search-label", "Search careers by title");
+    searchLabel.htmlFor = input.id;
+    searchPanel.appendChild(searchLabel);
+    const suggestions = el("div", "career-search-suggestions");
+    ["Software", "Nurse", "Teacher"].forEach(term => {
+      addButton(suggestions, term, () => { input.value = term; form.requestSubmit(); }, "career-suggestion");
+    });
     const submit = el("button", "career-button", "Search");
     submit.type = "submit";
     form.append(input, submit);
     searchPanel.appendChild(form);
+    searchPanel.appendChild(suggestions);
     const status = el("p", "career-status");
     status.setAttribute("role", "status");
     searchPanel.appendChild(status);
@@ -231,15 +246,21 @@
     let offset = 0;
     let currentQuery = initialQuery;
     let total = 0;
+    let requestVersion = 0;
     async function loadPage(reset) {
+      const version = ++requestVersion;
+      submit.disabled = true;
+      moreButton.disabled = true;
       if (reset) {
         offset = 0;
         results.replaceChildren();
       }
       status.textContent = "Loading catalogue entries…";
+      status.className = "career-status";
       try {
         const qs = new URLSearchParams({ q: currentQuery, offset: String(offset), limit: "24" });
         const payload = await jsonRequest(`/api/careers?${qs}`);
+        if (version !== requestVersion) return;
         total = payload.total;
         payload.results.forEach(item => results.appendChild(catalogCard(item)));
         offset += payload.results.length;
@@ -248,9 +269,12 @@
           : "No catalogue entries matched that title. Try a broader search.";
         moreButton.hidden = offset >= total;
       } catch (error) {
+        if (version !== requestVersion) return;
         status.textContent = error.message;
         status.className = "career-status career-error";
         moreButton.hidden = true;
+      } finally {
+        if (version === requestVersion) { submit.disabled = false; moreButton.disabled = false; }
       }
     }
     form.addEventListener("submit", event => {
@@ -364,36 +388,44 @@
     const rank = recommendations().findIndex(item => item.id === id) + 1;
     const returnTo = `/career/${encodeURIComponent(id)}`;
     heading(career.title, "Explore catalogue evidence before deciding whether this role interests you.", "Career details");
-    content.appendChild(el("p", "career-occupation-code", `O*NET-SOC ${career.id}`));
-
     const work = section(recommendation ? "Why this appeared" : "About your selected career");
     if (recommendation) {
       work.appendChild(el("p", "", `This role appeared at position ${rank} in the assessment engine’s returned order. ${recommendation.explanation || "The engine did not return a text explanation for this entry."}`));
       work.appendChild(el("p", "career-muted", "The engine ranks using RIASEC interests and subject preferences. The broad self-reported skill ratings are not ranking inputs."));
-      work.appendChild(el("p", "career-alert", "The initial three recommendations are a presentation choice, not statistically established best careers."));
     } else {
       work.appendChild(el("p", "", "You opened this catalogue entry directly; it is not presented as a personalized recommendation."));
     }
-    work.appendChild(el("p", "career-alert", "Sourced work-duty details are not present in FutureSkill’s local catalogue. Review the official occupation profile before drawing conclusions about daily work or requirements."));
+    work.appendChild(el("p", "career-muted", "Local sourced duties are unavailable. Inspect the official profile for work activities and requirements."));
     addLink(work, career.profile_url, "Open O*NET OnLine occupation profile");
 
-    const interest = section("Catalogue interest profile", "The existing engine stores this occupation profile; these values are not personal results.");
-    appendRiasecBars(interest, career);
+    const interest = section("Catalogue evidence");
+    const catalogueDetails = el("details", "career-engine-details");
+    catalogueDetails.append(el("summary", "", "Interest profile & catalogue metadata"),
+      el("p", "career-occupation-code", `O*NET-SOC ${career.id}`),
+      el("p", "", "These imported interest values are not personal results. Local dataset provenance and validation have not been independently established."));
+    appendRiasecBars(catalogueDetails, career);
+    interest.appendChild(catalogueDetails);
 
     const startingPoint = section("Your starting point");
-    startingPoint.appendChild(el("p", "", "This assessment does not measure role-specific proficiency or occupational readiness. Broad confidence ratings are self-reported and cannot be converted into role requirements."));
+    startingPoint.appendChild(el("p", "", "Role-specific readiness is not assessed. Self-reported confidence is not proficiency."));
     if (career.pathway.available) {
       startingPoint.appendChild(el("p", "career-pathway-status", `A supported learning template is available for ${career.pathway.template}. Its skills and requirements are illustrative, not independently validated occupational benchmarks.`));
     } else {
       startingPoint.appendChild(el("p", "career-alert", "No supported role-specific pathway template is available for this catalogue entry. The reskilling studio will explain its available templates; do not treat another template as a verified match."));
     }
-    const savedProfile = await jsonRequest("/api/state").catch(() => null);
+    const isDemo = params.get("demo") === "1";
+    const savedProfile = await jsonRequest(isDemo ? "/api/state?demo=1&demo_scenario=fresh" : "/api/state").catch(() => null);
     if (savedProfile?.profile) {
       startingPoint.appendChild(el("p", "career-context-note",
         `Your saved learning pathway is ${savedProfile.profile.target_career}. Browsing this career does not change it.`));
       startingPoint.appendChild(el("p", "career-muted", "Any new plan requires explicit review."));
     }
     const targetQuery = new URLSearchParams({ career: career.title });
+    if (isDemo) {
+      targetQuery.set("demo", "1");
+      targetQuery.set("demo_scenario", "fresh");
+      startingPoint.appendChild(el("p", "career-context-note", "Demonstration: pathway actions use an isolated sample session."));
+    }
     addLink(startingPoint, `/reskilling?${targetQuery}`, "Choose this target and review pathway options", "career-button");
 
     const tryIt = section("Try it before choosing");
@@ -566,9 +598,36 @@
 
   async function start() {
     initMobileSidebar();
-    const path = window.location.pathname;
-    setActiveNavigation(path);
+    let path = window.location.pathname;
     try {
+      if (window.FutureSkillCareerPreview) {
+        const patterns = {
+          "equal-high": [5,5,5,5,5,5], "equal-low": [1,1,1,1,1,1],
+          differentiated: [5,4,3,2,4,1], "leading-tie": [5,5,3,2,4,1], mixed: [4,2,5,3,1,4]
+        };
+        const name = params.get("profile") || "mixed";
+        const values = patterns[name];
+        if (!values) throw new Error("Unknown sample assessment profile.");
+        const rating = name === "equal-high" ? 5 : name === "equal-low" ? 1 : 3;
+        const answers = {
+          answers: Object.fromEntries(["R","I","A","S","E","C"].map((key,index) => [key,Array(4).fill(values[index])])),
+          subject_answers: Object.fromEntries(["IT","Math","Education","Health","Business","Engineering"].map(key => [key,[rating,rating]])),
+          skill_answers: Object.fromEntries(["MathSkill","CodingSkill","DataSkill","CommunicationSkill","LeadershipSkill","CreativeSkill"].map(key => [key,rating]))
+        };
+        previewContext = { data: await jsonRequest("/api/recommend", {method:"POST",body:JSON.stringify(answers)}) };
+        path = params.get("view") === "profile" ? "/my-profile" : "/career-overview";
+        const banner = el("p", "career-demo-banner", "DEVELOPMENT DEMO — isolated sample answers. Your saved assessment and learning plan are unchanged.");
+        content.appendChild(banner);
+        const pathway = document.querySelector('[data-workspace-nav="pathway"]');
+        if (pathway) pathway.href = "/reskilling?demo=1&demo_scenario=fresh";
+      }
+      setActiveNavigation(path);
+      if (previewContext) {
+        [["overview","overview"],["profile","profile"]].forEach(([nav,view]) => {
+          const link = document.querySelector(`[data-workspace-nav="${nav}"]`);
+          if (link) link.href = `/__dev/career-preview?view=${view}&profile=${encodeURIComponent(params.get("profile") || "mixed")}`;
+        });
+      }
       if (path === "/career-overview") renderOverview();
       else if (path === "/my-profile") renderProfile();
       else if (path === "/compare") await renderComparison((params.get("ids") || "").split(",").filter(Boolean));

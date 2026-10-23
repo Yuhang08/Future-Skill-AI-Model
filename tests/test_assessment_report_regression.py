@@ -87,6 +87,7 @@ class AssessmentReportRegressionTests(unittest.TestCase):
         detail = self.client.get(f"/api/careers/{career['id']}")
         self.assertEqual(detail.status_code, 200)
         self.assertEqual(detail.json()["title"], career["title"])
+        self.assertEqual(detail.json()["pathway"], career["pathway"])
         self.assertTrue(detail.json()["profile_url"].startswith("https://www.onetonline.org/"))
         self.assertIsInstance(detail.json()["pathway"]["available"], bool)
         self.assertTrue(detail.json()["pathway"]["status"])

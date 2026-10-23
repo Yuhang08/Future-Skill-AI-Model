@@ -1,0 +1,98 @@
+/* Shared second-pass hierarchy. Values/themes remain owned by future-theme.css. */
+html[data-futureskill-page] { scroll-padding-top: calc(var(--fs-navigation-height, 70px) + 24px); }
+html[data-futureskill-page] body { font-size:16px; line-height:1.6; }
+html[data-futureskill-page] :is(a,button,input,select,summary):focus-visible { outline:3px solid var(--fs-accent); outline-offset:4px; }
+html[data-futureskill-page] .fs-site-brand {font-size:18px;letter-spacing:-.04em;gap:10px}
+html[data-futureskill-page] .fs-site-brand img {width:36px;height:36px;padding:0;border:0;background:none;filter:none}
+html[data-futureskill-page] .fs-site-brand picture {display:flex}
+html[data-futureskill-page="home"] body > header,
+html[data-futureskill-page="sdg"] body > header {display:none}
+html[data-futureskill-page="reskilling"] .site-header .brand,
+html[data-futureskill-page="reskilling"] .site-header .assessment-link,
+html[data-futureskill-page="reskilling"] .site-header .tiny-label,
+html[data-futureskill-page="reskilling"] .site-header .status-dot {display:none}
+html[data-futureskill-page="reskilling"] .site-header {min-height:0;padding:0;border:0;justify-content:flex-end;margin:0}
+html[data-futureskill-page="reskilling"] .site-header:has(.workspace-toggle:not(:hover)) {background:transparent}
+html[data-futureskill-page] :is(.career-page-heading,#results > h2,.hero-copy h1) {font-size:clamp(30px,3vw,40px);line-height:1.17;letter-spacing:-.045em;margin-bottom:12px}
+html[data-futureskill-page="reskilling"] .dashboard-heading h1 {font-size:clamp(30px,3vw,40px);line-height:1.2;letter-spacing:-.04em;margin:8px 0 12px;color:var(--fs-ink)}
+html[data-futureskill-page] :is(.career-panel > h2,.report-section > h2,.report-overview > h2,.dashboard-heading h2,.section-title-row h2) {font-size:clamp(22px,2.3vw,28px);line-height:1.25;letter-spacing:-.035em}
+html[data-futureskill-page] :is(.career-option-title,.career-result-card .career-option-title) {font-size:clamp(22px,2.1vw,26px);font-weight:750;line-height:1.25;letter-spacing:-.025em;color:var(--fs-ink);margin:6px 0 12px;overflow-wrap:anywhere}
+html[data-futureskill-page] :is(.career-panel,.report-section,.report-overview) {box-shadow:none;border-radius:18px}
+html[data-futureskill-page] :is(.career-page-lede,.career-muted,.report-lede,.report-intro,.report-structured-summary) {font-size:16px;line-height:1.6}
+html[data-futureskill-page] :is(.career-workspace-sidebar,.assessment-workspace-sidebar,.workspace-sidebar) {max-height:none;overflow:visible;box-shadow:none}
+html[data-futureskill-page] :is(.career-workspace-nav,.assessment-workspace-nav) > a[href^="/reskilling"] {display:flex;align-items:center;gap:8px;background:var(--fs-accent-soft);border:1px solid var(--fs-line);margin:14px 0 5px;color:var(--fs-accent-ink)}
+html[data-futureskill-page] :is(.career-workspace-nav,.assessment-workspace-nav) > a[href^="/reskilling"]::before {content:"";width:18px;height:18px;flex-shrink:0;background:currentColor;clip-path:polygon(0 80%,25% 80%,25% 55%,50% 55%,50% 30%,75% 30%,75% 5%,100% 5%,100% 100%,0 100%)}
+html[data-futureskill-page] :is(.career-workspace-nav,.assessment-workspace-nav) > a[href^="/reskilling"]::after {content:"→";margin-left:auto}
+html[data-futureskill-page] :is(.career-workspace-nav,.assessment-workspace-nav) > a[href^="/reskilling"]:hover {border-color:var(--fs-accent)}
+html[data-futureskill-page] :is(.career-workspace-nav,.assessment-workspace-nav) > a[aria-current="page"] {box-shadow:inset 3px 0 var(--fs-accent)}
+html[data-futureskill-page] :is(.career-summary-grid,.career-observations,.report-summary-grid) {gap:12px}
+html[data-futureskill-page] :is(.report-summary,.career-observation) {background:var(--fs-raised-alt);border:0;border-radius:12px;padding:16px;border-top:3px solid var(--fs-accent)}
+html[data-futureskill-page] :is(.report-summary,.career-observation) h3 {font-size:14px;font-weight:600;color:var(--fs-ink-soft);margin:0 0 8px}
+html[data-futureskill-page] :is(.report-summary,.career-observation) p {margin:0;font-size:16px;line-height:1.6}
+html[data-futureskill-page] .career-profile-report .report-summary-grid {margin-top:18px}
+@media(min-width:1100px) {
+ html[data-futureskill-page] .career-observations {grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+html[data-futureskill-page] .report-structured-summary strong {color:var(--fs-ink);font-weight:750}
+html[data-futureskill-page] .career-result-card {display:block;padding:24px;margin-top:16px;background:var(--fs-raised);border:1px solid var(--fs-line);border-radius:15px;box-shadow:none}
+html[data-futureskill-page] .career-result-heading {display:block}
+html[data-futureskill-page] .career-rank {font-size:13px;color:var(--fs-ink-soft);background:none;padding:0;margin:0;letter-spacing:.025em;font-weight:500}
+html[data-futureskill-page] .career-evidence-note {display:inline-block;font-size:14px;color:var(--fs-accent-ink);margin:0 0 12px}
+html[data-futureskill-page] .career-match-reasons {padding-left:20px;margin:0 0 12px;color:var(--fs-ink-soft);font-size:15px}
+html[data-futureskill-page] .career-pathway-status {font-size:14px;line-height:1.6;padding:10px 12px;border-left:3px solid var(--fs-line);background:var(--fs-raised-alt);color:var(--fs-ink);margin:12px 0}
+html[data-futureskill-page] .career-card-actions {display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:18px}
+html[data-futureskill-page] :is(.career-action-primary,.career-button) {display:inline-flex;justify-content:center;align-items:center;min-height:44px;padding:10px 18px;border-radius:9px;background:var(--fs-accent);color:var(--fs-on-accent,#fff);border:1px solid var(--fs-accent);font-size:15px;font-weight:650;text-decoration:none;cursor:pointer;line-height:1.4}
+html[data-futureskill-page] :is(.career-action-secondary,.career-button-secondary) {display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border:1px solid var(--fs-line);border-radius:9px;color:var(--fs-ink);background:var(--fs-raised);text-decoration:none;font-size:15px;line-height:1.4;cursor:pointer}
+html[data-futureskill-page] .career-card-controls {border-top:1px solid var(--fs-line);margin-top:20px;padding-top:6px;display:flex;flex-wrap:wrap;gap:4px 24px}
+html[data-futureskill-page] .career-card-controls > details {margin:0;border:0;padding:0;font-size:14px}
+html[data-futureskill-page] .career-card-controls > details[open] {flex-basis:100%}
+html[data-futureskill-page] .career-card-controls summary {padding:9px 0;cursor:pointer;font-weight:600;color:var(--fs-ink-soft);min-height:40px}
+html[data-futureskill-page] .career-card-controls p {font-size:15px;line-height:1.6}
+html[data-futureskill-page] .career-card-controls a {display:block;margin:10px 0;color:var(--fs-accent-ink)}
+html[data-futureskill-page] .career-catalog-item {padding:22px;border-radius:14px;min-width:0}
+html[data-futureskill-page] .career-catalog-meta {font-size:14px;color:var(--fs-ink-soft);margin:8px 0;cursor:pointer}
+html[data-futureskill-page] .career-catalog-actions {display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+html[data-futureskill-page] .career-action-text {color:var(--fs-accent-ink);font-size:14px}
+html[data-futureskill-page] .career-search-label {display:block;font-weight:600;margin:8px 0}
+html[data-futureskill-page] .career-search-suggestions {display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+html[data-futureskill-page] .career-demo-banner {padding:12px 16px;border:1px solid var(--fs-line);border-radius:10px;background:var(--fs-amber-soft);color:var(--fs-ink);font-size:14px}
+html[data-futureskill-page] .career-suggestion {background:var(--fs-raised);border:1px solid var(--fs-line);color:var(--fs-ink-soft);padding:7px 12px;border-radius:8px;cursor:pointer;font:inherit;font-size:14px}
+html[data-futureskill-page] .report-jump-links {display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
+html[data-futureskill-page] .report-jump-links a {padding:9px 14px;border-radius:8px;background:var(--fs-raised);border:1px solid var(--fs-line);color:var(--fs-accent-ink);font-size:15px;min-height:44px;box-sizing:border-box}
+html[data-futureskill-page="reskilling"] .hero-section {display:block;min-height:0;padding:18px 0 24px;background:none;border:0;box-shadow:none}
+html[data-futureskill-page="reskilling"] .hero-section .hero-copy {padding:0}
+html[data-futureskill-page="reskilling"] .hero-section h1 {font-size:34px;max-width:none;margin:5px 0 10px}
+html[data-futureskill-page="reskilling"] .hero-section p {font-size:16px;max-width:680px;margin:0}
+html[data-futureskill-page="reskilling"] :is(.hero-illustration,.hero-tags,.hero-start) {display:none}
+html[data-futureskill-page="reskilling"] .hero-section[hidden] {display:none}
+html[data-futureskill-page="reskilling"] .workspace-sidebar-heading p {font-size:18px;font-weight:700;line-height:1.4;margin-top:12px;overflow-wrap:anywhere;color:var(--fs-ink)}
+html[data-futureskill-page="reskilling"] .workspace-setup-steps {padding:15px 0;margin-top:12px;border-top:1px solid var(--fs-line)}
+html[data-futureskill-page="reskilling"] .workspace-setup-steps > p {font-size:13px;color:var(--fs-ink-soft);margin:0 10px 8px}
+html[data-futureskill-page="reskilling"] .workspace-setup-steps button {display:block;width:100%;padding:10px;text-align:left;font:inherit;font-size:14px;border:0;border-radius:8px;background:none;color:var(--fs-ink);cursor:pointer}
+html[data-futureskill-page="reskilling"] .workspace-setup-steps button[aria-current="step"] {background:var(--fs-accent-soft);font-weight:700}
+html[data-futureskill-page="reskilling"] .setup-step-complete {float:right;font-size:12px;font-weight:600;color:var(--fs-accent-ink);margin-left:8px}
+html[data-futureskill-page="reskilling"] .setup-step-complete[hidden] {display:none}
+html[data-futureskill-page="reskilling"] .workspace-sidebar-bottom {margin-top:18px}
+html[data-futureskill-page="reskilling"] #workspaceSummary {font-size:14px;line-height:1.6;margin:10px}
+html[data-futureskill-page="reskilling"] .workspace-nav-item[disabled] {opacity:.65;cursor:not-allowed;background:none}
+html[data-futureskill-page="reskilling"] .workspace-return {display:block;padding:12px 10px;color:var(--fs-accent-ink);font-size:14px}
+html[data-futureskill-page="reskilling"] .next-activity-card {display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px;margin:20px 0;border:1px solid var(--fs-line);border-left:4px solid var(--fs-accent);border-radius:14px;background:var(--fs-raised)}
+html[data-futureskill-page="reskilling"] .next-activity-card[hidden] {display:none}
+html[data-futureskill-page="reskilling"] .next-activity-card h2 {font-size:18px;line-height:1.4;margin:0 0 6px}
+html[data-futureskill-page="reskilling"] .next-activity-card p {margin:0;font-size:16px;color:var(--fs-ink-soft)}
+html[data-futureskill-page="reskilling"] :is(.field > label,.field-label,.field-hint,.stat-label,.stat-note,.gap-top,.gap-top strong,.gap-footer,.plan-note,.task-photo,.task-tag,.rating-foot,.insight-box) {font-size:14px;line-height:1.6}
+html[data-futureskill-page="reskilling"] :is(.task-title,.task-description,.week-bar label,.win-content strong) {font-size:16px;line-height:1.5}
+html[data-futureskill-page="reskilling"] :is(.card-header h3,.tree-card h3,.schedule-card h3) {font-size:22px;line-height:1.3}
+@media(min-width:1000px){html[data-futureskill-page="reskilling"] .site-header {display:none}}
+@media(max-width:700px){
+ html[data-futureskill-page] :is(.career-option-title,.career-result-card .career-option-title){font-size:22px}
+ html[data-futureskill-page] .career-result-card{padding:18px}
+ html[data-futureskill-page] :is(.career-observations,.report-summary-grid){grid-template-columns:1fr}
+ html[data-futureskill-page] .career-catalog-actions .career-action-text{flex-basis:100%}
+ html[data-futureskill-page="career-workspace"] .report-interest-list {grid-template-columns:repeat(2,minmax(0,1fr))}
+ html[data-futureskill-page="reskilling"] .hero-section h1{font-size:30px}
+ html[data-futureskill-page="reskilling"] .next-activity-card{align-items:stretch;flex-direction:column}
+}
+@media(max-height:650px) and (min-width:1000px){
+ html[data-futureskill-page] :is(.career-workspace-sidebar,.assessment-workspace-sidebar,.workspace-sidebar){position:static}
+}

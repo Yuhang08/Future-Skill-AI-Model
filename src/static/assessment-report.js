@@ -193,6 +193,54 @@
     if (text !== undefined) element.textContent = String(text);
     return element;
   }
+  // Only known labels and validated numeric values become emphasis, never HTML.
+  function summaryParagraph(model, kind) {
+    const copy = model[`${kind}Summary`];
+    const labels = [...Object.values(LABELS), ...SUBJECTS.map(item => item[1]), ...Object.values(SKILL_LABELS)];
+    const tokens = [...new Set(labels)].sort((a, b) => b.length - a.length)
+      .map(value => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    const pattern = new RegExp(`(${tokens.join("|")}|\\d+(?:\\.\\d+)?\\s*/\\s*(?:100|5))`, "g");
+    const paragraph = node("p", "report-structured-summary");
+    let offset = 0;
+    for (const match of copy.matchAll(pattern)) {
+      paragraph.appendChild(document.createTextNode(copy.slice(offset, match.index)));
+      paragraph.appendChild(node("strong", "", match[0]));
+      offset = match.index + match[0].length;
+    }
+    paragraph.appendChild(document.createTextNode(copy.slice(offset)));
+    // Translate the full sentence before splitting, preserving whole-phrase packs.
+    const translate = () => {
+      const translated = root.FutureSkillI18n?.translateText(copy) || copy;
+      if (translated === copy) return;
+      paragraph.replaceChildren();
+      const names = labels.map(label => root.FutureSkillI18n.translateText(label))
+        .sort((a,b) => b.length - a.length).map(value => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+      const translatedPattern = new RegExp(`(${names.join("|")}|\\d+(?:\\.\\d+)?\\s*/\\s*(?:100|5))`, "g");
+      let start = 0;
+      for (const match of translated.matchAll(translatedPattern)) {
+        paragraph.append(document.createTextNode(translated.slice(start,match.index)),node("strong","",match[0]));
+        start = match.index + match[0].length;
+      }
+      paragraph.appendChild(document.createTextNode(translated.slice(start)));
+    };
+    // This structured component owns its translations; the generic observer skips it.
+    paragraph.setAttribute("data-i18n-ignore", "");
+    const update = () => {
+      if (!paragraph.isConnected) { root.removeEventListener?.("futureskill:languagechange", update); return; }
+      if (root.FutureSkillI18n?.getState().language === "en") {
+        paragraph.replaceChildren();
+        let start=0;
+        for(const match of copy.matchAll(pattern)){
+          paragraph.append(document.createTextNode(copy.slice(start,match.index)),node("strong","",match[0]));
+          start=match.index+match[0].length;
+        }
+        paragraph.appendChild(document.createTextNode(copy.slice(start)));
+      } else translate();
+    };
+    root.addEventListener?.("futureskill:languagechange", update);
+    root.FutureSkillI18n?.ready?.then?.(update);
+    return paragraph;
+  }
   function section(title, intro, id) {
     const element = node("section", "report-section");
     if (id) element.id = id;
@@ -200,6 +248,23 @@
     element.appendChild(heading);
     if (intro) element.appendChild(node("p", "report-intro", intro));
     return element;
+  }
+  function compactSummary(model, kind) {
+    if ((kind === "interest" && model.allInterestsEqual) ||
+        (kind === "subject" && model.allSubjectsEqual) ||
+        (kind === "confidence" && model.allSkillsEqual)) return summaryParagraph(model, kind);
+    const paragraph = node("p", "report-structured-summary");
+    const items = kind === "interest"
+      ? model.leadingInterests.map(key => [LABELS[key], model.data.riasec_scores[key], 100])
+      : kind === "subject"
+        ? model.subjectLeaders.map(key => [SUBJECTS.find(item => item[0] === key)[1],model.data.subject_preferences[key],5])
+        : model.highestConfidenceSkills.map(key => [SKILL_LABELS[key],model.data.skills[key],5]);
+    items.forEach(([label,value,scale],index) => {
+      if(index) paragraph.appendChild(document.createTextNode(" · "));
+      paragraph.append(node("strong","",label),document.createTextNode(" "),node("strong","",`${value} / ${scale}`));
+    });
+    if (items.length > 1) paragraph.append(document.createTextNode(" "),node("span","","(tied)"));
+    return paragraph;
   }
   function meter(label, value, min, max, suffix) {
     const wrap = node("div", "report-meter");
@@ -283,28 +348,34 @@
       ["Interests", model.interestSummary],
       ["Subjects", model.subjectSummary],
       ["Confidence", model.confidenceSummary]
-    ].forEach(([label, text]) => {
+    ].forEach(([label, text], index) => {
       const card = node("article", "report-summary");
-      card.append(node("h3", "", label), node("p", "", text));
+      const kind = ["interest", "subject", "confidence"][index];
+      const headingLabel = options.profileOnly && !model.allSkillsEqual && kind === "confidence" ? "Highest reported confidence" : label;
+      card.append(node("h3", "", headingLabel), options.profileOnly ? compactSummary(model, kind) : summaryParagraph(model, kind));
       summaryGrid.appendChild(card);
     });
     intro.appendChild(summaryGrid);
     const jumpLinks = node("nav", "report-jump-links");
     jumpLinks.setAttribute("aria-label", "Results report sections");
-    [["#report-overview", "Overview"], ["#report-interests", "Interests"],
-      ["#report-subjects", "Subjects"], ["#report-confidence", "Confidence"],
-      ["#report-careers", "Careers"]]
+    (options.profileOnly
+      ? [["#report-interests", "Interests"], ["#report-subjects", "Subjects"], ["#report-confidence", "Confidence"]]
+      : [["#report-overview", "Overview"], ["#report-interests", "Interests"],
+        ["#report-subjects", "Subjects"], ["#report-confidence", "Confidence"], ["#report-careers", "Careers"]])
       .forEach(([href, label]) => {
         const link = node("a", "", label);
         link.href = href;
         jumpLinks.appendChild(link);
       });
-    if (!options.hideJumpNavigation) intro.appendChild(jumpLinks);
+    if (!options.hideJumpNavigation) {
+      if (options.profileOnly) intro.insertBefore(jumpLinks, summaryGrid);
+      else intro.appendChild(jumpLinks);
+    }
     report.appendChild(intro);
 
     const careerSection = section(
       "Your career possibilities",
-      "These are the first three entries from the existing career engine, shown for easier exploration—not a statistically established shortlist or a prediction of outcomes.",
+      "Your first three recommendations, in engine order. Suggestions to explore—not predictions of career success.",
       "report-careers"
     );
     careerSection.querySelector("h2").id = "careerRecommendationsHeading";
@@ -312,7 +383,7 @@
     const careerResults = node("div", "report-career-results");
     careerResults.id = "careerResults";
     careerSection.appendChild(careerResults);
-    report.appendChild(careerSection);
+    if (!options.profileOnly) report.appendChild(careerSection);
 
     const interestSection = section("Your career interests — RIASEC",
       "You reported how much you enjoy work activities. Scores use the existing 20–100 scale: four answers summed, divided by 20, then multiplied by 100.",
@@ -443,9 +514,14 @@
     pathway.href = demo
       ? "/reskilling?demo=1&demo_scenario=fresh"
       : "/reskilling";
-    actions.append(review, careers, pathway);
+    if (options.profileOnly) actions.appendChild(review);
+    else actions.append(review, careers, pathway);
     next.appendChild(actions);
-    report.appendChild(next);
+    if (options.profileOnly) {
+      const reviewSection = section("Review your responses", "Review answers before changing them. Scores update only when you submit the assessment again.", "report-review");
+      reviewSection.appendChild(actions);
+      report.appendChild(reviewSection);
+    } else report.appendChild(next);
 
     const methodology = section("How to read this report", "", "report-methodology");
     const methodDetails = node("details", "report-details report-method-details");
@@ -471,7 +547,7 @@
     return model;
   }
 
-  const api = Object.freeze({ buildModel, render, SOURCES });
+  const api = Object.freeze({ buildModel, render, summaryParagraph, compactSummary, SOURCES });
   root.FutureSkillReport = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);

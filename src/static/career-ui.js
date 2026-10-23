@@ -62,15 +62,22 @@
     head.appendChild(element("h3", "career-option-title", career.title || "Career title unavailable"));
     card.appendChild(head);
 
-    const note = element(
-      "p",
-      "career-evidence-note",
-      "The local catalogue does not include sourced work duties for this role. Open the official occupation profile to inspect its details."
-    );
-    card.appendChild(note);
+    const idValid = CAREER_ID.test(String(career.id || ""));
+    if (idValid) card.appendChild(link(
+      `https://www.onetonline.org/link/summary/${encodeURIComponent(career.id)}`,
+      "Role details: O*NET", "career-evidence-note"
+    ));
+    const reasons = element("ul", "career-match-reasons");
+    const parsed = /^Shared interest strengths:\s*(.*?)\.\s*Detected career fields:\s*(.*)\.$/.exec(career.explanation || "");
+    if (parsed) {
+      const areas = parsed[1] === "limited overlap" ? null : parsed[1].split(",").map(key => TYPE_NAMES[key.trim()] || key.trim()).join(", ");
+      reasons.append(element("li", "", areas ? `Interest overlap: ${areas}` : "No distinct above-average interest overlap"),
+        element("li", "", parsed[2] && !["none", "unclassified"].includes(parsed[2].trim().toLowerCase()) ? `Subject tags from title: ${parsed[2]}` : "No subject tags detected from title"));
+    } else reasons.appendChild(element("li", "", "Personalized matching evidence unavailable"));
+    card.appendChild(reasons);
 
     const rationale = element("details", "career-why");
-    rationale.appendChild(element("summary", "", "Why this appeared"));
+    rationale.appendChild(element("summary", "", "Why this match?"));
     rationale.appendChild(element(
       "p",
       "",
@@ -78,50 +85,45 @@
         ? `${engineExplanation(career)} The ranking uses RIASEC interests and subject preferences; broad confidence ratings are not ranking inputs.`
         : "No personalized engine explanation is available for this role. It was not generated as a personal recommendation."
     ));
-    card.appendChild(rationale);
+    if (career.match_index !== undefined) rationale.appendChild(scoreDetails({ ...career, rank }));
 
     const status = career.pathway_career
-      ? `A supported learning template is available: ${career.pathway_career}. Its skills and requirements are illustrative, not independently validated occupational benchmarks.`
-      : "Role-specific readiness has not been assessed; no supported pathway template is linked to this catalogue role.";
+      ? `Example pathway: ${career.pathway_career}. Illustrative requirements; readiness not assessed.`
+      : "No linked pathway template. Role-specific readiness not assessed.";
     card.appendChild(element("p", "career-pathway-status", status));
-    card.appendChild(element(
-      "p",
-      "career-skill-boundary",
-      "Broad self-reported confidence ratings do not establish proficiency or occupational readiness."
-    ));
     const activity = element("details", "career-why");
     activity.append(
       element("summary", "", "Try it before choosing"),
       element("p", "", "Open the official profile, choose one listed work activity to investigate, and write down a question about what it involves. This is an exploration exercise, not a proficiency test.")
     );
-    card.appendChild(activity);
+    const limitations = element("details", "career-limitations");
+    limitations.append(element("summary", "", "Limitations"),
+      element("p", "", "Interests are not verified ability. Self-reported confidence is not proficiency and does not affect this ranking. Title-derived subject tags are a heuristic, not occupational requirements. Local sourced duties are unavailable."),
+      activity);
+    const sources = element("details", "career-sources");
+    sources.append(element("summary", "", "Sources"),
+      element("p", "", "FutureSkill’s custom questionnaire and deterministic engine support these response observations and ranking indices. They are not validated occupational requirements."));
+    if (idValid) sources.append(link(`https://www.onetonline.org/link/summary/${encodeURIComponent(career.id)}`,
+      "Official occupation profile — work details for further research", ""));
+    sources.appendChild(link("https://www.onetonline.org/find/descriptor/browse/1.B.1",
+      "O*NET interest types — general RIASEC descriptions only", ""));
 
     const actions = element("div", "career-card-actions");
+    const demoSuffix = options.demo ? "&demo=1&demo_scenario=fresh" : "";
     if (CAREER_ID.test(String(career.id || ""))) {
-      actions.appendChild(link(`/career/${encodeURIComponent(career.id)}`, "Explore this career", "career-action-primary"));
+      actions.appendChild(link(`/career/${encodeURIComponent(career.id)}${options.demo ? "?demo=1&demo_scenario=fresh" : ""}`, "Explore this career", "career-action-primary"));
       actions.appendChild(link(
-        `/compare?ids=${encodeURIComponent(career.id)}`,
+        `/compare?ids=${encodeURIComponent(career.id)}${demoSuffix}`,
         "Compare",
         "career-action-secondary"
-      ));
-      actions.appendChild(link(
-        `https://www.onetonline.org/link/summary/${encodeURIComponent(career.id)}`,
-        "O*NET profile",
-        "career-action-text"
       ));
     } else {
       actions.appendChild(element("span", "career-action-unavailable", "Career detail is unavailable"));
     }
-    const pathwayQuery = new URLSearchParams();
-    if (options.demo) {
-      pathwayQuery.set("demo", "1");
-      pathwayQuery.set("demo_scenario", "fresh");
-    }
-    pathwayQuery.set("career", career.title || "");
-    actions.appendChild(link(`/reskilling?${pathwayQuery}`, "Review learning pathway options", "career-action-text"));
     card.appendChild(actions);
-
-    if (career.match_index !== undefined) card.appendChild(scoreDetails({ ...career, rank }));
+    const controls = element("div", "career-card-controls");
+    controls.append(rationale, sources, limitations);
+    card.appendChild(controls);
     return card;
   }
 

@@ -123,6 +123,12 @@ not committed or published.
 
 ## One-server architecture
 
+For the second-pass UI, screen IDs, isolated review links, original logo assets,
+before/after captures and check boundaries, see
+[`docs/ui-refinement-review.md`](../docs/ui-refinement-review.md).
+Start at `/__dev/screens` in development Preview. Brand alternatives are at
+`/__dev/brand`; sample overview/profile pages do not replace learner data.
+
 - `GET /`  → old Career Assessment
 - `POST /api/recommend` → old career assessment and career matching
 - `GET /reskilling` → new skills and timetable questionnaire/dashboard

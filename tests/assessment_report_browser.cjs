@@ -201,7 +201,9 @@ async function contrast() {
     console.log("PASS browser: normal assessment submission and review preserve all answers; normal pathways are not demos");
 
     await go("/?report-demo=mixed");
-    await evaluate("document.querySelector('#careerResults a[href^=\"/reskilling\"]').click()");
+    await evaluate("document.querySelector('#careerResults a.career-action-primary').click()");
+    await wait("location.pathname.startsWith('/career/') && !!document.querySelector('#careerWorkspaceContent a[href^=\"/reskilling?\"]')");
+    await evaluate("document.querySelector('#careerWorkspaceContent a[href^=\"/reskilling?\"]').click()");
     await wait("location.pathname==='/reskilling' && typeof setSteps==='function'");
     assert.equal(await evaluate("new URLSearchParams(location.search).get('demo')"), "1");
     console.log("PASS browser: real recommendation opens isolated reskilling flow");

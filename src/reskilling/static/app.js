@@ -7,6 +7,7 @@ const demoMode = pageParams.get('demo') === '1';
 let appState = null;
 let csrf = '';
 let step = 0;
+const completedSetupSteps = new Set();
 let selectedWeek = 'auto';
 let toastTimer;
 const THEME_STORAGE_KEY = 'futureskill-theme-preference';
@@ -99,6 +100,37 @@ function setWorkspaceActive(action) {
     else item.removeAttribute('aria-current');
   });
 }
+function updateWorkspaceSummary() {
+  if (!appState) return;
+  const hasPlan = Boolean(appState.profile);
+  const editing = !$('questionnaire').hidden;
+  const target = hasPlan ? appState.profile.target_career : $('targetCareer').value;
+  $('workspaceTarget').textContent = target || 'Choose a target';
+  $('workspaceTarget').toggleAttribute('data-i18n-ignore', Boolean(target));
+  $('workspaceSetupSteps').hidden = !editing;
+  $('hero').hidden = hasPlan && !editing;
+  document.querySelectorAll('#workspaceNav [data-workspace-action]').forEach(button => {
+    const action = button.dataset.workspaceAction;
+    button.disabled = !hasPlan && ['plan','progress'].includes(action);
+  });
+  if (hasPlan) {
+    const stats = appState.stats;
+    $('workspaceSummary').textContent = `${stats.completed_tasks} of ${stats.total_tasks} tasks completed.`;
+    const nextTask = appState.tasks.filter(task => !task.completed && task.kind === 'learning')
+      .slice().sort((a,b) => String(a.due_date).localeCompare(String(b.due_date)))[0];
+    $('nextActivityCard').hidden = !nextTask;
+    if (nextTask) {
+      const next = document.createElement('span');
+      next.setAttribute('data-i18n-ignore', '');
+      next.textContent = ` ${nextTask.skill} · ${nextTask.hours} h`;
+      $('workspaceSummary').appendChild(next);
+      $('nextActivityDetail').textContent = `${nextTask.skill} · ${dateHuman(nextTask.due_date)} · ${nextTask.hours} h`;
+    }
+  } else {
+    $('workspaceSummary').textContent = 'Set up your learning profile to create a plan.';
+    $('nextActivityCard').hidden = true;
+  }
+}
 function closeWorkspaceSidebar() {
   const toggle = $('workspaceToggle');
   const sidebar = $('workspaceSidebar');
@@ -157,7 +189,7 @@ function handleWorkspaceAction(action) {
     setWorkspaceActive('progress');
     if (appState?.profile) {
       setWorkspaceNotice('');
-      $('gapsSection')?.scrollIntoView({behavior:'smooth', block:'start'});
+      $('progressHistory')?.scrollIntoView({behavior:'smooth', block:'start'});
     } else {
       setWorkspaceNotice('Progress tracking will be available after you create a learning profile and plan.');
       $('workspaceNotice')?.scrollIntoView({behavior:'smooth', block:'start'});
@@ -218,14 +250,32 @@ function dayPills(container, name, checked=['Tuesday','Thursday','Saturday']) {
 function selectedDays(container) {
   return [...$(container).querySelectorAll('input:checked')].map(node => node.value);
 }
+function updateSetupIndicators() {
+  document.querySelectorAll('#workspaceSetupSteps [data-go-step]').forEach(button => {
+    const current = Number(button.dataset.goStep) === step;
+    if (current) button.setAttribute('aria-current', 'step');
+    else button.removeAttribute('aria-current');
+    let badge = button.querySelector('.setup-step-complete');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'setup-step-complete';
+      badge.textContent = 'Done';
+      button.appendChild(badge);
+    }
+    badge.hidden = !completedSetupSteps.has(Number(button.dataset.goStep));
+  });
+  if ($('workspaceSetupStatus')) $('workspaceSetupStatus').textContent = `Step ${step + 1} of 3 · not saved`;
+}
 function setSteps(next) {
   step = Math.max(0, Math.min(next, 2));
   document.querySelectorAll('.step-panel').forEach(p => { p.hidden = Number(p.dataset.step) !== step; });
   document.querySelectorAll('[data-go-step]').forEach(b => b.classList.toggle('active', Number(b.dataset.goStep) === step));
+  updateSetupIndicators();
   $('prevStep').hidden = step === 0;
   $('nextStep').hidden = step === 2;
   $('submitPlan').hidden = step !== 2;
   $('formError').textContent = '';
+  updateWorkspaceSummary();
 }
 function drawSkillInputs(saved={}) {
   const career = $('targetCareer').value;
@@ -370,6 +420,7 @@ function renderDashboard(state, animateTree=false) {
   $('replanHours').value = p.weekly_hours;
   $('replanWeeks').value = p.target_weeks;
   dayPills('replanDays','replanDays',p.preferred_days);
+  updateWorkspaceSummary();
 }
 function showApp(state) {
   appState = state;
@@ -386,6 +437,7 @@ function showApp(state) {
     fillForm(null);
     setSteps(0);
   }
+  updateWorkspaceSummary();
 }
 async function submitPlan(event) {
   event.preventDefault();
@@ -474,18 +526,44 @@ async function submitReplan(event) {
 function initListeners() {
   initWorkspaceNavigation();
   $('weeklyHours').addEventListener('input',()=>{$('weeklyHoursOutput').textContent=`${$('weeklyHours').value} hours`;});
-  $('targetCareer').addEventListener('change',()=>drawSkillInputs());
-  $('nextStep').addEventListener('click',()=>setSteps(step+1));
+  $('targetCareer').addEventListener('change',()=>{
+    completedSetupSteps.delete(1);
+    drawSkillInputs();
+    updateSetupIndicators();
+    updateWorkspaceSummary();
+  });
+  $('nextStep').addEventListener('click',()=>{
+    const fields = [...document.querySelectorAll(`.step-panel[data-step="${step}"] input,.step-panel[data-step="${step}"] select,.step-panel[data-step="${step}"] textarea`)];
+    const invalid = fields.find(field => !field.checkValidity());
+    if (invalid) { invalid.reportValidity(); return; }
+    completedSetupSteps.add(step);
+    setSteps(step+1);
+  });
+  $('assessmentForm').addEventListener('input', event => {
+    const panel = event.target.closest('.step-panel');
+    if (!panel) return;
+    completedSetupSteps.delete(Number(panel.dataset.step));
+    updateSetupIndicators();
+  });
   $('prevStep').addEventListener('click',()=>setSteps(step-1));
-  document.querySelectorAll('[data-go-step]').forEach(b=>b.addEventListener('click',()=>setSteps(Number(b.dataset.goStep))));
+  document.querySelectorAll('[data-go-step]').forEach(b=>b.addEventListener('click',()=>{
+    setSteps(Number(b.dataset.goStep));
+    if(b.closest('#workspaceSetupSteps')) {
+      closeWorkspaceSidebar();
+      $('questionnaire').scrollIntoView({behavior:'smooth',block:'start'});
+      document.querySelector('.step-panel:not([hidden]) input,.step-panel:not([hidden]) select')?.focus({preventScroll:true});
+    }
+  }));
   $('assessmentForm').addEventListener('submit',submitPlan);
   $('editProfile').addEventListener('click',()=>{
+    completedSetupSteps.clear();
     fillForm(appState.profile);
     setSteps(0);
     $('dashboard').hidden=true;
     document.body.classList.remove('has-dashboard');
     $('questionnaire').hidden=false;
     $('cancelEdit').hidden=false;
+    updateWorkspaceSummary();
     $('questionnaire').scrollIntoView({behavior:'smooth'});
   });
   $('cancelEdit').addEventListener('click',()=>showApp(appState));
@@ -550,6 +628,7 @@ function showCareerBridge(response, requestedCareer) {
       $('editProfile').click();
       $('targetCareer').value = selected;
       drawSkillInputs();
+      updateWorkspaceSummary();
       $('questionnaire').scrollIntoView({behavior:'smooth'});
       note.hidden = true;
     });
@@ -560,6 +639,7 @@ function showCareerBridge(response, requestedCareer) {
 
   $('targetCareer').value = selected;
   drawSkillInputs();
+  updateWorkspaceSummary();
   note.textContent = `Career selected from your assessment: ${requestedCareer}. Skills use the illustrative ${selected} template; assess your own skills before generating a plan.`;
 }
 

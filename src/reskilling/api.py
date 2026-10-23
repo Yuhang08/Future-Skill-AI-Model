@@ -256,6 +256,17 @@ def seed_demo_session(user_id: str, scenario: str):
 
 
 if DEV_INVENTORY_ENABLED:
+    @router.get("/__dev/career-preview")
+    def development_career_preview():
+        # Browser-memory-only samples; never replace sessionStorage or learner records.
+        html = (BASE.parent / "static" / "career-workspace.html").read_text(encoding="utf-8")
+        html = html.replace("</head>", "<script>window.FutureSkillCareerPreview=true;</script></head>", 1)
+        return HTMLResponse(html, headers={"Cache-Control": "no-store"})
+
+    @router.get("/__dev/brand")
+    def development_brand_preview():
+        return FileResponse(BASE.parent / "brand-preview.html", media_type="text/html")
+
     @router.get("/__dev/screens")
     def development_screen_inventory():
         return FileResponse(BASE.parent / "static" / "dev-screens.html", media_type="text/html")
