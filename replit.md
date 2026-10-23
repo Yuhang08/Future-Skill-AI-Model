@@ -48,3 +48,55 @@ node tests/assessment_progress.test.cjs
 ```
 
 Additional browser checks and architecture notes are in `src/README.md`.
+
+## Career-assessment results report
+
+The report adds interpretation and accessible comparison bars around the existing
+`/api/recommend` response. It does not change assessment scoring or career ranking.
+Self-reported broad skill confidence is displayed separately and is not a ranking
+input. General interest descriptions cite official O*NET pages; FutureSkill's
+questionnaire is custom, not the official Interest Profiler.
+
+Open `/?report-demo=equal-high` in Preview for an explicitly labeled sample report.
+The selector also supports equal-low, differentiated, leading-tie, mixed, and
+invalid data. Valid demonstrations call the real recommendations API, keep
+answers in memory, and never overwrite the learner's saved draft. Their
+reskilling links use the existing isolated demo sessions.
+
+Additional checks:
+
+```bash
+node tests/assessment_report.test.cjs
+node --experimental-websocket tests/assessment_report_browser.cjs
+node --experimental-websocket tests/assessment_browser.cjs
+```
+
+The browser checks require the available Chromium binary and a running workflow.
+They use a temporary browser profile and save screenshots under `/tmp`, not Git.
+The API regression checks are included in Python test discovery and compare full
+responses against pre-report-refinement baselines.
+
+No assessment LLM review is implemented or represented as successful AI output.
+The existing pathway-only provider reports missing credentials in this setup.
+The deterministic report remains available and sends no answers to an LLM.
+
+## Interface languages
+
+The shared navigation Settings button offers English (`en`), Simplified Chinese
+(`zh-CN`) and Bahasa Melayu (`ms`). The reskilling workspace's existing Settings
+panel uses the same language preference. This preference is local to the current
+browser, not an account setting or cross-device synchronization feature.
+
+The language packs are editable local JSON files under `src/static/locales/`.
+Keep their English phrase keys and named interpolation slots synchronized.
+`src/static/future-i18n.js` applies the selected pack to static and dynamically
+rendered interface text without changing questionnaire data, input values,
+recommendation identifiers, scores or URLs. Imported occupational titles and
+external source material may retain their original English.
+
+Language-specific checks:
+
+```bash
+node tests/language_packs.test.cjs
+node --experimental-websocket tests/language_browser.cjs
+```

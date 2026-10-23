@@ -169,7 +169,7 @@ html[data-futureskill-page] .fs-site-nav {
   top: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 18px;
   min-height: 70px;
@@ -251,4 +251,38 @@ html[data-futureskill-page] .dev-loading-panel {
   html[data-futureskill-page] .fs-site-nav { padding: 7px 12px 4px; }
   html[data-futureskill-page] .fs-site-links a { padding: 8px 10px; font-size: 11px; }
   html[data-futureskill-page] .fs-site-brand { gap: 7px; font-size: 13px; }
+}
+
+/* Shared language settings; the native dialog supplies Escape and focus containment. */
+html[data-futureskill-page] .fs-settings-button {
+  min-height: 44px; padding: 9px 13px; border: 1px solid var(--fs-line-strong);
+  border-radius: 10px; color: var(--fs-ink); background: var(--fs-raised);
+  font: 700 12px "DM Sans", sans-serif; white-space: nowrap; box-shadow: none;
+}
+html[data-futureskill-page] .fs-settings-button:hover { background: var(--fs-accent-soft); }
+html[data-futureskill-page] .fs-settings-dialog {
+  width: min(460px, calc(100vw - 28px)); max-height: min(82dvh, 640px);
+  padding: 0; border: 1px solid var(--fs-line); border-radius: 18px;
+  color: var(--fs-ink); background: var(--fs-surface); box-shadow: var(--fs-shadow);
+}
+html[data-futureskill-page] .fs-settings-dialog::backdrop { background: rgba(11, 28, 39, .56); }
+html[data-futureskill-page] .fs-settings-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding:22px 24px 16px; border-bottom:1px solid var(--fs-line); }
+html[data-futureskill-page] .fs-settings-heading h2 { margin:2px 0 0; font-size:23px; letter-spacing:-.03em; }
+html[data-futureskill-page] .fs-settings-kicker { margin:0; color:var(--fs-muted); font:700 10px "Space Mono",monospace; letter-spacing:.08em; }
+html[data-futureskill-page] .fs-settings-dialog .fs-settings-close { width:38px; min-height:38px; padding:0; border:1px solid var(--fs-line); border-radius:9px; background:var(--fs-raised); color:var(--fs-ink); font-size:22px; }
+html[data-futureskill-page] .fs-settings-body { padding:20px 24px 24px; }
+html[data-futureskill-page] .fs-settings-label { display:block; margin-bottom:8px; color:var(--fs-ink); font-size:13px; font-weight:700; }
+html[data-futureskill-page] #fsLanguageSelect { width:100%; min-height:48px; padding:10px 12px; }
+html[data-futureskill-page] .fs-language-status { min-height:22px; margin:9px 0 0; font-size:12px; color:var(--fs-danger); }
+html[data-futureskill-page] .fs-translation-note { margin:10px 0 0; padding:11px 12px; border-left:3px solid var(--fs-amber); border-radius:0 8px 8px 0; background:var(--fs-amber-soft); color:var(--fs-ink-soft); font-size:12px; line-height:1.5; }
+@media(max-width:1000px) {
+  html[data-futureskill-page] .fs-site-nav { grid-template-columns:1fr auto auto; }
+  html[data-futureskill-page] .fs-settings-button { grid-row:1; grid-column:3; }
+}
+@media(max-width:520px) {
+  html[data-futureskill-page] .fs-site-nav { grid-template-columns:1fr auto auto; }
+  html[data-futureskill-page] .fs-settings-button { grid-row:1; grid-column:3; padding:8px 9px; font-size:11px; }
+  html[data-futureskill-page] .fs-site-nav .fs-theme-toggle { grid-column:2; }
+  html[data-futureskill-page] .fs-settings-body { padding:17px; }
+  html[data-futureskill-page] .fs-settings-heading { padding:18px 17px 14px; }
 }

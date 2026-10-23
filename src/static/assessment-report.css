@@ -1,0 +1,233 @@
+html[data-futureskill-page="home"] .assessment-report {
+  color: var(--fs-ink);
+  margin: 24px 0 8px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+html[data-futureskill-page="home"] .report-demo-control[hidden] { display: none; }
+html[data-futureskill-page="home"] .report-code {
+  display: flex; align-items: center; gap: 16px; margin: 14px 0;
+  color: var(--fs-ink-soft); font-size: 13px;
+}
+html[data-futureskill-page="home"] .report-code strong {
+  padding: 6px 12px; border-radius: 8px; background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink); font: 700 22px "Space Mono", monospace;
+}
+html[data-futureskill-page="home"] .report-jump-links {
+  display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px;
+}
+html[data-futureskill-page="home"] .report-jump-links a {
+  display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 700;
+}
+html[data-futureskill-page="home"] [id^="report-"],
+html[data-futureskill-page="home"] #careerRecommendationsHeading { scroll-margin-top: 90px; }
+html[data-futureskill-page="home"] .report-content { display: grid; gap: 18px; }
+html[data-futureskill-page="home"] .report-overview,
+html[data-futureskill-page="home"] .report-section,
+html[data-futureskill-page="home"] .report-error {
+  min-width: 0;
+  padding: clamp(19px, 3vw, 30px);
+  border: 1px solid var(--fs-line);
+  border-radius: 16px;
+  background: var(--fs-raised);
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-futureskill-page="home"] .report-eyebrow {
+  margin: 0 0 7px;
+  color: var(--fs-accent);
+  font: 700 11px/1.5 "Space Mono", monospace;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+html[data-futureskill-page="home"] .report-overview h2,
+html[data-futureskill-page="home"] .report-section > h2 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 30px);
+  letter-spacing: -.04em;
+}
+html[data-futureskill-page="home"] .report-lede,
+html[data-futureskill-page="home"] .report-intro { max-width: 760px; margin: 8px 0 18px; }
+html[data-futureskill-page="home"] .report-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px;
+}
+html[data-futureskill-page="home"] .report-summary {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--fs-line);
+  border-radius: 12px;
+  background: var(--fs-raised-alt);
+}
+html[data-futureskill-page="home"] .report-summary h3,
+html[data-futureskill-page="home"] .report-row h3,
+html[data-futureskill-page="home"] .report-interest h3,
+html[data-futureskill-page="home"] .report-next-steps h3 {
+  margin: 0 0 6px;
+  color: var(--fs-ink);
+  font-size: 15px;
+  letter-spacing: -.02em;
+}
+html[data-futureskill-page="home"] .report-summary p,
+html[data-futureskill-page="home"] .report-next-steps p { margin: 0; font-size: 14px; line-height: 1.55; }
+html[data-futureskill-page="home"] .report-pattern,
+html[data-futureskill-page="home"] .report-note {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--fs-mint);
+  border-radius: 0 9px 9px 0;
+  background: var(--fs-mint-soft);
+  color: var(--fs-ink);
+  font-size: 14px;
+}
+html[data-futureskill-page="home"] .report-ai-notice {
+  margin: 17px 0 0;
+  padding: 13px 15px;
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 10px;
+  background: var(--fs-amber-soft);
+  color: var(--fs-ink-soft);
+  font-size: 13px;
+}
+html[data-futureskill-page="home"] .report-section > .report-intro { margin-bottom: 17px; }
+html[data-futureskill-page="home"] .report-interest-list,
+html[data-futureskill-page="home"] .report-list { display: grid; gap: 10px; }
+html[data-futureskill-page="home"] .report-interest,
+html[data-futureskill-page="home"] .report-row {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--fs-line);
+  border-radius: 12px;
+  background: var(--fs-surface);
+}
+html[data-futureskill-page="home"] .report-interest-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+html[data-futureskill-page="home"] .report-type-icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  place-items: center;
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 10px;
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  font: 700 15px "Space Mono", monospace;
+}
+html[data-futureskill-page="home"] .report-interest-head h3 { margin: 0; }
+html[data-futureskill-page="home"] .report-activity,
+html[data-futureskill-page="home"] .report-question,
+html[data-futureskill-page="home"] .report-evidence {
+  margin: 5px 0 0;
+  color: var(--fs-ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+html[data-futureskill-page="home"] .report-meter { margin: 10px 0; }
+html[data-futureskill-page="home"] .report-meter-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+html[data-futureskill-page="home"] .report-meter-label { color: var(--fs-ink-soft); font-size: 13px; }
+html[data-futureskill-page="home"] .report-meter-value {
+  color: var(--fs-ink);
+  font: 700 13px "Space Mono", monospace;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+html[data-futureskill-page="home"] .report-meter-track {
+  height: 10px;
+  overflow: hidden;
+  border: 1px solid var(--fs-line);
+  border-radius: 999px;
+  background: var(--fs-raised-alt);
+}
+html[data-futureskill-page="home"] .report-meter-fill {
+  display: block;
+  min-width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--fs-accent);
+}
+html[data-futureskill-page="home"] .report-row .report-meter-track { height: 13px; }
+html[data-futureskill-page="home"] .report-row .report-meter-fill { background: var(--fs-mint); }
+html[data-futureskill-page="home"] .report-citation { margin: 7px 0; color: var(--fs-ink-soft); font-size: 12px; }
+html[data-futureskill-page="home"] .report-source-link { font-weight: 700; }
+html[data-futureskill-page="home"] .report-details { margin-top: 10px; }
+html[data-futureskill-page="home"] .report-details summary {
+  width: fit-content;
+  min-height: 40px;
+  padding: 8px 0;
+  color: var(--fs-accent);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+html[data-futureskill-page="home"] .report-details p { margin: 3px 0 8px; font-size: 14px; }
+html[data-futureskill-page="home"] .report-details .report-question { color: var(--fs-ink-soft); }
+html[data-futureskill-page="home"] .report-next-steps { display: grid; gap: 12px; margin: 18px 0; padding: 0; list-style: none; }
+html[data-futureskill-page="home"] .report-next-steps li { display: grid; grid-template-columns: 38px minmax(0,1fr); gap: 12px; align-items: start; }
+html[data-futureskill-page="home"] .report-step-number { color: var(--fs-mint); font: 700 13px "Space Mono", monospace; }
+html[data-futureskill-page="home"] .report-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+html[data-futureskill-page="home"] .report-button,
+html[data-futureskill-page="home"] .report-pathway,
+html[data-futureskill-page="home"] .report-careers-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid var(--fs-accent);
+  border-radius: 9px;
+  background: var(--fs-accent);
+  color: var(--fs-on-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+html[data-futureskill-page="home"] .report-pathway { background: var(--fs-raised); color: var(--fs-accent); }
+html[data-futureskill-page="home"] .report-careers-link { background: var(--fs-accent-soft); color: var(--fs-accent-ink); border-color: var(--fs-line); }
+html[data-futureskill-page="home"] .report-method-details { padding-top: 4px; }
+html[data-futureskill-page="home"] .report-method-copy { max-width: 900px; padding-top: 6px; }
+html[data-futureskill-page="home"] .report-method-copy p,
+html[data-futureskill-page="home"] .report-sources { font-size: 13px; line-height: 1.6; }
+html[data-futureskill-page="home"] .report-sources { padding-left: 22px; }
+html[data-futureskill-page="home"] .report-sources li { margin: 9px 0; }
+html[data-futureskill-page="home"] .report-error {
+  border-color: var(--fs-danger);
+  background: var(--fs-danger-soft);
+}
+html[data-futureskill-page="home"] .report-error h2 { margin-top: 0; color: var(--fs-danger); }
+html[data-futureskill-page="home"] .report-demo-control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+  padding: 14px;
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 12px;
+  background: var(--fs-amber-soft);
+}
+html[data-futureskill-page="home"] .report-demo-control label { font-weight: 700; }
+html[data-futureskill-page="home"] .report-demo-control select { min-height: 42px; padding: 7px 10px; }
+html[data-futureskill-page="home"] .report-demo-status { flex-basis: 100%; margin: 0; font-size: 13px; }
+@media (max-width: 700px) {
+  html[data-futureskill-page="home"] .report-summary-grid { grid-template-columns: 1fr; }
+  html[data-futureskill-page="home"] .report-actions { flex-direction: column; align-items: stretch; }
+  html[data-futureskill-page="home"] .report-button,
+  html[data-futureskill-page="home"] .report-pathway { width: 100%; }
+  html[data-futureskill-page="home"] .report-careers-link { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-futureskill-page="home"] .report-button,
+  html[data-futureskill-page="home"] .report-pathway { transition: none; }
+}

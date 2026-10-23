@@ -229,8 +229,13 @@ async function checkStepInteractionContrast() {
     console.log("PASS: corrupted drafts and blocked browser storage leave the assessment usable");
     console.log("All assessment browser checks passed. Screenshots: /tmp/future-assessment-*.png");
   } finally {
-    socket?.close(); browser.kill("SIGTERM");
+    socket?.close();
     for (const item of pending.values()) clearTimeout(item.timer);
-    await sleep(100); fs.rmSync(profile, { recursive: true, force: true, maxRetries: 3 });
+    if (browser.exitCode === null) {
+      await new Promise(resolve => { browser.once("exit", resolve); browser.kill("SIGTERM"); });
+    }
+    await sleep(300);
+    await fs.promises.rm(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 })
+      .catch(error => console.warn(`Temporary browser profile cleanup: ${error.code}`));
   }
 })().catch(error => { console.error(error.stack || error); process.exitCode = 1; });
