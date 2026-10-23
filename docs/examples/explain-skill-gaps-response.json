@@ -1,0 +1,179 @@
+{
+  "schema_version": "1.0",
+  "target_career": "Data Analyst",
+  "explanation_origin": "authored_example",
+  "gaps": [
+    {
+      "skill": "Excel", "current": 3, "required": 3, "gap": 0,
+      "importance": 0.75, "priority": 0, "estimated_hours": 0,
+      "objective": "Clean a spreadsheet and use formulas and pivot tables",
+      "project": "Create an Excel summary dashboard",
+      "prerequisites": [],
+      "catalog_ref": "reskilling/catalog.py::CAREERS['Data Analyst']['skills']['Excel']",
+      "requirement_status": "illustrative",
+      "requirement_source_ids": ["local-illustrative-catalog"],
+      "learning_source_ids": [],
+      "why_skill_matters": {
+        "text": "In this illustrative pathway, spreadsheet cleaning, formulas and pivot tables support the summary-dashboard practice project.",
+        "source_ids": ["local-illustrative-catalog"]
+      },
+      "learning_actions": [],
+      "limitations": ["Your self-rating meets the illustrative target; this does not verify mastery."]
+    },
+    {
+      "skill": "Python Basics", "current": 3, "required": 3, "gap": 0,
+      "importance": 0.85, "priority": 0, "estimated_hours": 0,
+      "objective": "Use variables, loops, functions and CSV files",
+      "project": "Write a script that summarises a CSV file",
+      "prerequisites": [],
+      "catalog_ref": "reskilling/catalog.py::CAREERS['Data Analyst']['skills']['Python Basics']",
+      "requirement_status": "illustrative",
+      "requirement_source_ids": ["local-illustrative-catalog"],
+      "learning_source_ids": ["python-tutorial-3.12"],
+      "why_skill_matters": {
+        "text": "In this illustrative pathway, Python foundations support the CSV-summary practice script. The official tutorial supports learning variables, control flow and functions, not this career target.",
+        "source_ids": ["local-illustrative-catalog", "python-tutorial-3.12"]
+      },
+      "learning_actions": [],
+      "limitations": ["Your self-rating meets the illustrative target; this does not verify mastery."]
+    },
+    {
+      "skill": "SQL", "current": 2, "required": 4, "gap": 2,
+      "importance": 1, "priority": 0.4, "estimated_hours": 10,
+      "objective": "Query and join tables with SELECT, JOIN and GROUP BY",
+      "project": "Answer five realistic questions with SQL",
+      "prerequisites": [],
+      "catalog_ref": "reskilling/catalog.py::CAREERS['Data Analyst']['skills']['SQL']",
+      "requirement_status": "illustrative",
+      "requirement_source_ids": ["local-illustrative-catalog"],
+      "learning_source_ids": ["postgresql-sql-tutorial-18"],
+      "why_skill_matters": {
+        "text": "In this illustrative Data Analyst pathway, SQL is used to query and join tables so you can answer questions about a dataset. The PostgreSQL tutorial supports these learning topics, not the occupational target.",
+        "source_ids": ["local-illustrative-catalog", "postgresql-sql-tutorial-18"]
+      },
+      "learning_actions": [
+        {
+          "text": "Work through the approved tutorial sections on querying tables, joins and aggregate functions using sample data.",
+          "source_ids": ["postgresql-sql-tutorial-18"]
+        },
+        {
+          "text": "Apply those concepts to the catalogue project: answer five realistic questions about a sample dataset and explain what each query returns.",
+          "source_ids": ["local-illustrative-catalog", "postgresql-sql-tutorial-18"]
+        }
+      ],
+      "limitations": ["The target 4/5 and ten-hour practice estimate are catalogue assumptions, not validated standards."]
+    },
+    {
+      "skill": "Statistics", "current": 3, "required": 3, "gap": 0,
+      "importance": 0.95, "priority": 0, "estimated_hours": 0,
+      "objective": "Interpret averages, spread and basic relationships",
+      "project": "Analyse an anonymised survey dataset",
+      "prerequisites": [],
+      "catalog_ref": "reskilling/catalog.py::CAREERS['Data Analyst']['skills']['Statistics']",
+      "requirement_status": "illustrative",
+      "requirement_source_ids": ["local-illustrative-catalog"],
+      "learning_source_ids": [],
+      "why_skill_matters": {
+        "text": "In this illustrative pathway, interpreting averages, spread and relationships supports the survey-analysis practice project.",
+        "source_ids": ["local-illustrative-catalog"]
+      },
+      "learning_actions": [],
+      "limitations": ["Your self-rating meets the illustrative target; this does not verify mastery."]
+    },
+    {
+      "skill": "Pandas", "current": 3, "required": 3, "gap": 0,
+      "importance": 0.95, "priority": 0, "estimated_hours": 0,
+      "objective": "Load, filter, clean and group tabular datasets",
+      "project": "Prepare and explain a cleaned dataset",
+      "prerequisites": ["Python Basics"],
+      "catalog_ref": "reskilling/catalog.py::CAREERS['Data Analyst']['skills']['Pandas']",
+      "requirement_status": "illustrative",
+      "requirement_source_ids": ["local-illustrative-catalog"],
+      "learning_source_ids": ["pandas-intro-tutorials-2.3"],
+      "why_skill_matters": {
+        "text": "In this illustrative pathway, working with tabular data supports preparing and explaining a cleaned dataset. The pandas tutorials support technical learning, not the occupational target.",
+        "source_ids": ["local-illustrative-catalog", "pandas-intro-tutorials-2.3"]
+      },
+      "learning_actions": [],
+      "limitations": ["Your self-rating meets the illustrative target; this does not verify mastery."]
+    },
+    {
+      "skill": "Data Visualisation", "current": 3, "required": 3, "gap": 0,
+      "importance": 0.9, "priority": 0, "estimated_hours": 0,
+      "objective": "Create and interpret appropriate data charts",
+      "project": "Build three charts and explain each insight",
+      "prerequisites": ["Pandas"],
+      "catalog_ref": "reskilling/catalog.py::CAREERS['Data Analyst']['skills']['Data Visualisation']",
+      "requirement_status": "illustrative",
+      "requirement_source_ids": ["local-illustrative-catalog"],
+      "learning_source_ids": [],
+      "why_skill_matters": {
+        "text": "In this illustrative pathway, creating and interpreting appropriate charts supports communicating insights through the chart-building practice project.",
+        "source_ids": ["local-illustrative-catalog"]
+      },
+      "learning_actions": [],
+      "limitations": ["Your self-rating meets the illustrative target; this does not verify mastery."]
+    }
+  ],
+  "approved_sources": [
+    {
+      "id": "local-illustrative-catalog",
+      "title": "FutureSkill illustrative reskilling catalogue",
+      "kind": "illustrative_catalog",
+      "local_path": "reskilling/catalog.py",
+      "url": null, "accessed_on": null, "published_on": null,
+      "supports": "Provenance of existing example targets, weights, hours, prerequisites, objectives and projects.",
+      "limitations": [
+        "Original authorship and evidence for numeric choices are not documented.",
+        "Not an independently validated occupational requirement or proficiency standard."
+      ]
+    },
+    {
+      "id": "pandas-intro-tutorials-2.3",
+      "title": "pandas 2.3 documentation — Getting started tutorials",
+      "kind": "technical_learning_reference",
+      "local_path": null,
+      "url": "https://pandas.pydata.org/pandas-docs/version/2.3/getting_started/intro_tutorials/index.html",
+      "accessed_on": "2026-10-22", "published_on": null,
+      "supports": "Tabular-data input/output, filtering, summary statistics and combining tables.",
+      "limitations": [
+        "A technical reference, not a verified course or occupational standard.",
+        "Does not establish career-specific targets, weights, hours or job demand."
+      ]
+    },
+    {
+      "id": "postgresql-sql-tutorial-18",
+      "title": "PostgreSQL 18 documentation — The SQL Language",
+      "kind": "technical_learning_reference",
+      "local_path": null,
+      "url": "https://www.postgresql.org/docs/18/tutorial-sql.html",
+      "accessed_on": "2026-10-22", "published_on": null,
+      "supports": "SQL learning topics: querying tables, joins and aggregate functions.",
+      "limitations": [
+        "Examples use PostgreSQL; SQL dialects can differ.",
+        "Does not establish career-specific targets, weights, hours or job demand."
+      ]
+    },
+    {
+      "id": "python-tutorial-3.12",
+      "title": "Python 3.12 documentation — The Python Tutorial",
+      "kind": "technical_learning_reference",
+      "local_path": null,
+      "url": "https://docs.python.org/3.12/tutorial/",
+      "accessed_on": "2026-10-22", "published_on": null,
+      "supports": "Python foundations: variables, control flow, functions and data structures.",
+      "limitations": [
+        "Assumes some general programming knowledge; not a complete beginner curriculum.",
+        "Does not establish career-specific targets, weights, hours or job demand."
+      ]
+    }
+  ],
+  "limitations": [
+    "Skill ratings are self-reported, not verified proficiency.",
+    "All target levels, importance weights, hour estimates and prerequisite choices remain illustrative catalogue assumptions.",
+    "Technical learning references do not validate occupational requirements or job demand.",
+    "A zero gap does not establish mastery; suggested actions do not change the schedule or award completion credit.",
+    "Interest-profile CSV records are not occupational skill-requirement evidence and are excluded.",
+    "Citation and schema validation do not prove textual entailment; explanations still require evidence review."
+  ]
+}

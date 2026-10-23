@@ -1,0 +1,1669 @@
+
+<!DOCTYPE html>
+<html lang="en" data-futureskill-page="home">
+
+<head>
+<script src="/static/future-theme.js?v=2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.ico" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<title>FutureSkill AI | Discover Your Future</title>
+
+<style>
+
+/* =====================================
+   1. GENERAL WEBSITE DESIGN
+===================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f7fb;
+    color: #203647;
+}
+
+header {
+    background: #123447;
+    color: white;
+    padding: 20px 7%;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+main {
+    max-width: 1050px;
+    margin: auto;
+    padding: 45px 20px;
+}
+
+h1 {
+    color: #123447;
+}
+
+p {
+    line-height: 1.7;
+    color: #64748b;
+}
+
+button {
+    background: #109b80;
+    color: white;
+    border: none;
+    padding: 13px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    background: #e6eef3;
+    color: #294354;
+}
+
+
+/* =====================================
+   2. HOME PAGE
+===================================== */
+
+.hero {
+    background: white;
+    border-radius: 22px;
+    text-align: center;
+    padding: 65px 25px;
+    box-shadow: 0 8px 30px #102a430a;
+}
+
+.hero h1 {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 17px;
+}
+
+.hero button {
+    margin-top: 20px;
+    padding: 16px 32px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.feature-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.feature-card h3 {
+    color: #123447;
+}
+
+
+/* =====================================
+   3. ASSESSMENT POPUP
+===================================== */
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 30, 45, 0.75);
+    z-index: 100;
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 780px;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn {
+    background: transparent;
+    color: #64748b;
+    font-size: 25px;
+    padding: 5px 10px;
+}
+
+.part-label {
+    color: #109b80;
+    font-weight: bold;
+}
+
+.progress-background {
+    height: 10px;
+    background: #e4edf1;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    background: #109b80;
+    height: 100%;
+    width: 0%;
+    transition: width 0.2s;
+}
+
+.question {
+    border-bottom: 1px solid #e5ebef;
+    padding: 20px 0;
+}
+
+.question-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.answer-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #d4e0e7;
+    border-radius: 9px;
+    padding: 11px 16px;
+    cursor: pointer;
+}
+
+.answer-option:has(input:checked) {
+    background: #e0f6ed;
+    border-color: #109b80;
+}
+
+.answer-option input {
+    accent-color: #109b80;
+}
+
+.scale-guide {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 12px;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.error {
+    color: #ca3030;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+
+/* =====================================
+   4. CAREER RESULTS
+===================================== */
+
+#results {
+    display: none;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    margin: 20px 0;
+}
+
+.profile-title {
+    color: #109b80;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.profile-item {
+    padding: 15px;
+    border-radius: 10px;
+    background: #f2f7fa;
+    text-align: center;
+}
+
+.profile-item strong {
+    font-size: 24px;
+    color: #109b80;
+}
+
+.career-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin: 16px 0;
+    border: 1px solid #e0e9ef;
+}
+
+.career-card h3 {
+    margin-top: 0;
+}
+
+.match-score {
+    font-size: 25px;
+    font-weight: bold;
+    color: #109b80;
+}
+
+.score-bar-background {
+    background: #e6edf1;
+    height: 9px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.score-bar {
+    background: #109b80;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.disclaimer {
+    font-size: 13px;
+    color: #718096;
+}
+
+
+/* =====================================
+   5. MOBILE RESPONSIVENESS
+===================================== */
+
+@media (max-width: 650px) {
+
+    .hero h1 {
+        font-size: 29px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .modal {
+        padding: 20px;
+    }
+
+    .profile-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .answer-option {
+        padding: 9px 12px;
+    }
+
+}
+
+.dev-inventory-banner {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: #153f34;
+    color: #fff;
+    font: 13px/1.4 Arial, sans-serif;
+}
+.dev-inventory-banner a {
+    color: #d3f2df;
+    font-weight: 700;
+}
+
+/* Skill intelligence: calm dashboard surfaces, clear evidence hierarchy. */
+body { font-family: "DM Sans", sans-serif; background: #f1f0fa; color: #202442; }
+header { background: #171a43; padding: 18px max(20px, calc((100vw - 1120px)/2)); color: #fff; letter-spacing: -.03em; }
+main { max-width: 1120px; padding-top: 36px; }
+h1, h2, h3 { color: #202442; letter-spacing: -.035em; }
+p { color: #666b83; }
+button { background: #5542d8; border-radius: 9px; }
+button:hover { background: #4432c0; opacity: 1; }
+.secondary-btn { background: #ecebf5; color: #353858; }
+.hero, .profile-card, .career-card, .feature-card { border: 1px solid #e5e3f0; box-shadow: 0 10px 26px #24234c0b; }
+.hero { background: linear-gradient(135deg,#fff 0%,#f8f7ff 100%); border-radius: 18px; text-align: left; padding: clamp(34px,6vw,72px); position: relative; overflow: hidden; }
+.hero:after { content:"";position:absolute;width:250px;height:250px;right:6%;top:-90px;border:1px solid #ddd9ff;border-radius:50%;box-shadow:0 0 0 28px #f4f2ff,0 0 0 56px #f8f7ff;pointer-events:none; }
+.hero h1 { max-width:600px; font-size:clamp(36px,5vw,58px); line-height:1.03; margin:0 0 18px; position:relative;z-index:1; }
+.hero p { max-width:560px; position:relative;z-index:1; }
+.hero button { position:relative;z-index:1; }
+.features { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.feature-card { text-align:left; border-radius:13px; background:#fff; }
+.feature-card h3 { margin-top:0; }
+.profile-title, .profile-item strong, .match-score { color:#5542d8; }
+.profile-grid { grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); }
+.profile-item { background:#f5f4fb; }
+.career-card { border-radius:14px; padding:24px; }
+.score-bar-background { background:#edecf5; }
+.score-bar { background:#7665e9; }
+.assessment-link { display:inline-flex; margin-top:14px; color:#4c3cc4; font-weight:700; text-decoration:none; }
+.assessment-link:hover { text-decoration:underline; }
+.sdg-alignment { margin-top:22px; border:1px solid #e4e1f1; border-radius:12px; overflow:hidden; background:#faf9fe; }
+.sdg-alignment-head { display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:15px 17px;border-bottom:1px solid #ebe9f4; }
+.sdg-kicker,.mono { font-family:"Space Mono",monospace; letter-spacing:.02em; }
+.sdg-kicker { color:#5948cb;font-size:11px;font-weight:700;text-transform:uppercase; }
+.sdg-status { flex:0 0 auto;border-radius:20px;padding:5px 9px;background:#eeeafa;color:#4a3ab3;font-size:11px;font-weight:700; }
+.sdg-status.unreviewed { background:#f3efe5;color:#79623c; }
+.sdg-alignment-body { padding:14px 17px 16px; }
+.sdg-alignment-body p { margin:5px 0;line-height:1.5;font-size:14px; }
+.sdg-target-list { display:flex;flex-wrap:wrap;gap:7px;margin:10px 0; }
+.sdg-chip { display:inline-flex;padding:6px 9px;border-radius:6px;background:#eeecfb;color:#4336a0;font-size:12px;font-weight:700; }
+.sdg-note { font-size:12px!important;color:#767990!important; }
+.sdg-more { display:inline-flex;margin-top:9px;color:#4f40c6;font-weight:700;text-decoration:none;font-size:13px; }
+.sdg-more:hover { text-decoration:underline; }
+.sdg-wait { padding:16px;color:#6e7187;font-size:13px; }
+.feature-hub-card { background:#353090!important; border-radius:14px; box-shadow:none; }
+.feature-hub-card:nth-child(1) { background:#4b56a6!important; }
+.feature-hub-card:nth-child(2) { background:#575080!important; }
+.feature-hub-card:nth-child(3) { background:#38326e!important; }
+.feature-hub-card small { background:#ffffff20; }
+.dev-inventory-banner { font-family:"DM Sans",sans-serif; }
+@media(max-width:650px) {
+ .features { grid-template-columns:1fr; }
+ .hero:after { right:-130px; }
+ .sdg-alignment-head { flex-direction:column;gap:8px; }
+}
+
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="/static/future-theme.css?v=2">
+<link rel="stylesheet" href="/static/future-pages.css?v=assessment-navigation-3">
+</head>
+
+<body>
+
+<!-- =====================================
+     WEBSITE HEADER
+===================================== -->
+
+<header>
+    FutureSkill AI
+</header>
+
+<main>
+
+<!-- =====================================
+     HOME PAGE
+===================================== -->
+
+<section id="homePage">
+
+    <div class="hero">
+
+        <h1>Discover Your Future Career</h1>
+
+        <p>
+            Discover your interests, explore your
+            strengths, and find career opportunities
+            that align with your future.
+        </p>
+
+        <p>
+            42 Questions | 3 Assessment Parts
+        </p>
+
+        <button onclick="startAssessment()">
+            Start Career Assessment
+        </button>
+
+    </div>
+
+        <p style="margin-top:24px"><a href="/reskilling" style="color:#4c3cc4;font-weight:bold">Already know your goal? Explore your reskilling pathway →</a></p>
+
+    <div class="features">
+
+        <div class="feature-card">
+
+            <h3>RIASEC Assessment</h3>
+
+            <p>
+                Explore your six occupational
+                interest dimensions.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>Subject Preferences</h3>
+
+            <p>
+                Discover which academic
+                fields interest you most.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>Career Recommendations</h3>
+
+            <p>
+                Explore careers based on your
+                interests and preferences.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     ASSESSMENT POPUP
+===================================== -->
+
+<div
+    class="overlay"
+    id="assessmentOverlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="partTitle"
+>
+
+    <div class="modal" id="assessmentModal">
+
+        <div class="modal-header">
+
+            <span class="part-label" id="partLabel">
+                Part 1 of 3
+            </span>
+
+            <button
+                class="close-btn"
+                onclick="closeAssessment()"
+                aria-label="Close assessment"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <h2 id="partTitle"></h2>
+
+        <p id="partDescription"></p>
+
+        <section class="assessment-progress" aria-label="Assessment progress and navigation">
+        <nav class="assessment-part-nav" aria-label="Assessment sections">
+            <button type="button" data-assessment-part="0">Part A <span class="part-count">0/24</span></button>
+            <button type="button" data-assessment-part="1">Part B <span class="part-count">0/12</span></button>
+            <button type="button" data-assessment-part="2">Part C <span class="part-count">0/6</span></button>
+        </nav>
+        <div class="progress-background">
+
+            <div
+                class="progress-bar"
+                id="progressBar" role="progressbar" aria-label="Overall assessment completion"
+                aria-valuemin="0" aria-valuemax="42" aria-valuenow="0"
+            ></div>
+
+        </div>
+
+        <p id="progressText"></p>
+        <div class="assessment-progress-meta">
+            <p id="assessmentSaveStatus" role="status"></p>
+            <button type="button" id="clearAssessmentDraft">Clear saved draft</button>
+        </div>
+        <details class="assessment-question-nav" id="assessmentQuestionNav">
+            <summary>Quiz navigation <span id="assessmentPartProgress"></span></summary>
+            <div id="assessmentQuestionButtons"></div>
+            <p class="assessment-nav-legend">✓ Answered · Dot: unanswered · Outline: current</p>
+        </details>
+        </section>
+
+        <div id="questionContainer"></div>
+
+        <p
+            id="errorMessage"
+            class="error"
+            role="alert"
+        ></p>
+
+        <div class="navigation">
+
+            <button
+                class="secondary-btn"
+                id="previousButton"
+                onclick="previousPart()"
+            >
+                Previous
+            </button>
+
+            <button
+                id="nextButton"
+                onclick="nextPart()"
+            >
+                Next
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     RESULT PAGE
+===================================== -->
+
+<section id="results">
+
+    <h1>Your Career Assessment Results</h1>
+
+    <div
+        class="profile-card"
+        id="userProfile"
+    ></div>
+
+    <h2>Top 10 Career Recommendations</h2>
+
+    <div id="careerResults"></div>
+        <div class="career-card" style="border-color:#bce3d6;background:#f1fbf7">
+          <h3>Build your personalised learning pathway</h3>
+          <p>Not sure what to study next? Explore skill gaps, a flexible weekly timetable, learning objectives, to-do tasks, photo evidence and your growing learning tree.</p>
+          <a href="/reskilling" style="display:inline-block;text-decoration:none;background:#5542d8;color:white;padding:13px 20px;border-radius:10px;font-weight:bold">Explore Reskilling Pathways →</a>
+        </div>
+
+    <p class="disclaimer">
+        These scores are experimental career matching
+        indices, not validated probabilities of
+        career success or suitability.
+    </p>
+
+    <button onclick="restartAssessment()">
+        Retake Assessment
+    </button>
+
+</section>
+
+<section class="feature-hub" aria-labelledby="featureHubTitle">
+  <style>
+    .feature-hub{max-width:1120px;margin:42px auto 10px;padding:0 20px}
+    .feature-hub h2{font-size:24px;margin:0 0 16px;color:#193331}
+    .feature-hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .feature-hub-card{display:block;min-height:175px;border-radius:18px;padding:22px;color:white;text-decoration:none;box-shadow:0 8px 22px #102a4314;transition:transform .18s ease,box-shadow .18s ease}
+    .feature-hub-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #102a4324}
+    .feature-hub-card:focus-visible{outline:3px solid #102a43;outline-offset:3px}
+    .feature-hub-card h3{font-size:20px;margin:8px 0 10px}
+    .feature-hub-card p{line-height:1.5;margin:0;color:#fff}
+    .feature-hub-card small{display:inline-block;margin-top:14px;padding:4px 9px;border-radius:999px;background:#ffffff28;font-weight:700}
+    @media(max-width:720px){.feature-hub-grid{grid-template-columns:1fr}.feature-hub{padding:0 15px}.feature-hub-card{min-height:145px}}
+  </style>
+  <h2 id="featureHubTitle">Explore More Features</h2>
+  <div class="feature-hub-grid">
+    <a class="feature-hub-card" href="/ai-trend" style="background:linear-gradient(135deg,#2468db,#4d9af2)">
+      <h3>AI Trend Explorer</h3>
+      <p>Explore qualitative career and skill scenarios; not validated demand forecasts.</p>
+      <small>Prototype data</small>
+    </a>
+    <a class="feature-hub-card" href="/uncertainty" style="background:linear-gradient(135deg,#7046c8,#a675e7)">
+      <h3>AI Uncertainty Lab</h3>
+      <p>Change assumptions and compare illustrative model outputs.</p>
+      <small>Rule-based simulation</small>
+    </a>
+    <a class="feature-hub-card" href="/sdg-impact" style="background:linear-gradient(135deg,#087b6e,#22a983)">
+      <h3>SDG alignment evidence</h3>
+      <p>Review role-to-target reasoning, sources and what the evidence cannot establish.</p>
+      <small>Curated targets only</small>
+    </a>
+  </div>
+</section>
+
+</main>
+
+
+<script src="/static/assessment-progress.js?v=2"></script>
+<script>
+
+// ==========================================
+// 1. QUESTIONNAIRE DATABASE
+// ==========================================
+
+const assessmentParts = [
+
+    // =====================================
+    // PART A: 24 RIASEC QUESTIONS
+    // =====================================
+
+    {
+        title: "Part A: RIASEC Interests",
+
+        description:
+            "How much would you enjoy doing these activities?",
+
+        questions: [
+
+            // REALISTIC
+            ["R", "Build or repair a simple electronic device."],
+            ["R", "Use tools to assemble a physical product."],
+            ["R", "Test or troubleshoot a piece of equipment."],
+            ["R", "Work with machines or practical technology."],
+
+            // INVESTIGATIVE
+            ["I", "Solve challenging mathematical problems."],
+            ["I", "Investigate why a scientific phenomenon happens."],
+            ["I", "Analyse data to discover patterns."],
+            ["I", "Develop logical explanations for complex problems."],
+
+            // ARTISTIC
+            ["A", "Create an original visual design."],
+            ["A", "Write creative stories or scripts."],
+            ["A", "Develop new artistic concepts."],
+            ["A", "Express ideas through art or creative media."],
+
+            // SOCIAL
+            ["S", "Explain difficult concepts to other people."],
+            ["S", "Help someone understand a new skill."],
+            ["S", "Support people facing a problem."],
+            ["S", "Collaborate with others to help a community."],
+
+            // ENTERPRISING
+            ["E", "Lead a team to complete a project."],
+            ["E", "Persuade others to support an idea."],
+            ["E", "Start a business or new initiative."],
+            ["E", "Organise people to achieve a goal."],
+
+            // CONVENTIONAL
+            ["C", "Organise information into clear records."],
+            ["C", "Check data carefully for errors."],
+            ["C", "Follow detailed procedures accurately."],
+            ["C", "Maintain an organised database or system."]
+
+        ]
+    },
+
+
+    // =====================================
+    // PART B: 12 SUBJECT QUESTIONS
+    // =====================================
+
+    {
+        title: "Part B: Subject Preferences",
+
+        description:
+            "How interested are you in these subjects?",
+
+        questions: [
+
+            // IT
+            ["IT", "Developing software or mobile applications."],
+            ["IT", "Learning about artificial intelligence and cybersecurity."],
+
+            // MATHEMATICS
+            ["Math", "Studying advanced mathematics and statistics."],
+            ["Math", "Using mathematical models to solve real problems."],
+
+            // EDUCATION
+            ["Education", "Teaching students and explaining complex ideas."],
+            ["Education", "Designing learning activities and educational materials."],
+
+            // HEALTHCARE
+            ["Health", "Learning about medicine and human health."],
+            ["Health", "Working in healthcare or medical research."],
+
+            // BUSINESS
+            ["Business", "Studying entrepreneurship, finance and management."],
+            ["Business", "Developing business strategies and marketing plans."],
+
+            // ENGINEERING
+            ["Engineering", "Designing engineering systems and technology."],
+            ["Engineering", "Applying physics to practical engineering problems."]
+
+        ]
+    },
+
+
+    // =====================================
+    // PART C: 6 SKILL QUESTIONS
+    // =====================================
+
+    {
+        title: "Part C: Skills Self-Assessment",
+
+        description:
+            "How confident are you in your current abilities?",
+
+        questions: [
+
+            ["MathSkill", "Solving mathematical and logical problems."],
+
+            ["CodingSkill", "Writing and debugging computer programs."],
+
+            ["DataSkill", "Analysing data and interpreting results."],
+
+            ["CommunicationSkill", "Explaining information clearly to others."],
+
+            ["LeadershipSkill", "Planning projects and leading a team."],
+
+            ["CreativeSkill", "Generating original solutions to problems."]
+
+        ]
+    }
+
+];
+
+
+// ==========================================
+// 2. INITIALISE ASSESSMENT
+// ==========================================
+
+let currentPart = 0;
+
+let answers = {};
+
+const totalQuestions = assessmentParts.reduce(
+    (total, part) => total + part.questions.length,
+    0
+);
+
+function makeKey(partIndex, questionIndex) {
+
+    return `${partIndex}_${questionIndex}`;
+
+}
+
+const assessmentProgress = FutureSkillAssessmentProgress.create({
+    parts: assessmentParts,
+    getAnswers: () => answers,
+    setAnswers: value => { answers = value; },
+    getPart: () => currentPart,
+    setPart: value => { currentPart = value; },
+    render: () => displayQuestions(),
+    demo: new URLSearchParams(location.search).has("screen"),
+});
+
+// ==========================================
+// 3. OPEN AND CLOSE POPUP
+// ==========================================
+
+function startAssessment() {
+
+    document.getElementById(
+        "assessmentOverlay"
+    ).style.display = "flex";
+
+    document.body.style.overflow = "hidden";
+
+    displayQuestions();
+
+}
+
+function closeAssessment() {
+
+    document.getElementById(
+        "assessmentOverlay"
+    ).style.display = "none";
+
+    document.body.style.overflow = "";
+
+}
+
+
+// ==========================================
+// 4. DISPLAY CURRENT QUESTIONS
+// ==========================================
+
+function displayQuestions() {
+
+    const part = assessmentParts[currentPart];
+
+    document.getElementById(
+        "partLabel"
+    ).textContent = `Part ${currentPart + 1} of 3`;
+
+    document.getElementById(
+        "partTitle"
+    ).textContent = part.title;
+
+    document.getElementById(
+        "partDescription"
+    ).textContent = part.description;
+
+    const container = document.getElementById(
+        "questionContainer"
+    );
+
+    container.innerHTML = "";
+
+    part.questions.forEach((question, index) => {
+
+        const key = makeKey(
+            currentPart, index
+        );
+
+        const questionDiv = document.createElement(
+            "div"
+        );
+
+        questionDiv.className = "question";
+        questionDiv.id = `assessment-question-${currentPart}-${index}`;
+        questionDiv.dataset.questionIndex = String(index);
+        questionDiv.tabIndex = -1;
+
+        const title = document.createElement("div");
+
+        title.className = "question-title";
+        title.id = `assessment-question-title-${currentPart}-${index}`;
+
+        title.textContent =
+            `${index + 1}. ${question[1]}`;
+
+        const questionState = document.createElement("small");
+        questionState.className = "question-state";
+        title.appendChild(questionState);
+        questionDiv.appendChild(title);
+
+        const optionsDiv = document.createElement(
+            "div"
+        );
+
+        optionsDiv.className = "answer-options";
+        optionsDiv.setAttribute("role", "radiogroup");
+        optionsDiv.setAttribute("aria-labelledby", title.id);
+
+        for (let number = 1; number <= 5; number++) {
+
+            const label = document.createElement(
+                "label"
+            );
+
+            label.className = "answer-option";
+
+            const radio = document.createElement(
+                "input"
+            );
+
+            radio.type = "radio";
+
+            radio.name = key;
+
+            radio.value = number;
+
+            if (answers[key] === number) {
+                radio.checked = true;
+            }
+
+            radio.addEventListener(
+                "change",
+                () => {
+
+                    answers[key] = number;
+
+                    assessmentProgress.save();
+                    updateProgress();
+
+                    document.getElementById(
+                        "errorMessage"
+                    ).textContent = "";
+
+                }
+            );
+
+            label.appendChild(radio);
+
+            label.appendChild(
+                document.createTextNode(
+                    String(number)
+                )
+            );
+
+            optionsDiv.appendChild(label);
+
+        }
+
+        questionDiv.appendChild(optionsDiv);
+
+        if (index === 0) {
+
+            const guide = document.createElement(
+                "div"
+            );
+
+            guide.className = "scale-guide";
+
+            guide.innerHTML = currentPart === 2
+                ? "<span>1 = Not confident</span><span>5 = Very confident</span>"
+                : "<span>1 = Strongly dislike</span><span>5 = Strongly like</span>";
+
+            questionDiv.appendChild(guide);
+
+        }
+
+        container.appendChild(questionDiv);
+
+    });
+
+    document.getElementById(
+        "previousButton"
+    ).disabled = currentPart === 0;
+
+    document.getElementById(
+        "nextButton"
+    ).textContent = currentPart === 2
+        ? "Get Recommendations"
+        : "Next";
+
+    document.getElementById(
+        "errorMessage"
+    ).textContent = "";
+
+    updateProgress();
+
+}
+
+
+// ==========================================
+// 5. UPDATE PROGRESS BAR
+// ==========================================
+
+function updateProgress() {
+
+    const answered = Object.keys(
+        answers
+    ).length;
+
+    const percentage = (
+        answered / totalQuestions
+    ) * 100;
+
+    document.getElementById(
+        "progressBar"
+    ).style.width = `${percentage}%`;
+
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        `${answered} / ${totalQuestions} questions answered`;
+
+    document.getElementById("progressBar").setAttribute("aria-valuemax", String(totalQuestions));
+    document.getElementById("progressBar").setAttribute("aria-valuenow", String(answered));
+    assessmentProgress.update();
+}
+
+
+// ==========================================
+// 6. PREVIOUS PART
+// ==========================================
+
+function previousPart() {
+
+    if (currentPart > 0) {
+
+        assessmentProgress.goToPart(currentPart - 1);
+
+        document.getElementById(
+            "assessmentModal"
+        ).scrollTop = 0;
+
+    }
+
+}
+
+
+// ==========================================
+// 7. NEXT PART
+// ==========================================
+
+async function nextPart() {
+
+    const questions = assessmentParts[
+        currentPart
+    ].questions;
+
+    const incomplete = questions.some(
+        (_, index) => {
+
+            const key = makeKey(
+                currentPart, index
+            );
+
+            return answers[key] === undefined;
+
+        }
+    );
+
+    if (incomplete) {
+
+        assessmentProgress.showMissing(currentPart);
+        document.getElementById(
+            "errorMessage"
+        ).textContent =
+            "Please answer all questions before continuing.";
+
+        return;
+
+    }
+
+    if (currentPart < 2) {
+
+        assessmentProgress.goToPart(currentPart + 1);
+
+        document.getElementById(
+            "assessmentModal"
+        ).scrollTop = 0;
+
+    } else {
+
+        await submitAssessment();
+
+    }
+
+}
+
+
+// ==========================================
+// 8. ORGANISE QUESTIONNAIRE ANSWERS
+// ==========================================
+
+function prepareAssessmentData() {
+
+    const riasecAnswers = {};
+
+    const subjectAnswers = {};
+
+    const skillAnswers = {};
+
+    assessmentParts.forEach(
+        (part, partIndex) => {
+
+            part.questions.forEach(
+                (question, questionIndex) => {
+
+                    const category = question[0];
+
+                    const key = makeKey(
+                        partIndex,
+                        questionIndex
+                    );
+
+                    const value = answers[key];
+
+                    if (partIndex === 0) {
+
+                        if (!riasecAnswers[category]) {
+                            riasecAnswers[category] = [];
+                        }
+
+                        riasecAnswers[category].push(
+                            value
+                        );
+
+                    } else if (partIndex === 1) {
+
+                        if (!subjectAnswers[category]) {
+                            subjectAnswers[category] = [];
+                        }
+
+                        subjectAnswers[category].push(
+                            value
+                        );
+
+                    } else {
+
+                        skillAnswers[category] = value;
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+    return {
+
+        answers: riasecAnswers,
+
+        subject_answers: subjectAnswers,
+
+        skill_answers: skillAnswers
+
+    };
+
+}
+
+
+// ==========================================
+// 9. SEND RESULTS TO PYTHON BACKEND
+// ==========================================
+
+async function submitAssessment() {
+
+    for (let p = 0; p < assessmentParts.length; p++) {
+        const missing = assessmentParts[p].questions.findIndex((_, q) =>
+            answers[makeKey(p, q)] === undefined);
+        if (missing !== -1) {
+            assessmentProgress.showMissing(p);
+            document.getElementById("errorMessage").textContent =
+                "Please answer all questions in Parts A, B and C before requesting recommendations.";
+            return;
+        }
+    }
+
+    const button = document.getElementById(
+        "nextButton"
+    );
+
+    button.disabled = true;
+
+    button.textContent = "Calculating...";
+
+    try {
+
+        const questionnaireData = prepareAssessmentData();
+
+        const response = await fetch(
+            "/api/recommend",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(
+                    questionnaireData
+                )
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+
+            const message = typeof result.detail === "string"
+                ? result.detail
+                : "Unable to calculate career recommendations.";
+
+            throw new Error(message);
+
+        }
+
+        displayResults(result);
+
+        closeAssessment();
+
+        document.getElementById(
+            "homePage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "results"
+        ).style.display = "block";
+
+        window.scrollTo(0, 0);
+
+    } catch (error) {
+
+        document.getElementById(
+            "errorMessage"
+        ).textContent =
+            "Error: " + error.message;
+
+        console.error(error);
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent = "Get Recommendations";
+
+    }
+
+}
+
+
+// ==========================================
+// 10. DISPLAY RIASEC RESULTS
+// ==========================================
+
+function createSdgAlignment(career) {
+    const alignment = career && career.sdg_alignment;
+    const section = document.createElement("section");
+    section.className = "sdg-alignment";
+    section.setAttribute("aria-label", "SDG alignment evidence");
+
+    const head = document.createElement("div");
+    head.className = "sdg-alignment-head";
+    const heading = document.createElement("div");
+    const kicker = document.createElement("div");
+    kicker.className = "sdg-kicker";
+    kicker.textContent = "Career pathway · SDG alignment";
+    const title = document.createElement("strong");
+    title.textContent = "Potential relationship, not proven impact";
+    heading.append(kicker, title);
+    const badge = document.createElement("span");
+    badge.className = `sdg-status${alignment && alignment.status === "curated" ? "" : " unreviewed"}`;
+    badge.textContent = alignment && alignment.status === "curated" ? "Potential alignment" : "Not yet reviewed";
+    head.append(heading, badge);
+    section.appendChild(head);
+
+    const body = document.createElement("div");
+    body.className = "sdg-alignment-body";
+    const mappings = alignment && Array.isArray(alignment.mappings) ? alignment.mappings : [];
+    if (mappings.length) {
+        const chips = document.createElement("div");
+        chips.className = "sdg-target-list";
+        mappings.forEach(mapping => {
+            const chip = document.createElement("span");
+            chip.className = "sdg-chip";
+            chip.textContent = `SDG ${mapping.sdg_id} · Target ${mapping.target_id}`;
+            chips.appendChild(chip);
+        });
+        body.appendChild(chips);
+        const reason = document.createElement("p");
+        reason.textContent = mappings[0].relevance_reason || mappings[0].target_summary || "";
+        body.appendChild(reason);
+    } else {
+        const note = document.createElement("p");
+        note.textContent = "No curated role-to-target mapping is available for this career yet.";
+        body.appendChild(note);
+    }
+    const caveat = document.createElement("p");
+    caveat.className = "sdg-note";
+    caveat.textContent = "Alignment describes a reasoned connection to a target. It does not establish that this career or pathway has advanced an SDG.";
+    body.appendChild(caveat);
+    const more = document.createElement("a");
+    more.className = "sdg-more";
+    more.href = `/sdg-impact?career=${encodeURIComponent(career.title || "")}`;
+    more.textContent = "Review evidence and limitations";
+    body.appendChild(more);
+    section.appendChild(body);
+    return section;
+}
+
+function displayResults(data) {
+
+    const profile = document.getElementById(
+        "userProfile"
+    );
+
+    profile.replaceChildren();
+
+    const profileHeading = document.createElement(
+        "h2"
+    );
+
+    profileHeading.textContent =
+        "Your RIASEC Profile";
+
+    profile.appendChild(profileHeading);
+
+    const top3 = document.createElement("div");
+
+    top3.className = "profile-title";
+
+    top3.textContent = data.top3;
+
+    profile.appendChild(top3);
+
+    const grid = document.createElement("div");
+
+    grid.className = "profile-grid";
+
+    for (const [dimension, score] of Object.entries(
+        data.riasec_scores
+    )) {
+
+        const item = document.createElement("div");
+
+        item.className = "profile-item";
+
+        const name = document.createElement("div");
+
+        name.textContent = dimension;
+
+        const value = document.createElement("strong");
+
+        value.textContent = score.toFixed(1);
+
+        item.appendChild(name);
+
+        item.appendChild(value);
+
+        grid.appendChild(item);
+
+    }
+
+    profile.appendChild(grid);
+
+
+    // =====================================
+    // SUBJECT PREFERENCES
+    // =====================================
+
+    const subjectHeading = document.createElement(
+        "h3"
+    );
+
+    subjectHeading.textContent =
+        "Your Subject Preferences";
+
+    profile.appendChild(subjectHeading);
+
+    for (const [subject, value] of Object.entries(
+        data.subject_preferences
+    )) {
+
+        const item = document.createElement("p");
+
+        item.textContent =
+            `${subject}: ${Number(value).toFixed(1)} / 5`;
+
+        profile.appendChild(item);
+
+    }
+
+
+    // =====================================
+    // SKILLS SELF-ASSESSMENT
+    // =====================================
+
+    const skillsHeading = document.createElement(
+        "h3"
+    );
+
+    skillsHeading.textContent =
+        "Your Self-Reported Skills";
+
+    profile.appendChild(skillsHeading);
+
+    for (const [skill, value] of Object.entries(
+        data.skills
+    )) {
+
+        const item = document.createElement("p");
+
+        item.textContent =
+            `${skill}: ${value} / 5`;
+
+        profile.appendChild(item);
+
+    }
+
+
+    // =====================================
+    // TOP 10 CAREER RECOMMENDATIONS
+    // =====================================
+
+    const careerContainer = document.getElementById(
+        "careerResults"
+    );
+
+    careerContainer.replaceChildren();
+
+    if (!data.recommendations ||
+        data.recommendations.length === 0) {
+
+        careerContainer.textContent =
+            "No career recommendations available.";
+
+        return;
+
+    }
+
+    data.recommendations.forEach(
+        (career, index) => {
+
+            const card = document.createElement("div");
+
+            card.className = "career-card";
+
+            const title = document.createElement("h3");
+
+            title.textContent =
+                `${index + 1}. ${career.title}`;
+
+            card.appendChild(title);
+
+            const score = document.createElement("div");
+
+            score.className = "match-score";
+
+            score.textContent =
+                `Match Index: ${Number(career.match_index).toFixed(2)}`;
+
+            card.appendChild(score);
+
+            // Matching score progress bar
+            const barBackground = document.createElement(
+                "div"
+            );
+
+            barBackground.className =
+                "score-bar-background";
+
+            const bar = document.createElement("div");
+
+            bar.className = "score-bar";
+
+            bar.style.width = (
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        Number(career.match_index)
+                    )
+                )
+            ) + "%";
+
+            barBackground.appendChild(bar);
+
+            card.appendChild(barBackground);
+
+            const types = document.createElement("p");
+
+            types.textContent =
+                `Career RIASEC: ${career.riasec}`;
+
+            card.appendChild(types);
+
+            const interest = document.createElement(
+                "p"
+            );
+
+            interest.textContent =
+                `RIASEC Similarity: ${Number(career.interest_index).toFixed(2)}`;
+
+            card.appendChild(interest);
+
+            const subject = document.createElement(
+                "p"
+            );
+
+            subject.textContent =
+                `Subject Similarity: ${Number(career.subject_index).toFixed(2)}`;
+
+            card.appendChild(subject);
+
+            const fields = document.createElement("p");
+
+            fields.textContent =
+                `Related Fields: ${career.fields}`;
+
+            card.appendChild(fields);
+
+            const explanation = document.createElement(
+                "p"
+            );
+
+            explanation.textContent =
+                career.explanation;
+
+            card.appendChild(explanation);
+
+            const pathwayLink = document.createElement("a");
+            const inventoryMode = new URLSearchParams(window.location.search).has("screen");
+            pathwayLink.href = inventoryMode
+                ? "/reskilling?demo=1&demo_scenario=fresh&career=" + encodeURIComponent(career.title)
+                : "/reskilling?career=" + encodeURIComponent(career.title);
+            pathwayLink.textContent = "Explore reskilling options →";
+            pathwayLink.style.cssText = "display:inline-block;margin-top:12px;padding:12px 18px;background:#5542d8;color:white;border-radius:9px;font-weight:bold;text-decoration:none";
+            card.appendChild(pathwayLink);
+
+            card.appendChild(createSdgAlignment(career));
+
+            careerContainer.appendChild(card);
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// 11. RETAKE ASSESSMENT
+// ==========================================
+
+function restartAssessment() {
+
+    assessmentProgress.clear({ confirm: false, redraw: false });
+    currentPart = 0;
+
+    answers = {};
+
+    document.getElementById(
+        "results"
+    ).style.display = "none";
+
+    document.getElementById(
+        "homePage"
+    ).style.display = "block";
+
+    startAssessment();
+
+}
+
+// Deep links used by the development-only screen inventory. Sample answers are
+// held in memory and never submitted except for S05's real recommendation demo.
+async function openInventoryPreview() {
+    const params = new URLSearchParams(window.location.search);
+    const screen = params.get("screen");
+    if (!screen) return;
+
+    const banner = document.createElement("div");
+    banner.className = "dev-inventory-banner";
+    const label = document.createElement("strong");
+    label.textContent = "DEVELOPMENT SCREEN PREVIEW";
+    const note = document.createElement("span");
+    note.textContent = "Assessment sample answers are not saved.";
+    const link = document.createElement("a");
+    link.href = "/__dev/screens";
+    link.textContent = "Back to screen inventory";
+    banner.append(label, note, link);
+    document.body.prepend(banner);
+
+    if (/^S0[2-4]$/.test(screen) || screen === "S23" || screen === "S24") {
+        for (let partIndex = 0; partIndex < assessmentParts.length; partIndex++) {
+            assessmentParts[partIndex].questions.forEach((_, questionIndex) => {
+                answers[makeKey(partIndex, questionIndex)] = 3;
+            });
+        }
+        if (screen === "S23" || screen === "S24") {
+            currentPart = 2;
+        } else {
+            currentPart = Number(screen.slice(-1)) - 2;
+        }
+        startAssessment();
+        if (screen === "S23") {
+            const button = document.getElementById("nextButton");
+            button.disabled = true;
+            button.textContent = "Calculating...";
+            document.getElementById("errorMessage").textContent =
+                "Development sample: recommendation request is still in progress.";
+        }
+        if (screen === "S24") {
+            document.getElementById("errorMessage").textContent =
+                "Sample request failed. Check your connection and try again.";
+        }
+        return;
+    }
+
+    if (screen !== "S05") return;
+    const payload = {
+        answers: {R:[4,4,3,4], I:[5,4,5,4], A:[3,4,4,3], S:[4,5,4,4], E:[4,4,5,4], C:[3,4,4,5]},
+        subject_answers: {IT:[5,4], Math:[4,5], Education:[4,4], Health:[3,3], Business:[4,4], Engineering:[4,5]},
+        skill_answers: {MathSkill:3, CodingSkill:3, DataSkill:4, CommunicationSkill:4, LeadershipSkill:3, CreativeSkill:4}
+    };
+    const button = document.getElementById("nextButton");
+    button.disabled = true;
+    button.textContent = "Calculating...";
+    try {
+        const response = await fetch("/api/recommend", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.detail || "Unable to load sample results.");
+        displayResults(result);
+        closeAssessment();
+        document.getElementById("homePage").style.display = "none";
+        document.getElementById("results").style.display = "block";
+        window.scrollTo(0, 0);
+    } catch (error) {
+        document.getElementById("errorMessage").textContent = `Sample results unavailable: ${error.message}`;
+        startAssessment();
+    }
+}
+
+openInventoryPreview();
+
+</script>
+
+</body>
+</html>

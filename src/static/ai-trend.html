@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" data-futureskill-page="trends">
+<head>
+  <script src="/static/future-theme.js?v=2"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FutureSkill AI · Career Trend Explorer</title>
+  <style>
+    :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#193331;background:#f4f8f5}
+    *{box-sizing:border-box}body{margin:0}header{background:#123c35;color:#fff;padding:16px max(20px,calc((100vw - 1120px)/2))}
+    header a{color:#d7f3e4;font-weight:700;text-decoration:none}main{max-width:1120px;margin:auto;padding:32px 20px 56px}
+    h1{font-size:clamp(28px,4vw,42px);margin:4px 0 8px}h2{font-size:20px;margin:0 0 12px}
+    p{line-height:1.6}.subtle{color:#667a74}.eyebrow{color:#37815f;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+    .notice{background:#fff5dd;border:1px solid #e8d39a;border-radius:12px;padding:16px;margin:20px 0;color:#5e4b26}
+    .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:22px 0}
+    .meta div,.trend-card{background:#fff;border:1px solid #dce8e1;border-radius:14px;padding:16px}
+    .meta strong{display:block;font-size:18px;margin-top:3px}.toolbar{display:flex;gap:12px;align-items:center;margin:22px 0}
+    input{font:inherit;border:1px solid #cbdcd3;border-radius:9px;padding:11px 13px;max-width:440px;width:100%}
+    #status{min-height:24px;color:#46695a}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:14px}
+    .trend-card h2{margin:0}.trend-card .topline{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .badge{padding:4px 9px;border-radius:999px;background:#e9f4ec;color:#286445;font-size:12px;font-weight:800;white-space:nowrap}
+    .badge.mixed{background:#fff2d7;color:#72551a}.badge.down{background:#fbe8e8;color:#8b3b3b}
+    .trend-card p{margin:11px 0;color:#455b54}.trend-card h3{font-size:13px;margin:15px 0 6px}
+    .chips{display:flex;flex-wrap:wrap;gap:6px}.chip{background:#eff5f1;border-radius:999px;padding:4px 8px;font-size:12px;color:#365c4a}
+    .source{margin-top:24px;color:#5d716b;font-size:13px}.source li{margin:6px 0}
+    @media(max-width:560px){main{padding:24px 15px 42px}.toolbar{display:block}.toolbar input{max-width:none}.trend-card .topline{display:block}.badge{display:inline-block;margin-top:8px}}
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/static/future-theme.css?v=2">
+  <link rel="stylesheet" href="/static/future-pages.css?v=2">
+</head>
+<body>
+  <header><a href="/">← Back to FutureSkill AI</a></header>
+  <main>
+    <span class="eyebrow">Career exploration · prototype data</span>
+    <h1>AI Career Trend Explorer</h1>
+    <p class="subtle">Review broad skill and career-category directions from the imported project data.</p>
+    <div class="notice"><strong>Not a validated forecast:</strong> the historical labels are qualitative and future labels are hand-built scenarios. This dataset contains no annual employment counts and should not be used to predict an individual’s job prospects.</div>
+    <div class="meta" aria-label="Dataset summary">
+      <div>Geographic scope<strong id="geo">—</strong></div>
+      <div>Scenario period<strong id="period">—</strong></div>
+      <div>Model type<strong id="model">—</strong></div>
+      <div>Categories<strong id="count">—</strong></div>
+    </div>
+    <div class="toolbar"><label for="search">Filter categories</label><input id="search" type="search" placeholder="Try data, healthcare, education…"></div>
+    <p id="status" role="status" aria-live="polite">Loading imported category scenarios…</p>
+    <section id="trends" class="grid" aria-label="Career trend categories"></section>
+    <section class="source">
+      <h2>Source and limitations</h2>
+      <p id="sourceText"></p>
+      <ul id="limits"></ul>
+    </section>
+  </main>
+  <script>
+    const statusNode = document.getElementById("status");
+    const grid = document.getElementById("trends");
+    const search = document.getElementById("search");
+    let categories = [];
+
+    function addText(parent, tag, text, className) {
+      const node = document.createElement(tag);
+      node.textContent = text ?? "";
+      if (className) node.className = className;
+      parent.appendChild(node);
+      return node;
+    }
+
+    function renderCategories() {
+      const query = search.value.trim().toLowerCase();
+      const visible = categories.filter(item =>
+        JSON.stringify(item).toLowerCase().includes(query)
+      );
+      grid.replaceChildren();
+      visible.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "trend-card";
+        const topline = document.createElement("div");
+        topline.className = "topline";
+        addText(topline, "h2", item.category);
+        const badge = addText(topline, "span", item.direction, "badge");
+        if (item.direction.includes("Mixed")) badge.classList.add("mixed");
+        if (item.direction === "Decrease") badge.classList.add("down");
+        card.appendChild(topline);
+        addText(card, "p", `${item.historical_trend} in the qualitative 2021–2025 label set → ${item.future_trend} scenario for 2026–2030.`);
+        addText(card, "p", item.impact);
+        addText(card, "h3", "Drivers");
+        const drivers = document.createElement("div");
+        drivers.className = "chips";
+        item.drivers.forEach(value => addText(drivers, "span", value, "chip"));
+        card.appendChild(drivers);
+        addText(card, "h3", "Skills mentioned");
+        const skills = document.createElement("div");
+        skills.className = "chips";
+        item.skills.forEach(value => addText(skills, "span", value, "chip"));
+        card.appendChild(skills);
+        addText(card, "p", `Example roles: ${item.careers.join(", ")}`, "subtle");
+        grid.appendChild(card);
+      });
+      if (!visible.length) addText(grid, "p", "No categories match that search.");
+      statusNode.textContent = `${visible.length} of ${categories.length} categories shown.`;
+    }
+
+    async function loadTrends() {
+      try {
+        const response = await fetch("/api/ai-trends");
+        if (!response.ok) throw new Error("Trend data could not be loaded.");
+        const data = await response.json();
+        categories = data.categories || [];
+        document.getElementById("geo").textContent = data.geographic_scope;
+        document.getElementById("period").textContent = data.scenario_period;
+        document.getElementById("model").textContent = data.model_type;
+        document.getElementById("count").textContent = categories.length;
+        document.getElementById("sourceText").textContent = data.source;
+        const list = document.getElementById("limits");
+        (data.limitations || []).forEach(item => addText(list, "li", item));
+        renderCategories();
+      } catch (error) {
+        statusNode.textContent = `Unable to load trend scenarios: ${error.message}`;
+      }
+    }
+    search.addEventListener("input", renderCategories);
+    loadTrends();
+  </script>
+</body>
+</html>

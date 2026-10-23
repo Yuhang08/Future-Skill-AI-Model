@@ -136,40 +136,40 @@ User ──► Replit (App / API) ──► RunPod Endpoint (GPU model)
 
 ## How to Run
 
-### Option 1 — Run on Replit (Recommended)
-
-1. Open the [Replit Project](https://replit.com/@your-username/your-project), or import this repository via **Create Repl → Import from GitHub**.
-2. Open the **Secrets** tab (🔒) and add the variables listed in `.env.example`:
-   - `RUNPOD_API_KEY`
-   - `RUNPOD_ENDPOINT_ID`
-3. Click **Run**. Replit uses the `.replit` file to start `python src/main.py`.
-
-### Option 2 — Run Locally
+The integrated FastAPI website starts at `src/main.py`. The older standalone
+prototypes under `test/`, submission material and existing source datasets are
+preserved. See [the website guide](src/README.md) for features, limitations and
+private-data handling.
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/your-username/your-project.git
-cd your-project
-
-# 2. Create and activate a virtual environment
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Configure environment variables
-cp .env.example .env            # then fill in your values
-
-# 5. Run the app
-python src/main.py
+# Run these commands from the repository root.
+python -m pip install -r requirements.txt
+python -m uvicorn main:app --app-dir src --host 0.0.0.0 --port 5000
 ```
+
+Open `/` for the assessment, `/reskilling` for pathways, `/ai-trend` for
+qualitative trends, `/uncertainty` for illustrative scenarios and `/sdg-impact`
+for evidence-limited career connections. No model credential or RunPod endpoint
+is required for these rule-based prototype pages.
+
+The optional skill-gap explanation service requires supported server-side model
+credentials; see [its contract and configuration](docs/explain-skill-gaps.md).
+Do not commit credentials or private learner data. `FUTURESKILL_DATA_DIR` can
+select a private writable storage location instead of the default `src/instance/`.
+Development screen inventory is opt-in with `FUTURESKILL_DEV_INVENTORY=1`.
+The earlier RunPod architecture notes elsewhere in this document are not a
+claim that the current website has a working RunPod connection.
 
 ### Run Tests
 
 ```bash
-python -m unittest discover tests
+PYTHONPATH=src python -m unittest discover -s tests -v
+node tests/assessment_progress.test.cjs
 ```
+
+On PowerShell, set `$env:PYTHONPATH = "src"` first. Browser regression scripts
+in `tests/` require Chromium and a running app. No real-provider request is
+performed by the automated Python tests.
 
 ---
 

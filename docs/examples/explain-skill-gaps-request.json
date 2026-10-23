@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "target_career": "Data Analyst",
+  "rating_basis": "self_reported",
+  "skills": {
+    "Excel": 3,
+    "Python Basics": 3,
+    "SQL": 2,
+    "Statistics": 3,
+    "Pandas": 3,
+    "Data Visualisation": 3
+  }
+}
