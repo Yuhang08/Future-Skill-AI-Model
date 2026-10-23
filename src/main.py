@@ -201,3 +201,9 @@ app.middleware("http")(session_cookie_middleware)
 app.include_router(reskilling_router)
 app.include_router(exploration_router)
 app.include_router(explanation_router)
+
+# HR Interview: standalone Flask application hosted under the same FastAPI site.
+# Flask routes /api/interview/* become /hr-interview/api/interview/*.
+from starlette.middleware.wsgi import WSGIMiddleware
+from hr_interview.app import app as hr_flask_app
+app.mount("/hr-interview", WSGIMiddleware(hr_flask_app))

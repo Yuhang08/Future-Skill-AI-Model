@@ -106,7 +106,29 @@
               <div class="field"><label for="userType">Which best describes you?</label><select id="userType" required><option value="student">Student / fresh graduate</option><option value="employed">Currently employed</option><option value="career_changer">Planning a career change</option><option value="returning">Returning to work or learning</option></select></div>
               <div class="field"><label for="industry">Your current industry or community <span class="optional">optional</span></label><input id="industry" maxlength="80" placeholder="e.g. Education, Retail, Technology"></div>
               <div class="field"><label for="experience">Your general experience</label><select id="experience"><option value="beginner">Beginner</option><option value="some">Some practical experience</option><option value="experienced">Experienced learner</option></select></div>
-              <div class="field"><label for="targetCareer">Your target career</label><select id="targetCareer" required></select></div>
+
+              <div class="field">
+                  <label for="targetCareer">Your target career</label>
+
+                  <input
+                      type="search"
+                      id="careerSearch"
+                      placeholder="Search your target career..."
+                      autocomplete="off"
+                      aria-label="Search careers"
+                  >
+
+                  <select
+                      id="targetCareer"
+                      size="7"
+                      required
+                      style="display:none;"
+                      aria-label="Select your target career"
+                  ></select>
+
+                  <small id="careerCount"></small>
+              </div>
+
             </div>
             <div class="field"><label for="personalGoal">What would you like to achieve? <span class="optional">optional</span></label><textarea id="personalGoal" maxlength="200" rows="3" placeholder="e.g. Build my first data analysis portfolio project"></textarea></div>
           </div>

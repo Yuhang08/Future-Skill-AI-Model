@@ -5,3 +5,7 @@ numpy>=1.25,<3
 python-multipart>=0.0.9
 httpx>=0.27,<1
 pydantic
+
+Flask>=3,<4
+openai>=1.75,<3
+python-dotenv>=1,<2
