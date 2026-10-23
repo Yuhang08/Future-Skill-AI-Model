@@ -63,6 +63,16 @@ function engine({ blocked = false, fail = false, delayed } = {}) {
     const phrase = "Part 2 of 3";
     const expected = code === "en" ? phrase : packs[code]["Part {n} of 3"].replace("{n}", "2");
     assert.equal(api.translateText(phrase), expected, `${code}: whole-phrase interpolation works`);
+    const question = "Question 3 of 5";
+    const expectedQuestion = code === "en" ? question
+      : packs[code]["Question {questionNumber} of {questionCount}"]
+        .replace("{questionNumber}", "3").replace("{questionCount}", "5");
+    assert.equal(api.translateText(question), expectedQuestion, `${code}: interview question count translates`);
+    assert.equal(api.translateText("Interview practice"), packs[code]["Interview practice"]);
+    const countPhrase = "Practice answers in this summary: 3.";
+    const expectedCount = code === "en" ? countPhrase
+      : packs[code]["Practice answers in this summary: {count}."].replace("{count}", "3");
+    assert.equal(api.translateText(countPhrase), expectedCount);
     assert.equal(api.translateText("97.5 / 100"), "97.5 / 100");
     assert.equal(api.translateText("Software Developers"), "Software Developers");
   }

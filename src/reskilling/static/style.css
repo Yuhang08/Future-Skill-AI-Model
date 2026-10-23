@@ -125,3 +125,29 @@ body.has-dashboard .hero-start{display:none}
 :root[data-theme="dark"] .settings-section-heading p,:root[data-theme="dark"] .settings-availability li small{color:#a2b2a5}
 :root[data-theme="dark"] .settings-availability li{border-color:#34463a}
 :root[data-theme="dark"] .availability-status{background:#2c3a30;color:#a9b9ac}
+
+/* Optional interview practice is a contextual route, not part of the saved plan. */
+.interview-practice-card{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:18px;margin:0 0 24px;padding:21px 24px;border:1px solid var(--fs-line);border-radius:17px;background:linear-gradient(112deg,var(--fs-accent-soft),var(--fs-raised) 58%);box-shadow:var(--fs-shadow-small)}
+.interview-practice-mark{display:grid;place-items:center;width:48px;height:48px;border:1px solid var(--fs-line-strong);border-radius:14px;background:var(--fs-raised);color:var(--fs-accent)}
+.interview-practice-mark svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.interview-practice-copy .section-eyebrow{color:var(--fs-accent)}
+.interview-practice-copy h2{margin:5px 0 3px;font-size:17px;letter-spacing:-.35px}
+.interview-practice-copy p{max-width:610px;margin:0;color:var(--fs-muted);font-size:12px;line-height:1.55}
+.interview-practice-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px;white-space:nowrap}
+.interview-practice-actions .btn{gap:10px;padding:11px 15px}
+.interview-history-link{min-height:30px;display:inline-flex;align-items:center;color:var(--fs-accent-ink);font-size:11px;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.workspace-nav-item[href="/interview-practice/"]{text-decoration:none}
+.workspace-nav-item[href="/interview-practice/"]:focus-visible{outline:3px solid var(--fs-accent);outline-offset:3px}
+:root[data-theme="dark"] .interview-practice-card{background:linear-gradient(112deg,#203c48,var(--fs-raised) 64%);border-color:var(--fs-line)}
+:root[data-theme="dark"] .interview-history-link{color:var(--fs-accent)}
+@media(max-width:840px){
+  .interview-practice-card{grid-template-columns:48px minmax(0,1fr);gap:14px}
+  .interview-practice-actions{grid-column:2;align-items:flex-start;flex-direction:row;flex-wrap:wrap;gap:13px}
+}
+@media(max-width:520px){
+  .interview-practice-card{grid-template-columns:40px minmax(0,1fr);align-items:start;gap:11px;padding:17px 15px}
+  .interview-practice-mark{width:38px;height:38px;border-radius:11px}
+  .interview-practice-mark svg{width:21px;height:21px}
+  .interview-practice-copy h2{font-size:15px}
+  .interview-practice-actions{grid-column:1/-1;padding-left:0;align-items:center;justify-content:flex-start}
+}

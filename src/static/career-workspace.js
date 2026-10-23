@@ -427,6 +427,21 @@
       startingPoint.appendChild(el("p", "career-context-note", "Demonstration: pathway actions use an isolated sample session."));
     }
     addLink(startingPoint, `/reskilling?${targetQuery}`, "Choose this target and review pathway options", "career-button");
+    const interviewQuery = new URLSearchParams({
+      career_id: career.id,
+      career: career.title,
+    });
+    startingPoint.appendChild(el(
+      "p",
+      "career-muted",
+      "Interview practice uses the career title for general questions; this catalogue does not provide verified role-specific requirements."
+    ));
+    addLink(
+      startingPoint,
+      `/interview-practice/?${interviewQuery}`,
+      "Practise for this career",
+      "career-button-secondary"
+    );
 
     const tryIt = section("Try it before choosing");
     tryIt.appendChild(el("p", "", "Open the official profile, choose one listed work activity to investigate, and write down a question about what it involves. This is an exploration exercise, not a proficiency test."));

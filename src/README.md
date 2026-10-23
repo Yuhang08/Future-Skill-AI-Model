@@ -42,6 +42,12 @@ files out of Git. Use a separate writable data directory for testing.
 - O*NET sources: [Interest Types](https://www.onetonline.org/find/descriptor/browse/1.B.1) supports general RIASEC descriptions; [O*NET Interest Profiler](https://www.onetcenter.org/IP.html) describes the official instrument and its own validation; [O*NET OnLine](https://www.onetonline.org/) provides the linked occupation profiles.
 - The local results report is deterministic. The existing optional LLM service explains pathway skill gaps; it is not an assessment-review service. No LLM call is required by the report.
 
+## Interview practice
+
+- The imported interview feature is available at `/interview-practice/`; see [the integration notes](../docs/interview-practice-integration.md) for upstream provenance, storage boundaries, provider status, and limitations.
+- The current career CSV does not provide sourced role requirements, so questions are presented as general practice based on the selected career title.
+- The page and its history remain available without provider configuration; a practice start fails explicitly rather than showing a template as AI feedback. No LLM inference is required to start the rest of FutureSkill.
+
 ## Replit development review
 
 - Open the running app in **Preview**. The development-only **Open screen inventory** link appears on the homepage and reskilling page when the Replit workflow starts with `FUTURESKILL_DEV_INVENTORY=1`.

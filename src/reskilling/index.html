@@ -49,6 +49,10 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5h16"/><path d="M6.5 16V11m5 5V5m5 11v-7"/></svg>
             <span>Progress Tracking</span>
           </button>
+          <a class="workspace-nav-item" href="/interview-practice/">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10h8M8 13.5h5"/></svg>
+            <span>Interview practice</span>
+          </a>
           <button type="button" class="workspace-nav-item" data-workspace-action="edit-profile"><span>Edit learning profile</span></button>
         </nav>
         <div id="workspaceSetupSteps" class="workspace-setup-steps" hidden>
@@ -125,6 +129,20 @@
         <section id="nextActivityCard" class="next-activity-card" hidden>
           <div><h2>Next unfinished learning activity</h2><p id="nextActivityDetail" data-i18n-ignore></p></div>
           <button type="button" class="btn btn-primary" data-workspace-action="plan">Open my plan</button>
+        </section>
+        <section id="interviewPracticeCard" class="interview-practice-card" aria-labelledby="interviewPracticeTitle" hidden>
+          <div class="interview-practice-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M5 6.5h22v15H14l-7 4v-19Z"/><path d="M11 12h10M11 16h7"/></svg>
+          </div>
+          <div class="interview-practice-copy">
+            <span class="section-eyebrow">OPTIONAL CAREER PRACTICE</span>
+            <h2 id="interviewPracticeTitle">Rehearse an interview for your saved target</h2>
+            <p>Practise for your saved career target. Questions are general title-based practice, not verified occupational requirements.</p>
+          </div>
+          <div class="interview-practice-actions">
+            <a id="interviewPracticeLink" class="btn btn-primary" href="/interview-practice/">Start practice <span aria-hidden="true">→</span></a>
+            <a class="interview-history-link" href="/interview-practice/?view=history">View practice history</a>
+          </div>
         </section>
         <div class="stats-grid">
           <div class="stat-card"><span class="stat-icon">◎</span><span class="stat-label">Study hours completed</span><strong id="hoursStat">0 / 0 h</strong><span class="stat-note">Estimated practice hours</span></div>

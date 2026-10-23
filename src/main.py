@@ -323,3 +323,14 @@ app.middleware("http")(session_cookie_middleware)
 app.include_router(reskilling_router)
 app.include_router(exploration_router)
 app.include_router(explanation_router)
+
+# Keep the upstream Flask feature intact and mount it under its own route prefix;
+# its root and career API therefore cannot replace FutureSkill's existing routes.
+from a2wsgi import WSGIMiddleware
+from hr_interview.app import app as interview_practice_app
+
+app.mount(
+    "/interview-practice",
+    WSGIMiddleware(interview_practice_app),
+    name="interview-practice",
+)

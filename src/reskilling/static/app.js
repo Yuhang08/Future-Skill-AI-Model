@@ -100,8 +100,17 @@ function setWorkspaceActive(action) {
     else item.removeAttribute('aria-current');
   });
 }
+function updateInterviewPracticeEntry() {
+  const savedTarget = appState?.profile?.target_career;
+  const card = $('interviewPracticeCard');
+  if (!card) return;
+  card.hidden = !savedTarget;
+  if (!savedTarget) return;
+  $('interviewPracticeLink').href = `/interview-practice/?career=${encodeURIComponent(savedTarget)}`;
+}
 function updateWorkspaceSummary() {
   if (!appState) return;
+  updateInterviewPracticeEntry();
   const hasPlan = Boolean(appState.profile);
   const editing = !$('questionnaire').hidden;
   const target = hasPlan ? appState.profile.target_career : $('targetCareer').value;
