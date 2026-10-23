@@ -1,0 +1,1143 @@
+/* Home · a confident entry point, with the questionnaire treated as a real flow. */
+html[data-futureskill-page="home"] body { --ink: var(--fs-ink); }
+html[data-futureskill-page="home"] header {
+  position: relative;
+  z-index: 1;
+  padding: 18px max(22px, calc((100vw - 1120px)/2));
+  background: var(--fs-surface);
+  border-bottom: 1px solid var(--fs-line);
+  color: var(--fs-ink);
+  font-size: 21px;
+  letter-spacing: -.045em;
+}
+html[data-futureskill-page="home"] main { max-width: 1120px; padding-top: clamp(28px, 5vw, 58px); }
+html[data-futureskill-page="home"] h1 { color: var(--fs-ink); }
+html[data-futureskill-page="home"] .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 330px;
+  padding: clamp(36px, 7vw, 78px) clamp(26px, 7vw, 82px);
+  border: 1px solid var(--fs-line);
+  border-radius: 22px;
+  text-align: left;
+  background: var(--fs-raised);
+  box-shadow: var(--fs-shadow);
+}
+html[data-futureskill-page="home"] .hero::after {
+  width: 280px; height: 280px;
+  right: 5%; top: -95px;
+  border-color: color-mix(in srgb, var(--fs-accent) 22%, transparent);
+  box-shadow: 0 0 0 28px color-mix(in srgb, var(--fs-accent) 6%, transparent),
+              0 0 0 58px color-mix(in srgb, var(--fs-accent) 3%, transparent);
+}
+html[data-futureskill-page="home"] .hero h1 {
+  max-width: 690px;
+  margin: 0 0 20px;
+  font-size: clamp(38px, 5.6vw, 66px);
+  line-height: 1.02;
+  letter-spacing: -.055em;
+}
+html[data-futureskill-page="home"] .hero p { max-width: 580px; font-size: 16px; }
+html[data-futureskill-page="home"] .hero p:nth-of-type(2) {
+  color: var(--fs-accent);
+  font: 700 11px/1.5 "Space Mono", monospace;
+  letter-spacing: .04em;
+}
+html[data-futureskill-page="home"] .hero button { position: relative; z-index: 1; margin-top: 14px; }
+html[data-futureskill-page="home"] .features { gap: 14px; margin-top: 18px; }
+html[data-futureskill-page="home"] .feature-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 164px;
+  padding: 23px;
+  border-radius: 14px;
+  text-align: left;
+}
+html[data-futureskill-page="home"] .feature-card::before {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 3px;
+  margin: 0 0 19px;
+  background: var(--fs-mint);
+}
+html[data-futureskill-page="home"] .feature-card h3 { margin-top: 0; }
+html[data-futureskill-page="home"] .secondary-btn,
+html[data-futureskill-page="home"] .close-btn {
+  background: var(--fs-raised-alt);
+  color: var(--fs-ink-soft);
+  border-color: var(--fs-line);
+}
+html[data-futureskill-page="home"] .overlay { background: rgba(8, 19, 32, .66); padding: 16px; }
+html[data-futureskill-page="home"] .modal {
+  background: var(--fs-surface);
+  color: var(--fs-ink);
+  border: 1px solid var(--fs-ink-soft);
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(3, 13, 24, .32);
+}
+html[data-futureskill-page="home"] .modal-header { padding-bottom: 12px; border-bottom: 1px solid var(--fs-line); }
+html[data-futureskill-page="home"] .part-label,
+html[data-futureskill-page="home"] .profile-title,
+html[data-futureskill-page="home"] .profile-item strong,
+html[data-futureskill-page="home"] .match-score { color: var(--fs-mint); }
+html[data-futureskill-page="home"] .progress-background,
+html[data-futureskill-page="home"] .score-bar-background { background: var(--fs-raised-alt); }
+html[data-futureskill-page="home"] .progress-bar,
+html[data-futureskill-page="home"] .score-bar { background: var(--fs-accent); }
+html[data-futureskill-page="home"] .question { border-color: var(--fs-line); }
+html[data-futureskill-page="home"] .answer-option { border-color: var(--fs-line-strong); color: var(--fs-ink-soft); }
+html[data-futureskill-page="home"] .answer-option:has(input:checked) {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+}
+html[data-futureskill-page="home"] .answer-option input { accent-color: var(--fs-accent); }
+html[data-futureskill-page="home"] .profile-item { background: var(--fs-raised-alt); }
+html[data-futureskill-page="home"] .disclaimer { color: var(--fs-muted); }
+html[data-futureskill-page="home"] .sdg-alignment { background: var(--fs-surface); border-color: var(--fs-line); }
+html[data-futureskill-page="home"] .sdg-alignment-head { border-color: var(--fs-line); }
+html[data-futureskill-page="home"] .sdg-kicker,
+html[data-futureskill-page="home"] .sdg-more { color: var(--fs-accent); }
+html[data-futureskill-page="home"] .sdg-status,
+html[data-futureskill-page="home"] .sdg-chip { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-futureskill-page="home"] .sdg-status.unreviewed { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-futureskill-page="home"] .sdg-note { color: var(--fs-muted) !important; }
+html[data-futureskill-page="home"] .feature-hub-card,
+html[data-futureskill-page="home"] .feature-hub-card:nth-child(n) {
+  background: var(--fs-raised-alt) !important;
+  color: var(--fs-ink);
+  border-color: var(--fs-line);
+}
+html[data-futureskill-page="home"] .feature-hub-card h3 { color: var(--fs-ink); }
+html[data-futureskill-page="home"] .feature-hub-card p { color: var(--fs-ink-soft); }
+html[data-futureskill-page="home"] .feature-hub-card small { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-futureskill-page="home"] .error { color: var(--fs-danger); }
+
+/* Career trends · editorial dataset index with clear sample-data boundaries. */
+html[data-futureskill-page="trends"] .eyebrow { color: var(--fs-mint); font: 700 11px "Space Mono", monospace; }
+html[data-futureskill-page="trends"] h1 { letter-spacing: -.05em; }
+html[data-futureskill-page="trends"] .subtle,
+html[data-futureskill-page="trends"] .source { color: var(--fs-muted); }
+html[data-futureskill-page="trends"] .notice {
+  background: var(--fs-amber-soft);
+  border: 1px solid color-mix(in srgb, var(--fs-amber) 32%, var(--fs-line));
+  border-radius: 12px;
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="trends"] .meta > div {
+  min-height: 88px;
+  padding: 16px;
+  border-radius: 12px;
+  color: var(--fs-muted);
+}
+html[data-futureskill-page="trends"] .meta strong { color: var(--fs-ink); font-size: 19px; }
+html[data-futureskill-page="trends"] .toolbar label { color: var(--fs-ink-soft); font-weight: 700; }
+html[data-futureskill-page="trends"] #status { color: var(--fs-muted); }
+html[data-futureskill-page="trends"] .trend-card {
+  padding: 20px;
+  border-radius: 14px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+html[data-futureskill-page="trends"] .trend-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--fs-ink-soft);
+  box-shadow: var(--fs-shadow);
+}
+html[data-futureskill-page="trends"] .trend-card p { color: var(--fs-ink-soft); }
+html[data-futureskill-page="trends"] .badge { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-futureskill-page="trends"] .badge.mixed { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-futureskill-page="trends"] .badge.down { background: var(--fs-danger-soft); color: var(--fs-danger); }
+html[data-futureskill-page="trends"] .chip { background: var(--fs-raised-alt); color: var(--fs-ink-soft); }
+html[data-futureskill-page="trends"] .source { border-top: 1px solid var(--fs-line); padding-top: 22px; }
+
+/* Uncertainty lab · reference-inspired slate instrument, never presented as forecast. */
+html[data-futureskill-page="uncertainty"] .eyebrow {
+  color: var(--fs-accent);
+  font: 700 10px "Space Mono", monospace;
+  letter-spacing: .08em;
+}
+html[data-futureskill-page="uncertainty"] h1 { letter-spacing: -.045em; }
+html[data-futureskill-page="uncertainty"] .subtle { color: var(--fs-muted); }
+html[data-futureskill-page="uncertainty"] .warning {
+  padding: 16px 18px;
+  background: var(--fs-amber-soft);
+  border: 1px solid color-mix(in srgb, var(--fs-amber) 35%, var(--fs-line));
+  border-radius: 12px;
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="uncertainty"] .panel {
+  margin: 14px 0;
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: 15px;
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-futureskill-page="uncertainty"] .panel h2 { margin-bottom: 17px; }
+html[data-futureskill-page="uncertainty"] label { color: var(--fs-ink-soft); }
+html[data-futureskill-page="uncertainty"] select,
+html[data-futureskill-page="uncertainty"] input[type="number"] { min-height: 46px; }
+html[data-futureskill-page="uncertainty"] input[type="range"] { accent-color: var(--fs-accent); }
+html[data-futureskill-page="uncertainty"] .range-value { color: var(--fs-accent); font-variant-numeric: tabular-nums; }
+html[data-futureskill-page="uncertainty"] button.secondary {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  border-color: var(--fs-line);
+}
+html[data-futureskill-page="uncertainty"] button.secondary:hover { background: var(--fs-raised-alt); }
+html[data-futureskill-page="uncertainty"] #status { color: var(--fs-muted); }
+html[data-futureskill-page="uncertainty"] .metric {
+  color: var(--fs-mint);
+  font-size: clamp(30px, 4vw, 42px);
+  letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums;
+}
+html[data-futureskill-page="uncertainty"] .metric-label { color: var(--fs-muted); }
+html[data-futureskill-page="uncertainty"] table { min-width: 350px; }
+html[data-futureskill-page="uncertainty"] th { font-family: "Space Mono", monospace; font-size: 11px; }
+html[data-futureskill-page="uncertainty"] td { font-variant-numeric: tabular-nums; }
+html[data-futureskill-page="uncertainty"] .table-wrap { overflow-x: auto; }
+/* Grid children must shrink below their table's intrinsic minimum width. */
+html[data-futureskill-page="uncertainty"] .results > div { min-width: 0; max-width: 100%; }
+html[data-futureskill-page="uncertainty"] .table-wrap { max-width: 100%; }
+
+/* SDG explorer · preserve UN color marks, photographs, and collapsed disclosure text. */
+html[data-futureskill-page="sdg"] { --fs-sdg-surface: var(--fs-raised); }
+html[data-futureskill-page="sdg"] .brand-mark { background: var(--fs-accent-soft); color: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .brand-mark img { display: block; width: 23px; height: 23px; }
+html[data-futureskill-page="sdg"][data-future-theme="dark"] .brand-mark img { filter: brightness(1.45); }
+html[data-futureskill-page="sdg"] .eyebrow,
+html[data-futureskill-page="sdg"] .mono,
+html[data-futureskill-page="sdg"] .goal-index { font-family: "Space Mono", monospace; }
+html[data-futureskill-page="sdg"] .eyebrow { color: var(--fs-accent); }
+html[data-futureskill-page="sdg"] h1 { color: var(--fs-ink); letter-spacing: -.05em; }
+html[data-futureskill-page="sdg"] p { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .status-pill { background: var(--fs-raised-alt); border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .distinction {
+  background: var(--fs-amber-soft);
+  border-left-color: var(--fs-amber);
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="sdg"] .distinction strong { color: var(--fs-ink); }
+html[data-futureskill-page="sdg"] details.about { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] details.about summary,
+html[data-futureskill-page="sdg"] .evidence-full summary { color: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .search-panel { border-radius: 13px; }
+html[data-futureskill-page="sdg"] .helper,
+html[data-futureskill-page="sdg"] .state-message,
+html[data-futureskill-page="sdg"] .section-label span { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .state-message.error { color: var(--fs-danger); }
+html[data-futureskill-page="sdg"] .mapping {
+  background: var(--fs-raised);
+  border-color: var(--fs-line);
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-futureskill-page="sdg"] .mapping-head { background: var(--fs-raised-alt); }
+html[data-futureskill-page="sdg"] .mapping-head p { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .target-tag { background: color-mix(in srgb, var(--sdg-color) 13%, var(--fs-raised)); }
+html[data-futureskill-page="sdg"] .mapping-details-trigger { min-height: 42px; }
+html[data-futureskill-page="sdg"] .mapping-drawer,
+html[data-futureskill-page="sdg"] .mapping-drawer-header { background: var(--fs-surface); color: var(--fs-ink); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .mapping-drawer-header h2 { color: var(--fs-ink); }
+html[data-futureskill-page="sdg"] .mapping-drawer-close { background: var(--fs-raised-alt); color: var(--fs-ink-soft); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .evidence-stat,
+html[data-futureskill-page="sdg"] .evidence-box,
+html[data-futureskill-page="sdg"] .evidence-detail,
+html[data-futureskill-page="sdg"] .evidence-node,
+html[data-futureskill-page="sdg"] .goal-info-dialog { background: var(--fs-raised-alt); color: var(--fs-ink-soft); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .evidence-stat span,
+html[data-futureskill-page="sdg"] .field-label,
+html[data-futureskill-page="sdg"] .drawer-target { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .evidence-node { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .evidence-node.practice { color: var(--fs-amber); }
+html[data-futureskill-page="sdg"] .evidence-node:hover { background: var(--fs-accent-soft); }
+html[data-futureskill-page="sdg"] .evidence-full li { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .sources a { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-futureskill-page="sdg"] .limit-box { background: var(--fs-amber-soft); border-color: color-mix(in srgb, var(--fs-amber) 35%, var(--fs-line)); color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .action-box { background: var(--fs-mint-soft); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .action-box p { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .pathway { background: var(--fs-raised-alt); color: var(--fs-ink); border: 1px solid var(--fs-line); }
+html[data-futureskill-page="sdg"] .pathway h2,
+html[data-futureskill-page="sdg"] .skill-name { color: var(--fs-ink); }
+html[data-futureskill-page="sdg"] .pathway-intro,
+html[data-futureskill-page="sdg"] .not-assessed { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .pathway-toggle::after { color: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .skill-row { background: var(--fs-surface); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .skill-level,
+html[data-futureskill-page="sdg"] .skill-description { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .skill-description p { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .not-assessed { border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .not-assessed a { color: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .empty-card { background: var(--fs-raised); border-color: var(--fs-line-strong); color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .empty-card strong { color: var(--fs-ink); }
+html[data-futureskill-page="sdg"] .footnote { border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .mindmap-shell { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .map-legend,
+html[data-futureskill-page="sdg"] .map-caption { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .legend-dot { background: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .legend-dot.muted { background: var(--fs-dim); }
+html[data-futureskill-page="sdg"] .map-lines line { stroke: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .career-center { background: var(--fs-accent-ink); border-color: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .career-center small { color: #d7ebf5; }
+html[data-futureskill-page="sdg"][data-future-theme="dark"] .career-center {
+  background: var(--fs-accent-soft);
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="sdg"][data-future-theme="dark"] .career-center small {
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="sdg"] .goal-node { background: var(--fs-surface); color: var(--fs-ink); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .goal-node:hover { background: var(--fs-raised); }
+html[data-futureskill-page="sdg"] .goal-node-status { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .goal-info-dialog { color: var(--fs-ink); }
+html[data-futureskill-page="sdg"] .goal-info-heading h2 { color: var(--fs-ink); }
+html[data-futureskill-page="sdg"] .goal-info-heading p { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .skeleton { background: linear-gradient(90deg, var(--fs-raised-alt), var(--fs-surface), var(--fs-raised-alt)); }
+
+/* SDG career combobox · tokenized surfaces, readable statuses, and resilient wrapping. */
+html[data-futureskill-page="sdg"] .career-search-field { min-width: 0; }
+html[data-futureskill-page="sdg"] #career {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  background: var(--fs-surface);
+  border-color: var(--fs-line-strong);
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="sdg"] #career:focus-visible { border-color: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .career-options {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  border-color: var(--fs-line-strong);
+  background: var(--fs-raised);
+  color: var(--fs-ink);
+  box-shadow: var(--fs-shadow);
+}
+html[data-futureskill-page="sdg"] .career-option {
+  display: flex;
+  min-width: 0;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--fs-ink);
+  cursor: pointer;
+  text-align: left;
+  transform: none;
+}
+html[data-futureskill-page="sdg"] .career-option:hover {
+  background: var(--fs-raised-alt);
+  color: var(--fs-ink);
+  transform: none;
+}
+html[data-futureskill-page="sdg"] .career-option[aria-selected="true"] {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+  color: var(--fs-accent-ink);
+  box-shadow: inset 3px 0 0 var(--fs-accent);
+}
+html[data-futureskill-page="sdg"] .career-option:focus-visible {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: -3px;
+}
+html[data-futureskill-page="sdg"] .career-option-title {
+  min-width: 0;
+  flex: 1 1 12rem;
+  overflow-wrap: anywhere;
+  color: inherit;
+  line-height: 1.35;
+}
+html[data-futureskill-page="sdg"] .career-option-status {
+  flex: 0 1 auto;
+  max-width: 100%;
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+html[data-futureskill-page="sdg"] .career-search-message,
+html[data-futureskill-page="sdg"] .career-choice-status {
+  color: var(--fs-ink-soft);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 520px) {
+  html[data-futureskill-page="sdg"] .career-option {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+  html[data-futureskill-page="sdg"] .career-option-title,
+  html[data-futureskill-page="sdg"] .career-option-status { flex-basis: auto; }
+}
+
+/* Inventory · dense development reference, clearly differentiated from learner flow. */
+html[data-futureskill-page="inventory"] body { background: var(--fs-canvas); }
+html[data-futureskill-page="inventory"] .top {
+  background: var(--fs-accent-ink);
+  border-bottom: 1px solid var(--fs-line);
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="inventory"] .top small { color: var(--fs-accent); font-family: "Space Mono", monospace; }
+html[data-futureskill-page="inventory"] .top h1,
+html[data-futureskill-page="inventory"] .top p { color: var(--fs-ink); }
+html[data-futureskill-page="inventory"] .safety {
+  background: var(--fs-amber-soft);
+  border-color: color-mix(in srgb, var(--fs-amber) 35%, var(--fs-line));
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="inventory"] .toolbar a,
+html[data-futureskill-page="inventory"] .toolbar button,
+html[data-futureskill-page="inventory"] .card-actions a,
+html[data-futureskill-page="inventory"] .card-actions button {
+  min-height: 42px;
+  background: var(--fs-raised);
+  border-color: var(--fs-line-strong);
+  color: var(--fs-accent);
+}
+html[data-futureskill-page="inventory"] .toolbar a.primary,
+html[data-futureskill-page="inventory"] .card-actions a.primary { background: var(--fs-accent); border-color: var(--fs-accent); color: var(--fs-on-accent); }
+html[data-futureskill-page="inventory"] .group-intro,
+html[data-futureskill-page="inventory"] .meta { color: var(--fs-muted); }
+html[data-futureskill-page="inventory"] .meta strong,
+html[data-futureskill-page="inventory"] .card h3 { color: var(--fs-ink); }
+html[data-futureskill-page="inventory"] .id { color: var(--fs-accent); font-family: "Space Mono", monospace; }
+html[data-futureskill-page="inventory"] .status.existing { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-futureskill-page="inventory"] .status.demo,
+html[data-futureskill-page="inventory"] .status.prototype { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-futureskill-page="inventory"] .status.proposed { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-futureskill-page="inventory"] .card p { color: var(--fs-ink-soft); }
+html[data-futureskill-page="inventory"] .note { color: var(--fs-amber); }
+html[data-futureskill-page="inventory"] details summary { color: var(--fs-accent); }
+html[data-futureskill-page="inventory"] footer { border-color: var(--fs-line); color: var(--fs-muted); }
+
+/* Reskilling · layered workspace, with semantic recoloring rather than inversion. */
+html[data-futureskill-page="reskilling"] body,
+html[data-futureskill-page="reskilling"] :root { color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"] .site-shell { max-width: 1500px; }
+html[data-futureskill-page="reskilling"] .site-header { border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"] .brand { color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"] .brand-icon { display: grid; place-items: center; background: var(--fs-accent-soft); color: var(--fs-accent); border-radius: 11px; }
+html[data-futureskill-page="reskilling"] .brand-icon img { display: block; width: 27px; height: 27px; }
+html[data-futureskill-page="reskilling"] .brand-green,
+html[data-futureskill-page="reskilling"] .dashboard-heading h2 span { color: var(--fs-mint); }
+html[data-futureskill-page="reskilling"] .tiny-label,
+html[data-futureskill-page="reskilling"] .section-eyebrow { color: var(--fs-accent); }
+html[data-futureskill-page="reskilling"] .assessment-link,
+html[data-futureskill-page="reskilling"] .proof-link { color: var(--fs-accent); }
+html[data-futureskill-page="reskilling"] .status-dot,
+html[data-futureskill-page="reskilling"] .dot { background: var(--fs-mint); }
+html[data-futureskill-page="reskilling"] .hero-copy h1 { color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"] .hero-copy h1 em { color: var(--fs-accent); }
+html[data-futureskill-page="reskilling"] .hero-copy p,
+html[data-futureskill-page="reskilling"] .muted { color: var(--fs-ink-soft); }
+html[data-futureskill-page="reskilling"] .hero-tags span,
+html[data-futureskill-page="reskilling"] .hero-bubble { background: var(--fs-raised); border-color: var(--fs-line); color: var(--fs-accent-ink); box-shadow: var(--fs-shadow-small); }
+html[data-futureskill-page="reskilling"] .orbit { border-color: color-mix(in srgb, var(--fs-accent) 26%, transparent); }
+html[data-futureskill-page="reskilling"] .orbit-inner { background: radial-gradient(circle, var(--fs-accent-soft) 20%, var(--fs-raised-alt) 68%, transparent 75%); }
+html[data-futureskill-page="reskilling"] .hero-spark { color: var(--fs-amber); }
+html[data-futureskill-page="reskilling"] .panel,
+html[data-futureskill-page="reskilling"] .stat-card { background: var(--fs-raised); border-color: var(--fs-line); box-shadow: var(--fs-shadow-small); }
+html[data-futureskill-page="reskilling"] .workspace-sidebar { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"] .workspace-sidebar-heading p { color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"] .workspace-overline { color: var(--fs-accent); }
+html[data-futureskill-page="reskilling"] .workspace-nav-item { color: var(--fs-ink-soft); }
+html[data-futureskill-page="reskilling"] .workspace-nav-item:hover { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-futureskill-page="reskilling"] .workspace-nav-item.active { background: var(--fs-raised); color: var(--fs-accent-ink); box-shadow: var(--fs-shadow-small); }
+html[data-futureskill-page="reskilling"] .workspace-nav-item.active::before { background: var(--fs-accent); }
+html[data-futureskill-page="reskilling"] .nav-external { color: var(--fs-dim); }
+html[data-futureskill-page="reskilling"] .sidebar-note,
+html[data-futureskill-page="reskilling"] .settings-nav-item { border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"] .sidebar-note-mark { background: var(--fs-mint); box-shadow: 0 0 0 4px var(--fs-mint-soft); }
+html[data-futureskill-page="reskilling"] .workspace-notice,
+html[data-futureskill-page="reskilling"] .insight-box { background: var(--fs-accent-soft); border-color: var(--fs-line); color: var(--fs-ink-soft); }
+html[data-futureskill-page="reskilling"] .pill { background: var(--fs-raised-alt); border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"] .pill.soft,
+html[data-futureskill-page="reskilling"] .btn-ghost { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-futureskill-page="reskilling"] .step-label { color: var(--fs-dim); }
+html[data-futureskill-page="reskilling"] .step-label.active,
+html[data-futureskill-page="reskilling"] .progress-label strong { color: var(--fs-accent); }
+html[data-futureskill-page="reskilling"] .step-connector,
+html[data-futureskill-page="reskilling"] .form-footer,
+html[data-futureskill-page="reskilling"] .footer-note { border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"] .field input:not([type="range"]):not([type="checkbox"]),
+html[data-futureskill-page="reskilling"] .field select,
+html[data-futureskill-page="reskilling"] .field textarea,
+html[data-futureskill-page="reskilling"] .week-bar select { background: var(--fs-surface); border-color: var(--fs-line-strong); color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"] .field-hint,
+html[data-futureskill-page="reskilling"] .optional { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"] .range-output { background: var(--fs-accent-soft); border-color: var(--fs-line); color: var(--fs-accent-ink); }
+html[data-futureskill-page="reskilling"] .day-selector label,
+html[data-futureskill-page="reskilling"] .skill-rating { background: var(--fs-surface); border-color: var(--fs-line); color: var(--fs-ink-soft); }
+html[data-futureskill-page="reskilling"] .day-selector label:has(input:checked) { background: var(--fs-accent-soft); border-color: var(--fs-accent); color: var(--fs-accent-ink); }
+html[data-futureskill-page="reskilling"] .day-selector label:focus-within { outline-color: var(--fs-accent); }
+html[data-futureskill-page="reskilling"] .rating-head span,
+html[data-futureskill-page="reskilling"] .stat-icon { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-futureskill-page="reskilling"] .stat-label,
+html[data-futureskill-page="reskilling"] .stat-note { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"] .gap-bar,
+html[data-futureskill-page="reskilling"] .progress-track { background: var(--fs-raised-alt); }
+html[data-futureskill-page="reskilling"] .gap-current { background: var(--fs-mint); }
+html[data-futureskill-page="reskilling"] .gap-require { background: var(--fs-amber); }
+html[data-futureskill-page="reskilling"] .plan-note,
+html[data-futureskill-page="reskilling"] .day-group,
+html[data-futureskill-page="reskilling"] .empty-state { background: var(--fs-raised-alt); border-color: var(--fs-line); color: var(--fs-ink-soft); }
+html[data-futureskill-page="reskilling"] .task-row { border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"] .task-description,
+html[data-futureskill-page="reskilling"] .gap-footer,
+html[data-futureskill-page="reskilling"] .gap-top span { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"] .task-tag { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-futureskill-page="reskilling"] .task-tag.review { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-futureskill-page="reskilling"] .task-photo,
+html[data-futureskill-page="reskilling"] .win-item { background: var(--fs-mint-soft); border-color: var(--fs-line); color: var(--fs-mint); }
+html[data-futureskill-page="reskilling"] .tree-card { background: var(--fs-raised); }
+html[data-futureskill-page="reskilling"] .tree-scene { background: radial-gradient(circle at 50% 73%, var(--fs-mint-soft), var(--fs-raised-alt) 75%); }
+html[data-futureskill-page="reskilling"] .tree-glow { background: radial-gradient(circle, color-mix(in srgb, var(--fs-mint) 22%, transparent), transparent 70%); }
+html[data-futureskill-page="reskilling"] .tree-ground { background: color-mix(in srgb, var(--fs-mint) 52%, var(--fs-raised-alt)); }
+html[data-futureskill-page="reskilling"] .tree-level span,
+html[data-futureskill-page="reskilling"] .tree-encouragement { color: var(--fs-mint); }
+html[data-futureskill-page="reskilling"] .privacy-tip,
+html[data-futureskill-page="reskilling"] .footer-note { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"] .footer-note span:first-child { color: var(--fs-accent); }
+html[data-futureskill-page="reskilling"] .settings-dialog { background: var(--fs-surface); border-color: var(--fs-line); color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"] .settings-dialog-header,
+html[data-futureskill-page="reskilling"] .settings-section,
+html[data-futureskill-page="reskilling"] .settings-availability li { border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"] .settings-dialog-header h2,
+html[data-futureskill-page="reskilling"] .settings-section-heading h3,
+html[data-futureskill-page="reskilling"] .settings-availability li strong { color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"] .settings-close,
+html[data-futureskill-page="reskilling"] .theme-options label span { background: var(--fs-raised-alt); border-color: var(--fs-line); color: var(--fs-ink-soft); }
+html[data-futureskill-page="reskilling"] .theme-options input:checked + span { background: var(--fs-accent-soft); border-color: var(--fs-accent); color: var(--fs-accent-ink); }
+html[data-futureskill-page="reskilling"] .settings-section-heading p,
+html[data-futureskill-page="reskilling"] .settings-availability li small { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"] .availability-status { background: var(--fs-raised-alt); color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"] .btn-primary { background: var(--fs-accent); color: var(--fs-on-accent); }
+html[data-futureskill-page="reskilling"] .btn-primary:hover { background: var(--fs-accent-hover); }
+html[data-futureskill-page="reskilling"] .btn-outline { background: var(--fs-raised); border-color: var(--fs-line-strong); color: var(--fs-accent-ink); }
+html[data-futureskill-page="reskilling"] .form-error { color: var(--fs-danger); }
+html[data-futureskill-page="reskilling"] .toast { background: var(--fs-accent-ink); }
+html[data-futureskill-page="reskilling"] .toast.error { background: var(--fs-danger); }
+html[data-futureskill-page="reskilling"] .settings-dialog::backdrop { background: rgba(4, 13, 24, .62); }
+html[data-futureskill-page="reskilling"] .settings-close { min-width: 42px; min-height: 42px; }
+html[data-futureskill-page="reskilling"] .workspace-toggle { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"] .workspace-toggle span { background: var(--fs-ink-soft); }
+html[data-futureskill-page="reskilling"] .workspace-nav-item { min-height: 46px; }
+
+@media (max-width: 760px) {
+  html[data-futureskill-page="home"] .features { grid-template-columns: 1fr; }
+  html[data-futureskill-page="home"] .hero { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-futureskill-page] *,
+  html[data-futureskill-page] *::before,
+  html[data-futureskill-page] *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Final QA corrections: override the legacy reskilling dark-theme selectors.
+   They target :root[data-theme="dark"] with higher specificity than the first pass. */
+html[data-futureskill-page="reskilling"][data-future-theme] body {
+  background: var(--fs-canvas);
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .site-header {
+  border-color: var(--fs-line);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .brand,
+html[data-futureskill-page="reskilling"][data-future-theme] .hero-copy h1,
+html[data-futureskill-page="reskilling"][data-future-theme] .dashboard-heading h2,
+html[data-futureskill-page="reskilling"][data-future-theme] .card-header h3,
+html[data-futureskill-page="reskilling"][data-future-theme] .tree-card h3,
+html[data-futureskill-page="reskilling"][data-future-theme] .replan-card h3,
+html[data-futureskill-page="reskilling"][data-future-theme] .clarity-card h3,
+html[data-futureskill-page="reskilling"][data-future-theme] .task-title,
+html[data-futureskill-page="reskilling"][data-future-theme] .stat-card strong {
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .site-header,
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-layout,
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-main { color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-sidebar {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-sidebar-heading p { color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-nav-item {
+  background: transparent;
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-nav-item:hover {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-nav-item.active {
+  background: var(--fs-raised);
+  color: var(--fs-accent-ink);
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-nav-item.active::before { background: var(--fs-accent); }
+html[data-futureskill-page="reskilling"][data-future-theme] .sidebar-note,
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-nav-item { border-color: var(--fs-line); color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"][data-future-theme] .panel,
+html[data-futureskill-page="reskilling"][data-future-theme] .stat-card {
+  background: var(--fs-raised);
+  border-color: var(--fs-line);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-notice,
+html[data-futureskill-page="reskilling"][data-future-theme] .insight-box {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .hero-tags span,
+html[data-futureskill-page="reskilling"][data-future-theme] .hero-bubble {
+  background: var(--fs-raised);
+  border-color: var(--fs-line);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .pill {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+  color: var(--fs-muted);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .pill.soft,
+html[data-futureskill-page="reskilling"][data-future-theme] .btn-ghost,
+html[data-futureskill-page="reskilling"][data-future-theme] .range-output {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-line);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .step-connector,
+html[data-futureskill-page="reskilling"][data-future-theme] .form-footer,
+html[data-futureskill-page="reskilling"][data-future-theme] .footer-note { border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"][data-future-theme] .step-label { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"][data-future-theme] .step-label.active,
+html[data-futureskill-page="reskilling"][data-future-theme] .progress-label strong { color: var(--fs-accent); }
+html[data-futureskill-page="reskilling"][data-future-theme] .field input:not([type="range"]):not([type="checkbox"]),
+html[data-futureskill-page="reskilling"][data-future-theme] .field select,
+html[data-futureskill-page="reskilling"][data-future-theme] .field textarea,
+html[data-futureskill-page="reskilling"][data-future-theme] .week-bar select {
+  background: var(--fs-surface);
+  border-color: var(--fs-line-strong);
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .field-hint,
+html[data-futureskill-page="reskilling"][data-future-theme] .optional,
+html[data-futureskill-page="reskilling"][data-future-theme] .stat-label,
+html[data-futureskill-page="reskilling"][data-future-theme] .stat-note,
+html[data-futureskill-page="reskilling"][data-future-theme] .muted { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"][data-future-theme] .day-selector label,
+html[data-futureskill-page="reskilling"][data-future-theme] .skill-rating {
+  background: var(--fs-surface);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .day-selector label:has(input:checked) {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .rating-head span,
+html[data-futureskill-page="reskilling"][data-future-theme] .stat-icon {
+  background: var(--fs-mint-soft);
+  color: var(--fs-mint);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .gap-bar,
+html[data-futureskill-page="reskilling"][data-future-theme] .progress-track { background: var(--fs-raised-alt); }
+html[data-futureskill-page="reskilling"][data-future-theme] .gap-current { background: var(--fs-mint); }
+html[data-futureskill-page="reskilling"][data-future-theme] .gap-require { background: var(--fs-amber); }
+html[data-futureskill-page="reskilling"][data-future-theme] .plan-note,
+html[data-futureskill-page="reskilling"][data-future-theme] .day-group,
+html[data-futureskill-page="reskilling"][data-future-theme] .empty-state {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .task-row { border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"][data-future-theme] .task-description,
+html[data-futureskill-page="reskilling"][data-future-theme] .gap-footer,
+html[data-futureskill-page="reskilling"][data-future-theme] .gap-top span { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"][data-future-theme] .task-tag { background: var(--fs-mint-soft); color: var(--fs-mint); }
+html[data-futureskill-page="reskilling"][data-future-theme] .task-tag.review { background: var(--fs-amber-soft); color: var(--fs-amber); }
+html[data-futureskill-page="reskilling"][data-future-theme] .task-photo,
+html[data-futureskill-page="reskilling"][data-future-theme] .win-item { background: var(--fs-mint-soft); border-color: var(--fs-line); color: var(--fs-mint); }
+html[data-futureskill-page="reskilling"][data-future-theme] .tree-card { background: var(--fs-raised); }
+html[data-futureskill-page="reskilling"][data-future-theme] .tree-scene { background: radial-gradient(circle at 50% 73%, var(--fs-mint-soft), var(--fs-raised-alt) 75%); }
+html[data-futureskill-page="reskilling"][data-future-theme] .tree-ground { background: color-mix(in srgb, var(--fs-mint) 52%, var(--fs-raised-alt)); }
+html[data-futureskill-page="reskilling"][data-future-theme] .tree-level span,
+html[data-futureskill-page="reskilling"][data-future-theme] .tree-encouragement,
+html[data-futureskill-page="reskilling"][data-future-theme] .footer-note span:first-child { color: var(--fs-mint); }
+html[data-futureskill-page="reskilling"][data-future-theme] .privacy-tip,
+html[data-futureskill-page="reskilling"][data-future-theme] .footer-note { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"][data-future-theme="dark"] .brand-icon img,
+html[data-futureskill-page="reskilling"][data-future-theme="dark"] .footer-brand img { filter: brightness(1.45); }
+html[data-futureskill-page="reskilling"][data-future-theme] .footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .footer-brand img { width: 18px; height: 18px; }
+html[data-futureskill-page="reskilling"][data-future-theme="dark"] .brand-icon { background: var(--fs-accent-soft); }
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-dialog {
+  background: var(--fs-surface);
+  border-color: var(--fs-line);
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-dialog-header,
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-section,
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-availability li { border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-dialog-header h2,
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-section-heading h3,
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-availability li strong { color: var(--fs-ink); }
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-close,
+html[data-futureskill-page="reskilling"][data-future-theme] .theme-options label span {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .theme-options input:checked + span {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-section-heading p,
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-availability li small { color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"][data-future-theme] .availability-status { background: var(--fs-raised-alt); color: var(--fs-muted); }
+html[data-futureskill-page="reskilling"][data-future-theme] .settings-close {
+  min-width: 42px;
+  min-height: 42px;
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .btn-primary {
+  background: var(--fs-accent);
+  color: var(--fs-on-accent);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .btn-primary:hover { background: var(--fs-accent-hover); }
+html[data-futureskill-page="reskilling"][data-future-theme] .btn-outline {
+  background: var(--fs-raised);
+  border-color: var(--fs-line-strong);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-toggle { background: var(--fs-raised-alt); border-color: var(--fs-line); }
+html[data-futureskill-page="reskilling"][data-future-theme] .workspace-toggle span { background: var(--fs-ink-soft); }
+
+/* SDG drawer controls are quiet secondary actions, not primary blue buttons. */
+html[data-futureskill-page="sdg"][data-future-theme] .mapping-drawer-close {
+  min-height: 42px;
+  padding: 8px 12px;
+  background: var(--fs-raised-alt);
+  border: 1px solid var(--fs-ink-soft);
+  color: var(--fs-ink);
+  font: 700 12px/1.25 "DM Sans", sans-serif;
+}
+html[data-futureskill-page="sdg"][data-future-theme] .mapping-drawer-close:hover {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="sdg"][data-future-theme] .goal-node {
+  background: var(--fs-surface);
+  color: var(--fs-ink);
+  font: 700 10px/1.25 "DM Sans", sans-serif;
+}
+html[data-futureskill-page="sdg"][data-future-theme] .evidence-node {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 7px 6px;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  background: var(--fs-raised-alt);
+  border: 1px solid var(--fs-ink-soft);
+  border-radius: 8px;
+  color: var(--fs-ink);
+  font: 700 10px/1.3 "DM Sans", sans-serif;
+  text-align: center;
+}
+html[data-futureskill-page="sdg"][data-future-theme] .evidence-node.practice { color: var(--fs-amber); }
+html[data-futureskill-page="sdg"][data-future-theme] .evidence-node:hover,
+html[data-futureskill-page="sdg"][data-future-theme] .evidence-node[aria-pressed="true"] {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="sdg"][data-future-theme] .evidence-node.practice:hover,
+html[data-futureskill-page="sdg"][data-future-theme] .evidence-node.practice[aria-pressed="true"] { color: var(--fs-amber); }
+html[data-futureskill-page="sdg"][data-future-theme="dark"] .evidence-stat strong { color: #f0a1ad; }
+html[data-futureskill-page="sdg"][data-future-theme="dark"] .evidence-stat span { color: var(--fs-ink-soft); }
+
+/* The home demo result contains legacy inline color surfaces; keep its content intact. */
+html[data-futureskill-page="home"][data-future-theme="dark"] .career-card[style] {
+  background: var(--fs-raised) !important;
+  border-color: var(--fs-line) !important;
+}
+html[data-futureskill-page="home"][data-future-theme="dark"] #homePage a[style*="color"] {
+  color: var(--fs-accent) !important;
+}
+html[data-futureskill-page="home"][data-future-theme="dark"] .career-card a[style*="background"],
+html[data-futureskill-page="home"][data-future-theme="dark"] .career-card a[style*="cssText"] {
+  background: var(--fs-accent) !important;
+  color: var(--fs-on-accent) !important;
+}
+
+/* Reskilling step control contrast and mobile labels. */
+html[data-futureskill-page="reskilling"] .steps {
+  min-width: 0;
+  max-width: 100%;
+}
+html[data-futureskill-page="reskilling"] .steps .step-label {
+  min-width: 0;
+  flex: 1 1 0;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--fs-ink-soft);
+  border-radius: 10px;
+  background: var(--fs-raised);
+  color: var(--fs-ink-soft);
+  line-height: 1.35;
+  white-space: normal;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+html[data-futureskill-page="reskilling"] .steps .step-label span {
+  display: inline;
+  min-width: 0;
+  color: inherit;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+html[data-futureskill-page="reskilling"] .steps .step-label.active,
+html[data-futureskill-page="reskilling"] .steps .step-label[aria-current="step"] {
+  border-color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  box-shadow: inset 0 0 0 1px var(--fs-accent);
+}
+html[data-futureskill-page="reskilling"] .steps .step-label:hover {
+  border-color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="reskilling"] .steps .step-label:focus-visible {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 3px;
+}
+html[data-futureskill-page="reskilling"] .steps .step-connector {
+  flex: 0 1 18px;
+  min-width: 5px;
+  margin-inline: 5px;
+  background: var(--fs-line-strong);
+}
+@media (max-width: 620px) {
+  html[data-futureskill-page="reskilling"] .steps {
+    align-items: stretch;
+    gap: 5px;
+  }
+  html[data-futureskill-page="reskilling"] .steps .step-label {
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 3px;
+    padding: 8px 7px;
+    font-size: 11px;
+  }
+  html[data-futureskill-page="reskilling"] .steps .step-label span {
+    display: block;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+  html[data-futureskill-page="reskilling"] .steps .step-connector {
+    flex: 0 0 4px;
+    min-width: 4px;
+    margin-inline: 0;
+  }
+}
+
+/* Home assessment: compact, clearly differentiated part and question navigation. */
+html[data-futureskill-page="home"] #assessmentModal,
+html[data-futureskill-page="home"] #assessmentModal * {
+  min-width: 0;
+}
+html[data-futureskill-page="home"] #assessmentModal {
+  max-width: min(780px, 100%);
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-progress {
+  margin: 10px 0 8px;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-progress .progress-background {
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 999px;
+  overflow: hidden;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-progress #progressText {
+  margin: 7px 0 0;
+  color: var(--fs-ink-soft);
+  font-size: 12px;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-part-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin: 10px 0 8px;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-part-nav button,
+html[data-futureskill-page="home"] #assessmentModal #clearAssessmentDraft {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--fs-ink-soft);
+  border-radius: 9px;
+  background: var(--fs-raised-alt);
+  color: var(--fs-ink-soft);
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-part-nav button[aria-current="step"] {
+  border-color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  box-shadow: inset 0 0 0 1px var(--fs-accent);
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-part-nav button:hover,
+html[data-futureskill-page="home"] #assessmentModal #clearAssessmentDraft:hover {
+  border-color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-part-nav button:focus-visible,
+html[data-futureskill-page="home"] #assessmentModal #clearAssessmentDraft:focus-visible,
+html[data-futureskill-page="home"] #assessmentModal .question-jump:focus-visible {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 2px;
+}
+html[data-futureskill-page="home"] #assessmentModal .part-count {
+  color: var(--fs-ink-soft);
+  font-size: 12px;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-progress-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px 10px;
+  margin: 8px 0 11px;
+  padding: 8px 10px;
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 11px;
+  background: var(--fs-raised-alt);
+}
+html[data-futureskill-page="home"] #assessmentModal #assessmentSaveStatus {
+  color: var(--fs-ink-soft);
+  font-size: 12px;
+}
+html[data-futureskill-page="home"] #assessmentModal #clearAssessmentDraft {
+  min-height: 36px;
+  padding: 6px 10px;
+  background: var(--fs-surface);
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav {
+  margin: 9px 0 12px;
+  padding: 0 10px;
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 11px;
+  background: var(--fs-raised-alt);
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  color: var(--fs-accent-ink);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.35;
+  cursor: pointer;
+  list-style: none;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav summary::-webkit-details-marker {
+  display: none;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav summary::after {
+  content: "▾";
+  flex: 0 0 8px;
+  width: 12px;
+  color: currentColor;
+  font-size: 15px;
+  line-height: 1;
+  text-align: center;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav[open] summary::after {
+  content: "▴";
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav summary:focus-visible {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 2px;
+  border-radius: 5px;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav summary #assessmentPartProgress {
+  margin-left: auto;
+  color: var(--fs-ink-soft);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: right;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav:not([open]) #assessmentQuestionButtons,
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav:not([open]) .assessment-nav-legend {
+  display: none;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav[open] {
+  padding: 0 10px 9px;
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav[open] summary {
+  margin-bottom: 5px;
+}
+html[data-futureskill-page="home"] #assessmentModal #assessmentQuestionButtons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+  gap: 5px;
+}
+html[data-futureskill-page="home"] #assessmentModal .question-jump {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 5px;
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 8px;
+  background: var(--fs-surface);
+  color: var(--fs-ink);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+html[data-futureskill-page="home"] #assessmentModal .question-jump .question-nav-mark {
+  color: var(--fs-ink-soft);
+  font-size: 12px;
+  line-height: 1;
+}
+html[data-futureskill-page="home"] #assessmentModal .question-jump[data-question-state="answered"] {
+  border-color: var(--fs-line-strong);
+  background: var(--fs-mint-soft);
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="home"] #assessmentModal .question-jump[data-question-state="answered"] .question-nav-mark {
+  color: var(--fs-mint);
+  font-weight: 800;
+}
+html[data-futureskill-page="home"] #assessmentModal .question-jump[aria-current="true"] {
+  border-color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  box-shadow: inset 0 0 0 1px var(--fs-accent);
+}
+html[data-futureskill-page="home"] #assessmentModal .question-jump[aria-current="true"] .question-nav-mark {
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="home"] #assessmentModal .question-jump[data-invalid="true"] {
+  border-color: var(--fs-danger);
+  border-style: dashed;
+  background: var(--fs-danger-soft);
+  color: var(--fs-danger);
+  box-shadow: inset 0 0 0 1px var(--fs-danger);
+}
+html[data-futureskill-page="home"] #assessmentModal .question-jump:hover {
+  border-color: var(--fs-accent);
+}
+html[data-futureskill-page="home"] #assessmentModal .assessment-nav-legend {
+  margin: 7px 0 0;
+  color: var(--fs-ink-soft);
+  font-size: 11px;
+  line-height: 1.45;
+}
+html[data-futureskill-page="home"] #assessmentModal .question {
+  max-width: 100%;
+  border-color: var(--fs-line-strong);
+  overflow-wrap: anywhere;
+}
+html[data-futureskill-page="home"] #assessmentModal .question[data-invalid="true"] {
+  padding-inline: 10px;
+  border: 1px solid var(--fs-danger);
+  border-radius: 9px;
+  background: var(--fs-danger-soft);
+}
+html[data-futureskill-page="home"] #assessmentModal .question-validation-error {
+  margin: 8px 0 0;
+  color: var(--fs-danger);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+html[data-futureskill-page="home"] #assessmentModal .question:focus {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 3px;
+}
+html[data-futureskill-page="home"] #assessmentModal .question-title {
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="home"] #assessmentModal .question-state {
+  display: inline-block;
+  margin-inline-start: 7px;
+  padding: 3px 7px;
+  border: 1px solid var(--fs-ink-soft);
+  border-radius: 999px;
+  background: var(--fs-raised-alt);
+  color: var(--fs-ink-soft);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.35;
+  vertical-align: middle;
+}
+html[data-futureskill-page="home"] #assessmentModal .answer-option {
+  border-color: var(--fs-ink-soft);
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="home"] #assessmentModal .answer-option:focus-within {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 2px;
+}
+html[data-futureskill-page="home"] #assessmentModal .answer-option:has(input:checked) {
+  border-color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+@media (max-width: 560px) {
+  html[data-futureskill-page="home"] #assessmentModal .assessment-question-nav {
+    padding: 11px;
+  }
+  html[data-futureskill-page="home"] #assessmentModal #assessmentQuestionButtons {
+    grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+    gap: 6px;
+  }
+  html[data-futureskill-page="home"] #assessmentModal .question-jump {
+    flex-direction: row;
+    min-height: 44px;
+  }
+  html[data-futureskill-page="home"] #assessmentModal .question-jump::before,
+  html[data-futureskill-page="home"] #assessmentModal .question-jump::after {
+    display: none;
+  }
+  html[data-futureskill-page="home"] #assessmentModal .assessment-progress-meta {
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en" data-futureskill-page="uncertainty">
+<head>
+  <script src="/static/future-theme.js?v=2"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FutureSkill AI · Uncertainty Lab</title>
+  <style>
+    :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#193331;background:#f4f8f5}
+    *{box-sizing:border-box}body{margin:0}header{background:#123c35;color:#fff;padding:16px max(20px,calc((100vw - 1120px)/2))}
+    header a{color:#d7f3e4;font-weight:700;text-decoration:none}main{max-width:1120px;margin:auto;padding:32px 20px 56px}
+    h1{font-size:clamp(28px,4vw,42px);margin:4px 0 8px}h2{font-size:20px;margin:0 0 13px}
+    p{line-height:1.6}.subtle{color:#667a74}.eyebrow{color:#37815f;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+    .warning{background:#fff5dd;border:1px solid #e8d39a;border-radius:12px;padding:16px;margin:20px 0;color:#5e4b26}
+    .panel{background:#fff;border:1px solid #dce8e1;border-radius:14px;padding:20px;margin:16px 0}
+    .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:16px}
+    label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}select,input[type=number]{font:inherit;width:100%;padding:10px 12px;border:1px solid #cbdcd3;border-radius:9px}
+    input[type=range]{width:100%;accent-color:#358968}.range-value{float:right;color:#277653;font-variant-numeric:tabular-nums}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    button{font:inherit;font-weight:750;border:0;border-radius:9px;padding:11px 15px;background:#17483c;color:white;cursor:pointer}
+    button.secondary{background:#e9f4ec;color:#235c43}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #5db995;outline-offset:2px}
+    #status{min-height:24px;color:#46695a}.results{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .metric{font-size:30px;font-weight:800;color:#287957}.metric-label{font-size:13px;color:#60736e}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px;border-bottom:1px solid #e4ece7}th{color:#547064}
+    .table-wrap{overflow:auto}.empty{color:#667a74;padding:10px 0}
+    @media(max-width:700px){main{padding:24px 15px 42px}.results{grid-template-columns:1fr}.panel{padding:16px}}
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/static/future-theme.css?v=2">
+  <link rel="stylesheet" href="/static/future-pages.css?v=2">
+  <link rel="stylesheet" href="/static/uncertainty-chart.css?v=1">
+</head>
+<body>
+  <header><a href="/">← Back to FutureSkill AI</a></header>
+  <main>
+    <span class="eyebrow">What-if scenarios · prototype model</span>
+    <h1>AI Uncertainty Lab</h1>
+    <p class="subtle">Change assumptions and compare how this simple rule-based model responds.</p>
+    <div class="warning"><strong>These are not employment forecasts.</strong> The imported model uses hand-set coefficients and an illustrative 68.9% starting value. It has not been calibrated against labour-market data. Do not use the outputs as probabilities or career advice.</div>
+
+    <section class="panel" aria-labelledby="controls-title">
+      <h2 id="controls-title">Scenario assumptions</h2>
+      <div class="controls">
+        <div><label for="preset">Starting scenario</label><select id="preset"><option>Loading scenarios…</option></select></div>
+        <div><label for="base_rate">Illustrative starting value (%)</label><input id="base_rate" type="number" min="0" max="100" step="0.1" value="68.9"></div>
+      </div>
+      <div class="controls" id="sliders"></div>
+      <div class="actions">
+        <button id="run" type="button">Run this scenario</button>
+        <button id="compare" class="secondary" type="button">Compare all six scenarios</button>
+      </div>
+      <p id="status" role="status" aria-live="polite">Loading the scenario set…</p>
+    </section>
+
+    <section class="panel employment-output" aria-labelledby="outputs-title">
+      <h2 id="outputs-title">Employment-to-Population Ratio</h2>
+      <p class="output-result-line">2031 illustrative result: <span class="metric" id="lastValue">—</span></p>
+      <p class="metric-label">Output from the scenario formula, not an observed or validated employment rate.</p>
+      <p id="chartScenarioName" class="scenario-chart-name"></p>
+      <div id="employmentChart" class="employment-chart" role="img" aria-label="Illustrative employment-to-population values for 2026–2031" aria-busy="true"></div>
+      <p id="employmentChartStatus" class="chart-status" role="status" aria-live="polite">Loading the scenario chart…</p>
+      <p class="chart-note">Illustrative model outputs only, not forecasts. The percentage axis is zoomed to the scenario values. No validated uncertainty interval is available.</p>
+      <details class="year-values">
+        <summary>Year-by-year values</summary>
+        <div id="yearTable" class="table-wrap"></div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <h2>Occupational growth assumptions</h2>
+      <p class="subtle">These percentages are formula outputs from assumed sensitivity weights, not measured job growth.</p>
+      <div id="jobTable" class="table-wrap"></div>
+    </section>
+
+    <section class="panel" id="comparison" hidden>
+      <h2>Preset comparison</h2>
+      <div id="compareTable" class="table-wrap"></div>
+    </section>
+  </main>
+  <script src="/static/uncertainty-chart.js?v=1"></script>
+  <script>
+    const descriptors = [
+      ["ai_growth", "AI development speed"],
+      ["automation", "Automation intensity"],
+      ["adaptation", "Worker transition capacity"],
+      ["economy", "Economic conditions"],
+      ["alignment", "AI-goal misalignment severity"],
+      ["other_factors", "Other factors (policy, demographics)"]
+    ];
+    const preset = document.getElementById("preset");
+    const sliders = document.getElementById("sliders");
+    const statusNode = document.getElementById("status");
+    let scenarios = [];
+    let defaultBaseRate = 68.9;
+    let latestRun = 0;
+
+    function makeElement(tag, text, parent, className) {
+      const node = document.createElement(tag);
+      if (text !== undefined && text !== null) node.textContent = text;
+      if (className) node.className = className;
+      if (parent) parent.appendChild(node);
+      return node;
+    }
+
+    function buildTable(headers, rows) {
+      const table = document.createElement("table");
+      const head = table.createTHead().insertRow();
+      headers.forEach(text => makeElement("th", text, head));
+      const body = table.createTBody();
+      rows.forEach(values => {
+        const row = body.insertRow();
+        values.forEach(value => makeElement("td", value, row));
+      });
+      return table;
+    }
+
+    function fillSliders(values) {
+      sliders.replaceChildren();
+      descriptors.forEach(([key, label]) => {
+        const box = document.createElement("div");
+        const labelNode = makeElement("label", label, box);
+        labelNode.htmlFor = key;
+        const valueNode = makeElement("span", values[key], labelNode, "range-value");
+        valueNode.id = `${key}_value`;
+        const input = document.createElement("input");
+        input.type = "range";
+        input.id = key;
+        input.min = "0";
+        input.max = "100";
+        input.step = "5";
+        input.value = values[key];
+        input.setAttribute("aria-label", label);
+        input.addEventListener("input", () => {
+          valueNode.textContent = input.value;
+        });
+        box.appendChild(input);
+        sliders.appendChild(box);
+      });
+    }
+
+    function showResult(data, scenarioName = "Adjusted scenario") {
+      const series = data.employment_rate || {};
+      const entries = Object.entries(series);
+      const last = entries[entries.length - 1];
+      document.getElementById("lastValue").textContent = last ? `${last[1].toFixed(2)}%` : "—";
+      window.EmploymentScenarioChart.render(series, scenarioName);
+      document.getElementById("yearTable").replaceChildren(buildTable(
+        ["Year", "Illustrative value (%)"],
+        entries.map(([year, value]) => [year, value.toFixed(2)])
+      ));
+      const jobs = Object.entries(data.occupational_growth || {}).sort((a, b) => b[1] - a[1]);
+      document.getElementById("jobTable").replaceChildren(buildTable(
+        ["Example occupation", "Formula output (%)"],
+        jobs.map(([job, value]) => [job, `${value > 0 ? "+" : ""}${value.toFixed(2)}`])
+      ));
+    }
+
+    async function runScenario() {
+      const requestId = ++latestRun;
+      statusNode.textContent = "Calculating the illustrative scenario…";
+      window.EmploymentScenarioChart.setLoading();
+      const body = Object.fromEntries(descriptors.map(([key]) => [key, Number(document.getElementById(key).value)]));
+      body.base_rate = Number(document.getElementById("base_rate").value);
+      const selected = scenarios.find(item => item.id === preset.value);
+      const adjusted = body.base_rate !== defaultBaseRate ||
+        descriptors.some(([key]) => body[key] !== selected?.inputs[key]);
+      const scenarioName = selected ? `${selected.name}${adjusted ? " · adjusted assumptions" : ""}` : "Adjusted scenario";
+      try {
+        const response = await fetch("/api/uncertainty/simulate", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(body)
+        });
+        const data = await response.json();
+        if (requestId !== latestRun) return;
+        if (!response.ok) throw new Error(data.detail || "Scenario request failed.");
+        showResult(data, scenarioName);
+        statusNode.textContent = data.warning;
+      } catch (error) {
+        if (requestId !== latestRun) return;
+        statusNode.textContent = `Could not run scenario: ${error.message}`;
+        window.EmploymentScenarioChart.setError();
+      }
+    }
+
+    async function compareScenarios() {
+      const panel = document.getElementById("comparison");
+      try {
+        const response = await fetch("/api/uncertainty/scenarios");
+        if (!response.ok) throw new Error("Scenario comparison could not be loaded.");
+        const data = await response.json();
+        const rows = data.scenarios.map(item => {
+          const values = Object.values(item.employment_rate);
+          return [item.id, item.name, `${values[0].toFixed(2)}%`, `${values.at(-1).toFixed(2)}%`];
+        });
+        document.getElementById("compareTable").replaceChildren(buildTable(
+          ["Scenario", "Name", "Starting value", "2031 formula output"],
+          rows
+        ));
+        panel.hidden = false;
+        statusNode.textContent = data.warning;
+      } catch (error) {
+        statusNode.textContent = `Could not compare scenarios: ${error.message}`;
+      }
+    }
+
+    async function start() {
+      try {
+        const response = await fetch("/api/uncertainty/scenarios");
+        if (!response.ok) throw new Error("Scenario data could not be loaded.");
+        const data = await response.json();
+        scenarios = data.scenarios || [];
+        preset.replaceChildren();
+        scenarios.forEach(item => preset.add(new Option(`${item.id} · ${item.name}`, item.id)));
+        document.getElementById("base_rate").value = data.base_rate;
+        defaultBaseRate = data.base_rate;
+        const initial = scenarios[0];
+        if (initial) fillSliders(initial.inputs);
+        preset.addEventListener("change", () => {
+          const selected = scenarios.find(item => item.id === preset.value);
+          if (selected) {
+            fillSliders(selected.inputs);
+            runScenario();
+          }
+        });
+        document.getElementById("run").addEventListener("click", runScenario);
+        document.getElementById("compare").addEventListener("click", compareScenarios);
+        if (initial) showResult(initial, initial.name);
+        statusNode.textContent = data.warning;
+      } catch (error) {
+        statusNode.textContent = `Unable to load scenarios: ${error.message}`;
+        window.EmploymentScenarioChart.setError();
+      }
+    }
+    start();
+  </script>
+</body>
+</html>

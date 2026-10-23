@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FutureSkill AI — Screen inventory and requirements</title>
+<style>
+:root{color-scheme:light;--ink:#182d35;--green:#176349;--line:#d9e3df}*{box-sizing:border-box}body{margin:0;background:#f4f7f5;color:var(--ink);font:16px/1.6 system-ui,sans-serif}header{background:#163f35;color:#fff;padding:48px max(24px,calc((100vw - 1120px)/2))}header p{max-width:850px;color:#dcece6}h1{font-size:36px;line-height:1.2;margin:12px 0}h2{font-size:25px;margin-top:0}h3{font-size:19px}main{max-width:1170px;margin:auto;padding:24px}section{background:white;border:1px solid var(--line);border-radius:12px;padding:28px;margin-bottom:22px}a{color:var(--green)}nav{display:flex;flex-wrap:wrap;gap:10px 22px;margin-bottom:24px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:12px 10px}th{background:#eaf2ee}code{background:#edf2ef;padding:2px 4px;overflow-wrap:anywhere}li{margin:7px 0}.note{border-left:4px solid #c28b2b;background:#fff8e9;padding:14px 18px}.tag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px}.scroll{overflow-x:auto}.flow{background:#edf4f0;padding:18px;border-radius:8px}.muted{color:#53666b}footer{font-size:13px;text-align:center;padding:12px 24px 36px}@media(max-width:650px){header{padding:32px 20px}h1{font-size:29px}main{padding:12px}section{padding:20px}table{min-width:700px}}@media print{body{background:white;font-size:11px}header{background:white;color:#182d35;padding:12px}header p{color:#182d35}main{padding:0;max-width:none}section{border:0;padding:10px 0;break-inside:auto}nav{display:none}table{font-size:10px;min-width:0}tr{break-inside:avoid}a{color:inherit}h2,h3{break-after:avoid}.scroll{overflow:visible}}
+</style>
+</head>
+<body>
+<header>
+<div class="tag">Product baseline · 21 October 2026</div>
+<h1>FutureSkill AI<br>Screen inventory &amp; user requirements</h1>
+<p>A source-based inventory for the imported career assessment and reskilling prototype, with traceable requirements and clearly separated proposals for the next design phase.</p>
+</header>
+<main>
+<nav aria-label="Document sections"><a href="#scope">Scope</a><a href="#users">Users &amp; journeys</a><a href="#screens">Screen inventory</a><a href="#states">Interaction states</a><a href="#requirements">Requirements</a><a href="#fields">Field rules</a><a href="#gaps">Gaps &amp; priorities</a><a href="#handoff">Design handoff</a><a href="#evidence">Evidence</a></nav>
+
+<section id="scope">
+<h2>1. Scope and evidence standard</h2>
+<p><strong>This deliverable:</strong> screen inventory and user requirements. No application code, dependencies, runtime settings, or workflows were changed. No Figma file was supplied or edited.</p>
+<p><strong>Method:</strong> static inspection of the HTML, JavaScript, API, scheduling logic, persistence, README, and existing integration tests. Screens described here were <strong>not rendered or interactively verified</strong>; existing tests were read, not run. “Present in source” is not a claim that a feature has passed testing.</p>
+<ul>
+<li><strong>Observed:</strong> behavior or content directly present in the imported code.</li>
+<li><strong>Gap:</strong> a mismatch or missing capability identified by inspection, requiring confirmation or implementation.</li>
+<li><strong>Proposed:</strong> a recommended future requirement, not a shipped feature or an approved design.</li>
+</ul>
+<div class="note"><strong>Product limits:</strong> this is a rule-based prototype, not a trained AI system, validated career suitability assessment, verified skills test, or employment guarantee. The learning tree is a motivational UI, not evidence of environmental impact.</div>
+<p><strong>Deferred deliverables:</strong> UI changes, Figma editing, fuller system-interface specification, learning-path redesign, SDG mapping, integrated documentation, and pitch deck. This document provides their baseline; it does not claim to complete them.</p>
+</section>
+
+<section id="users">
+<h2>2. Users and core journeys</h2>
+<p><strong>Observed user categories:</strong> student/fresh graduate; currently employed; planning a career change; returning to work or learning. These are profile choices, not different permission roles. No administrator, teacher, employer, or authenticated account interface is present.</p>
+<div class="flow"><strong>Discover a direction:</strong> landing → 24 interest questions → 12 subject questions → 6 broad skill ratings → career results → choose a reskilling link.</div>
+<p class="flow"><strong>Already have a goal:</strong> direct reskilling entry → choose one of five example careers and enter profile → rate specific skills → set schedule → generate pathway.</p>
+<p class="flow"><strong>Continue learning:</strong> return with the same browser-session identity → saved dashboard → select week → complete/reopen a task → add or replace a photo → adjust timetable or edit profile.</p>
+<h3>User needs</h3>
+<ul>
+<li>Explore career directions with understandable reasons rather than promises of success.</li>
+<li>Understand which self-rated skills differ from an illustrative career target.</li>
+<li>Get manageable learning activities that fit available time and study days.</li>
+<li>Record effort and adjust availability without losing completed work.</li>
+<li>Understand what data is saved, who can see it, and the limits of the prototype.</li>
+</ul>
+</section>
+
+<section id="screens">
+<h2>3. Screen inventory</h2>
+<p><strong>Two primary HTML routes, fourteen design frames.</strong> Frames include wizard steps, edit modes, and a photo response; they are not fourteen separate web pages. Dashboard modules should remain components unless a later design explicitly separates them.</p>
+<div class="scroll"><table>
+<thead><tr><th>ID / frame</th><th>Location &amp; entry</th><th>Observed content and actions</th><th>Exit / dependency</th></tr></thead>
+<tbody>
+<tr><td>S01 · Career landing</td><td><code>/</code> · initial view</td><td>Career introduction; 42-question description; three feature cards; Start Career Assessment; direct reskilling link.</td><td>Start → S02; direct link → S06 or S10.</td></tr>
+<tr><td>S02 · Interests</td><td><code>/</code> · assessment modal, part A</td><td>24 questions across six RIASEC dimensions, each rated 1–5; progress; Next; close. Previous disabled on first part.</td><td>All questions required before S03.</td></tr>
+<tr><td>S03 · Subject preferences</td><td><code>/</code> · modal, part B</td><td>12 questions across IT, Math, Education, Health, Business, Engineering; 1–5 preference ratings; Previous/Next.</td><td>Previous → S02; valid Next → S04.</td></tr>
+<tr><td>S04 · Broad skills</td><td><code>/</code> · modal, part C</td><td>Six 1–5 confidence ratings: math, coding, data, communication, leadership, creativity; Get Recommendations.</td><td><code>POST /api/recommend</code> → S05; errors stay in modal.</td></tr>
+<tr><td>S05 · Career results</td><td><code>/</code> · replaces landing in browser</td><td>Top-three RIASEC code and six scores; top-ten career cards with matching index, interest/subject similarities, related fields and explanation; per-career reskilling link; general pathway CTA; retake.</td><td>Career link → <code>/reskilling?career=…</code>; retake resets assessment.</td></tr>
+<tr><td>S06 · About you</td><td><code>/reskilling</code> · no saved profile, step 1</td><td>Hero; user category; optional industry/community; experience; target career; optional personal goal; Continue; optional career bridge notice.</td><td>Catalog and session from <code>GET /api/state</code>; Continue → S07.</td></tr>
+<tr><td>S07 · Specific skills</td><td><code>/reskilling</code> · step 2</td><td>Career-specific skill sliders, 0–5; self-assessment explanation; Back/Continue; step navigation.</td><td>Selected career controls skills; Continue → S08.</td></tr>
+<tr><td>S08 · Your schedule</td><td><code>/reskilling</code> · step 3</td><td>Weekly hours; duration; preferred days; learning style; 20% review-time explanation; Generate my pathway.</td><td><code>POST /api/plan</code> → S10; validation error stays in form.</td></tr>
+<tr><td>S09 · Edit learning profile</td><td><code>/reskilling</code> · dashboard Edit assessment</td><td>Same three-step form prefilled from saved profile; Return to dashboard cancels unsaved edits. Career changes redraw skill inputs.</td><td>Regenerate → S10; cancel → saved S10. Not a separate route.</td></tr>
+<tr><td>S10 · Learning dashboard</td><td><code>/reskilling</code> · saved or newly created profile</td><td>Career/goal heading; four metrics; skill-gap list; weekly plan; completed wins; tree; timetable form; prototype explanations.</td><td>Contains S11–S13; Edit → S09.</td></tr>
+<tr><td>S11 · Weekly task view</td><td>S10 · plan module</td><td>Week selector / all upcoming weeks; date groups; skill, objective, activity, hours, XP; completion checkbox; upload evidence; completed wins with reopen action.</td><td>Status API updates dashboard; upload → S14 link becomes available.</td></tr>
+<tr><td>S12 · Growth feedback</td><td>S10 · learning-tree module</td><td>Tree stage, total XP, progress to next stage, encouragement; toast and animation following completion.</td><td>XP is derived from completed tasks; reopening can reduce it.</td></tr>
+<tr><td>S13 · Adjust timetable</td><td>S10 · sidebar form</td><td>Hours/week; weeks from today; preferred days; Rebuild my timetable. No separate scheduling page.</td><td><code>POST /api/replan</code>; completed work retained, unfinished tasks replaced.</td></tr>
+<tr><td>S14 · Photo evidence view</td><td><code>/api/tasks/{task_id}/proof</code> · opens new tab</td><td>Raw private image response for a task owned by the current session; not a custom gallery or verification screen.</td><td>Browser close/back returns to dashboard; unavailable or foreign image → error response.</td></tr>
+</tbody></table></div>
+<h3>Reusable dashboard components</h3>
+<p>Metric card; skill-gap item; progress bar; week selector; day group; pending task row; completed-win row; evidence upload/link; tree-stage card; day picker; timetable form; clarification card; toast. Shared form controls and typography should be specified across both page families in later UI work.</p>
+</section>
+
+<section id="states">
+<h2>4. Required interaction states</h2>
+<div class="scroll"><table>
+<thead><tr><th>Area</th><th>Present in source</th><th>Gap / proposed acceptance criterion</th></tr></thead>
+<tbody>
+<tr><td>Assessment</td><td>Unanswered/selected options; per-part incomplete error; progress; submitting label “Calculating…” with disabled button; request error.</td><td>Verify keyboard focus on open/close, Escape behavior, focus trap, and screen-reader progress. Do not assume dialog semantics alone make it accessible.</td></tr>
+<tr><td>Results</td><td>Results replace landing after a successful response; retake clears answers; current answers/results are held in JavaScript memory.</td><td>Decide whether refresh recovery is required. No saved assessment history is observed.</td></tr>
+<tr><td>Career bridge</td><td>First-time visitors get mapped-career notice or unsupported-role explanation; only explicit mappings are used.</td><td>Returning users with a saved profile bypass bridge handling. Show requested versus saved career and let the user retain or deliberately switch.</td></tr>
+<tr><td>Initial state fetch</td><td>Questionnaire/dashboard selected after <code>/api/state</code>; failure shows questionnaire and an error toast.</td><td>Add a loading state and persistent retry action; prevent submission with a missing catalog/session rather than leaving a partially usable form.</td></tr>
+<tr><td>Plan generation / edit</td><td>Submit disabled while pending; form error and toast on failure; successful dashboard; cancel edit restores saved view.</td><td>Explain replacement of unfinished tasks and possible photo removal before regeneration; validate earlier or clearly summarize field errors at final submission.</td></tr>
+<tr><td>No skill gaps</td><td>All self-ratings meeting targets can produce no tasks and an empty-state message.</td><td>Distinguish “no practice scheduled because ratings meet example targets” from “all planned tasks completed”; offer reassessment, not a mastery claim.</td></tr>
+<tr><td>Insufficient schedule</td><td>Plan note warns that selected weeks may not cover estimated practice.</td><td>Keep remaining work visible; never present partial coverage as complete readiness.</td></tr>
+<tr><td>Task completion</td><td>Checkbox disabled during request; rollback on error; success rerenders metrics/tree and shows toast.</td><td>Verify no double XP for repeated completion; reopening removes derived credit and places task back into upcoming work.</td></tr>
+<tr><td>Evidence</td><td>No photo / uploaded photo; add or replace; invalid type/size error; input disabled during upload; view link on success.</td><td>No standalone delete-photo action or upload-progress view is observed. Proposed: user-controlled deletion and clear failure/retry behavior.</td></tr>
+<tr><td>Timetable change</td><td>Invalid schedule error; success updates plan and scrolls to it; completed tasks retained.</td><td>No pending submit lock is present. Prevent duplicate submissions and explain that photos on replaced unfinished tasks are removed.</td></tr>
+<tr><td>Completed wins</td><td>Empty message or latest fourteen completed tasks; reopen and photo actions.</td><td>Older completions are not all reachable from this list. Decide on a full history view or pagination.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="requirements">
+<h2>5. User requirements and acceptance criteria</h2>
+<p>These are baseline requirements inferred from the existing product, not newly confirmed stakeholder requirements. <strong>B</strong> = preserve baseline; <strong>P</strong> = proposed enhancement; <strong>L</strong> = public-launch prerequisite.</p>
+<div class="scroll"><table>
+<thead><tr><th>ID / priority</th><th>User requirement</th><th>Acceptance criterion</th><th>Screen / evidence</th></tr></thead>
+<tbody>
+<tr><td>UR01 · B</td><td>As a learner, I can explore careers without already knowing my target.</td><td>Complete 24 + 12 + 6 ratings; each part blocks incomplete progression; success displays top-ten recommendations and explanations; errors allow retry.</td><td>S01–S05 · assessment HTML, recommendation API</td></tr>
+<tr><td>UR02 · B</td><td>I can understand the limits of my career results.</td><td>Results identify indices as experimental, not validated success probabilities; broad confidence ratings are not treated as occupational mastery.</td><td>S04–S05 · HTML, scoring and career engine</td></tr>
+<tr><td>UR03 · B/P</td><td>I can move from a career recommendation to a relevant, honest pathway choice.</td><td>Exact supported titles or explicit aliases select the correct example template; unsupported occupations are not silently assigned a false roadmap. Proposed: returning learners receive a deliberate keep/switch choice.</td><td>S05–S06 · reskilling JavaScript</td></tr>
+<tr><td>UR04 · B</td><td>I can start directly with a known goal.</td><td>Direct reskilling entry works independently of assessment results; select from five supported example roles and supply a valid profile.</td><td>S06 · catalog, profile validation</td></tr>
+<tr><td>UR05 · B</td><td>I can rate the actual skills relevant to the selected example role.</td><td>Each catalog skill has a 0–5 rating; gap is nonnegative target minus current rating; importance influences priority; self-ratings are labeled unverified.</td><td>S07, S10 · catalog and gap engine</td></tr>
+<tr><td>UR06 · B</td><td>I can receive a plan that fits my available time.</td><td>Validate 1–40 weekly hours, 1–52 weeks and at least one valid study day; reserve 20% of budget for review; schedule foundations before dependent practice; show remaining unscheduled work.</td><td>S08, S10–S11 · schedule engine</td></tr>
+<tr><td>UR07 · B</td><td>I can see exactly what to do next.</td><td>Tasks expose skill, date, objective, suggested activity, estimated hours and XP; filter by available week or all upcoming weeks.</td><td>S11 · task renderer</td></tr>
+<tr><td>UR08 · B</td><td>I can record and correct my progress.</td><td>Complete or reopen an owned task; metrics and XP follow saved task state; failed updates restore checkbox state; practice completion does not increase self-rated proficiency automatically.</td><td>S10–S12 · status API and renderer</td></tr>
+<tr><td>UR09 · B/P</td><td>I can attach learning evidence without implying it is graded.</td><td>Accept one JPG/PNG/WEBP photo per task up to the server's 5 MiB limit; replace earlier photo; restrict access to the owning session; state that evidence is not automatically graded. Proposed: deletion control and consent copy.</td><td>S11, S14 · photo API</td></tr>
+<tr><td>UR10 · B</td><td>I can adjust availability without losing completed effort.</td><td>Replanning changes only scheduling options, starts from current date, preserves completed task records and XP, and regenerates unfinished work from remaining estimated practice.</td><td>S13 · replan API and storage</td></tr>
+<tr><td>UR11 · B/P</td><td>I can revise my goal and skills intentionally.</td><td>Edit opens saved values; cancel makes no saved changes; career changes request a new skill self-assessment. Proposed: explain how regeneration affects unfinished work and evidence.</td><td>S09 · form, plan API and storage</td></tr>
+<tr><td>UR12 · B</td><td>I receive encouraging, honest feedback.</td><td>Tree stages use XP thresholds 0, 10, 35, 80, 150, 250; no time-based inactivity penalty; XP reflects completion state across stored careers, not verified competence or environmental impact.</td><td>S12 · tree engine and public state</td></tr>
+<tr><td>UR13 · P</td><td>I can use the product on a phone and with a keyboard or assistive technology.</td><td>Target WCAG 2.2 AA; visible focus; accessible dialog behavior; named controls; announced errors/progress; text alongside colors; no horizontal page scrolling at narrow widths; touch-friendly controls. Verify, do not infer from CSS.</td><td>All screens · future accessibility review</td></tr>
+<tr><td>UR14 · P</td><td>I can recover from a server or session problem.</td><td>Loading/error/retry states are explicit; entered values survive recoverable failures; session/CSRF failures explain refresh or recovery without pretending an account exists.</td><td>S02–S13 · future error-state work</td></tr>
+<tr><td>UR15 · L</td><td>I control my learning and photo data before public use.</td><td>Define consent, retention and deletion; secure identity/recovery, HTTPS and secure cookies; rate limits; decoded/transcoded image validation; durable private storage and backup policy; verify cross-user isolation.</td><td>Public-launch work, not current capability</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="fields">
+<h2>6. Field and data rules</h2>
+<div class="scroll"><table>
+<thead><tr><th>Input / data</th><th>Observed rule</th><th>Design implication</th></tr></thead>
+<tbody>
+<tr><td>Career assessment</td><td>RIASEC: six dimensions × four answers. Subjects: six categories × two answers. Skills: six values. Integer scale 1–5.</td><td>Keep “interest/preference” and “confidence” scale meanings distinct; retain 42-question count unless scope changes.</td></tr>
+<tr><td>Target career</td><td>Data Analyst; Software Developer; Cybersecurity Analyst; UI/UX Designer; Digital Marketing Specialist.</td><td>Five illustrative templates do not cover the entire recommendation dataset.</td></tr>
+<tr><td>Career aliases</td><td>Software Developers → Software Developer; Information Security Analysts → Cybersecurity Analyst. Exact template matches are case-insensitive; aliases are explicitly keyed.</td><td>Do not infer mappings for other occupations or claim automatic coverage.</td></tr>
+<tr><td>Profile</td><td>Four user categories; three experience levels; industry/community optional, 80 characters; goal optional, 200 characters. Backend trims/truncates these strings.</td><td>Display field labels and limits; profile category is not an access role.</td></tr>
+<tr><td>Specific skills</td><td>All selected-role skills required on the server; numeric 0–5. UI sliders default to 0 and use integer steps.</td><td>Zero is a default, not evidence that the learner deliberately rated every skill; consider explicit confirmation later.</td></tr>
+<tr><td>Study schedule</td><td>Hours 1–40; new-plan slider uses whole hours, replan input uses 0.5 steps; duration 1–52; nonempty, valid, unique days; default 6 hours, 8 weeks, Tue/Thu/Sat.</td><td>Decide whether half-hour precision should be consistent across create/edit/replan.</td></tr>
+<tr><td>Learning preference</td><td>Hands-on projects; video + practice; reading + practice. Experience and preference alter generic activity wording.</td><td>No personalized course-provider search or verified course recommendation system is present.</td></tr>
+<tr><td>Progress</td><td>Learning practice hours versus estimated practice need; task count includes learning and review. Tree XP spans stored completed tasks across careers.</td><td>Label active-pathway metrics versus cumulative XP; never equate hours, uploads or XP with proven mastery.</td></tr>
+<tr><td>Evidence</td><td>One photo per task; replacement deletes old file. Server limit 5 × 1024 × 1024 bytes; type/signature checks, not full image decoding.</td><td>Current “smaller than 5 MB” copy is less precise than server behavior. Public handling requires stronger processing.</td></tr>
+<tr><td>Persistence and identity</td><td>Profile/tasks in local SQLite; photos local; signed browser cookie identifies anonymous session. Assessment answers/results remain in page memory.</td><td>No account recovery, cross-device sync, or export/delete UI is observed. Losing the cookie can orphan access to local data.</td></tr>
+<tr><td>Regeneration</td><td>Completed tasks remain; unfinished tasks are replaced across stored careers; associated removed photos are deleted. Active dashboard filters by selected career.</td><td>Explain the effect before applying changes; do not describe replanning as merely moving existing task dates.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="gaps">
+<h2>7. Gaps and recommended priorities</h2>
+<ol>
+<li><strong>High — returning-user career handoff.</strong> Query handling sits inside the “no saved profile” condition. A nested saved-profile switching branch is therefore unreachable. A recommendation link can leave a returning learner on the prior pathway without explaining the new target. Proposed: explicit keep/switch choice with skill reassessment before saving.</li>
+<li><strong>High — explain data replacement.</strong> Regeneration removes unfinished task records and their evidence. Proposed: a clear impact notice and deliberate confirmation before replacing work.</li>
+<li><strong>High before public launch — privacy and identity.</strong> The README explicitly warns against public deployment as-is. Retention/deletion, account recovery, secure cookies, stronger uploads, rate limiting and durable private storage remain launch requirements.</li>
+<li><strong>Medium — startup and error recovery.</strong> Catalog/session load failure has a short-lived toast but no explicit retry control. Proposed: persistent error panel and disabled dependent actions.</li>
+<li><strong>Medium — empty state accuracy.</strong> No-gap profiles can be shown a congratulatory “all tasks completed” message despite never having tasks. Separate “no gaps by self-rating” from “completed schedule.”</li>
+<li><strong>Medium — consistent interface and accessibility.</strong> Two page families use separate styling. Responsive CSS exists, but keyboard, screen-reader, contrast, touch and rendered layout checks remain unverified.</li>
+<li><strong>Medium — progress history.</strong> Only fourteen recent completed wins are rendered. A full history and evidence deletion are not available in the current UI.</li>
+</ol>
+<p><strong>Not included in this baseline:</strong> labor-market forecasting, automatically graded photos, certifications, external learning-provider integrations, teacher/admin consoles, payments, or measured SDG outcomes. These must not be presented as implemented.</p>
+</section>
+
+<section id="handoff">
+<h2>8. Handoff to design and later deliverables</h2>
+<h3>Suggested Figma structure — proposal only</h3>
+<ul>
+<li><strong>00 · Baseline:</strong> inventory IDs S01–S14, journey flows, evidence limits, and glossary.</li>
+<li><strong>01 · Components:</strong> typography, colors, buttons, ratings, form controls, task rows, gap bars, metric cards, tree card, notices, toast.</li>
+<li><strong>02 · Career discovery:</strong> S01–S05, including incomplete, submitting and failed-request variants.</li>
+<li><strong>03 · Reskilling:</strong> S06–S14; new/returning learner; supported/unsupported career; empty/partial/completed plan; edit/cancel; photo errors.</li>
+<li><strong>04 · Responsive &amp; accessibility:</strong> representative frames at 390 px, 768 px and 1440 px; keyboard order, focus, labels and announcements.</li>
+</ul>
+<h3>Decisions still needed before broader work</h3>
+<ul>
+<li>Is the next release a classroom/local demo or intended for real public learners?</li>
+<li>Which learner group and primary journey should the redesign prioritize?</li>
+<li>Is there an existing Figma file, editable link, design system or branding to preserve?</li>
+<li>Which institution/project rubric, document format and pitch audience apply?</li>
+<li>For SDG mapping, which features are intended contributions and which outcomes will actually be measured? Do not infer impact from the learning-tree graphic.</li>
+</ul>
+<p>SDG mapping and the pitch deck should reference approved requirements and evidence from this baseline, while labeling illustrative targets, proposed features and unmeasured outcomes honestly.</p>
+</section>
+
+<section id="evidence">
+<h2>9. Source traceability and verification boundary</h2>
+<div class="scroll"><table>
+<thead><tr><th>Source</th><th>Used for</th></tr></thead>
+<tbody>
+<tr><td><code>README.md</code></td><td>Product intent, architecture, prototype limits and public-launch warning.</td></tr>
+<tr><td><code>static/index.html</code></td><td>S01–S05; question counts, navigation, validation, loading/error handling, result presentation and career links.</td></tr>
+<tr><td><code>app.py</code>, <code>assessment_scoring.py</code>, <code>career_engine.py</code></td><td>Recommendation request/response, assessment scales and separation of assessment scoring from career matching.</td></tr>
+<tr><td><code>reskilling/index.html</code>, <code>reskilling/static/app.js</code>, <code>reskilling/static/style.css</code></td><td>S06–S13; field controls, dashboard state, career bridge, task/evidence actions, responsive rules.</td></tr>
+<tr><td><code>reskilling/catalog.py</code>, <code>reskilling/engine.py</code></td><td>Five templates, skill targets, input rules, scheduling, priority, review time and tree stages.</td></tr>
+<tr><td><code>reskilling/api.py</code>, <code>reskilling/storage.py</code></td><td>Session ownership, API boundaries, local persistence, photo restrictions and task replacement behavior.</td></tr>
+<tr><td><code>tests/test_integration.py</code></td><td>Existing checks describe pages/assets, recommendation response and a pathway journey including completion, photo upload, replan and cross-session denial. Read only; no passing result asserted.</td></tr>
+</tbody></table></div>
+<p><strong>Recommended verification when implementation begins:</strong> run existing integration checks, then add browser-level checks for assessment progression, returning-user career handoff, cancel/edit behavior, no-gap and partial-plan states, complete/reopen, upload/replace/delete policy, duplicate replans, refresh/recovery, and keyboard/mobile accessibility.</p>
+<p class="muted">Document status: source-based baseline ready for stakeholder review. No runtime or visual verification of the application was performed as part of this documentation-only deliverable.</p>
+</section>
+</main>
+<footer>FutureSkill AI · Screen inventory and requirements · Standalone document; no external assets or scripts</footer>
+</body>
+</html>
