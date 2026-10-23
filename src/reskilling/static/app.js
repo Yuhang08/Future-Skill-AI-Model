@@ -629,13 +629,106 @@ async function init() {
   try {
     const response=await api('/api/state');
     csrf = response.csrf;
-    const targetSelect=$('targetCareer');
-    targetSelect.innerHTML = Object.entries(response.catalog).map(([name,career])=>
-      `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+
+
+    const targetSelect = $('targetCareer');
+    const searchInput = $('careerSearch');
+    const careerCount = $('careerCount');
+
+    // Load and sort all careers A-Z
+    const allCareers = Object.keys(response.catalog).sort(
+        (a, b) => a.localeCompare(b, 'en', {
+            sensitivity: 'base'
+        })
+    );
+
+    let selectedCareer = "";
+
+    // Render matching career options
+    function renderCareerOptions(keyword = "") {
+        const matches = allCareers.filter(name =>
+            name.toLowerCase().includes(
+                keyword.trim().toLowerCase()
+            )
+        );
+
+        targetSelect.replaceChildren();
+
+        matches.forEach(name => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            targetSelect.appendChild(option);
+        });
+
+        // Keep existing selection if it is still visible
+        if (selectedCareer && matches.includes(selectedCareer)) {
+            targetSelect.value = selectedCareer;
+        } else {
+            targetSelect.selectedIndex = -1;
+        }
+
+        targetSelect.style.display =
+            matches.length > 0 ? 'block' : 'none';
+
+        careerCount.textContent =
+            `${matches.length} matching / ${allCareers.length} careers`;
+    }
+
+    // Confirm the selected career
+    function confirmCareer() {
+        const career = targetSelect.value;
+
+        if (!career) return;
+
+        selectedCareer = career;
+        searchInput.value = career;
+
+        // Restore all options so saved profiles still work
+        renderCareerOptions("");
+        targetSelect.value = career;
+
+        // Hide the list after selection
+        targetSelect.style.display = 'none';
+
+        careerCount.textContent =
+            `Selected: ${career} · ${allCareers.length} careers`;
+    }
+
+    // Populate options, but hide initially
+    renderCareerOptions("");
+    targetSelect.style.display = 'none';
+
+    // Show options when user focuses the search field
+    searchInput.addEventListener('focus', () => {
+        const keyword =
+            searchInput.value === selectedCareer
+                ? ""
+                : searchInput.value;
+
+        renderCareerOptions(keyword);
+        searchInput.select();
+    });
+
+    // Filter while typing
+    searchInput.addEventListener('input', () => {
+        renderCareerOptions(searchInput.value);
+    });
+
+    // Confirm using mouse or keyboard selection
+    targetSelect.addEventListener('change', confirmCareer);
+
     showApp(response);
     showCareerBridge(response, pageParams.get('career'));
+
+    // Synchronize the selected career
+    selectedCareer = targetSelect.value;
+    searchInput.value = selectedCareer;
+    targetSelect.style.display = 'none';
+
     updateSdgNavLink();
     openInventoryScreen(pageParams.get('screen'));
+
   } catch(error) {
     $('questionnaire').hidden=false;
     toast(`Cannot reach the Python server: ${error.message}`,true);

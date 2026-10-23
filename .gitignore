@@ -38,3 +38,6 @@ attached_assets/
 zipFile.zip
 /generated-artifacts/
 /artifacts/mockup-sandbox-preview/dist/
+
+# Temporary local integration backups
+.integration_backup/
