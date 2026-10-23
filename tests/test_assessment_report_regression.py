@@ -55,7 +55,11 @@ class AssessmentReportRegressionTests(unittest.TestCase):
             with self.subTest(profile=name):
                 response = self.client.post("/api/recommend", json=payload_for(name))
                 self.assertEqual(response.status_code, 200)
-                canonical = json.dumps(response.json(), sort_keys=True, separators=(",", ":"))
+                legacy_contract = response.json()
+                for career in legacy_contract["recommendations"]:
+                    for additive_key in ("id", "pathway_career", "pathway_status"):
+                        career.pop(additive_key, None)
+                canonical = json.dumps(legacy_contract, sort_keys=True, separators=(",", ":"))
                 self.assertEqual(hashlib.sha256(canonical.encode()).hexdigest(), expected)
 
     def test_broad_confidence_is_not_a_career_ranking_input(self):
@@ -73,6 +77,38 @@ class AssessmentReportRegressionTests(unittest.TestCase):
             self.assertEqual(result["top3"], "RIA")
             self.assertEqual({row["interest_index"] for row in result["recommendations"]}, {50.0})
             self.assertEqual(len(set(result["riasec_scores"].values())), 1)
+
+    def test_catalogue_ids_are_additive_and_resolve_to_canonical_profiles(self):
+        catalogue = self.client.get("/api/careers", params={"q": "software", "limit": 5})
+        self.assertEqual(catalogue.status_code, 200)
+        self.assertGreater(catalogue.json()["total"], 0)
+        career = catalogue.json()["results"][0]
+        self.assertRegex(career["id"], r"^\d{2}-\d{4}\.\d{2}$")
+        detail = self.client.get(f"/api/careers/{career['id']}")
+        self.assertEqual(detail.status_code, 200)
+        self.assertEqual(detail.json()["title"], career["title"])
+        self.assertTrue(detail.json()["profile_url"].startswith("https://www.onetonline.org/"))
+        self.assertIsInstance(detail.json()["pathway"]["available"], bool)
+        self.assertTrue(detail.json()["pathway"]["status"])
+        self.assertEqual(self.client.get("/api/careers/invalid").status_code, 404)
+        for route in (
+            "/career-overview",
+            "/careers",
+            "/my-profile",
+            "/compare?ids=15-1252.00,15-1253.00",
+            f"/career/{career['id']}",
+        ):
+            with self.subTest(route=route):
+                self.assertEqual(self.client.get(route).status_code, 200)
+
+    def test_recommendation_order_and_titles_resolve_through_additive_catalogue_ids(self):
+        result = self.client.post("/api/recommend", json=payload_for("differentiated")).json()
+        self.assertGreater(len(result["recommendations"]), 0)
+        first = result["recommendations"][0]
+        self.assertRegex(first["id"], r"^\d{2}-\d{4}\.\d{2}$")
+        detail = self.client.get(f"/api/careers/{first['id']}")
+        self.assertEqual(detail.status_code, 200)
+        self.assertEqual(detail.json()["title"], first["title"])
 
     def test_invalid_assessment_still_rejected(self):
         base = payload_for("equal-high")

@@ -168,7 +168,7 @@
       dialog.addEventListener("close", () => settingsButton.focus());
     }
     const i18nScript = document.createElement("script");
-    i18nScript.src = "/static/future-i18n.js?v=3";
+    i18nScript.src = "/static/future-i18n.js?v=4";
     i18nScript.async = true;
     document.head.appendChild(i18nScript);
     updateControls();

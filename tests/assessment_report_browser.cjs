@@ -129,10 +129,10 @@ async function contrast() {
       const recommendationRequest = requests.filter(req => req.url.endsWith("/api/recommend")).at(-1);
       const response = await send("Network.getResponseBody", { requestId: recommendationRequest.id });
       const actual = JSON.parse(response.body);
-      const headings = await evaluate("[...document.querySelectorAll('#careerResults > .career-card > h3')].map(el=>el.textContent)");
-      assert.deepEqual(headings, actual.recommendations.map((career, index) => `${index+1}. ${career.title}`));
-      const cardValues = await evaluate("[...document.querySelectorAll('#careerResults .match-score')].map(el=>el.textContent)");
-      assert.deepEqual(cardValues, actual.recommendations.map(career => `Match Index: ${career.match_index.toFixed(2)}`));
+      const headings = await evaluate("[...document.querySelectorAll('#careerResults .career-result-card .career-option-title')].map(el=>el.textContent)");
+      assert.deepEqual(headings, actual.recommendations.map(career => career.title));
+      const cardValues = await evaluate("[...document.querySelectorAll('#careerResults .career-result-card')].map(card=>Number(card.querySelector('.career-index-list dd:last-child').textContent))");
+      assert.deepEqual(cardValues, actual.recommendations.map(career => career.match_index));
       assert.equal(await evaluate("[...document.querySelectorAll('#results a[href^=\"/reskilling\"]')].every(el=>el.href.includes('demo=1'))"), true);
       console.log(`PASS browser: ${scenario}, exact scores, real recommendation order, sources, activities, isolated drafts`);
     }
@@ -205,6 +205,41 @@ async function contrast() {
     await wait("location.pathname==='/reskilling' && typeof setSteps==='function'");
     assert.equal(await evaluate("new URLSearchParams(location.search).get('demo')"), "1");
     console.log("PASS browser: real recommendation opens isolated reskilling flow");
+
+    const postsBeforeBrowsing = requests.filter(request => request.method !== "GET").length;
+    await metrics(1440);
+    await go("/careers");
+    await wait("document.querySelectorAll('.career-catalog-item').length > 0");
+    const searchInput = "document.querySelector('.career-search-form input[type=search]')";
+    await evaluate(`${searchInput}.value='Software';document.querySelector('.career-search-form').requestSubmit()`);
+    await wait("document.getElementById('careerWorkspaceContent').textContent.includes('Software Developers')");
+    const englishWorkspace = await evaluate("document.getElementById('careerWorkspaceMain').textContent");
+    await evaluate("FutureSkillI18n.setLanguage('zh-CN')");
+    await wait("document.documentElement.lang==='zh-CN'");
+    const chineseWorkspace = await evaluate("document.getElementById('careerWorkspaceMain').textContent");
+    assert.notEqual(chineseWorkspace, englishWorkspace, "career workspace follows the selected language");
+    await evaluate("FutureSkillI18n.setLanguage('ms')");
+    await wait("document.documentElement.lang==='ms'");
+    await evaluate("FutureSkillI18n.setLanguage('en')");
+    await wait("document.documentElement.lang==='en'");
+    await go("/career/15-1252.00");
+    await wait("document.getElementById('careerWorkspaceContent').textContent.includes('Software Developers')");
+    assert.ok(await evaluate("document.querySelectorAll('#careerWorkspaceContent a[href*=\"onetonline.org\"]').length > 0"));
+    assert.ok(await evaluate("document.getElementById('careerWorkspaceContent').textContent.includes('illustrative')"));
+    await go("/compare?ids=15-1252.00,15-1253.00");
+    await wait("document.querySelectorAll('.career-compare-table tbody tr').length > 0");
+    const compareText = await evaluate("document.querySelector('.career-compare-table').textContent");
+    assert.match(compareText, /Software Developers/);
+    assert.match(compareText, /Software Quality Assurance Analysts and Testers/);
+    await metrics(390);
+    await evaluate("FutureSkillTheme.setPreference('dark')");
+    await pause(350);
+    assert.equal(await evaluate("document.documentElement.scrollWidth<=innerWidth+2"), true);
+    await screenshot("390-dark-career-compare");
+    assert.equal(requests.filter(request => request.method !== "GET").length, postsBeforeBrowsing,
+      "career browsing and comparison do not submit or change a learner plan");
+    console.log("PASS browser: search, detail, comparison, zh/ms/en switching, mobile dark layout and no learner-data writes");
+
     assert.deepEqual(exceptions, [], "no uncaught browser exceptions");
     console.log("All results browser checks passed; screenshots in /tmp/future-report-*.png. No actual LLM calls made.");
   } finally {

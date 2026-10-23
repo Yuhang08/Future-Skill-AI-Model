@@ -64,7 +64,7 @@
       names.forEach((name, index) => {
         const value = match[index + 1];
         let replacement = value;
-        if (["area", "areas", "subjects", "subject", "skills", "lowSkills", "ties", "first", "second", "question1", "question2"].includes(name)) {
+        if (["area", "areas", "subjects", "subject", "skills", "lowSkills", "ties", "fields", "first", "second", "question1", "question2"].includes(name)) {
           replacement = value.split(", ").map(item => {
             const scored = /^(.*?)(\s+\(\d+\))$/.exec(item);
             const label = scored ? scored[1] : item;

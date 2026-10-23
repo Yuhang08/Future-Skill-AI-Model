@@ -8,12 +8,15 @@ html[data-futureskill-page="home"] .assessment-report {
 }
 html[data-futureskill-page="home"] .report-demo-control[hidden] { display: none; }
 html[data-futureskill-page="home"] .report-code {
-  display: flex; align-items: center; gap: 16px; margin: 14px 0;
-  color: var(--fs-ink-soft); font-size: 13px;
+  display: grid; justify-items: center; gap: 10px; margin: 18px 0 20px;
+  color: var(--fs-ink-soft); font-size: 13px; text-align: center;
 }
 html[data-futureskill-page="home"] .report-code strong {
-  padding: 6px 12px; border-radius: 8px; background: var(--fs-accent-soft);
-  color: var(--fs-accent-ink); font: 700 22px "Space Mono", monospace;
+  display: inline-flex; min-width: 220px; min-height: 88px; align-items: center; justify-content: center;
+  padding: 10px 22px; border: 1px solid var(--fs-line); border-radius: 18px;
+  background: linear-gradient(135deg, var(--fs-accent-soft), var(--fs-mint-soft));
+  color: var(--fs-accent-ink); font: 800 clamp(38px, 7vw, 60px)/1 "Space Mono", monospace;
+  letter-spacing: .04em; box-shadow: var(--fs-shadow-small);
 }
 html[data-futureskill-page="home"] .report-jump-links {
   display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px;
@@ -92,8 +95,13 @@ html[data-futureskill-page="home"] .report-ai-notice {
   font-size: 13px;
 }
 html[data-futureskill-page="home"] .report-section > .report-intro { margin-bottom: 17px; }
-html[data-futureskill-page="home"] .report-interest-list,
-html[data-futureskill-page="home"] .report-list { display: grid; gap: 10px; }
+html[data-futureskill-page="home"] .report-interest-list {
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px;
+}
+html[data-futureskill-page="home"] #report-subjects .report-list,
+html[data-futureskill-page="home"] #report-confidence .report-list {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
+}
 html[data-futureskill-page="home"] .report-interest,
 html[data-futureskill-page="home"] .report-row {
   min-width: 0;
@@ -103,24 +111,37 @@ html[data-futureskill-page="home"] .report-row {
   background: var(--fs-surface);
 }
 html[data-futureskill-page="home"] .report-interest-head {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 12px;
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  text-align: center;
 }
 html[data-futureskill-page="home"] .report-type-icon {
   display: grid;
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+   width: 30px;
+   height: 30px;
+   flex: 0 0 30px;
   place-items: center;
   border: 1px solid var(--fs-line-strong);
-  border-radius: 10px;
+   border-radius: 9px;
   background: var(--fs-accent-soft);
   color: var(--fs-accent-ink);
-  font: 700 15px "Space Mono", monospace;
+   font: 700 13px "Space Mono", monospace;
 }
-html[data-futureskill-page="home"] .report-interest-head h3 { margin: 0; }
+html[data-futureskill-page="home"] .report-interest-head h3 { margin: 0; font-size: 13px; }
+html[data-futureskill-page="home"] .report-interest .report-activity {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-height: 2.7em;
+  font-size: 11px;
+  line-height: 1.35;
+}
+html[data-futureskill-page="home"] .report-interest .report-meter-label { display: none; }
+html[data-futureskill-page="home"] .report-interest .report-meter-heading { justify-content: center; }
+html[data-futureskill-page="home"] .report-interest .report-meter-value { font-size: 12px; }
 html[data-futureskill-page="home"] .report-activity,
 html[data-futureskill-page="home"] .report-question,
 html[data-futureskill-page="home"] .report-evidence {
@@ -222,10 +243,18 @@ html[data-futureskill-page="home"] .report-demo-control select { min-height: 42p
 html[data-futureskill-page="home"] .report-demo-status { flex-basis: 100%; margin: 0; font-size: 13px; }
 @media (max-width: 700px) {
   html[data-futureskill-page="home"] .report-summary-grid { grid-template-columns: 1fr; }
+  html[data-futureskill-page="home"] .report-interest-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  html[data-futureskill-page="home"] #report-subjects .report-list,
+  html[data-futureskill-page="home"] #report-confidence .report-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   html[data-futureskill-page="home"] .report-actions { flex-direction: column; align-items: stretch; }
   html[data-futureskill-page="home"] .report-button,
   html[data-futureskill-page="home"] .report-pathway { width: 100%; }
   html[data-futureskill-page="home"] .report-careers-link { width: 100%; }
+}
+@media (max-width: 420px) {
+  html[data-futureskill-page="home"] .report-interest-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html[data-futureskill-page="home"] #report-subjects .report-list,
+  html[data-futureskill-page="home"] #report-confidence .report-list { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   html[data-futureskill-page="home"] .report-button,

@@ -3,7 +3,7 @@
 <html lang="en" data-futureskill-page="home">
 
 <head>
-<script src="/static/future-theme.js?v=3"></script>
+<script src="/static/future-theme.js?v=4"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="/favicon.ico" type="image/svg+xml">
@@ -420,7 +420,8 @@ button:hover { background: #4432c0; opacity: 1; }
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
 <link rel="stylesheet" href="/static/future-theme.css?v=3">
 <link rel="stylesheet" href="/static/future-pages.css?v=assessment-navigation-3">
-<link rel="stylesheet" href="/static/assessment-report.css?v=1">
+<link rel="stylesheet" href="/static/assessment-report.css?v=2">
+<link rel="stylesheet" href="/static/assessment-workspace.css?v=1">
 </head>
 
 <body>
@@ -455,13 +456,23 @@ button:hover { background: #4432c0; opacity: 1; }
             42 Questions | 3 Assessment Parts
         </p>
 
-        <button onclick="startAssessment()">
-            Start Career Assessment
-        </button>
+        <div class="entry-choices" aria-label="Choose how to explore careers">
+            <article class="entry-choice">
+                <span class="entry-choice-kicker">EXPLORE CAREERS</span>
+                <h2>Start with your interests</h2>
+                <p>Take the assessment for exploratory recommendations, or browse the catalogue first.</p>
+                <button onclick="startAssessment()">Start Career Assessment</button>
+                <a class="entry-choice-link" href="/careers">Browse careers without the assessment</a>
+            </article>
+            <article class="entry-choice">
+                <span class="entry-choice-kicker">I KNOW MY TARGET ROLE</span>
+                <h2>Search the career catalogue</h2>
+                <p>Choose a role directly. You can review available pathway support before starting.</p>
+                <a class="entry-choice-button" href="/careers?mode=target">Find a career</a>
+            </article>
+        </div>
 
     </div>
-
-        <p style="margin-top:24px"><a href="/reskilling" style="color:#4c3cc4;font-weight:bold">Already know your goal? Explore your reskilling pathway →</a></p>
 
     <div class="features">
 
@@ -602,44 +613,48 @@ button:hover { background: #4432c0; opacity: 1; }
 ===================================== -->
 
 <section id="results">
-
-    <h1>Your Career Assessment Results</h1>
-    <div id="reportDemoControl" class="report-demo-control" hidden>
-        <label for="reportDemoScenario">Report demonstration scenario</label>
-        <select id="reportDemoScenario">
+    <div class="career-results-layout">
+      <aside class="career-results-sidebar" aria-label="Your results workspace">
+        <div class="career-results-sidebar-heading">
+          <span>YOUR WORKSPACE</span>
+          <p>Your results, then your next step.</p>
+        </div>
+        <nav aria-label="Results sections">
+          <a href="#report-overview" data-results-nav="report-overview">My career overview</a>
+          <a href="#report-careers" data-results-nav="report-careers">Career possibilities</a>
+          <a href="#report-interests" data-results-nav="report-interests">Interests</a>
+          <a href="#report-subjects" data-results-nav="report-subjects">Subjects</a>
+          <a href="#report-confidence" data-results-nav="report-confidence">Confidence</a>
+          <a href="/my-profile">My profile &amp; assessment</a>
+          <a href="/reskilling" id="workspacePathwayLink">My learning pathway</a>
+          <details>
+            <summary>Further exploration</summary>
+            <a href="/ai-trend">AI trends</a>
+            <a href="/sdg-impact">SDG connections</a>
+          </details>
+        </nav>
+        <a class="career-results-retake" href="/" onclick="restartAssessment(); return false;">Review or retake assessment</a>
+      </aside>
+      <div class="career-results-main">
+        <h1 class="career-results-page-title">Your career possibilities</h1>
+        <div id="reportDemoControl" class="report-demo-control" hidden>
+          <label for="reportDemoScenario">Report demonstration scenario</label>
+          <select id="reportDemoScenario">
             <option value="equal-high">Equal high</option>
             <option value="equal-low">Equal low</option>
             <option value="differentiated">Differentiated</option>
             <option value="leading-tie">Leading tie</option>
             <option value="mixed">Mixed ratings</option>
             <option value="invalid">Invalid data</option>
-        </select>
-        <p id="reportDemoStatus" class="report-demo-status" role="status"></p>
-    </div>
-
-    <div
-        class="profile-card"
-        id="userProfile"
-    ></div>
-
-    <h2 id="careerRecommendationsHeading">Top 10 Career Recommendations</h2>
-
-    <div id="careerResults"></div>
-        <div class="career-card" style="border-color:#bce3d6;background:#f1fbf7">
-          <h3>Build your personalised learning pathway</h3>
-          <p>Not sure what to study next? Explore skill gaps, a flexible weekly timetable, learning objectives, to-do tasks, photo evidence and your growing learning tree.</p>
-          <a id="resultsPathwayLink" href="/reskilling" style="display:inline-block;text-decoration:none;background:#5542d8;color:white;padding:13px 20px;border-radius:10px;font-weight:bold">Explore Reskilling Pathways →</a>
+          </select>
+          <p id="reportDemoStatus" class="report-demo-status" role="status"></p>
         </div>
-
-    <p class="disclaimer">
-        These scores are experimental career matching
-        indices, not validated probabilities of
-        career success or suitability.
-    </p>
-
-    <button onclick="restartAssessment()">
-        Retake Assessment
-    </button>
+        <div class="profile-card" id="userProfile"></div>
+        <p class="disclaimer">
+          These recommendations are exploratory. Their order does not predict career success or employment outcomes.
+        </p>
+      </div>
+    </div>
 
 </section>
 
@@ -680,7 +695,8 @@ button:hover { background: #4432c0; opacity: 1; }
 
 
 <script src="/static/assessment-progress.js?v=2"></script>
-<script src="/static/assessment-report.js?v=1"></script>
+<script src="/static/assessment-report.js?v=2"></script>
+<script src="/static/career-ui.js?v=2"></script>
 <script>
 
 // ==========================================
@@ -1345,153 +1361,47 @@ function createSdgAlignment(career) {
 }
 
 function displayResults(data) {
-
-    const profile = document.getElementById(
-        "userProfile"
-    );
-
-    const model = FutureSkillReport.render(profile, data, {
-        demo: new URLSearchParams(window.location.search).has("report-demo") ||
-            new URLSearchParams(window.location.search).has("screen"),
+    const params = new URLSearchParams(window.location.search);
+    const demoMode = params.has("report-demo") || params.has("screen");
+    const model = FutureSkillReport.render(document.getElementById("userProfile"), data, {
+        demo: demoMode,
         onReview: openFilledAssessmentReview
     });
-
-
-    // =====================================
-    // TOP 10 CAREER RECOMMENDATIONS
-    // =====================================
-
-    const careerContainer = document.getElementById(
-        "careerResults"
-    );
-
-    careerContainer.replaceChildren();
-    const demoMode = new URLSearchParams(window.location.search).has("report-demo") ||
-        new URLSearchParams(window.location.search).has("screen");
-    document.getElementById("resultsPathwayLink").href = demoMode
-        ? "/reskilling?demo=1&demo_scenario=fresh" : "/reskilling";
+    const careerContainer = document.getElementById("careerResults");
+    const pathwayLink = document.getElementById("resultsPathwayLink");
+    if (pathwayLink) {
+        pathwayLink.href = demoMode ? "/reskilling?demo=1&demo_scenario=fresh" : "/reskilling";
+    }
+    const workspacePathwayLink = document.getElementById("workspacePathwayLink");
+    if (workspacePathwayLink) {
+        workspacePathwayLink.href = demoMode ? "/reskilling?demo=1&demo_scenario=fresh" : "/reskilling";
+    }
     if (!model.valid) {
-        careerContainer.textContent = "Recommendations are unavailable because this response could not be validated.";
-        return;
-    }
-
-    if (!data.recommendations ||
-        data.recommendations.length === 0) {
-
-        careerContainer.textContent =
-            "No career recommendations available.";
-
-        return;
-
-    }
-
-    data.recommendations.forEach(
-        (career, index) => {
-
-            const card = document.createElement("div");
-
-            card.className = "career-card";
-
-            const title = document.createElement("h3");
-
-            title.textContent =
-                `${index + 1}. ${career.title}`;
-
-            card.appendChild(title);
-
-            const score = document.createElement("div");
-
-            score.className = "match-score";
-
-            score.textContent =
-                `Match Index: ${Number(career.match_index).toFixed(2)}`;
-
-            card.appendChild(score);
-
-            // Matching score progress bar
-            const barBackground = document.createElement(
-                "div"
-            );
-
-            barBackground.className =
-                "score-bar-background";
-
-            const bar = document.createElement("div");
-
-            bar.className = "score-bar";
-
-            bar.style.width = (
-                Math.max(
-                    0,
-                    Math.min(
-                        100,
-                        Number(career.match_index)
-                    )
-                )
-            ) + "%";
-
-            barBackground.appendChild(bar);
-
-            card.appendChild(barBackground);
-
-            const types = document.createElement("p");
-
-            types.textContent =
-                `Career RIASEC: ${career.riasec}`;
-
-            card.appendChild(types);
-
-            const interest = document.createElement(
-                "p"
-            );
-
-            interest.textContent =
-                `RIASEC Similarity: ${Number(career.interest_index).toFixed(2)}`;
-
-            card.appendChild(interest);
-
-            const subject = document.createElement(
-                "p"
-            );
-
-            subject.textContent =
-                `Subject Similarity: ${Number(career.subject_index).toFixed(2)}`;
-
-            card.appendChild(subject);
-
-            const fields = document.createElement("p");
-
-            fields.textContent =
-                `Related Fields: ${career.fields}`;
-
-            card.appendChild(fields);
-
-            const explanation = document.createElement(
-                "p"
-            );
-
-            explanation.textContent =
-                career.explanation.replace("Shared interest strengths:", "Interests above your own profile mean:");
-
-            card.appendChild(explanation);
-
-            const pathwayLink = document.createElement("a");
-            const params = new URLSearchParams(window.location.search);
-            const inventoryMode = params.has("screen") || params.has("report-demo");
-            pathwayLink.href = inventoryMode
-                ? "/reskilling?demo=1&demo_scenario=fresh&career=" + encodeURIComponent(career.title)
-                : "/reskilling?career=" + encodeURIComponent(career.title);
-            pathwayLink.textContent = "Explore reskilling options →";
-            pathwayLink.style.cssText = "display:inline-block;margin-top:12px;padding:12px 18px;background:#5542d8;color:white;border-radius:9px;font-weight:bold;text-decoration:none";
-            card.appendChild(pathwayLink);
-
-            card.appendChild(createSdgAlignment(career));
-
-            careerContainer.appendChild(card);
-
+        if (careerContainer) {
+            careerContainer.textContent = "Recommendations are unavailable because this response could not be validated.";
         }
-    );
-
+        return;
+    }
+    FutureSkillCareers.renderRecommendations(careerContainer, data.recommendations, {
+        personalized: true,
+        demo: demoMode
+    });
+    if (!demoMode && Array.isArray(data.recommendations)) {
+        try {
+            sessionStorage.setItem("futureskill-career-context", JSON.stringify({
+                data,
+                reviewAnswers: resultReviewAnswers || null
+            }));
+        } catch (_) {
+            // The report remains usable when session storage is blocked.
+        }
+    }
+    document.querySelectorAll("[data-results-nav]").forEach(link => {
+        link.addEventListener("click", () => {
+            document.querySelectorAll("[data-results-nav]").forEach(item => item.removeAttribute("aria-current"));
+            link.setAttribute("aria-current", "location");
+        });
+    });
 }
 
 
@@ -1658,7 +1568,7 @@ async function loadReportDemo(scenario) {
             skills: {MathSkill: 3, CodingSkill: 3, DataSkill: 3, CommunicationSkill: 3, LeadershipSkill: 3, CreativeSkill: 3},
             recommendations: []
         });
-        document.getElementById("careerResults").replaceChildren();
+        document.getElementById("careerResults")?.replaceChildren();
         status.textContent = "Invalid input is shown locally; no service request was made.";
         selector.disabled = false;
         return;
@@ -1693,14 +1603,43 @@ async function loadReportDemo(scenario) {
         FutureSkillReport.render(document.getElementById("userProfile"), {
             invalidSample: true
         });
-        document.getElementById("careerResults").textContent = "Sample recommendations could not be loaded.";
+        const careerResults = document.getElementById("careerResults");
+        if (careerResults) careerResults.textContent = "Sample recommendations could not be loaded.";
         status.textContent = `Sample service request failed: ${error.message}`;
     } finally {
         selector.disabled = false;
     }
 }
 
-openInventoryPreview();
+function restoreReviewFromSession() {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("review") || params.has("screen") || params.has("report-demo")) return false;
+    try {
+        const context = JSON.parse(sessionStorage.getItem("futureskill-career-context") || "null");
+        if (!context || !FutureSkillReport.buildModel(context.data).valid) return false;
+        resultReviewAnswers = context.reviewAnswers && typeof context.reviewAnswers === "object"
+            ? { ...context.reviewAnswers }
+            : null;
+        displayResults(context.data);
+        document.getElementById("homePage").style.display = "none";
+        document.getElementById("results").style.display = "block";
+        window.scrollTo(0, 0);
+        if (resultReviewAnswers) {
+            openFilledAssessmentReview();
+        } else {
+            const note = document.createElement("p");
+            note.className = "report-note";
+            note.setAttribute("role", "status");
+            note.textContent = "Your assessment responses could not be restored from this browser session. The report is still available.";
+            document.getElementById("userProfile").prepend(note);
+        }
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+if (!restoreReviewFromSession()) openInventoryPreview();
 
 </script>
 

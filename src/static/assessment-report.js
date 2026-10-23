@@ -79,6 +79,13 @@
       url: "https://www.onetcenter.org/IP.html",
       claims: "Supports the six interest-type framework and career exploration only. FutureSkill's custom questionnaire is not the official O*NET instrument and does not inherit its validation, norms, or reliability."
     }),
+    "onet-occupation-profiles": Object.freeze({
+      id: "onet-occupation-profiles",
+      title: "O*NET OnLine occupation profiles",
+      publisher: "U.S. Department of Labor, Employment and Training Administration",
+      url: "https://www.onetonline.org/",
+      claims: "Links to the matching occupation profile for learners to inspect. FutureSkill does not reproduce occupational duties or requirements that are absent from its local catalogue."
+    }),
     "futureskill-method": Object.freeze({
       id: "futureskill-method",
       title: "How this report is calculated",
@@ -267,6 +274,7 @@
 
     const report = node("div", "report-content");
     const intro = node("div", "report-overview");
+    intro.id = "report-overview";
     intro.append(node("p", "report-eyebrow", "A guide for reflection"),
       node("h2", "", "Your results at a glance"),
       node("p", "report-lede", "Three separate views of what you reported—not a verified competency test or a prediction of employment."));
@@ -283,8 +291,9 @@
     intro.appendChild(summaryGrid);
     const jumpLinks = node("nav", "report-jump-links");
     jumpLinks.setAttribute("aria-label", "Results report sections");
-    [["#report-interests", "Interests"], ["#report-subjects", "Subjects"],
-      ["#report-confidence", "Confidence"], ["#careerRecommendationsHeading", "Careers"]]
+    [["#report-overview", "Overview"], ["#report-interests", "Interests"],
+      ["#report-subjects", "Subjects"], ["#report-confidence", "Confidence"],
+      ["#report-careers", "Careers"]]
       .forEach(([href, label]) => {
         const link = node("a", "", label);
         link.href = href;
@@ -292,6 +301,18 @@
       });
     intro.appendChild(jumpLinks);
     report.appendChild(intro);
+
+    const careerSection = section(
+      "Your career possibilities",
+      "These are the first three entries from the existing career engine, shown for easier exploration—not a statistically established shortlist or a prediction of outcomes.",
+      "report-careers"
+    );
+    careerSection.querySelector("h2").id = "careerRecommendationsHeading";
+    careerSection.appendChild(node("div", "report-career-list"));
+    const careerResults = node("div", "report-career-results");
+    careerResults.id = "careerResults";
+    careerSection.appendChild(careerResults);
+    report.appendChild(careerSection);
 
     const interestSection = section("Your career interests — RIASEC",
       "You reported how much you enjoy work activities. Scores use the existing 20–100 scale: four answers summed, divided by 20, then multiplied by 100.",
@@ -335,17 +356,18 @@
       const article = node("article", "report-interest");
       const heading = node("div", "report-interest-head");
       const icon = interestIcon(type);
+      icon.setAttribute("aria-label", `${type.name} interest icon`);
       const titleWrap = node("div", "");
       titleWrap.append(node("h3", "", type.name), node("p", "report-activity", type.activity));
       heading.append(icon, titleWrap);
       article.appendChild(heading);
       article.appendChild(meter(`${type.name} interest score`, item.score, 20, 100, "/ 100"));
-      const citation = node("p", "report-citation", "General activity interpretation: ");
-      citation.append(sourceLink(type.source, "O*NET interest-type descriptions"));
-      article.append(citation);
       const details = node("details", "report-details");
       details.appendChild(node("summary", "", "More about this area"));
       details.append(node("p", "", type.detail), node("p", "report-question", `Explore: ${type.question}`));
+      const citation = node("p", "report-citation", "General activity interpretation: ");
+      citation.append(sourceLink(type.source, "O*NET interest-type descriptions"));
+      details.appendChild(citation);
       article.appendChild(details);
       interestList.appendChild(article);
     });
@@ -358,9 +380,11 @@
     const subjectList = node("div", "report-list");
     SUBJECTS.forEach(([key, name, meaning, question]) => {
       const article = node("article", "report-row");
-      article.append(node("h3", "", name), node("p", "report-activity", meaning),
-        meter(`${name} interest`, data.subject_preferences[key], 1, 5, "/ 5"),
-        node("p", "report-question", `Explore: ${question}`));
+      article.append(node("h3", "", name), meter(`${name} interest`, data.subject_preferences[key], 1, 5, "/ 5"));
+      const details = node("details", "report-details");
+      details.appendChild(node("summary", "", "Explore this subject"));
+      details.append(node("p", "report-activity", meaning), node("p", "report-question", `Explore: ${question}`));
+      article.appendChild(details);
       subjectList.appendChild(article);
     });
     subjectSection.appendChild(subjectList);
@@ -373,8 +397,11 @@
     const skillList = node("div", "report-list");
     SKILLS.forEach(([key, name, activity]) => {
       const article = node("article", "report-row");
-      article.append(node("h3", "", name), meter(`${name} confidence`, data.skills[key], 1, 5, "/ 5"),
-        node("p", "report-evidence", `A possible practice activity: ${activity}`));
+      article.append(node("h3", "", name), meter(`${name} confidence`, data.skills[key], 1, 5, "/ 5"));
+      const details = node("details", "report-details");
+      details.appendChild(node("summary", "", "Build an example"));
+      details.appendChild(node("p", "report-evidence", `A possible practice activity: ${activity}`));
+      article.appendChild(details);
       skillList.appendChild(article);
     });
     skillSection.appendChild(skillList);
@@ -399,7 +426,7 @@
     });
     next.appendChild(steps);
     const aiNotice = node("p", "report-ai-notice",
-      "AI-written assessment review is unavailable: no AI provider or assessment-review service is configured. This deterministic report is available without AI, and does not send your answers to an AI service.");
+      "Assessment review is not available through the current AI service. This deterministic report remains available, and your assessment answers are not sent to an AI service.");
     next.appendChild(aiNotice);
     const actions = node("div", "report-actions");
     const review = node("button", "report-button", "Review my answers");
@@ -408,6 +435,7 @@
       if (options && typeof options.onReview === "function") options.onReview();
     });
     const pathway = node("a", "report-pathway", "Explore reskilling options");
+    pathway.id = "resultsPathwayLink";
     const careers = node("a", "report-careers-link", "View career recommendations");
     careers.href = "#careerRecommendationsHeading";
     const demo = Boolean(options && options.demo);

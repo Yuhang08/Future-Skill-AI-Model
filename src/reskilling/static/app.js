@@ -393,6 +393,23 @@ async function submitPlan(event) {
   try {
     submit.disabled = true;
     const payload = readForm();
+    const savedTarget = appState.profile?.target_career || null;
+    const targetChanged = Boolean(savedTarget && savedTarget !== payload.target_career);
+    const unfinished = Array.isArray(appState.tasks)
+      ? appState.tasks.filter(task => !task.completed)
+      : [];
+    if (targetChanged || unfinished.length) {
+      const lines = [
+        targetChanged
+          ? `Your saved target will change from “${savedTarget}” to “${payload.target_career}”.`
+          : `Your saved target remains “${payload.target_career}”.`,
+        unfinished.length
+          ? `${unfinished.length} unfinished task${unfinished.length === 1 ? "" : "s"} across your learning plan will be replaced. Photos attached to unfinished tasks will also be removed.`
+          : "There are no unfinished tasks to replace.",
+        "Completed tasks, their uploaded evidence, and learning-tree points will remain."
+      ];
+      if (!window.confirm(`${lines.join("\n\n")}\n\nContinue and generate this learning pathway?`)) return;
+    }
     const result = await api('/api/plan', 'POST', payload);
     showApp(result.state);
     window.scrollTo({top:0,behavior:'smooth'});
