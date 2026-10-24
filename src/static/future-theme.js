@@ -146,8 +146,8 @@
     const links = document.createElement("div");
     links.className = "fs-site-links";
     const items = [
-      ["/", "Career assessment"], ["/reskilling", "Reskilling"], ["/ai-trend", "AI trends"],
-      ["/uncertainty", "Uncertainty Lab"], ["/sdg-impact", "SDG connections"],
+      ["/", "Career assessment"], ["/reskilling", "Reskilling"], ["/ai-trend", "Future Job Trend"],
+      ["/uncertainty", "Employability Predictor"], ["/sdg-impact", "SDG connections"],
       ["/interview-practice/", "Interview practice"],
     ];
     // The existing inventory remains development-only, not a new learner feature.
