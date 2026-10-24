@@ -20,9 +20,9 @@
 | Resource          | Link                                           |
 | ----------------- | ---------------------------------------------- |
 | GitHub Repository | [https://github.com/your-username/your-project](https://github.com/Yuhang08/Future-Skill-AI-Model)  |
-| Replit Project    | https://replit.com/@your-username/your-project |
+| Replit Project    | [https://replit.com/@your-username/your-project](https://replit.com/@tehyy623/Future-Skill-AI-Model) |
 | Live Demo         | https://your-project.replit.app                |
-| RunPod Endpoint   | https://api.runpod.ai/v2/your-endpoint-id      |
+| RunPod Endpoint   | None                                           |
 | Slide Deck        | https://example.com/slides                     |
 | Demo Video        | https://example.com/demo-video                 |
 
@@ -90,13 +90,15 @@ F6. Relevant SDG Mapping: A short, justified mapping to relevant SDG targets whe
 
 ### Tech Stack
 
-| Layer         | Technology                   |
-| ------------- | ---------------------------- |
-| Frontend      | e.g. HTML, React             |
-| Backend       | e.g. Python, Flask / FastAPI |
-| Database      | e.g. PostgreSQL, SQLite      |
-| AI / Compute  | RunPod (GPU)                 |
-| Hosting / Dev | Replit                       |
+| Layer           | Technology                   |
+| --------------- | ---------------------------- |
+| Frontend        | HTML, CSS, JavaScript        |
+| Backend         | Python, FastAPI; Flask for the interview module|
+| Database        | SQLite                       |
+| AI / Compute    | OpenAI API — GPT-4.1 mini, with optional embedding and audio-transcription models|
+| Hosting         | Render                       |
+| Development     | Replit, PyCharm              |
+| Version control | GitHub                       |
 
 ---
 
@@ -127,7 +129,7 @@ F6. Relevant SDG Mapping: A short, justified mapping to relevant SDG targets whe
 ### Architecture
 
 ```
-User ──► Replit (App / API) ──► RunPod Endpoint (GPU model)
+User ──► Replit (App / API) ──► Render (GPU model)
                 │
                 └──► Response returned to user
 ```
@@ -178,34 +180,23 @@ performed by the automated Python tests.
 
 ---
 
-## How We Use Replit *(Required)*
+## How We Use Replit 
 
-Describe how your team used Replit. For example:
+- **Development:** We used Replit as a cloud workspace to develop and integrate the HTML, CSS and JavaScript frontend with our Python backend.
 
-- **Development:** Collaborative coding in a shared Repl using Multiplayer.
-- **Hosting:** The app is deployed with Replit Deployments at the Live Demo link above.
-- **Secrets:** API keys are stored in Replit Secrets, never in the code.
+- **Prototyping:** Replit’s preview environment helped us review page layouts and refine the user journey across career assessment, reskilling and SDG exploration.
+
+- **Version Control:** We connected our development workflow with GitHub to track changes, share updates and maintain a consistent project version.
+
+- **Secrets:** AI integrations read credentials from server-side environment variables, allowing configuration through Replit Secrets without hard-coding API keys.
+
+- **Hosting:** Replit supports our development and preview workflow. The public website is hosted on **Render**, using the code maintained in our GitHub repository.
 
 📄 Proof of use: [`submission/REPLIT PROOF OF USE.pdf`](submission/REPLIT%20PROOF%20OF%20USE.pdf)
 
 ## How We Use RunPod *(Required)*
 
-Describe how your team used RunPod. For example:
-
-- **Workload:** Model inference (e.g. text generation, image processing) runs on a RunPod GPU.
-- **Setup:** `runpod/handler.py` is deployed as a **RunPod Serverless Endpoint**.
-- **Integration:** The Replit app sends requests to the endpoint using `RUNPOD_API_KEY` and `RUNPOD_ENDPOINT_ID`.
-
-Example request:
-
-```bash
-curl -X POST https://api.runpod.ai/v2/$RUNPOD_ENDPOINT_ID/runsync \
-  -H "Authorization: Bearer $RUNPOD_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"input": {"prompt": "Hello"}}'
-```
-
-📄 Proof of use: [`submission/RUNPOD PROOF OF USE.pdf`](submission/RUNPOD%20PROOF%20OF%20USE.pdf)
+*Not applicable, we did not use RunPod for our project
 
 ---
 
@@ -221,24 +212,24 @@ curl -X POST https://api.runpod.ai/v2/$RUNPOD_ENDPOINT_ID/runsync \
 
 ## Team
 
-| Name        | Role                | GitHub                                   |
-| ----------- | ------------------- | ---------------------------------------- |
-| Member Name | Team Lead / Backend | [@username](https://github.com/username) |
-| Member Name | Frontend            | [@username](https://github.com/username) |
-| Member Name | AI / RunPod         | [@username](https://github.com/username) |
+| Name         | Role                | GitHub                                   |
+| ------------ | ------------------- | ---------------------------------------- |
+| Chew Yu Hang | Team Lead / Backend | [@username](https://github.com/Yuhang08) |
+| Teh Yi Yang  | Frontend            | [@username](https://github.com/tehyy623) |
+| Caleb Poh    | AI / Replit / Render| [@username](https://github.com/Francium-fluoride) |
 
 ---
 
 ## Submission Checklist
 
-- [ ] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
+- [ / ] Team name, domain (Domain 1) and SDG track filled in
 - [ ] Slide deck link added
 - [ ] Demo video link added
-- [ ] Replit used, with proof of use in `submission/`
-- [ ] RunPod used, with proof of use in `submission/`
-- [ ] Submission template completed in `submission/`
+- [ / ] Replit used, with proof of use in `submission/`
+- [ X ] RunPod used, with proof of use in `submission/`
+- [ / ] Submission template completed in `submission/`
 - [ ] "How to Run" steps verified
-- [ ] No API keys or secrets committed to the repository
+- [ / ] No API keys or secrets committed to the repository
 
 ## License
 
