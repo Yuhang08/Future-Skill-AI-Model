@@ -185,10 +185,16 @@ html[data-futureskill-page="sdg"] .mindmap-stage { background-image: linear-grad
 html[data-futureskill-page="sdg"] .map-lines line { stroke: var(--hud-laser); stroke-width: 1.4; stroke-dasharray: 4 7; opacity: .8; filter: drop-shadow(0 0 3px var(--hud-laser)); animation: sdg-data-flow 2s linear infinite; }
 @keyframes sdg-data-flow { to { stroke-dashoffset: -22; } }
 html[data-futureskill-page="sdg"][data-future-theme] .goal-grid { position: relative; grid-template-rows: auto; }
-html[data-futureskill-page="sdg"][data-future-theme] .goal-grid.is-radial { display: block; width: 100%; height: var(--orbit-height,760px); }
-html[data-futureskill-page="sdg"] .goal-grid.is-radial::before { content: ""; position: absolute; left: 50%; top: 50%; width: calc(var(--goal-radius) * 2); height: calc(var(--goal-radius) * 2); border: 1px solid var(--fs-line); border-radius: 50%; transform: translate(-50%,-50%); opacity: .65; pointer-events: none; z-index: -1; }
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid.is-perimeter { display: block; width: 100%; height: var(--perimeter-height,642px); }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter::before { content: ""; position: absolute; inset: calc(16px + var(--goal-card-height) / 2) calc(50% - 3 * (var(--goal-card-width) + 14px)); border: 1px solid var(--fs-line); border-radius: 6px; opacity: .35; pointer-events: none; z-index: -1; }
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid:not(.is-perimeter) { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); grid-template-rows: auto; gap: 15px 8px; justify-items: center; }
 html[data-futureskill-page="sdg"][data-future-theme] .goal-node { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: var(--goal-diameter,96px); height: var(--goal-diameter,96px); min-height: 0; padding: 9px; border: 1px solid var(--fs-line); border-radius: 50%; background: var(--fs-surface); color: var(--fs-ink); box-shadow: none; gap: 4px; text-align: center; overflow: visible; transform: none; transition: border-color .16s ease,background-color .16s ease,box-shadow .16s ease; }
-html[data-futureskill-page="sdg"][data-future-theme] .goal-grid.is-radial > .goal-node { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) rotate(var(--goal-angle)) translateX(var(--goal-radius)) rotate(calc(-1 * var(--goal-angle))); }
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid.is-perimeter > .goal-node { position: absolute; left: var(--goal-x); top: var(--goal-y); transform: translate(-50%,-50%); display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: center; width: var(--goal-card-width); height: var(--goal-card-height); min-height: 0; padding: 9px; gap: 9px; border-radius: 6px; text-align: left; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-node-copy { align-items: flex-start; gap: 3px; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-node img { width: 28px; height: 28px; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-index { font-size: 8px; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-name { max-width: none; -webkit-line-clamp: 4; font-size: 9.5px; line-height: 1.2; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-node-status { font-size: 8px; }
 html[data-futureskill-page="sdg"][data-future-theme] .goal-node:hover { border-color: var(--hud-laser); background: var(--fs-accent-soft); transform: none; }
 html[data-futureskill-page="sdg"][data-future-theme] .goal-node.linked { border-color: var(--hud-laser); background: var(--fs-accent-soft); box-shadow: 0 0 15px var(--hud-glow),inset 0 0 14px var(--hud-glow); }
 html[data-futureskill-page="sdg"] .goal-node img { width: 26px; height: 26px; border-radius: 3px; flex: none; }
@@ -200,8 +206,12 @@ html[data-futureskill-page="sdg"] .goal-node.linked .goal-node-status { color: v
 html[data-futureskill-page="sdg"][data-future-theme] .career-center { border: 1px solid var(--hud-laser); border-radius: 6px; background: var(--fs-accent-soft); color: var(--fs-ink); padding: 12px 9px; box-shadow: 0 0 30px var(--hud-glow),inset 0 0 25px var(--hud-glow); }
 html[data-futureskill-page="sdg"][data-future-theme] .career-center small { color: var(--fs-accent); font: 8px/1.5 ui-monospace,monospace; letter-spacing: 1.5px; }
 html[data-futureskill-page="sdg"] .career-center strong { margin-top: 7px; color: var(--fs-ink); font-size: 14px; font-weight: 500; }
-html[data-futureskill-page="sdg"][data-future-theme] .goal-grid.is-radial > .career-center { position: absolute; grid-area: auto; left: 50%; top: 50%; transform: translate(-50%,-50%); display: flex; align-items: center; justify-content: center; width: 156px; height: 156px; min-height: 0; padding: 22px; border-radius: 50%; }
-html[data-futureskill-page="sdg"] .goal-grid.is-radial > .career-center strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; font-size: 13px; line-height: 1.4; }
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid.is-perimeter > .career-center { position: absolute; grid-area: auto; left: 50%; top: 50%; transform: translate(-50%,-50%); display: flex; align-items: center; justify-content: center; width: 156px; height: 156px; min-height: 0; padding: 22px; border-radius: 50%; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter > .career-center strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; font-size: 13px; line-height: 1.4; }
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid:not(.is-perimeter) > .career-center { grid-column: 1/-1; display: flex; align-items: center; justify-content: center; width: 136px; height: 136px; min-height: 0; margin: 0 auto 8px; padding: 18px; border-radius: 50%; }
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid:not(.is-perimeter) > .goal-node { grid-column: span 2; width: min(100%,96px); height: auto; aspect-ratio: 1; min-height: 0; padding: 8px; }
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid:not(.is-perimeter) > .goal-node:nth-last-child(2) { grid-column: 2 / span 2; }
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid:not(.is-perimeter) > .goal-node:last-child { grid-column: 4 / span 2; }
 html[data-futureskill-page="sdg"] .map-caption { margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--fs-line); color: var(--fs-muted); font-size: 10px; line-height: 1.7; }
 .hud-reviewed-heading { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin: 22px 0 11px; }
 html[data-futureskill-page="sdg"] .hud-reviewed-heading h3 { color: var(--fs-ink); margin: 0; font-size: 14px; font-weight: 500; }
@@ -234,6 +244,9 @@ html[data-futureskill-page="sdg"][data-hud-motion="paused"] .map-lines line { an
   .hud-coverage-dial { width: 160px; height: 160px; }
   html[data-futureskill-page="sdg"] main { padding: 25px 24px 40px; }
   html[data-futureskill-page="sdg"] .mindmap-shell { padding: 16px 14px 13px; }
+  html[data-futureskill-page="sdg"][data-future-theme] .goal-grid.is-perimeter > .goal-node { grid-template-columns: 23px minmax(0,1fr); gap: 6px; padding: 7px; }
+  html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-node img { width: 23px; height: 23px; }
+  html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-name { font-size: 9px; -webkit-line-clamp: 4; }
   html[data-futureskill-page="sdg"] .mindmap-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
 }
 @media(max-width:950px) {
@@ -275,11 +288,6 @@ html[data-futureskill-page="sdg"][data-hud-motion="paused"] .map-lines line { an
   .hud-target-name { font-size: 9px; }
   .hud-target-item { gap: 9px; }
   .hud-map-reticle { display: none; }
-  html[data-futureskill-page="sdg"][data-future-theme] .goal-grid { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); grid-template-rows: auto; gap: 15px 8px; justify-items: center; }
-  html[data-futureskill-page="sdg"][data-future-theme] .career-center { grid-column: 1/-1; display: flex; align-items: center; justify-content: center; width: 136px; height: 136px; min-height: 0; margin: 0 auto 8px; padding: 18px; border-radius: 50%; }
-  html[data-futureskill-page="sdg"][data-future-theme] .goal-node { grid-column: span 2; width: min(100%,96px); height: auto; aspect-ratio: 1; min-height: 0; padding: 8px; }
-  html[data-futureskill-page="sdg"][data-future-theme] .goal-node:nth-last-child(2) { grid-column: 2 / span 2; }
-  html[data-futureskill-page="sdg"][data-future-theme] .goal-node:last-child { grid-column: 4 / span 2; }
   html[data-futureskill-page="sdg"] .mindmap-heading { gap: 11px; }
   html[data-futureskill-page="sdg"] .mindmap-heading h2 { font-size: 14px; }
   .hud-reviewed-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
@@ -298,9 +306,9 @@ html[data-futureskill-page="sdg"][data-hud-motion="paused"] .map-lines line { an
 }
 @media(max-width:350px) { .hud-sidebar { grid-template-columns: minmax(0,1fr); } .hud-coverage-dial { width: 170px; height: 170px; } .hud-panel-caption > span:last-child { display: none; } }
 @media(max-width:360px) {
-  html[data-futureskill-page="sdg"][data-future-theme] .goal-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 15px 12px; }
-  html[data-futureskill-page="sdg"][data-future-theme] .goal-node:nth-last-child(2) { grid-column: span 2; }
-  html[data-futureskill-page="sdg"][data-future-theme] .goal-node:last-child { grid-column: 2 / span 2; }
+  html[data-futureskill-page="sdg"][data-future-theme] .goal-grid:not(.is-perimeter) { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 15px 12px; }
+  html[data-futureskill-page="sdg"][data-future-theme] .goal-grid:not(.is-perimeter) > .goal-node:nth-last-child(2) { grid-column: span 2; }
+  html[data-futureskill-page="sdg"][data-future-theme] .goal-grid:not(.is-perimeter) > .goal-node:last-child { grid-column: 2 / span 2; }
 }
 @media(prefers-reduced-motion:reduce) {
   html[data-futureskill-page="sdg"] .goal-node.linked::before { animation: none; --sdg-laser-angle: 70deg; }

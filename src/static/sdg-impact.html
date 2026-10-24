@@ -187,7 +187,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/static/future-theme.css?v=2">
   <link rel="stylesheet" href="/static/future-pages.css?v=sdg-career-selection-1">
-  <link rel="stylesheet" href="/static/sdg-hud.css?v=radial-2">
+  <link rel="stylesheet" href="/static/sdg-hud.css?v=frame5444-3">
   <script src="/static/sdg-hud.js?v=1" defer></script>
 </head>
 <body>
@@ -548,7 +548,6 @@
         const button = node(goalGrid,"button","","goal-node");
         button.type = "button";
         button.dataset.sdgId = String(id);
-        button.style.setProperty("--goal-angle",`${-90 + index * 360 / goals.length}deg`);
         button.style.setProperty("--goal-color",goal[1]);
         if (mapping) button.classList.add("linked");
         button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Reviewed potential career link. Open details." : "Not assessed for this career. Open goal information."}`);
@@ -586,23 +585,52 @@
 
     function drawMapLines() {
       if (results.hidden) return;
-      const radial = !window.matchMedia("(max-width: 720px)").matches;
-      goalGrid.classList.toggle("is-radial",radial);
-      if (!radial) {
-        ["--orbit-height","--goal-diameter","--goal-radius"].forEach(property => {
+      const width = goalGrid.clientWidth;
+      const perimeter = !window.matchMedia("(max-width: 720px)").matches && width >= 880;
+      goalGrid.classList.toggle("is-perimeter",perimeter);
+      if (!perimeter) {
+        ["--perimeter-height","--goal-card-width","--goal-card-height"].forEach(property => {
           if (goalGrid.style.getPropertyValue(property)) goalGrid.style.removeProperty(property);
+        });
+        goalGrid.querySelectorAll(".goal-node").forEach(button => {
+          ["--goal-x","--goal-y"].forEach(property => {
+            if (button.style.getPropertyValue(property)) button.style.removeProperty(property);
+          });
         });
         mapLines.replaceChildren();
         return;
       }
-      const width = goalGrid.clientWidth;
-      if (width <= 0) { mapLines.replaceChildren(); return; }
-      const height = Math.min(width,760);
-      const diameter = Math.min(100,Math.max(66,height * .135));
-      const radius = Math.max(0,(height - diameter) / 2 - 16);
-      [["--orbit-height",height],["--goal-diameter",diameter],["--goal-radius",radius]].forEach(([property,value]) => {
+      const pad = 16;
+      const gap = 14;
+      const cardWidth = Math.min(150,(width - 2 * pad - 6 * gap) / 7);
+      const cardHeight = 90;
+      const height = 2 * pad + 6 * cardHeight + 5 * gap;
+      const leftX = width/2 - 3 * (cardWidth + gap);
+      const rightX = width/2 + 3 * (cardWidth + gap);
+      [["--perimeter-height",height],["--goal-card-width",cardWidth],["--goal-card-height",cardHeight]].forEach(([property,value]) => {
         const pixels = `${value}px`;
         if (goalGrid.style.getPropertyValue(property) !== pixels) goalGrid.style.setProperty(property,pixels);
+      });
+      goalGrid.querySelectorAll(".goal-node").forEach((button,index) => {
+        let x;
+        let y;
+        if (index < 5) {
+          x = width/2 + (index - 2) * (cardWidth + gap);
+          y = pad + cardHeight/2;
+        } else if (index < 9) {
+          x = rightX;
+          y = pad + cardHeight/2 + (index - 4) * (cardHeight + gap);
+        } else if (index < 13) {
+          x = width/2 + (1.5 - (index - 9)) * (cardWidth + gap);
+          y = height - pad - cardHeight/2;
+        } else {
+          x = leftX;
+          y = pad + cardHeight/2 + (4 - (index - 13)) * (cardHeight + gap);
+        }
+        [["--goal-x",x],["--goal-y",y]].forEach(([property,value]) => {
+          const pixels = `${value}px`;
+          if (button.style.getPropertyValue(property) !== pixels) button.style.setProperty(property,pixels);
+        });
       });
       const rect = mindmapStage.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
@@ -618,11 +646,16 @@
         const tx = target.left + target.width/2 - rect.left;
         const ty = target.top + target.height/2 - rect.top;
         const distance = Math.hypot(tx - sx,ty - sy);
-        const startRadius = Math.min(center.width,center.height)/2 + 5;
-        const endRadius = Math.min(target.width,target.height)/2 + 5;
-        if (!distance || distance <= startRadius + endRadius) return;
+        if (!distance) return;
         const ux = (tx - sx)/distance;
         const uy = (ty - sy)/distance;
+        const startRadius = Math.min(center.width,center.height)/2 + 5;
+        const targetEdge = Math.min(
+          Math.abs(ux) > 1e-9 ? target.width/2 / Math.abs(ux) : Infinity,
+          Math.abs(uy) > 1e-9 ? target.height/2 / Math.abs(uy) : Infinity
+        );
+        const endRadius = targetEdge + 5;
+        if (distance <= startRadius + endRadius) return;
         const line = document.createElementNS("http://www.w3.org/2000/svg","line");
         line.setAttribute("x1",String(sx + ux * startRadius));
         line.setAttribute("y1",String(sy + uy * startRadius));
@@ -823,7 +856,7 @@
     let lastMapWidth = -1;
     const mapResizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(entries => {
       const width = entries[0]?.contentRect.width;
-      // Setting the orbit height changes this observed box too; only width
+      // Setting the map height changes this observed box too; only width
       // changes need another layout pass, so the observer cannot feed itself.
       if (typeof width !== "number" || Math.abs(width - lastMapWidth) < .5) return;
       lastMapWidth = width;
