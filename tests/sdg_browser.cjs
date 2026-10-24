@@ -164,25 +164,27 @@ async function capture(name) {
     await key('Enter', 'Enter', 13, '\r');
     assert.equal(await evaluate(`careerSearch.selection().id`), 'prototype:data-analyst');
     await evaluate(`document.getElementById('careerForm').requestSubmit()`);
-    await waitFor(`document.getElementById('reviewStatus').textContent.includes('NO TASK-BACKED MATCH') &&
+    await waitFor(`document.getElementById('reviewStatus').textContent.includes('0 task-target') &&
       !document.getElementById('results').hidden &&
       !document.getElementById('submitButton').disabled`, 'prototype role without official O*NET task ID');
     assert.deepEqual(mindmapRequests.at(-1), { career_id: 'prototype:data-analyst' });
     assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 0);
     assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 0);
-    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line').length`), 0);
+    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line.tentative-line').length`), 1);
+    assert.equal(await evaluate(`document.querySelector('.goal-node[data-sdg-id="9"]').classList.contains('tentative')`), true);
     assert.equal(await evaluate(`document.querySelector('#candidateSuggestions').hidden`), false);
     assert.equal(await evaluate(`document.querySelector('#learningContribution').hidden`), false);
     assert.match(await evaluate(`document.getElementById('candidateList').textContent`), /Goal 9/);
+    assert.match(await evaluate(`document.getElementById('candidateList').textContent`), /CLASSIFICATION-ONLY GUESS/);
     assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 4\.4/);
     assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 8\.5/);
     await waitFor(`Array.from(document.querySelectorAll('.goal-node img')).every(img => img.complete && img.naturalWidth > 0)`, 'all 17 official goal icons');
     assert.equal(await evaluate(`document.querySelector('details.about').open`), false);
-    console.log('PASS: prototype has no fabricated O*NET evidence; broad guess and training outcomes are separate');
+    console.log('PASS: prototype has dashed classification-only suggestion, never a solid task-backed link');
 
     await activate('.goal-node[data-sdg-id="9"]');
     await waitFor(`document.getElementById('goalInfoDialog').open`, 'goal is not misleadingly highlighted');
-    assert.match(await evaluate(`document.getElementById('goalInfoCopy').textContent`), /No reviewed career-to-target link/);
+    assert.match(await evaluate(`document.getElementById('goalInfoCopy').textContent`), /UNVERIFIED CANDIDATE/);
     await escapeDialog();
     assert.equal(await evaluate(`document.activeElement.dataset.sdgId`), '9');
     await send('Emulation.setDeviceMetricsOverride', {
