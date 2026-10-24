@@ -1,3 +1,37 @@
+## Further strict-target audit: 62-candidate list
+
+The latest manual audit used O*NET task descriptions and official UN Target
+definitions. These three concrete rule failures have now been corrected:
+
+- **Embalmers (39-4011.00), O*NET Task ID 4504 → NOT 12.5**:
+  preventing the escape of bodily waste matter is containment, not material
+  waste reduction, reuse or recycling. A core task alone is insufficient.
+- **Stationary Engineers / Boiler Operators (51-8021.00), Task ID 10470 →
+  NOT 6.3**: boiler water testing for corrosion prevention maintains
+  machinery; it does not in itself improve ambient water quality or
+  wastewater treatment.
+- **Refuse/Recyclable Material Collectors (53-7081.00), Task ID 20313 →
+  NOT automatically 12.5**: dumping materials at disposal sites is not
+  evidence that recyclable material is actually recycled. The adjective
+  `recyclable` must NOT be confused with the action `recycle`.
+
+**Preserve genuine potential matches:** Interior Designers, Task ID 20998,
+explicitly describe using recycled materials where feasible, and metal
+casters describe collecting scrap for recycling. Both are reasonable
+**task-supported suggestions for 12.5**, not measured SDG outcomes.
+
+UN Goal 12 Target 12.5 is specifically about prevention, reduction,
+recycling and reuse; UN Goal 6 Target 6.3 concerns pollution and water
+quality. Distinguish an environmentally relevant *occupation* from an
+unreviewed *Target-specific* contribution hypothesis.
+
+Additional regression checks were added to
+`tests/test_sdg_target_precision.py` for these cases and exact O*NET
+Task IDs where official CSV is installed. Expected strict-target counts
+will change; counts alone cannot certify mapping accuracy.
+
+---
+
 # Follow-up review of the 83 task-target candidates
 
 Review of the user's latest list uncovered overbroad UN target interpretations.
