@@ -322,4 +322,6 @@ def create_sdg_mindmap(request: MindmapRequest):
     career = get_sdg_careers().get(career_id)
     if career is None:
         raise HTTPException(status_code=404, detail="Select a supported career from the catalogue.")
-    return get_sdg_alignment_by_id(career_id)
+    # The mindmap actively requests task-derived scores for all 17 goals.
+    # Legacy assessments/audit exports retain the older optional API fields.
+    return get_sdg_alignment_by_id(career_id, include_goal_scores=True)
