@@ -10,6 +10,7 @@ from main import app
 from reskilling.sdg_alignment import (
     get_sdg_alignment, get_sdg_careers, get_sdg_alignment_by_id,
 )
+from reskilling.sdg_task_evidence import TASK_DATA as OFFICIAL_TASK_DATA
 
 
 class SDGCareerTests(unittest.TestCase):
@@ -86,6 +87,37 @@ class SDGCareerTests(unittest.TestCase):
                 self.assertEqual(data["task_profile"]["source_status"], "not_installed")
                 self.assertEqual(data["task_profile"]["representative_tasks"], [])
                 self.assertLessEqual(len(data["candidate_mappings"]), 3)
+
+    def test_923_analyses_with_official_task_data_when_installed(self):
+        # Genuine imported CSV is checked for role-by-role provenance. Missing
+        # official data skips the test; fabricated fixtures never pass as real.
+        if not OFFICIAL_TASK_DATA.is_file():
+            self.skipTest("Official O*NET 31.0 Task Statements CSV not installed")
+        with patch("reskilling.sdg_task_evidence.TASK_DATA", OFFICIAL_TASK_DATA):
+            records = {
+                code: rec for code, rec in get_sdg_careers().items()
+                if rec["kind"] == "occupation"
+            }
+            self.assertEqual(len(records), 923)
+            for code, record in records.items():
+                with self.subTest(code=code):
+                    result = get_sdg_alignment_by_id(code)
+                    self.assertEqual(result["career"], record["title"])
+                    self.assertTrue(result["mappings"] or result["candidate_mappings"])
+                    self.assertEqual(result["task_data_status"], "available")
+                    self.assertIsNotNone(result["task_profile"])
+                    profile = result["task_profile"]
+                    self.assertGreater(profile["occupation_task_count"], 0)
+                    self.assertTrue(profile["representative_tasks"])
+                    self.assertTrue(all(task["task_id"].isdigit() for task
+                                        in profile["representative_tasks"]))
+                    for suggestion in result["candidate_mappings"]:
+                        self.assertIn(suggestion["candidate_tier"], (
+                            "task_topic", "classification_only"))
+                        if suggestion["candidate_tier"] == "classification_only":
+                            self.assertEqual(suggestion["task_evidence"], [])
+                        else:
+                            self.assertTrue(suggestion["task_evidence"])
 
     def test_unknown_and_malformed_career_ids(self):
         self.assertEqual(self.search("the invalid"), [])
