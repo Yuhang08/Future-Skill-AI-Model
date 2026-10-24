@@ -24,7 +24,7 @@
 | Live Demo         | (https://future-skill-ai-model.onrender.com/)              |
 | RunPod Endpoint   | None                                           |
 | Slide Deck        | (https://www.canva.com/design/DAHY8lPJIu0/R1r_axxx3azZZKLuGaVGMw/edit)                    |
-| Demo Video        | https://example.com/demo-video                 |
+| Demo Video        | https://youtu.be/KTG0OxX6Ty0                 |
 
 ---
 
