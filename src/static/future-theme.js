@@ -11,7 +11,7 @@
 
   function updateControls() {
     document.querySelectorAll(".fs-site-brand img").forEach(image => {
-      image.src = resolved === "dark" ? "/static/brand-forward-dark.svg" : "/static/brand-forward.svg";
+      image.src = resolved === "dark" ? "/static/assets/logo-dark.png" : "/static/assets/logo-light.png";
     });
     document.querySelectorAll('#themePreference input[name="themePreference"]').forEach(input => {
       input.checked = input.value === preference;
@@ -141,7 +141,7 @@
     brand.className = "fs-site-brand";
     brand.href = "/";
     brand.setAttribute("aria-label", "FutureSkill AI home");
-    brand.innerHTML = '<img src="/static/brand-forward.svg" alt="" aria-hidden="true"><span>FutureSkill AI</span>';
+    brand.innerHTML = '<img src="/static/assets/logo-light.png" alt="FutureSkill AI">';
     nav.appendChild(brand);
     const links = document.createElement("div");
     links.className = "fs-site-links";
