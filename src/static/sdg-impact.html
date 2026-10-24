@@ -206,7 +206,7 @@
     <details class="about">
       <summary>About this prototype and how to read it</summary>
       <div class="about-copy">
-        <p>Search all 923 O*NET occupations. Career-specific SDG suggestions come from occupation titles and SOC groups. View each rule, its sources and its limitations.</p>
+        <p>Search all 923 O*NET occupations. Career connections require genuine O*NET occupation task records. Broad title/SOC guesses are shown separately and never as verified links.</p>
         <p>Occupation suggestions are separate from FutureSkill learning pathways. The learning product may support SDG 4.4 and 8.5; those are NOT automatically career goals.</p>
         <p>Evidence availability varies by role. Employment outcomes, equitable access and broader SDG-level contribution require separate evidence and follow-up data. A mapping does not show that a learner, career or product has caused measurable progress.</p>
         <p>Official UN goal icons identify the goals; their use does not imply UN endorsement. Photographs are representative, not evidence of FutureSkill outcomes.</p>
@@ -231,11 +231,16 @@
         <span id="reviewStatus" class="mono"></span>
       </div>
       <div id="mappingList" class="mapping-list"></div>
+      <details id="candidateSuggestions" class="pathway" hidden>
+        <summary class="pathway-toggle"><span><h2>Broader ideas · not task verified</h2><span class="pathway-intro">These title/SOC guesses do not create connections on the SDG map.</span></span></summary>
+        <p class="pathway-intro">These are exploratory themes, not occupational task evidence. Confirm the O*NET tasks and relevant UN target before making stronger claims.</p>
+        <div id="candidateList" class="skills-list"></div>
+      </details>
       <section class="mindmap-shell" aria-labelledby="mindmapTitle">
         <div class="mindmap-heading">
           <h2 id="mindmapTitle">Career connections · 17 goals</h2>
           <div class="map-legend" aria-label="Map legend">
-            <span class="legend-key"><i class="legend-dot"></i>Possible career connection</span>
+            <span class="legend-key"><i class="legend-dot"></i>O*NET task-backed hypothesis</span>
             <span class="legend-key"><i class="legend-dot muted"></i>Not assessed</span>
           </div>
         </div>
@@ -244,7 +249,7 @@
           <div id="careerCenter" class="career-center"><small>Exploring</small><strong id="mapCareerName">Career</strong></div>
           <div id="goalGrid" class="goal-grid" aria-label="United Nations Sustainable Development Goals"></div>
         </div>
-        <p class="map-caption">Occupation-specific title matches are hypotheses; dashed goal outlines indicate broader SOC-group guesses. Neither is a verified UN-target contribution. Education and job-readiness training links appear separately below.</p>
+        <p class="map-caption">Only suggestions supported by actual O*NET 31.0 tasks are linked. If no task matches, no goals are highlighted. Broad title/SOC guesses are displayed separately.</p>
       </section>
       <details id="learningContribution" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>FutureSkill learning contribution (separate)</h2><span class="pathway-intro">Learning and job-readiness links are NOT direct career-to-SDG mappings.</span></span></summary>
@@ -397,7 +402,7 @@
         ? "Occupation-title suggestion · verify job tasks and target evidence."
         : "Broad occupational-group suggestion · lower specificity; requires review.");
       const headActions = node(head, "div", "", "mapping-head-actions");
-      node(headActions, "span", mapping.specificity === "title_rule" ? "TITLE-BASED" : "BROAD SOC RULE", "target-tag");
+      node(headActions, "span", mapping.specificity === "onet_task" ? `O*NET TASK · TARGET ${mapping.target_id}` : "UNVERIFIED", "target-tag");
       const drawerId = `mapping-drawer-${index}`;
       const titleId = `mapping-drawer-title-${index}`;
       const openButton = node(headActions, "button", "Show more", "mapping-details-trigger");
@@ -453,7 +458,7 @@
       node(evidenceColumn, "p", mapping.relevance_reason || "A role-specific explanation has not been provided.");
       if (evidence.length) {
         const evidenceBox = node(evidenceColumn, "div", "", "evidence-box");
-        node(evidenceBox, "div", "Classification rationale · choose a node", "field-label");
+        node(evidenceBox, "div", "O*NET task evidence · choose a node", "field-label");
         const evidenceMap = node(evidenceBox, "div", "", "evidence-map");
         const root = node(evidenceMap,"div",mapping.target_id ? `SDG ${mapping.sdg_id} · Target ${mapping.target_id}` : `SDG ${mapping.sdg_id} · Suggested`,"evidence-root");
         const rootIcon = node(root,"img");
@@ -540,10 +545,7 @@
         button.dataset.gridColumn = String(desktopSlots[index][1]);
         button.style.gridArea = `${desktopSlots[index][0]} / ${desktopSlots[index][1]}`;
         button.style.setProperty("--goal-color",goal[1]);
-        if (mapping) {
-          button.classList.add("linked");
-          if (mapping.specificity === "soc_group") button.classList.add("broad-suggestion");
-        }
+        if (mapping) button.classList.add("linked");
         button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Potential career connection. Open details." : "Not assessed for this career. Open goal information."}`);
         const icon = node(button,"img");
         icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
@@ -552,7 +554,7 @@
         const copy = node(button,"span","","goal-node-copy");
         node(copy,"span",`GOAL ${String(id).padStart(2,"0")}`,"goal-index");
         node(copy,"span",goal[0],"goal-name");
-        node(copy,"span",mapping ? (mapping.specificity === "soc_group" ? "Broad suggestion" : "Title suggestion") : "Not assessed","goal-node-status");
+        node(copy,"span",mapping ? "Task-backed hypothesis" : "Not assessed","goal-node-status");
         button.addEventListener("click",() => {
           lastFocusedGoal = button;
           if (mapping) {
@@ -683,6 +685,23 @@
       }
     }
 
+    function renderCandidateSuggestions(data) {
+      const section = document.getElementById("candidateSuggestions");
+      const list = document.getElementById("candidateList");
+      list.replaceChildren();
+      section.open = false;
+      const suggestions = Array.isArray(data.candidate_mappings) ? data.candidate_mappings : [];
+      section.hidden = suggestions.length === 0;
+      suggestions.forEach(item => {
+        const entry = node(list, "div", "", "skill-row");
+        const primary = node(entry, "div");
+        node(primary, "div", `Goal ${item.sdg_id} · ${item.sdg_name}`, "skill-name");
+        node(primary, "p", item.relevance_reason || "Broad title/SOC guess.");
+        const note = node(entry, "div", "", "skill-description");
+        node(note, "p", "UNVERIFIED · No task evidence for this specific goal is claimed.");
+      });
+    }
+
     function renderLearningContribution(data) {
       const section = document.getElementById("learningContribution");
       const list = document.getElementById("learningContributionList");
@@ -717,6 +736,8 @@
       pathway.open = false;
       document.getElementById("learningContribution").hidden = true;
       document.getElementById("learningContribution").open = false;
+      document.getElementById("candidateSuggestions").hidden = true;
+      document.getElementById("candidateSuggestions").open = false;
       document.getElementById("roleTitle").textContent = "Explore all 17 goals";
       document.getElementById("reviewStatus").textContent = "NO CAREER SELECTED";
       mapCareerName.textContent = "Choose a supported career";
@@ -749,6 +770,8 @@
       pathway.open = false;
       document.getElementById("learningContribution").hidden = true;
       document.getElementById("learningContribution").open = false;
+      document.getElementById("candidateSuggestions").hidden = true;
+      document.getElementById("candidateSuggestions").open = false;
       activeMappings = [];
       try {
         const response = await fetch("/api/sdg/mindmap",{
@@ -759,25 +782,29 @@
         const data = await response.json();
         if (sequence !== reviewSequence) return;
         if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Could not load role evidence.");
-        activeMappings = ["curated", "suggested"].includes(data.status) && Array.isArray(data.mappings) ? data.mappings : [];
+        activeMappings = Array.isArray(data.mappings) ? data.mappings : [];
         activeCareer = data.career;
         document.getElementById("roleTitle").textContent = activeCareer;
         mapCareerName.textContent = activeCareer;
-        document.getElementById("reviewStatus").textContent = activeMappings.some(m => m.specificity === "title_rule")
-          ? "TITLE-BASED · UNVERIFIED"
-          : activeMappings.length ? "BROAD SOC SUGGESTIONS" : "NOT MAPPED";
+        document.getElementById("reviewStatus").textContent = activeMappings.length
+          ? "O*NET TASK-BASED · UNVERIFIED" : "NO TASK-BACKED MATCH";
         results.hidden = false;
         renderLearningContribution(data);
+        renderCandidateSuggestions(data);
         if (activeMappings.length) {
           activeMappings.forEach(renderMapping);
-          message.textContent = `${activeMappings.length} thematic SDG suggestion(s). These are not verified impact claims; click any highlighted goal for its rule and limitations.`;
+          message.textContent = `${activeMappings.length} candidate UN target(s) match real O*NET task text. Task evidence does not prove SDG impact.`;
           await renderPathway(data,activeCareer,sequence);
         } else {
           const empty = node(mappingList,"div","","empty-card");
-          node(empty,"strong","No career SDG suggestions available");
-          node(empty,"span","This occupation currently has no thematic suggestion. This does not mean it cannot contribute to an SDG.");
+          node(empty,"strong","No O*NET task-backed SDG connection available");
+          node(empty,"span", data.task_data_status === "not_installed"
+            ? "Official O*NET Task Statements CSV is not installed. Run scripts/import_onet_sdg_tasks.py to obtain genuine data."
+            : "No sufficiently explicit official O*NET task matched the target rules. Broader title/SOC guesses below are separate and unverified.");
           pathway.hidden = true;
-          message.textContent = "No occupational SDG suggested; this is not evidence of no contribution.";
+          message.textContent = data.task_data_status === "not_installed"
+            ? "O*NET 31.0 task statements not installed. No occupation target evidence can be claimed."
+            : "No task-backed SDG match. This does not rule out other possible contributions.";
         }
         if (sequence !== reviewSequence) return;
         renderGoals();
