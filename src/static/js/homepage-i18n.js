@@ -28,10 +28,19 @@ function choose(code){
  lang=code;localStorage.setItem(storageKey,code);schedule();
  document.dispatchEvent(new CustomEvent('futureskill:languagechange',{detail:{lang:code}}));
 }
-document.addEventListener('DOMContentLoaded',()=>{
- document.getElementById('language-select')?.addEventListener('change',e=>choose(e.target.value));
- new MutationObserver(schedule).observe(document.body,{subtree:true,childList:true,characterData:true});
- schedule();
-});
-window.FutureSkillHomepageI18n={setLanguage:choose};
+function startHomeTranslation(){
+ const select=document.getElementById('language-select');
+ if(select && !select.dataset.homeI18nBound){
+   select.dataset.homeI18nBound='1';
+   select.addEventListener('change',e=>choose(e.target.value));
+ }
+ if(!window.__homeI18nObserver){
+   window.__homeI18nObserver=new MutationObserver(schedule);
+   window.__homeI18nObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
+ }
+ apply(); // Apply immediately, including on pages where DOMContentLoaded has already fired.
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startHomeTranslation,{once:true});
+else startHomeTranslation();
+window.FutureSkillHomepageI18n={setLanguage:choose,apply,start:startHomeTranslation,getLanguage:()=>lang};
 })();
