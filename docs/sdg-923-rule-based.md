@@ -1,83 +1,105 @@
-# FutureSkill AI: 923 careers and evidence-limited SDG suggestions
+# FutureSkill AI — Evidence-based SDG candidate mapping (O*NET 31.0)
 
-## What changed
+## Important conclusion
 
-The 923 O*NET-SOC occupational entries from `src/career_profiles_clean.csv`
-have searchable identifiers. **The occupation mind map no longer inherits SDG 4
-or SDG 8 from FutureSkill's training programme.** These links are separate.
+The original CSV of 923 occupations has **only O*NET-SOC codes, titles and
+RIASEC interest measures**, not job duties. Assigning SDG 12 to all chefs or
+SDG 4 to IT roles based only on occupation type is **not verified**. It is
+incorrect to describe such suggestions as validated impacts.
 
-The occupation map is **NOT a verified SDG contribution or target-impact
-model**. Our source CSV contains occupation names, O*NET-SOC codes and RIASEC
-interest dimensions — not occupational Task Statements or measured impacts.
+Official sources checked:
+- O*NET 31.0 [Task Statements](https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html),
+  published as `task_statements.csv`, contains **18,838 occupational task
+  records** with the occupational code, task ID, full task text, Task Type and
+  source date.
+- UN [Goal 12 / Target 12.3](https://sdgs.un.org/goals/goal12) refers explicitly
+  to reducing food waste and food losses.
+- O*NET [Chefs and Head Cooks (35-1011.00)](https://www.onetonline.org/link/details/35-1011.00)
+  lists tasks such as ordering supplies, estimating ingredient amounts,
+  checking food quality and planning menus based on expected demand. **These
+  do not establish that an individual chef has reduced food waste.**
 
-## Two deliberately separate outputs
+## Latest website contract
 
-`POST /api/sdg/mindmap`, with a canonical `career_id`:
+The career explorer still searches **923 occupations**, but now returns:
 
-- `mappings`: possible goal-level occupational themes based on **specific
-  phrases** in titles, otherwise broad SOC-major-group classifications.
-  Each has `target_id: null`, `mapping_kind: occupation_theme`,
-  `review_status: rule_based_suggestion`, and `specificity` of
-  `title_rule` or `soc_group`. Neither has been validated as an
-  occupation-to-target impact claim.
-- `learning_pathway_mappings`: original limited, illustrative FutureSkill
-  training links to Targets 4.4 and 8.5, **only where that learning
-  pathway exists**. Shown in a separate disclosure, never as career map nodes.
-- `pathway_skills`: existing illustrative learning requirements, unaffected.
-- `status: suggested`: the career map is not independently reviewed.
+1. `mappings` — **only** suggested UN-target links triggered by *real task
+   statements*, with an actual O*NET Task ID, task text, Core/Supplemental
+   label and official source URLs. Such links are named
+   `task_based_candidate` and `task_signal_unreviewed` — NOT measured
+   impacts or endorsement by the UN.
+2. `candidate_mappings` — low-specificity career-name/SOC-group *guesses*.
+   These are browsable in a separate disclosure, **not drawn as graph edges**.
+3. `learning_pathway_mappings` — prior FutureSkill education / reskilling
+   preparation links (UN 4.4, 8.5), separate from occupation contributions.
+4. `task_data_status` — `available`, `not_installed`,
+   `invalid_file`, or `occupation_tasks_missing`. When no source CSV is
+   installed, the app does **not** invent task-backed mappings.
 
-A SOC-group link is deliberately **broad** and explicitly identified as such.
-Do not present 923 available suggestions as 923 validated occupational
-contribution judgments.
+## Real-data installation (Windows PowerShell)
 
-## Illustrative examples (not externally verified)
-
-| Occupation | Career map | Separate FutureSkill learning links |
-| --- | --- | --- |
-| Data Analyst (prototype, not O*NET CSV identity) | Goal 9 | 4.4, 8.5 |
-| Software Developers (15-1252.00) | Goal 9 | 4.4, 8.5 |
-| Information Security Analysts (15-1212.00) | Goals 9 and 16 | 4.4, 8.5 |
-| Environmental Engineers (17-2081.00) | Goals 6, 9, 13 | none |
-| Registered Nurses (29-1141.00) | Goal 3 | none |
-| Solar Energy Systems Engineers (17-2199.11) | Goals 7, 9, 13 | none |
-| Marine Engineers and Naval Architects (17-2121.00) | Goal 9, broad occupational-group suggestion | none |
-
-SDG 4 can be relevant for a teacher or a software developer **specifically**
-working on a documented education intervention; it is not a default for
-a general software job. SDG 8 is not automatic simply because a job exists.
-
-## Inputs and verification
-
-O*NET 31.0 publishes **Task Statements** associated with occupation codes.
-This prototype does not fetch, bundle or evaluate those statements. A stronger
-future version can assess the actual occupational tasks against carefully
-selected UN SDG targets and retain the Task IDs as auditable evidence.
-
-* Official O*NET 31.0 Task Statements:
-  https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html
-* O*NET taxonomy: https://www.onetcenter.org/taxonomy.html
-* UN SDGs: https://sdgs.un.org/goals
-* O*NET license/attribution: https://www.onetcenter.org/database.html
-
-O*NET task and occupation data is not proof of SDG impact. The final connection
-still requires human target review and outcome evidence. This project's
-rule-to-goal mappings are authored FutureSkill heuristics, not UN or O*NET
-endorsements.
-
-## Running the checks
-
-From the repository root (Windows PowerShell):
+From the **repository root**, using your PyCharm virtual environment:
 
 ```powershell
 git switch feature/all-923-career-sdg-mapping
 git pull --ff-only origin feature/all-923-career-sdg-mapping
+python scripts/import_onet_sdg_tasks.py
 $env:PYTHONPATH="src"
+python scripts/audit_sdg_task_evidence.py
 python -m unittest discover -s tests -p "test_sdg_careers.py" -v
-python -m unittest discover -s tests -p "test_integration.py" -v
 python -m uvicorn main:app --app-dir src --reload --port 5000
 ```
 
-Open `http://127.0.0.1:5000/sdg-impact` and compare Data Analyst
-and Software Developers. The central map should show Goal 9 only for
-those career-specific examples, with Goals 4/8 accessible solely in the
-distinct FutureSkill learning section.
+If the automatic download fails, open the official [O*NET Task Statements
+page](https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html)
+and download `task_statements.csv` manually. Move that file to
+`src/data/onet_task_statements.csv`. **Do not use an invented dataset.**
+
+The official source is not automatically downloaded by the server at startup;
+deployment with Render is deterministic and never calls the O*NET website
+during an API request.
+
+**To deploy the true task evidence on Render**, the downloaded CSV must be
+checked into your GitHub branch and included in the merge to `main`:
+```powershell
+git add src/data/onet_task_statements.csv
+git commit -m "data: add original O*NET 31.0 task statements for auditable SDG mapping"
+git push origin feature/all-923-career-sdg-mapping
+```
+
+Review the dataset license and ensure the file is the official O*NET release
+before publishing. Without that CSV on Render, the website will explicitly
+state no real task records are installed; it will *not* draw the old Chef→12
+line as if it had supporting duties.
+
+## What evidence supports
+
+A narrowly matched task such as explicit food-waste reduction may be
+considered for UN Target 12.3. Simply ordering groceries or estimating
+ingredient quantities **does not pass** this target rule. A job title or
+industry classification never establishes an outcome.
+
+The mapping rules are authored FutureSkill heuristics. A task statement and a
+UN target may be directly relevant without verifying a benefit. Before
+claiming real contribution, validate the rule manually against the UN target
+and collect real outcome or programme evidence.
+
+## License and attribution
+
+> This page includes information from the O*NET 31.0 Database by the
+> U.S. Department of Labor, Employment and Training Administration
+> (USDOL/ETA). Used under the CC BY 4.0 license. O*NET® is a trademark
+> of USDOL/ETA. FutureSkill AI has added its own UN SDG matching
+> heuristics; USDOL/ETA has not approved, endorsed or tested them.
+
+License: https://www.onetcenter.org/license_db.html
+
+## Caveats
+
+- O*NET is a U.S. occupational data source, not Malaysia-specific evidence.
+- `task_supported` means **a rule found a matching real occupational duty**,
+  not that SDG impact is measured or externally validated.
+- Some of the 923 records may have no narrow task-rule match; these remain
+  explicitly unassigned on the goal graph, not automatically assigned an SDG.
+- Current target rules cover selected, carefully specified goals, not all
+  169 UN SDG targets. The coverage audit reports the true count.
