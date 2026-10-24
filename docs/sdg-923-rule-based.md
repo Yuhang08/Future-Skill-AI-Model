@@ -1,3 +1,48 @@
+## Upgrade: 923 role-specific analyses (not 923 verified impacts)
+
+The prior strict task rules matched 280 of 923 careers in the first local
+audit; 643 had no *strict* task-to-target match. The newer analysis
+**does not force those 643 occupations into a supposedly proven UN target**.
+
+All 923 now receive a structured result:
+- **Task-to-target hypotheses:** prior strict rules, with real O*NET Task IDs;
+  mapped as main links. They remain unreviewed.
+- **Task-topic suggestions:** broader but distinctive topics extracted from
+  real job-task text, showing the source Task IDs. These are dashed,
+  unverified **goal-level** possibilities — not verified targets.
+- **Classification-only suggestions:** the weakest occupational title/SOC
+  suggestions, marked as such. The profile lists genuine job tasks to inspect,
+  but those tasks are **not cited as proof of the suggested SDG**.
+
+In the interactive mind map, solid links denote strict task-to-target
+hypotheses; dashed links require review. Different visual styles communicate
+the evidence tier and do not imply causal impact.
+
+`task_profile` reports each occupation's number of official tasks, number of
+Core tasks, and up to three verbatim representative tasks with their IDs and
+the official occupation link. This is role-specific context, not an impact
+estimate.
+
+### Export the complete 923-row review file
+
+```powershell
+$env:PYTHONPATH="src"
+python scripts/audit_sdg_task_evidence.py
+python scripts/export_923_sdg_review.py
+```
+
+This creates `reports/sdg_mapping_923_review.csv` with exactly one row
+per occupation, official Task IDs, tiered goal suggestions and source status.
+Rows labelled `classification_only` are NOT validated SDG mappings. Review
+those rows, especially when considering an official submission.
+
+The "923/923" count is **availability of an individualised analysis**, not
+classification accuracy. No calibrated confidence probability is claimed.
+Neither O*NET nor the UN independently approves these project-authored
+occupational correspondences.
+
+---
+
 # FutureSkill AI — Evidence-based SDG candidate mapping (O*NET 31.0)
 
 ## Important conclusion
