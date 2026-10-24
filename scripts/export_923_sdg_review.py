@@ -24,7 +24,10 @@ COLUMNS = [
     "onet_task_count", "core_task_count", "sample_task_ids",
     "task_based_goals", "task_based_targets", "task_based_ids",
     "task_topic_goals", "task_topic_ids",
+    "dwa_topic_goals", "dwa_topic_task_ids",
     "classification_only_goals", "all_candidate_goals",
+    "rating_data_available", "dwa_data_available",
+    "sample_task_importance", "sample_task_dwa_ids",
     "review_status", "sdg_evidence_disclaimer",
 ]
 
@@ -49,7 +52,10 @@ def main():
     if len(occupations) != 923:
         raise SystemExit(f"Unexpected occupation count: {len(occupations)}; expected 923.")
     output = []
-    classified = {"task_supported": 0, "task_topic_only": 0, "classification_only": 0}
+    classified = {
+        "task_supported": 0, "task_topic_only": 0,
+        "dwa_topic_only": 0, "classification_only": 0
+    }
     for role in occupations:
         code = role["O*NET-SOC Code"]
         data = get_sdg_alignment_by_id(code)
@@ -59,13 +65,15 @@ def main():
         candidates = data["candidate_mappings"]
         profile = data["task_profile"] or {}
         topics = [x for x in candidates if x.get("candidate_tier") == "task_topic"]
+        dwa_topics = [x for x in candidates if x.get("candidate_tier") == "dwa_topic"]
         fallback = [x for x in candidates
                     if x.get("candidate_tier") == "classification_only"]
         if not (strict or candidates):
             raise SystemExit(f"No results, including review-needed suggestions, for {code}")
         tier = (
             "task_supported" if strict else
-            "task_topic_only" if topics else "classification_only"
+            "task_topic_only" if topics else
+            "dwa_topic_only" if dwa_topics else "classification_only"
         )
         classified[tier] += 1
         strict_tasks = [
@@ -74,6 +82,10 @@ def main():
         topic_tasks = [
             task["task_id"] for m in topics for task in m.get("task_evidence", [])
         ]
+        dwa_task_ids = [
+            task["task_id"] for m in dwa_topics for task in m.get("task_evidence", [])
+        ]
+        sample = profile.get("representative_tasks", [])
         output.append({
             "onet_soc": code,
             "occupation": role["Title"],
@@ -88,7 +100,20 @@ def main():
             "task_based_ids": csv_ids(sorted(set(strict_tasks))),
             "task_topic_goals": unique_goal_ids(topics),
             "task_topic_ids": csv_ids(sorted(set(topic_tasks))),
+            "dwa_topic_goals": unique_goal_ids(dwa_topics),
+            "dwa_topic_task_ids": csv_ids(sorted(set(dwa_task_ids))),
             "classification_only_goals": unique_goal_ids(fallback),
+            "rating_data_available": (profile.get("supporting_data_available") or {}).get("task_ratings", False),
+            "dwa_data_available": (profile.get("supporting_data_available") or {}).get("tasks_to_dwas", False),
+            "sample_task_importance": csv_ids(
+                str(task.get("task_ratings", {}).get("importance_1_to_5", ""))
+                for task in sample
+            ),
+            "sample_task_dwa_ids": csv_ids(sorted({
+                item.get("id", "")
+                for task in sample for item in task.get("dwa_activities", [])
+                if item.get("id")
+            })),
             "all_candidate_goals": unique_goal_ids(strict + candidates),
             "review_status": tier,
             "sdg_evidence_disclaimer": (
