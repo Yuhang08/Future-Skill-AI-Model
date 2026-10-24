@@ -21,18 +21,24 @@
   const edgeIndices = [];
   const meshBuckets = Array.from({ length: 7 }, () => []);
   const dotBuckets = Array.from({ length: 7 }, () => []);
-  const meshColors = [
+  let isLight = document.documentElement.dataset.futureTheme === "light";
+  const sceneColor = (dark, light, alpha) => `rgba(${isLight ? light : dark},${alpha})`;
+  const darkMeshColors = [
     "rgba(49,116,230,.065)", "rgba(52,128,238,.09)",
     "rgba(54,140,246,.12)", "rgba(65,153,252,.16)",
     "rgba(77,166,255,.20)", "rgba(92,185,255,.25)",
     "rgba(120,205,255,.31)",
   ];
-  const dotColors = [
+  const darkDotColors = [
     "rgba(69,136,244,.19)", "rgba(71,148,250,.27)",
     "rgba(75,161,255,.38)", "rgba(89,181,255,.52)",
     "rgba(109,201,255,.69)", "rgba(143,222,255,.83)",
     "rgba(194,242,255,.96)",
   ];
+  const lightMeshColors = [.07, .10, .14, .18, .23, .29, .37].map(alpha => `rgba(24,103,169,${alpha})`);
+  const lightDotColors = [.18, .26, .36, .48, .62, .78, .95].map(alpha => `rgba(18,105,172,${alpha})`);
+  let meshColors = isLight ? lightMeshColors : darkMeshColors;
+  let dotColors = isLight ? lightDotColors : darkDotColors;
 
   for (let row = 0; row < latitudeCount; row++) {
     const latitude = -Math.PI / 2 + Math.PI * (row + 0.5) / latitudeCount;
@@ -137,7 +143,7 @@
       context.moveTo(screen[index * 3], screen[index * 3 + 1]);
       context.lineTo(screen[next * 3], screen[next * 3 + 1]);
     }
-    context.strokeStyle = foreground ? "rgba(82,178,255,.24)" : "rgba(45,121,235,.14)";
+    context.strokeStyle = foreground ? sceneColor("82,178,255", "28,113,174", .24) : sceneColor("45,121,235", "39,109,168", .14);
     context.lineWidth = foreground ? 0.85 : 0.65;
     context.stroke();
 
@@ -151,7 +157,7 @@
       context.beginPath();
       context.moveTo(screen[index * 3], screen[index * 3 + 1]);
       context.lineTo(screen[next * 3], screen[next * 3 + 1]);
-      context.strokeStyle = `rgba(126,224,255,${strength})`;
+      context.strokeStyle = sceneColor("126,224,255", "11,122,180", strength);
       context.lineWidth = (1.15 + (1 - segment / 16) * 0.65) * dotScale;
       context.stroke();
     }
@@ -169,7 +175,7 @@
       const y = star.y * height;
       if (Math.hypot(x - centerX, y - centerY) < radius * 1.02) continue;
       const alpha = 0.15 + (Math.sin(time * 0.34 + star.phase) + 1) * 0.08;
-      context.fillStyle = `rgba(129,199,255,${alpha})`;
+      context.fillStyle = sceneColor("129,199,255", "32,112,174", alpha);
       context.beginPath();
       context.arc(x, y, star.radius * dotScale, 0, Math.PI * 2);
       context.fill();
@@ -221,7 +227,7 @@
 
     // Sparse luminous junctions suggest a network without a noisy particle storm.
     context.save();
-    context.globalCompositeOperation = "lighter";
+    context.globalCompositeOperation = isLight ? "source-over" : "lighter";
     for (let index = 13; index < pointCount; index += 47) {
       const depth = projected[index * 3 + 2];
       if (depth < 0.12) continue;
@@ -230,12 +236,12 @@
       const pulse = 0.75 + Math.sin(time * 0.8 + index) * 0.18;
       context.beginPath();
       context.arc(x, y, (5 + depth * 3) * dotScale, 0, Math.PI * 2);
-      context.fillStyle = `rgba(39,161,255,${0.065 * pulse})`;
+      context.fillStyle = sceneColor("39,161,255", "17,124,193", 0.065 * pulse);
       context.fill();
       context.beginPath();
       context.arc(x, y, (1.5 + depth * 0.5) * dotScale, 0, Math.PI * 2);
-      context.fillStyle = `rgba(188,241,255,${0.85 * pulse})`;
-      context.shadowColor = "rgba(68,184,255,.75)";
+      context.fillStyle = sceneColor("188,241,255", "12,111,176", 0.85 * pulse);
+      context.shadowColor = sceneColor("68,184,255", "33,141,211", .75);
       context.shadowBlur = 10 * dotScale;
       context.fill();
       context.shadowBlur = 0;
@@ -264,6 +270,23 @@
     }
   }
 
+  function makeHalo() {
+    if (radius <= 0) return;
+    halo = context.createRadialGradient(centerX, centerY, radius * 0.12, centerX, centerY, radius * 1.48);
+    halo.addColorStop(0, sceneColor("10,84,193", "62,158,219", .07));
+    halo.addColorStop(0.63, sceneColor("16,113,239", "57,157,223", .045));
+    halo.addColorStop(0.80, sceneColor("27,127,255", "54,152,218", .065));
+    halo.addColorStop(1, sceneColor("12,86,220", "54,152,218", 0));
+  }
+
+  function onThemeChange() {
+    isLight = document.documentElement.dataset.futureTheme === "light";
+    meshColors = isLight ? lightMeshColors : darkMeshColors;
+    dotColors = isLight ? lightDotColors : darkDotColors;
+    makeHalo();
+    if (visible()) render(sceneTime);
+  }
+
   function measure() {
     if (destroyed) return;
     const bounds = container.getBoundingClientRect();
@@ -284,11 +307,7 @@
       dotScale = Math.max(0.76, Math.min(1.15, Math.min(width, height) / 520));
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       if (radius > 0) {
-        halo = context.createRadialGradient(centerX, centerY, radius * 0.12, centerX, centerY, radius * 1.48);
-        halo.addColorStop(0, "rgba(10,84,193,.07)");
-        halo.addColorStop(0.63, "rgba(16,113,239,.045)");
-        halo.addColorStop(0.80, "rgba(27,127,255,.065)");
-        halo.addColorStop(1, "rgba(12,86,220,0)");
+        makeHalo();
         if (visible()) render(sceneTime);
       }
     }
@@ -327,6 +346,7 @@
     window.removeEventListener("scroll", measure);
     window.removeEventListener("pagehide", onPageHide);
     window.removeEventListener("pageshow", onPageShow);
+    window.removeEventListener("futureskill:themechange", onThemeChange);
     if (motionPreference?.removeEventListener) motionPreference.removeEventListener("change", onMotionChange);
     else if (motionPreference?.removeListener) motionPreference.removeListener(onMotionChange);
   }
@@ -335,6 +355,7 @@
   window.addEventListener("resize", measure, { passive: true });
   window.addEventListener("pagehide", onPageHide);
   window.addEventListener("pageshow", onPageShow);
+  window.addEventListener("futureskill:themechange", onThemeChange);
   if (motionPreference?.addEventListener) motionPreference.addEventListener("change", onMotionChange);
   else if (motionPreference?.addListener) motionPreference.addListener(onMotionChange);
   if (typeof window.ResizeObserver === "function") {
