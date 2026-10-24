@@ -59,6 +59,27 @@
     .section-label h2{margin:0}
     .section-label span{font-size:10px;color:#718078}
     .mapping-list{display:grid;gap:9px}
+    .task-goal-rankings{padding:19px 20px;margin:14px 0 18px;border:1px solid #d4e3dc;border-radius:16px;background:#f5f9f6;color:#283e3a}
+    .task-goal-rankings h2{font-size:18px;margin:0 0 6px}
+    .task-goal-rankings .score-disclaimer{font-size:12px;line-height:1.55;color:#61756c;margin:0 0 14px}
+    .goal-rank-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+    .goal-rank-card{padding:12px 13px;border-radius:12px;border:1px solid #dce5dc;background:#fff;min-width:0}
+    .goal-rank-card h3{font-size:14px;margin:6px 0}
+    .goal-rank-card .rank-header{display:flex;gap:6px;justify-content:space-between;align-items:center;font-size:11px;color:#526960;font-weight:700}
+    .goal-rank-card .rank-number{font:700 13px "Space Mono",monospace;color:#176a61}
+    .goal-rank-card p{margin:8px 0;color:#52635e;font-size:11px;line-height:1.45}
+    .goal-score-meter{height:7px;border-radius:999px;background:#e6efea;overflow:hidden;margin:10px 0}
+    .goal-score-meter-fill{height:100%;border-radius:inherit;background:#237a67}
+    .task-score-evidence{display:grid;gap:4px;margin-top:8px;padding:9px;background:#f6f8f5;border-radius:7px;font-size:11px;line-height:1.4}
+    .task-score-evidence strong{font-size:10px;color:#3f5b51}
+    .task-score-evidence span{color:#53685c}
+    .all-goal-scores{margin-top:14px;border-top:1px solid #d7e3db;padding-top:10px}
+    .all-goal-scores summary{font-size:12px;font-weight:700;cursor:pointer}
+    .goal-score-line{display:grid;grid-template-columns:minmax(110px,1fr) minmax(95px,1.6fr) 64px;align-items:center;gap:8px;padding:7px 0;font-size:12px}
+    .goal-score-line .goal-score-meter{margin:0}
+    .goal-score-line span:last-child{text-align:right;font:700 11px "Space Mono",monospace}
+    .goal-node.scored-sdg .goal-node-status{font-weight:700;color:#176a61}
+    @media(max-width:760px){.goal-rank-cards{grid-template-columns:1fr}.task-goal-rankings{padding:13px}}
     .mapping{--sdg-color:#176a61;background:var(--paper);border:1px solid #e0e7dd;border-radius:12px;overflow:hidden;box-shadow:0 5px 16px #21433d08}
     .mapping-head{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:13px;min-height:76px;padding:12px 15px 12px 17px;background:linear-gradient(100deg,color-mix(in srgb,var(--sdg-color) 7%,#fffefa),#fffefa 67%)}
     .goal-node.tentative{border:2px dashed color-mix(in srgb,var(--goal-color) 64%,#dce5dc);background:color-mix(in srgb,var(--goal-color) 5%,#fffefa)}
@@ -232,6 +253,15 @@
         <h2 id="roleTitle">Career connections</h2>
         <span id="reviewStatus" class="mono"></span>
       </div>
+      <section id="taskGoalRankings" class="task-goal-rankings" aria-label="O*NET task-based SDG relevance ranking" hidden>
+        <h2>Task-based SDG relevance · Top 3</h2>
+        <p class="score-disclaimer">Every occupation's genuine O*NET task statements are compared with all 17 SDGs. These are model-estimated thematic relevance indices (0–100), NOT probability, achieved impact, or UN-certified connections. Even a low-scoring career receives exploratory rankings, with weak evidence clearly identified.</p>
+        <div id="topGoalCards" class="goal-rank-cards"></div>
+        <details class="all-goal-scores">
+          <summary>View scores for all 17 SDGs</summary>
+          <div id="allGoalScoreLines"></div>
+        </details>
+      </section>
       <div id="mappingList" class="mapping-list"></div>
       <details id="taskProfile" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>Official O*NET occupation tasks</h2><span class="pathway-intro">Source tasks are real; SDG conclusions are independent suggestions.</span></span></summary>
@@ -248,7 +278,7 @@
           <div class="map-legend" aria-label="Map legend">
             <span class="legend-key"><i class="legend-dot"></i>Task-target hypothesis</span>
             <span class="legend-key"><i class="legend-dot muted"></i>Dashed = tentative, needs review</span>
-            <span class="legend-key"><i class="legend-dot muted"></i>Not assessed</span>
+            <span class="legend-key"><i class="legend-dot muted"></i>Task-derived rank (not impact)</span>
           </div>
         </div>
         <div id="mindmapStage" class="mindmap-stage">
@@ -256,7 +286,7 @@
           <div id="careerCenter" class="career-center"><small>Exploring</small><strong id="mapCareerName">Career</strong></div>
           <div id="goalGrid" class="goal-grid" aria-label="United Nations Sustainable Development Goals"></div>
         </div>
-        <p class="map-caption">Solid links: explicit task-to-target rules. Dashed links: weaker unverified suggestions, sometimes only title/SOC classification. Neither is a proven SDG outcome. Check each role's actual Task IDs below.</p>
+        <p class="map-caption">Each goal has a task-based relevance index calculated from the selected career's O*NET duties. The top three have dashed exploratory connections. Solid connections are separate, narrower UN target hypotheses. Neither means verified SDG impact.</p>
       </section>
       <details id="learningContribution" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>FutureSkill learning contribution (separate)</h2><span class="pathway-intro">Learning and job-readiness links are NOT direct career-to-SDG mappings.</span></span></summary>
@@ -321,6 +351,8 @@
     ];
     let activeMappings = [];
     let activeCandidateMappings = [];
+    let activeGoalScores = [];
+    let activeTopGoals = [];
     let activeCareer = "";
     let lastFocusedGoal = null;
 
@@ -792,6 +824,50 @@
           link.target = "_blank";
           link.rel = "noopener noreferrer";
         }
+      });
+    }
+
+    function renderTaskGoalRankings(data) {
+      const section = document.getElementById("taskGoalRankings");
+      const cards = document.getElementById("topGoalCards");
+      const all = document.getElementById("allGoalScoreLines");
+      cards.replaceChildren();
+      all.replaceChildren();
+      const scores = Array.isArray(data.goal_scores) ? data.goal_scores : [];
+      const top = Array.isArray(data.top_goal_scores) ? data.top_goal_scores : [];
+      section.hidden = scores.length !== 17;
+      if (section.hidden) return;
+      top.forEach((entry,index) => {
+        const card = node(cards,"article","","goal-rank-card");
+        const header = node(card,"div","","rank-header");
+        node(header,"span",`#${index + 1} · SDG ${entry.sdg_id}`);
+        node(header,"span",`${entry.relevance_index}/100`,"rank-number");
+        node(card,"h3",entry.sdg_name);
+        const meter = node(card,"div","","goal-score-meter");
+        const fill = node(meter,"div","","goal-score-meter-fill");
+        fill.style.width = `${Math.max(0, Math.min(100, Number(entry.relevance_index) || 0))}%`;
+        node(card,"p",entry.evidence_basis === "direct_task_topic"
+          ? "Task wording matches this Goal theme. Exploratory relevance only."
+          : entry.evidence_basis === "linked_dwa_topic"
+            ? "Linked detailed work activities suggest this Goal."
+            : "Weak lexical resemblance only; human review required.");
+        (entry.task_evidence || []).slice(0,3).forEach(task => {
+          const evidence = node(card,"div","","task-score-evidence");
+          node(evidence,"strong",`O*NET Task ID ${task.task_id} · Score contribution ${task.task_score}`);
+          node(evidence,"span",task.task);
+          if (Array.isArray(task.phrase_matches) && task.phrase_matches.length)
+            node(evidence,"span",`Matched task themes: ${task.phrase_matches.join(", ")}`);
+          if (Array.isArray(task.dwa_phrase_matches) && task.dwa_phrase_matches.length)
+            node(evidence,"span",`Matched DWA themes: ${task.dwa_phrase_matches.join(", ")}`);
+        });
+      });
+      scores.sort((a,b)=>Number(a.sdg_id)-Number(b.sdg_id)).forEach(entry => {
+        const line = node(all,"div","","goal-score-line");
+        node(line,"span",`SDG ${entry.sdg_id} · ${entry.sdg_name}`);
+        const bar = node(line,"div","","goal-score-meter");
+        const fill = node(bar,"div","","goal-score-meter-fill");
+        fill.style.width = `${Math.max(0, Math.min(100, Number(entry.relevance_index) || 0))}%`;
+        node(line,"span",`${entry.relevance_index}/100`);
       });
     }
 
