@@ -1,0 +1,138 @@
+/* A restrained console skin for the current task-evidence explorer. */
+@property --sdg-laser-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+html[data-futureskill-page="sdg"] {
+  --hud-laser: var(--fs-accent);
+  --hud-glow: color-mix(in srgb, var(--fs-accent) 7%, transparent);
+  --hud-panel: var(--fs-surface);
+}
+html[data-futureskill-page="sdg"] main { max-width: 1440px; padding: 30px 32px 48px; }
+html[data-futureskill-page="sdg"] header:not(.fs-site-nav) {
+  height: 44px; padding: 0 max(32px, calc((100vw - 1376px) / 2));
+  background: transparent; border-bottom: 1px solid var(--fs-line);
+}
+html[data-futureskill-page="sdg"] header a { color: var(--fs-ink-soft); font-size: 11px; }
+html[data-futureskill-page="sdg"] .eyebrow { color: var(--fs-accent); font-size: 10px; letter-spacing: 1.4px; }
+html[data-futureskill-page="sdg"] .status-pill { border-radius: 4px; }
+html[data-futureskill-page="sdg"] .intro h1 { font-size: clamp(32px, 3.4vw, 46px); font-weight: 500; }
+html[data-futureskill-page="sdg"] .distinction { border-radius: 0 4px 4px 0; }
+html[data-futureskill-page="sdg"] .search-panel,
+html[data-futureskill-page="sdg"] .task-goal-rankings,
+html[data-futureskill-page="sdg"] .goal-explorer {
+  position: relative; isolation: isolate; min-width: 0;
+  border: 1px solid var(--fs-line); border-radius: 8px;
+  background: var(--hud-panel); box-shadow: inset 0 0 42px var(--hud-glow), 0 8px 26px #0000000a;
+}
+/* Static corner brackets frame the console; only linked Goal cards get a laser. */
+html[data-futureskill-page="sdg"] .search-panel::after,
+html[data-futureskill-page="sdg"] .task-goal-rankings::after,
+html[data-futureskill-page="sdg"] .goal-explorer::after {
+  content: ""; position: absolute; z-index: 1; inset: -1px; pointer-events: none;
+  border-radius: inherit; opacity: .6;
+  background: linear-gradient(var(--hud-laser),var(--hud-laser)) 8px 0/22px 1px no-repeat,
+    linear-gradient(var(--hud-laser),var(--hud-laser)) 0 8px/1px 22px no-repeat,
+    linear-gradient(var(--hud-laser),var(--hud-laser)) calc(100% - 8px) 100%/22px 1px no-repeat,
+    linear-gradient(var(--hud-laser),var(--hud-laser)) 100% calc(100% - 8px)/1px 22px no-repeat;
+}
+html[data-futureskill-page="sdg"] .search-panel { z-index: 6; padding: 18px; }
+html[data-futureskill-page="sdg"] #career { border-radius: 5px; }
+html[data-futureskill-page="sdg"] #submitButton { border-radius: 5px; min-width: 170px; }
+html[data-futureskill-page="sdg"] .section-label { gap: 20px; }
+html[data-futureskill-page="sdg"] #roleTitle { font-size: 24px; font-weight: 500; }
+html[data-futureskill-page="sdg"] #reviewStatus { color: var(--fs-accent-ink); font-size: 10px; text-align: right; }
+html[data-futureskill-page="sdg"] .task-goal-rankings { padding: 20px; }
+html[data-futureskill-page="sdg"] .task-goal-rankings h2 { font-weight: 500; }
+html[data-futureskill-page="sdg"] .goal-rank-card { border-radius: 6px; padding: 15px; background: var(--fs-raised); }
+html[data-futureskill-page="sdg"] .goal-rank-card .rank-number { color: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .goal-rank-card h3 { font-weight: 600; }
+html[data-futureskill-page="sdg"] .mapping { border-radius: 6px; box-shadow: none; }
+html[data-futureskill-page="sdg"] .mapping-head { background: var(--fs-surface); }
+html[data-futureskill-page="sdg"] .mapping-details-trigger { border-radius: 4px; }
+html[data-futureskill-page="sdg"] .pathway { border-radius: 6px; }
+html[data-futureskill-page="sdg"] .goal-explorer { padding: 22px; }
+html[data-futureskill-page="sdg"] .goal-node {
+  position: relative; isolation: isolate; overflow: visible; border-radius: 6px;
+  transition: background-color .16s ease, border-color .16s ease;
+}
+html[data-futureskill-page="sdg"] .goal-node:hover { transform: none; }
+html[data-futureskill-page="sdg"] .goal-node.linked { border-color: var(--hud-laser); }
+html[data-futureskill-page="sdg"] .goal-node.linked::before {
+  content: ""; position: absolute; z-index: 2; inset: -1px; padding: 1.5px;
+  border-radius: inherit; pointer-events: none;
+  background: conic-gradient(from var(--sdg-laser-angle), transparent 0deg 270deg,
+    color-mix(in srgb, var(--hud-laser) 15%, transparent) 292deg,
+    var(--hud-laser) 329deg, #d7fcff 345deg, transparent 351deg 360deg);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: sdg-laser-lap 5s linear infinite;
+}
+html[data-futureskill-page="sdg"] .goal-list-item:nth-child(even) .goal-node.linked::before { animation-delay: -2.5s; }
+@keyframes sdg-laser-lap { from { --sdg-laser-angle: 0deg; } to { --sdg-laser-angle: 360deg; } }
+.hud-layout-toolbar { display: flex; justify-content: flex-end; align-items: center; margin: 0 0 18px; }
+.hud-layout-controls { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--fs-line); border-radius: 6px; background: var(--fs-canvas); }
+html[data-futureskill-page="sdg"] .hud-layout-controls button {
+  min-height: 36px; padding: 7px 12px; border: 1px solid transparent; border-radius: 4px;
+  background: transparent; color: var(--fs-ink-soft); font-size: 11px; font-weight: 600;
+}
+html[data-futureskill-page="sdg"] .hud-layout-controls button[aria-pressed="true"] {
+  border-color: var(--fs-line-strong); background: var(--fs-accent-soft); color: var(--fs-accent-ink);
+}
+.hud-goal-stage { position: relative; isolation: isolate; }
+.hud-career-center, .hud-diagram-note { display: none; }
+.hud-goal-stage.is-diagram { min-height: var(--perimeter-height); }
+.hud-goal-stage.is-diagram .hud-career-center {
+  display: flex; position: absolute; z-index: 1; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  flex-direction: column; align-items: center; justify-content: center; gap: 9px;
+  width: 178px; height: 178px; padding: 21px; border-radius: 50%;
+  border: 1px solid var(--fs-line-strong); background: var(--fs-raised);
+  box-shadow: 0 0 0 12px var(--hud-glow), 0 0 0 26px color-mix(in srgb,var(--fs-line) 30%,transparent);
+  text-align: center; pointer-events: none;
+}
+.hud-career-center small { color: var(--fs-muted); font: 8px/1.5 ui-monospace, monospace; letter-spacing: 1px; }
+.hud-career-center strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; color: var(--fs-ink); font-size: 14px; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
+.hud-career-center span { color: var(--fs-accent-ink); font-size: 9px; line-height: 1.4; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter { position: relative; display: block; height: var(--perimeter-height); }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter > .goal-list-item {
+  position: absolute; z-index: 2; top: calc(var(--goal-y) - var(--goal-card-height)/2);
+  left: calc(var(--goal-x) - var(--goal-card-width)/2);
+  width: var(--goal-card-width); height: var(--goal-card-height);
+}
+html[data-futureskill-page="sdg"][data-future-theme] .goal-grid.is-perimeter .goal-node {
+  display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: center; gap: 7px;
+  width: 100%; height: 100%; min-height: 0; padding: 9px; text-align: left;
+}
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-node img { width: 28px; height: 28px; border-radius: 4px; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-index { font-size: 8px; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-name { font-size: 10px; line-height: 1.3; }
+html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-node-status { font-size: 9px; line-height: 1.35; margin-top: 4px; }
+.hud-connector-lines { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.hud-connector-lines line { stroke: var(--hud-laser); stroke-width: 1; opacity: .65; vector-effect: non-scaling-stroke; }
+.hud-diagram-note.is-visible { display: block; margin: 13px 0 0; padding-top: 12px; border-top: 1px solid var(--fs-line); color: var(--fs-ink-soft); font-size: 11px; }
+html[data-futureskill-page="sdg"] .goal-evidence-drawer { border-left-color: var(--hud-laser); }
+html[data-futureskill-page="sdg"] .footnote { font-size: 11px; line-height: 1.8; }
+html[data-futureskill-page="sdg"][data-hud-motion="paused"] .goal-node.linked::before { animation-play-state: paused; }
+@media(max-width:1000px) {
+  html[data-futureskill-page="sdg"] main { padding: 25px 24px 42px; }
+  html[data-futureskill-page="sdg"] .goal-explorer { padding: 18px; }
+}
+@media(max-width:900px) { .hud-layout-toolbar { display: none; } }
+@media(max-width:720px) {
+  html[data-futureskill-page="sdg"] main { padding: 24px 15px 36px; }
+  html[data-futureskill-page="sdg"] header:not(.fs-site-nav) { padding: 0 15px; }
+  html[data-futureskill-page="sdg"] .intro h1 { font-size: 36px; }
+  html[data-futureskill-page="sdg"] .task-goal-rankings, html[data-futureskill-page="sdg"] .goal-explorer { padding: 15px; }
+  html[data-futureskill-page="sdg"] .section-label { align-items: flex-start; }
+  html[data-futureskill-page="sdg"] #roleTitle { font-size: 22px; }
+  html[data-futureskill-page="sdg"] #reviewStatus { max-width: 45%; font-size: 9px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  html[data-futureskill-page="sdg"] .goal-node.linked::before { animation: none; --sdg-laser-angle: 70deg; }
+}
+@media(forced-colors:active) {
+  html[data-futureskill-page="sdg"] .goal-node.linked::before,
+  html[data-futureskill-page="sdg"] .search-panel::after,
+  html[data-futureskill-page="sdg"] .task-goal-rankings::after,
+  html[data-futureskill-page="sdg"] .goal-explorer::after { display: none; }
+  .hud-connector-lines line { stroke: CanvasText; }
+}

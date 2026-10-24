@@ -76,15 +76,25 @@ async function picture(name) {
     await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 1000, deviceScaleFactor: 1, mobile: false });
     await go("/"); assert.equal(await evaluate("FutureSkillI18n.getLanguage()"), "en");
     const englishHome = await evaluate("document.querySelector('#homePage h1').textContent");
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('#language-select option')].map(el=>el.value)"), ["en", "zh", "ms"]);
+    await evaluate("document.getElementById('language-select').value='zh';document.getElementById('language-select').dispatchEvent(new Event('change',{bubbles:true}))");
+    await wait("FutureSkillI18n.getLanguage()==='zh-CN'");
+    assert.equal(await evaluate("document.getElementById('fsLanguageSelect').value"), "zh-CN");
+    assert.equal(await evaluate("document.querySelectorAll('#homePage h1 > span').length"), 1, "language changes preserve the styled hero subtree");
+    await go("/");
+    assert.equal(await evaluate("FutureSkillI18n.getLanguage()"), "zh-CN", "header language persists after reload");
+    assert.equal(await evaluate("document.getElementById('language-select').value"), "zh");
+    await language("en");
     await settings();
     assert.deepEqual(await evaluate("[...document.querySelectorAll('#fsLanguageSelect option')].map(el=>el.value)"), ["en", "zh-CN", "ms"]);
     await evaluate("document.getElementById('fsLanguageSelect').value='zh-CN';document.getElementById('fsLanguageSelect').dispatchEvent(new Event('change',{bubbles:true}))");
     await wait("FutureSkillI18n.getLanguage()==='zh-CN'");
     assert.notEqual(await evaluate("document.querySelector('#homePage h1').textContent"), englishHome);
     assert.equal(await evaluate("localStorage.getItem('futureskill-language-preference')"), "zh-CN");
+    assert.equal(await evaluate("document.getElementById('language-select').value"), "zh", "Settings selection updates the header selector");
     await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
     await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
-    await wait("!document.getElementById('fsSettingsDialog').open");
+    await wait("!document.getElementById('fsSettingsDialog').open && document.activeElement.id==='fsSettingsButton'");
     assert.equal(await evaluate("document.activeElement.id"), "fsSettingsButton");
     await language("ms"); await language("en");
     assert.equal(await evaluate("document.querySelector('#homePage h1').textContent"), englishHome);
@@ -137,8 +147,9 @@ async function picture(name) {
     await wait("!!window.appState || !!document.querySelector('#questionnaire:not([hidden])') || !!document.querySelector('#dashboard:not([hidden])')");
     assert.deepEqual(await evaluate("[...document.querySelectorAll('#workspaceNav [data-workspace-action]')].map(el=>el.dataset.workspaceAction)"),
       ["overview", "plan", "progress", "edit-profile"]);
-    assert.equal(await evaluate("document.querySelectorAll('#workspaceSidebar a:not([href=\"/careers\"]),#workspaceSidebar [data-workspace-action=\"settings\"]').length"), 0);
+    assert.equal(await evaluate("document.querySelectorAll('#workspaceSidebar a:not([href=\"/careers\"]):not([href=\"/interview-practice/\"]),#workspaceSidebar [data-workspace-action=\"settings\"]').length"), 0);
     assert.equal(await evaluate("document.querySelector('#workspaceSidebar a[href=\"/careers\"]')!==null"), true);
+    assert.equal(await evaluate("document.querySelector('#workspaceSidebar a[href=\"/interview-practice/\"]')!==null"), true);
     assert.equal(await evaluate("document.querySelectorAll('#settingsDialog,#fsWorkspaceLanguageSelect').length"), 0);
     assert.equal(await evaluate("document.querySelectorAll('#fsSettingsDialog').length"), 1);
     assert.equal(await evaluate("!!document.querySelector('#fsSettingsButton svg')"), true);
@@ -211,6 +222,29 @@ async function picture(name) {
     }
     console.log("PASS browser: all three language Settings layouts at desktop/mobile widths in both themes without horizontal overflow");
 
+    await evaluate("localStorage.removeItem('futureskill-language-preference');localStorage.setItem('futureskill_language','zh')");
+    await go("/");
+    assert.equal(await evaluate("FutureSkillI18n.getLanguage()"), "zh-CN", "legacy homepage preference migrates on load");
+    assert.equal(await evaluate("document.getElementById('language-select').value"), "zh");
+    await go("/ai-trend");
+    assert.equal(await evaluate("FutureSkillI18n.getLanguage()"), "zh-CN", "migrated preference follows navigation to another page");
+    await go("/");
+    console.log("PASS browser: header and Settings share language, retain hero structure, persist on reload and migrate legacy preferences across pages");
+
+    await evaluate("localStorage.setItem('futureskill-language-preference','en')");
+    await go("/");
+    await send("Network.setBlockedURLs", { urls: ["*/static/locales/ms.json"] });
+    await evaluate("document.getElementById('language-select').value='ms';document.getElementById('language-select').dispatchEvent(new Event('change',{bubbles:true}))");
+    await wait("document.getElementById('headerLanguageStatus').textContent.includes('could not be loaded')");
+    assert.equal(await evaluate("FutureSkillI18n.getLanguage()"), "en", "failed header language load retains the current language");
+    assert.equal(await evaluate("document.getElementById('language-select').value"), "en");
+    assert.equal(await evaluate("document.getElementById('fsLanguageSelect').value"), "en");
+    await send("Network.setBlockedURLs", { urls: [] });
+    await evaluate("document.getElementById('language-select').value='ms';document.getElementById('language-select').dispatchEvent(new Event('change',{bubbles:true}))");
+    await wait("FutureSkillI18n.getLanguage()==='ms'");
+    assert.equal(await evaluate("document.getElementById('fsLanguageSelect').value"), "ms", "header selection recovers when the pack becomes available");
+    console.log("PASS browser: failed header language loads keep both selectors unchanged and a later retry recovers");
+
     await evaluate("localStorage.setItem('futureskill-language-preference','unsupported')");
     await go("/"); assert.equal(await evaluate("FutureSkillI18n.getLanguage()"), "en");
     const override = await send("Page.addScriptToEvaluateOnNewDocument", { source:
@@ -220,6 +254,8 @@ async function picture(name) {
     await wait("FutureSkillI18n.getLanguage()==='ms'");
     await wait("document.getElementById('fsLanguageStatus').textContent.length>0");
     assert.equal(await evaluate("FutureSkillI18n.getState().persistence"), "blocked");
+    assert.equal(await evaluate("document.getElementById('language-select').value"), "ms");
+    await wait("document.getElementById('headerLanguageStatus').textContent.length>0");
     await send("Page.removeScriptToEvaluateOnNewDocument", { identifier: override.identifier });
     assert.deepEqual(exceptions, []);
     console.log("PASS browser: invalid saved preference defaults to English; blocked storage gives explicit notice without breaking switching");
