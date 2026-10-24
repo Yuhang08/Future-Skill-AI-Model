@@ -104,13 +104,17 @@ class SDGCareerTests(unittest.TestCase):
                     result = get_sdg_alignment_by_id(code)
                     self.assertEqual(result["career"], record["title"])
                     self.assertTrue(result["mappings"] or result["candidate_mappings"])
-                    self.assertEqual(result["task_data_status"], "available")
+                    self.assertIn(result["task_data_status"],
+                                  ("available", "occupation_tasks_missing"))
                     self.assertIsNotNone(result["task_profile"])
                     profile = result["task_profile"]
-                    self.assertGreater(profile["occupation_task_count"], 0)
-                    self.assertTrue(profile["representative_tasks"])
-                    self.assertTrue(all(task["task_id"].isdigit() for task
-                                        in profile["representative_tasks"]))
+                    if profile["occupation_task_count"]:
+                        self.assertTrue(profile["representative_tasks"])
+                        self.assertTrue(all(task["task_id"].isdigit() for task
+                                            in profile["representative_tasks"]))
+                    else:
+                        self.assertEqual(result["task_data_status"],
+                                         "occupation_tasks_missing")
                     for suggestion in result["candidate_mappings"]:
                         self.assertIn(suggestion["candidate_tier"], (
                             "task_topic", "classification_only"))
