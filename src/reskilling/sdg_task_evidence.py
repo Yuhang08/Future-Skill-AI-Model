@@ -31,16 +31,38 @@ TARGET_RULES = (
     },
     {
         "target": "12.5", "goal": 12,
-        "topic": r"\b(?:material|solid waste|recycl\w*|plastic|scrap|industrial waste)\b",
-        "action": r"\b(?:reduc\w*|recycl\w*|reus\w*|recover\w*|prevent\w*)\b",
-        "object": r"\b(?:wast\w*|recycl\w*|scrap|refuse|dispos\w*)\b",
-        "note": "Waste prevention/recycling tasks may connect to Target 12.5.",
+        # Waste treatment/recycling as an actual occupation task; mentioning
+        # recycling in a presentation or a TRAINING curriculum is not proof
+        # the occupation undertakes waste reduction.
+        "topic": r"\b(?:wast\w*|recycl\w*|scrap materials?|"
+                 r"reusable materials?|resource recovery)\b",
+        "action": r"\b(?:reduc\w*|prevent\w*|recycl\w*|reus\w*|"
+                  r"recover\w*|collect\w*|sort\w*|operat\w*|"
+                  r"implement\w*|manag\w*|process\w*|coordinat\w*)\b",
+        "object": r"\b(?:wast\w*|recycl\w*|scrap|reus\w*|recovery)\b",
+        "exclude": r"\b(?:teach\w*|train\w*|educat\w*|instruct\w*|"
+                   r"curricul\w*|workshops?|seminars?|"
+                   r"awareness presentations?)\b",
+        "core_only": True,
+        "note": "A core operational recycling/waste-prevention task may "
+                "relate to Target 12.5; discussion or training alone does not.",
     },
     {
         "target": "1.3", "goal": 1,
-        "topic": r"\b(?:social security|income support|financial assistance|welfare benefits|public assistance)\b",
-        "action": r"\b(?:administer|deliver|provide|distribut|determin|enrol|assist|process|coordinate|evaluat)\w*\b",
-        "note": "Administration of social-protection benefits may connect to Target 1.3.",
+        # UN 1.3 is about SOCIAL PROTECTION systems. A commercial loan,
+        # student scholarship or generic financial assistance is not 1.3.
+        "topic": r"\b(?:social (?:security|protection) (?:benefits?|programs?|systems?)|"
+                 r"(?:government|public) assistance (?:benefits?|programs?)|"
+                 r"(?:unemployment|disability|welfare|child|maternity|pension) benefits?|"
+                 r"(?:income support|social welfare) (?:benefits?|programs?))\b",
+        "action": r"\b(?:administer|deliver|provid|distribut|determin|enrol|"
+                  r"assist|process|coordinat|evaluat|approv|assess|manag)\w*\b",
+        "exclude": r"\b(?:student loans?|college loans?|scholarships?|"
+                   r"tuition (?:loans?|grants?)|commercial loans?|"
+                   r"mortgage loans?|credit applications?)\b",
+        "core_only": True,
+        "note": "A core duty delivering/administering a social-protection program "
+                "may relate to Target 1.3; benefit coverage has not been measured.",
     },
     {
         "target": "2.1", "goal": 2,
@@ -57,10 +79,22 @@ TARGET_RULES = (
     },
     {
         "target": "4.1", "goal": 4,
-        "groups": ("25",),
-        "topic": r"\b(?:students?|pupils?|classroom|school children|school students)\b",
-        "action": r"\b(?:teach|instruct|tutor|educat|assess|develop lesson)\w*\b",
-        "note": "Teaching school students may connect to Target 4.1.",
+        # Target 4.1 refers specifically to PRIMARY and SECONDARY
+        # education, not postsecondary, preschool or adult classes.
+        "codes": (
+            "25-2012.00",  # Kindergarten teachers
+            "25-2021.00", "25-2022.00", "25-2023.00",
+            "25-2031.00", "25-2032.00",
+            "25-2055.00", "25-2056.00", "25-2057.00", "25-2058.00",
+            "25-3031.00",  # Substitute teachers
+        ),
+        "topic": r"\b(?:students?|pupils?|kindergartners?|"
+                 r"classrooms?|school children|school students)\b",
+        "action": r"\b(?:teach|instruct|tutor|educat|assess|"
+                  r"develop lesson|prepar\w* lessons?)\w*\b",
+        "core_only": True,
+        "note": "Core teaching duties in K-12 schooling may relate to "
+                "Target 4.1; preschool, university and adult instruction are different targets.",
     },
     {
         "target": "6.3", "goal": 6,
@@ -84,9 +118,20 @@ TARGET_RULES = (
     {
         "target": "9.5", "goal": 9,
         "groups": ("15", "17", "19"),
-        "topic": r"\b(?:research|scientific|technolog\w*|engineer\w*|prototype|software)\b",
-        "action": r"\b(?:conduct research|design|develop|experiment|investigat|test|invent|research)\w*\b",
-        "note": "Research and development tasks may connect to Target 9.5; innovation impact is not proven.",
+        # UN 9.5 emphasises scientific research and R&D capacity. General
+        # software installation, technical support, ordinary maintenance,
+        # website design or product testing alone do NOT establish 9.5.
+        "topic": r"\b(?:research and development|scientific research|"
+                 r"(?:basic|applied|experimental) research|"
+                 r"conduct (?:scientific|applied|experimental) research|"
+                 r"(?:develop|design|research|investigat)\w* (?:novel|"
+                 r"innovative|experimental|new) (?:technolog\w*|materials?|"
+                 r"products?|methods?|processes?|prototypes?)|"
+                 r"(?:develop|design|test) experimental prototypes?|"
+                 r"laboratory research)\b",
+        "core_only": True,
+        "note": "An explicit core research/development duty may relate to "
+                "Target 9.5. Routine IT work is not R&D, and no SDG result is measured.",
     },
     {
         "target": "10.2", "goal": 10,
@@ -128,8 +173,16 @@ TARGET_RULES = (
 )
 
 
-def _match_rule(task, code, rule):
+def _match_rule(task, code, rule, task_type=None):
+    """Propose target only when wording, career scope and evidence tier agree."""
     if rule.get("groups") and code[:2] not in rule["groups"]:
+        return False
+    if rule.get("codes") and code not in rule["codes"]:
+        return False
+    if rule.get("core_only") and task_type is not None:
+        if str(task_type).strip().lower() != "core":
+            return False
+    if rule.get("exclude") and re.search(rule["exclude"], task, re.IGNORECASE):
         return False
     for key in ("topic", "action", "object"):
         if rule.get(key) and not re.search(rule[key], task, re.IGNORECASE):
@@ -182,7 +235,7 @@ def task_supported_mappings(career_id, title):
     matched = defaultdict(list)
     for row in tasks:
         for rule in TARGET_RULES:
-            if _match_rule(row["task"], career_id, rule):
+            if _match_rule(row["task"], career_id, rule, row["type"]):
                 matched[rule["target"]].append((row, rule))
     # Require an explicitly matching CORE task, if present; otherwise label
     # supplemental findings as weaker signals (not automatically endorsed).
