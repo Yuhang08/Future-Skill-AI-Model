@@ -72,10 +72,18 @@ TARGET_RULES = (
     },
     {
         "target": "3.8", "goal": 3,
-        "groups": ("29", "31", "21"),
-        "topic": r"\b(?:patient|clinical|medical care|healthcare|health care)\b",
-        "action": r"\b(?:diagnos|treat|provid|administer|monitor|care for|rehabilitat)\w*\b",
-        "note": "Providing clinical care may connect to Target 3.8; health outcomes are not measured.",
+        # UN Target 3.8 concerns health-service ACCESS/COVERAGE, not the
+        # mere existence of a clinical job. Patient care is a weaker
+        # goal-level SDG 3 topic in sdg_candidate_ranker.py.
+        "topic": r"\b(?:universal health coverage|health(?:care)? access|"
+                 r"access to (?:essential|primary) (?:health|medical|clinical) "
+                 r"(?:care|services)|health services? coverage|"
+                 r"access to healthcare services|patient access to care)\b",
+        "action": r"\b(?:expand|improv|ensur|facilitat|provid|increas|"
+                  r"coordinat|extend|manag|develop)\w*\b",
+        "core_only": True,
+        "note": "Work explicitly improving access to essential healthcare "
+                "may relate to Target 3.8; providing clinical care alone is not UHC.",
     },
     {
         "target": "4.1", "goal": 4,
