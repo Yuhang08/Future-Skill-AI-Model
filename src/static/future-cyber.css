@@ -1,0 +1,76 @@
+/* Shared cyberpunk canvas. Decorative layers never intercept application input. */
+html[data-futureskill-page][data-future-theme="dark"] {
+  --fs-canvas: #030b16; --fs-canvas-glow: #09243b;
+  --fs-surface: #081a2b; --fs-raised: #0b2033; --fs-raised-alt: #0d263b;
+  --fs-ink: #e5f6ff; --fs-ink-soft: #b2c9dc; --fs-muted: #91afc5; --fs-dim: #91abc0;
+  --fs-line: #23485f; --fs-line-strong: #3f6c86;
+  --fs-accent: #67ddff; --fs-accent-hover: #a4edff; --fs-on-accent: #032035;
+  --fs-accent-soft: #103a51; --fs-accent-ink: #bcefff;
+  --cyber-grid: #3e8bad12; --cyber-major: #4e9aba0e;
+  --cyber-blue: #087fc333; --cyber-violet: #7227ad18;
+}
+html[data-futureskill-page][data-future-theme="light"] {
+  --fs-canvas: #edf5fc; --fs-canvas-glow: #e0f1ff;
+  --fs-surface: #f5faff; --fs-raised: #fff; --fs-raised-alt: #e9f3fc;
+  --fs-ink: #12324c; --fs-ink-soft: #3f607a; --fs-muted: #4d6e86; --fs-dim: #5b778c;
+  --fs-line: #b9d1e3; --fs-line-strong: #7babc9;
+  --fs-accent: #075eaa; --fs-accent-hover: #084c85; --fs-on-accent: #fff;
+  --fs-accent-soft: #d9edfc; --fs-accent-ink: #154b75;
+  --cyber-grid: #276a9b0d; --cyber-major: #276a9b10;
+  --cyber-blue: #45a6ee1c; --cyber-violet: #9964ca0c;
+}
+html[data-futureskill-page][data-future-theme] body {
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  background-color: var(--fs-canvas);
+  background-image: linear-gradient(var(--cyber-major) 1px,transparent 1px),linear-gradient(90deg,var(--cyber-major) 1px,transparent 1px),linear-gradient(var(--cyber-grid) 1px,transparent 1px),linear-gradient(90deg,var(--cyber-grid) 1px,transparent 1px);
+  background-size: 120px 120px,120px 120px,24px 24px,24px 24px;
+}
+html[data-futureskill-page] body::before {
+  content: ""; position: fixed; inset: -15%; z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse at 72% 20%,var(--cyber-blue),transparent 48%),radial-gradient(ellipse at 12% 78%,var(--cyber-violet),transparent 46%);
+  animation: cyber-ambient-drift 22s ease-in-out infinite alternate;
+}
+@keyframes cyber-ambient-drift { from { transform: translate3d(-2%,-1%,0); } to { transform: translate3d(3%,3%,0); } }
+html[data-futureskill-page] .fs-site-nav { background: var(--fs-surface); border-bottom-color: var(--fs-line); box-shadow: 0 1px 18px #008cff09; }
+html[data-futureskill-page="home"] .future-stats,
+html[data-futureskill-page="home"] .future-journey,
+html[data-futureskill-page="home"] .feature-hub { background: transparent; }
+/* The interview module shares appearance while retaining its Flask controller. */
+html[data-futureskill-page="interview"] .panel,
+html[data-futureskill-page="interview"] .historyItem { background: var(--fs-surface); border-color: var(--fs-line); }
+html[data-futureskill-page="interview"] label,
+html[data-futureskill-page="interview"] .answerLabel,
+html[data-futureskill-page="interview"] .logo { color: var(--fs-ink); }
+html[data-futureskill-page="interview"] .tag,
+html[data-futureskill-page="interview"] .question,
+html[data-futureskill-page="interview"] .readinessCard,
+html[data-futureskill-page="interview"] .secondary,
+html[data-futureskill-page="interview"] .interviewer .avatar { background: var(--fs-raised-alt); color: var(--fs-ink); border-color: var(--fs-line-strong); }
+html[data-futureskill-page="interview"] .career-options { background: var(--fs-raised); border-color: var(--fs-line-strong); }
+html[data-futureskill-page="interview"] #careerSearch { background: var(--fs-surface); color: var(--fs-ink); border-color: var(--fs-line-strong); }
+html[data-futureskill-page="interview"] .career-option { background: var(--fs-surface); color: var(--fs-ink); border-color: var(--fs-line); }
+html[data-futureskill-page="interview"] .career-option:hover,
+html[data-futureskill-page="interview"] .career-option:focus,
+html[data-futureskill-page="interview"] .career-option[aria-selected="true"] { background: var(--fs-accent-soft); color: var(--fs-accent-ink); }
+html[data-futureskill-page="interview"] .answerModes button[aria-pressed="true"] { background: var(--fs-accent-soft); color: var(--fs-accent-ink); border-color: var(--fs-accent); }
+html[data-futureskill-page="interview"] .score,
+html[data-futureskill-page="interview"] .topline,
+html[data-futureskill-page="interview"] .readinessCard strong,
+html[data-futureskill-page="interview"] .proficiencyHeading span,
+html[data-futureskill-page="interview"] #recordStatus { color: var(--fs-accent); }
+html[data-futureskill-page="interview"] .note,
+html[data-futureskill-page="interview"] .readinessCard small,
+html[data-futureskill-page="interview"] .interviewer small,
+html[data-futureskill-page="interview"] .career-meta,
+html[data-futureskill-page="interview"] .answerToolbar,
+html[data-futureskill-page="interview"] footer { color: var(--fs-muted); }
+html[data-futureskill-page="interview"] .career-meta,
+html[data-futureskill-page="interview"] .answerToolbar,
+html[data-futureskill-page="interview"] .answerHelp { opacity: 1; }
+html[data-futureskill-page="interview"] .feedback { border-color: var(--fs-line); }
+html[data-futureskill-page="interview"] .bar { background: var(--fs-line); }
+html[data-futureskill-page="interview"] .error { color: var(--fs-danger); }
+@media(prefers-reduced-motion:reduce) { html[data-futureskill-page] body::before { animation: none; transform: none; } }
+@media(forced-colors:active) { html[data-futureskill-page] body::before { display: none; } }

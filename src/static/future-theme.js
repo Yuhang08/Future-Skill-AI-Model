@@ -71,6 +71,7 @@
     const items = [
       ["/", "Career assessment"], ["/reskilling", "Reskilling"], ["/ai-trend", "AI trends"],
       ["/uncertainty", "Uncertainty Lab"], ["/sdg-impact", "SDG connections"],
+      ["/hr-interview/", "Interview practice"],
     ];
     // The existing inventory remains development-only, not a new learner feature.
     if (root.dataset.futureskillPage === "inventory") items.push(["/__dev/screens", "Screen inventory"]);
