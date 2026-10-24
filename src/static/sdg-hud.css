@@ -108,6 +108,8 @@ html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-name { font-size
 html[data-futureskill-page="sdg"] .goal-grid.is-perimeter .goal-node-status { font-size: 9px; line-height: 1.35; margin-top: 4px; }
 .hud-connector-lines { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .hud-connector-lines line { stroke: var(--hud-laser); stroke-width: 1; opacity: .65; vector-effect: non-scaling-stroke; }
+.hud-connector-lines line.exploratory { stroke-dasharray: 6 5; stroke-width: 1.5; opacity: .72; }
+html[data-futureskill-page="sdg"] .goal-node.top-ranked:not(.linked) { border-style: dashed; border-color: var(--hud-laser); }
 .hud-diagram-note.is-visible { display: block; margin: 13px 0 0; padding-top: 12px; border-top: 1px solid var(--fs-line); color: var(--fs-ink-soft); font-size: 11px; }
 html[data-futureskill-page="sdg"] .goal-evidence-drawer { border-left-color: var(--hud-laser); }
 html[data-futureskill-page="sdg"] .footnote { font-size: 11px; line-height: 1.8; }

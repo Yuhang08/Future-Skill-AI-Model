@@ -67,9 +67,13 @@
     });
 
     const linked = nodes.filter(node => node.classList.contains("linked"));
+    const exploratory = nodes.filter(node => node.classList.contains("top-ranked") && !node.classList.contains("linked"));
     const selected = (role?.textContent || "").trim();
     setText("[data-hud-career]", selected === "Explore all 17 goals" ? "Explore the goals" : selected || "Explore the goals");
-    setText("[data-hud-count]", linked.length ? `${linked.length} ${linked.length === 1 ? "Goal" : "Goals"} with Target hypotheses` : "No task-to-Target links shown");
+    setText("[data-hud-count]", linked.length
+      ? `${linked.length} Target hypotheses${exploratory.length ? ` · ${exploratory.length} exploratory Top 3` : ""}`
+      : exploratory.length ? `${exploratory.length} exploratory Goal connections · not verified`
+      : "No task-based connections available");
     if (!lines) {
       lines = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       lines.id = "mapLines";
@@ -84,7 +88,7 @@
     const hub = center.getBoundingClientRect();
     const sx = hub.left + hub.width/2 - bounds.left;
     const sy = hub.top + hub.height/2 - bounds.top;
-    linked.forEach(button => {
+    [...linked, ...exploratory].forEach(button => {
       const target = button.getBoundingClientRect();
       const tx = target.left + target.width/2 - bounds.left;
       const ty = target.top + target.height/2 - bounds.top;
@@ -96,6 +100,7 @@
       if (distance <= start + targetEdge) return;
       const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
       line.dataset.sdgId = button.dataset.sdgId;
+      if (!button.classList.contains("linked")) line.classList.add("exploratory");
       [["x1",sx+ux*start],["y1",sy+uy*start],["x2",tx-ux*targetEdge],["y2",ty-uy*targetEdge]].forEach(([name,value]) => line.setAttribute(name,String(value)));
       lines.appendChild(line);
     });

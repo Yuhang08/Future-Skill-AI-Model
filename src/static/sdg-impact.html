@@ -198,7 +198,7 @@
   <link rel="stylesheet" href="/static/future-theme.css?v=3">
    <link rel="stylesheet" href="/static/future-pages.css?v=sdg-expandable-goals-2">
   <link rel="stylesheet" href="/static/career-context.css?v=1">
-  <link rel="stylesheet" href="/static/sdg-hud.css?v=integration-1">
+  <link rel="stylesheet" href="/static/sdg-hud.css?v=top3-connectors-2">
   <link rel="stylesheet" href="/static/future-cyber.css?v=3">
 </head>
 <body>
@@ -281,7 +281,7 @@
           </div>
           <div id="goalGrid" class="goal-grid" role="list" aria-label="United Nations Sustainable Development Goals"></div>
         </div>
-        <p id="hudDiagramNote" class="hud-diagram-note">Connectors show potential task-to-Target hypotheses only. Goal rankings remain exploratory; neither demonstrates achieved impact.</p>
+        <p id="hudDiagramNote" class="hud-diagram-note">Solid lines indicate task-to-Target hypotheses; dashed lines show model-ranked Top 3 exploratory Goal relevance. Neither demonstrates achieved impact.</p>
       </details>
       <details id="learningContribution" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>FutureSkill learning contribution (separate)</h2><span class="pathway-intro">Learning and job-readiness links are NOT direct career-to-SDG mappings.</span></span></summary>
@@ -301,7 +301,7 @@
     <div id="goalInfoContent" class="mapping-drawer-panel"></div>
   </dialog>
   <script src="/static/sdg-career-search.js?v=1"></script>
-  <script src="/static/sdg-hud.js?v=integration-1" defer></script>
+  <script src="/static/sdg-hud.js?v=top3-connectors-2" defer></script>
   <script>
     const careerInput = document.getElementById("career");
     const message = document.getElementById("message");
@@ -631,10 +631,12 @@
         button.style.setProperty("--goal-color",goal[1]);
         if (mapping) button.classList.add("linked");
         else if (ranked || candidate) button.classList.add("tentative");
+        if (ranked && score) button.classList.add("top-ranked");
         if (score) button.classList.add("scored-sdg");
         const statusText = !activeCareer
           ? "Explore goal"
           : mapping ? (mapping.target_id ? `Target ${mapping.target_id} · candidate` : "Task-to-Target candidate")
+          : ranked && score ? "Top 3 exploratory Goal · not verified"
           : candidate ? (candidate.candidate_tier === "classification_only" ? "Classification-only" : "Needs review")
           : score ? (score.review_status === "task_text_candidate" ? "Task-theme · not reviewed" : "Weak exploratory ranking")
           : activeTaskDataStatus === "not_installed" ? "Task source unavailable" : "No target evidence";
