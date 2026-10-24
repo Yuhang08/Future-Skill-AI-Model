@@ -1,28 +1,35 @@
-# Repository Codebase — FutureSkill AI
+# FutureSkill AI — Repository Codebase
 
-This directory contains **read-only organizational copies** of verified source files from the repository's `main` branch, copied for judging and paperwork review on `submission-structure-20261025`.
+## Important: Render-safe source of truth
 
-**The website does not run from this directory.** Do not deploy it as a standalone application. Executable files retain their original live locations under `src/`. No live routes, imports, styling, logic, or dataset paths were changed.
+**The complete running application is the original repository structure, particularly `src/` and the root deployment/dependency files.** This submission directory is *documentation and supplementary grouped source snapshots only*. The snapshots are **not** intended to be deployed or used as an alternate application root.
 
-## Modules and original paths
+Do not delete, move, rename or replace files under `src/`, or change `requirements.txt`, production start command, environment variables, runtime data paths, or the Render deployment branch just to make the submission folders look cleaner.
 
-| Folder | Function | Original code path |
-|---|---|---|
-| `00_application/` | App entrypoint, integrated services and routes | `src/main.py` |
-| `01_career_assessment/` | Career matching / scoring engine | `src/career_engine.py` |
-| `02_ai_trend/` | Trend feature page | `src/static/ai-trend.html` |
-| `03_reskilling/` | Career catalog, occupation skills, reskilling frontend | `src/reskilling/` (selected files) |
-| `04_sdg_mapping/` | SDG impact page | `src/static/sdg-impact.html` |
-| `05_frontend/` | Homepage, workspace, styling, dynamic effects | `src/static/` (selected files) |
-| `06_multilingual/` | Language translation code and locale packs | `src/static/future-i18n.js`, `src/static/js/`, `src/static/locales/` (selected files) |
+### Canonical code links
 
-## Important limitations of this snapshot
+- [Production project source (main/src)](../../src)
+- [Root dependency and deployment configuration](../../)
+- [Original tests](../../tests)
 
-- This is a **partial verified code archive**, not yet every file used by the live site.
-- Some Python backend functions for different features may still live together in `src/main.py`, and copying it does not separate their implementations.
-- Large datasets, fonts, logos, binaries, further feature pages, extra modules and package/runtime dependencies have not all been inventoried or copied.
-- Some front-end copies retain references to their **original** locations and are for inspection, not execution.
-- `main` may not be the branch currently deployed to Render; live deployment branch has not been confirmed.
-- Do not treat these copies as evidence that every module is independently runnable.
+### Snapshots by function (not exhaustive)
 
-For functional verification, use the original application under `src/` until a separate full migration and regression test is completed.
+- `00_application/`: app entrypoint and requirements copy
+- `01_career_assessment/`: career matching snapshot
+- `02_ai_trend/`: trend page snapshot
+- `03_reskilling/`: selected reskilling modules, pages and JS
+- `04_sdg_mapping/`: SDG page snapshot
+- `05_frontend/`: selected frontend files
+- `06_multilingual/`: selected language scripts and locale data
+- `07_interview/`: interview HTML snapshot
+- `08_tests/`: selected tests
+
+**These are not every dependency.** Actual backend functionality includes additional modules in `src/reskilling/`, `src/hr_interview/`, data files and assets. Shared modules (including `src/main.py`) cannot be independently run from feature folders without preserving dependencies and relative paths.
+
+### Submission guidance
+
+To cite a feature in paperwork, always link to the **real source file under `src/`**, not just its duplicate in this folder. This ensures reviewers inspect exactly what is deployed. Use the feature folders for navigation and illustrative grouped copies only.
+
+### Archive completeness
+
+Until the full Git tree and the precise Render deployment branch are verified, **do not claim that this archive contains every source or asset**. Preserve the original file tree as the authoritative, complete runnable project.
