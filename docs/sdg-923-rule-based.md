@@ -1,3 +1,53 @@
+# SDG Target precision correction — 24 October 2026
+
+**Purpose:** reduce false positives found during review of the 923-career CSV.
+The following Target claims now need narrower O*NET occupational evidence:
+
+| Target | Old overly broad rule | Current task-to-target requirement |
+| --- | --- | --- |
+| 1.3 (social protection) | Generic "financial assistance" caused student-loan roles to match | Explicit government/public benefit, social-protection, welfare or similar program + administrative duty; core task |
+| 9.5 (scientific research/R&D) | Merely designing/testing software or providing IT support could match | Explicit scientific research, R&D, or innovative/new technology/product development; core task |
+| 12.5 (waste reduction) | Training or teaching about recycling could match | Direct waste prevention/recycling/reuse operational duty; reject education/training-only wording; core task |
+| 4.1 (primary and secondary education) | University, adult, preschool or museum instruction could match | K–12 teaching occupation code plus school/pupil/student instructional task; core task |
+| 3.8 (universal health coverage) | Any healthcare service/patient care counted as coverage | Explicit expansion or improvement of access to essential health services; core task |
+
+These rules are **conservative heuristics, not validated occupation–SDG
+causality**. Some truly relevant roles may now appear under the **dashed
+task-topic/DWA-topic candidate tier** or no suggestion, instead of a solid
+specific Target. That is intentional until their Target relationship is
+reviewed.
+
+Goal 4 task-topic discovery also no longer treats *generic internal staff
+training*, routine educational presentations, or instruction manuals as direct
+Quality Education work. Education-related career themes still need their
+specific O*NET task context.
+
+To validate this change against synthetic negative controls and the local
+official O*NET source:
+
+```powershell
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests -p "test_sdg_target_precision.py" -v
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python scripts/audit_sdg_task_evidence.py
+python scripts/export_923_sdg_review.py
+```
+
+The `test_sdg_target_precision.py` suite tests synthetic positive/negative
+sentences and, where the official CSV exists, checks that known overbroad
+occupation/Target pairs have been removed. Any **change in the count of
+strictly matched occupations is a coverage change, not a measured improvement
+in Precision**. Independent manual labeling of a representative random
+sample is necessary to estimate actual mapping correctness.
+
+UN references: https://sdgs.un.org/goals/goal1,
+https://sdgs.un.org/goals/goal3,
+https://sdgs.un.org/goals/goal4,
+https://sdgs.un.org/goals/goal9,
+https://sdgs.un.org/goals/goal12.
+
+---
+
 ## Correction: no automatic Goal 8 for management or commercial occupations
 
 Earlier versions classified all SOC 11 Management Occupations, and several
