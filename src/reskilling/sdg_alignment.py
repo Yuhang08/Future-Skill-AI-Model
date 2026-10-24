@@ -6,6 +6,7 @@ from functools import lru_cache
 
 from .catalog import CAREERS
 from .sdg_occupation_rules import infer_occupation_sdg_mappings
+from .sdg_task_evidence import task_supported_mappings
 from career_engine import load_careers
 
 
@@ -243,7 +244,9 @@ def _unknown_alignment(title):
         "career_id": None,
         "pathway_career": None,
         "status": "unknown",
+        "task_data_status": "unknown",
         "mappings": [],
+        "candidate_mappings": [],
         "learning_pathway_mappings": [],
         "pathway_skills": [],
         "evidence_scope": "This title is not in the supported career catalogue.",
@@ -255,19 +258,25 @@ def _build_alignment(career_id, current_skills=None):
     if career is None:
         return _unknown_alignment("")
     career_name = ROLE_BY_ID.get(career_id)
+    # Real occupational task records, not job titles, drive highlighted nodes.
+    task_mappings, task_data_status = task_supported_mappings(career_id, career["title"])
+    # Show broad title/SOC guesses separately; they are NEVER graph connections.
+    candidate_mappings = infer_occupation_sdg_mappings(career_id, career["title"])
     if career_name is None or career_name not in CAREERS:
         return {
             "career": career["title"],
             "career_id": career_id,
             "pathway_career": None,
-            "status": "suggested",
-            "mappings": infer_occupation_sdg_mappings(career_id, career["title"]),
+            "status": "task_supported" if task_mappings else "no_task_evidence",
+            "task_data_status": task_data_status,
+            "mappings": task_mappings,
+            "candidate_mappings": candidate_mappings,
             "learning_pathway_mappings": [],
             "pathway_skills": [],
             "evidence_scope": (
-                "These are rule-based thematic suggestions from the occupation "
-                "title or SOC major group, not reviewed target links or evidence "
-                "that this career causes measurable SDG impact."
+                "Only explicit rule matches in genuine O*NET 31.0 task statements "
+                "are shown on the career map. Title/SOC fallback is for browsing "
+                "only; neither supplies verified SDG outcome evidence."
             ),
         }
 
@@ -330,22 +339,22 @@ def _build_alignment(career_id, current_skills=None):
             "impact_limitations": REVIEWED_SCOPE,
         })
 
-    # Education / job-readiness links belong to the *learning product*, not
-    # to an occupation's direct social/environmental contribution. Do not
-    # highlight Goals 4/8 on the OCCUPATION mind map for this reason.
-    occupation_mappings = infer_occupation_sdg_mappings(career_id, career["title"])
+    # This distinction is essential: FutureSkill's training may relate to
+    # UN 4.4 / 8.5, but it does not make every IT career an SDG 4/8 occupation.
     return {
         "career": career["title"],
         "career_id": career_id,
         "pathway_career": career_name,
-        "status": "suggested" if occupation_mappings else "not_reviewed",
-        "mappings": occupation_mappings,
+        "status": "task_supported" if task_mappings else "no_task_evidence",
+        "task_data_status": task_data_status,
+        "mappings": task_mappings,
+        "candidate_mappings": candidate_mappings,
         "learning_pathway_mappings": learning_mappings,
         "pathway_skills": skills,
         "evidence_scope": (
-            "Occupation mappings are unverified, rule-based themes only. "
-            "Learning-pathway Target 4.4 / 8.5 links describe the FutureSkill "
-            "learning product, not an occupation's SDG contribution."
+            "Career graph: narrow rule matches in real O*NET 31.0 job tasks, "
+            "not measured SDG impacts. Broad title and SOC themes are clearly "
+            "separate. Training Targets 4.4 and 8.5 describe only FutureSkill."
         ),
     }
 
