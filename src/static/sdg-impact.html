@@ -617,7 +617,7 @@
       document.getElementById("goalInfoTitle").textContent = goal[0];
       document.getElementById("goalInfoNumber").textContent = `Sustainable Development Goal ${id}`;
       document.getElementById("goalInfoCopy").textContent = candidate
-        ? `UNVERIFIED CANDIDATE (not proven impact). ${candidate.relevance_reason} ${(candidate.task_evidence || []).map(e => `O*NET Task ID ${e.task_id}: ${e.task}`).join(" ")} Read the official tasks below before making any contribution claim.`
+        ? `UNVERIFIED CANDIDATE (not proven impact). ${candidate.relevance_reason} ${(candidate.task_evidence || []).map(e => `O*NET Task ID ${e.task_id}: ${e.task}. ${(e.dwa_activities || []).map(d => `DWA ${d.id}: ${d.name}`).join("; ")}`).join(" ")} Read the official tasks before making any contribution claim.`
         : activeCareer
         ? `${goal[2]} No reviewed career-to-target link is available for ${activeCareer}; no target or evidence has been assigned. This does not mean the role has no possible SDG connection.`
         : `${goal[2]} Explore this goal independently, or select a supported career to see any reviewed career connections.`;
@@ -724,6 +724,16 @@
         const label = node(row,"div");
         node(label,"div",`Task ID ${task.task_id} · ${task.task_type || "not classified"}`,"skill-name");
         node(label,"p",task.task);
+        const meta = node(row,"div","","skill-description");
+        const rating = task.task_ratings || {};
+        const parts = [];
+        if (rating.importance_1_to_5 != null)
+          parts.push(`O*NET task importance: ${rating.importance_1_to_5}/5`);
+        if (rating.relevance_pct != null)
+          parts.push(`Task relevance: ${rating.relevance_pct}%`);
+        if (parts.length) node(meta,"p",parts.join(" · ") + " (occupation ratings, NOT SDG probability)");
+        const dwas = Array.isArray(task.dwa_activities) ? task.dwa_activities : [];
+        dwas.forEach(dwa => node(meta,"p",`DWA ${dwa.id}: ${dwa.name}`));
       });
     }
 
@@ -740,12 +750,21 @@
         node(primary,"div",`Goal ${item.sdg_id} · ${item.sdg_name}`,"skill-name");
         node(primary,"p",item.relevance_reason || "Preliminary SDG suggestion.");
         const note = node(entry,"div","","skill-description");
-        const isTaskContext = item.candidate_tier === "task_topic";
-        node(note,"div",isTaskContext
-          ? "TASK-TOPIC CANDIDATE · a real O*NET task mentions this topic, but no UN target is verified."
-          : "CLASSIFICATION-ONLY GUESS · no occupation-to-target task evidence.","skill-name");
-        (Array.isArray(item.task_evidence) ? item.task_evidence : []).forEach(task =>
-          node(note,"p",`O*NET Task ID ${task.task_id}: ${task.task}`));
+        const tier = item.candidate_tier;
+        const tierText = tier === "task_topic"
+          ? "TASK-TOPIC CANDIDATE · original task phrase, no verified UN target"
+          : tier === "dwa_topic"
+          ? "DWA-TOPIC CANDIDATE · linked work activity, weaker than explicit task wording"
+          : "CLASSIFICATION-ONLY GUESS · no direct occupation-task SDG link";
+        node(note,"div",tierText,"skill-name");
+        (Array.isArray(item.task_evidence) ? item.task_evidence : []).forEach(task => {
+          node(note,"p",`O*NET Task ID ${task.task_id}: ${task.task}`);
+          (Array.isArray(task.dwa_activities) ? task.dwa_activities : []).forEach(dwa =>
+            node(note,"p",`Linked DWA ${dwa.id}: ${dwa.name}`));
+          const rating = task.task_ratings || {};
+          if (rating.importance_1_to_5 != null)
+            node(note,"p",`O*NET task importance ${rating.importance_1_to_5}/5; NOT a measure of SDG contribution`);
+        });
         const url = "https://www.onetonline.org/link/details/" + encodeURIComponent(data.career_id || "");
         if (data.task_profile && data.task_profile.occupation_task_count) {
           const link = node(note,"a","Read source tasks");
