@@ -10,7 +10,7 @@
   "reskilling_roadmap": "Reskilling Roadmap",
   "sdg_mapping": "SDG Mapping",
   "career_recommendations": "Career Recommendations",
-  "start_assessment": "Start Assessment",
+  "start_assessment": "Start Career Assessment",
   "next": "Next",
   "previous": "Previous",
   "submit": "Submit",
@@ -30,5 +30,8 @@
   "try_again": "Try Again",
   "save": "Save",
   "back_home": "Back to Home",
-  "ai_chatbot": "AI Chatbot"
+  "ai_chatbot": "AI Chatbot",
+  "start_with_interests": "Start with your interests",
+  "search_career_catalogue": "Search the career catalogue",
+  "find_career": "Find a career"
 }
