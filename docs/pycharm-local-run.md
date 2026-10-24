@@ -5,9 +5,9 @@
 
 ## 1. 更新 GitHub 代码
 
-这版整合代码在 `codex/blue-tech-homepage` 分支，已包含最新 `main` 的功能与新的科技风格。
+这版科技风格 UI 已合并到 `main` 分支。
 
-如果你已在 PyCharm 克隆了这个仓库，先 **Git → Fetch**，再在 Git 分支菜单选择 **Remote → origin/codex/blue-tech-homepage → Checkout**，然后选择 **Git → Pull**。
+如果你已在 PyCharm 克隆了这个仓库，先 **Git → Fetch**，再在 Git 分支菜单选择 `main`（若尚未建立本地分支，选择 **Remote → origin/main → Checkout**），然后选择 **Git → Pull**。
 如果提示有未提交的本地修改，先 **Commit** 或 **Shelve** 保存修改，再 Pull；出现合并冲突时保留并处理本地工作。
 
 首次使用时，选择 **Get from Version Control**，填入仓库地址：
@@ -16,7 +16,7 @@
 https://github.com/Yuhang08/Future-Skill-AI-Model.git
 ```
 
-首次克隆后，也切换到上面的 `codex/blue-tech-homepage` 分支再运行。
+首次克隆后，使用默认的 `main` 分支即可。
 
 ## 2. 配置 Python
 

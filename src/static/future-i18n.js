@@ -2,6 +2,7 @@
 (function (root) {
   "use strict";
   const KEY = "futureskill-language-preference";
+  const LEGACY_KEY = "futureskill_language";
   const CODES = ["en", "zh-CN", "ms"];
   const originalText = new WeakMap();
   const renderedText = new WeakMap();
@@ -20,7 +21,20 @@
   function savedLanguage() {
     try {
       const saved = localStorage.getItem(KEY);
-      return CODES.includes(saved) ? saved : "en";
+      if (saved !== null) return CODES.includes(saved) ? saved : "en";
+      // Retain preferences from the earlier homepage selector without replacing
+      // an existing Settings preference (including its invalid-value fallback).
+      const legacy = localStorage.getItem(LEGACY_KEY);
+      const migrated = legacy === "zh" ? "zh-CN" : legacy;
+      if (CODES.includes(migrated)) {
+        try { localStorage.setItem(KEY, migrated); }
+        catch (_) {
+          persistence = "blocked";
+          initialError = "Browser storage is blocked. Your language choice will apply for this visit only.";
+        }
+        return migrated;
+      }
+      return "en";
     } catch (_) {
       persistence = "blocked";
       initialError = "Browser storage is blocked. Your language choice will apply for this visit only.";
@@ -144,14 +158,13 @@
   function applyLanguage() {
     document.documentElement.lang = language;
     translateTree(document.body);
-    const select = document.getElementById("fsLanguageSelect");
-    if (select) { select.value = language; select.disabled = loading; }
+    syncSelectors();
     const statusText = loading ? "Loading language pack…" : initialError;
-    const status = document.getElementById("fsLanguageStatus");
-    if (status) status.textContent = statusText;
+    setStatus(statusText);
     window.dispatchEvent(new CustomEvent("futureskill:languagechange", { detail: { language } }));
   }
   async function setLanguage(code) {
+    if (code === "zh") code = "zh-CN";
     if (!CODES.includes(code)) code = "en";
     const sequence = ++requestNumber;
     loading = !loadedResolved.has(code);
@@ -170,19 +183,25 @@
     catalog = nextCatalog;
     try {
       localStorage.setItem(KEY, code);
+      localStorage.setItem(LEGACY_KEY, code === "zh-CN" ? "zh" : code);
       persistence = "available";
     } catch (_) { persistence = "blocked"; }
     loading = false;
     applyLanguage();
     return getState();
   }
+  function setStatus(message) {
+    for (const id of ["fsLanguageStatus", "headerLanguageStatus"]) {
+      const status = document.getElementById(id);
+      if (status) status.textContent = message;
+    }
+  }
   function syncSelectors() {
     const select = document.getElementById("fsLanguageSelect");
     if (select) { select.value = language; select.disabled = loading; }
-    if (loading) {
-      const status = document.getElementById("fsLanguageStatus");
-      if (status) status.textContent = "Loading language pack…";
-    }
+    const header = document.getElementById("language-select");
+    if (header) { header.value = language === "zh-CN" ? "zh" : language; header.disabled = loading; }
+    if (loading) setStatus("Loading language pack…");
   }
   function getState() {
     return { language, persistence, loading, loadError: initialError, loaded: CODES.filter(code => loadedResolved.has(code)) };
@@ -191,8 +210,7 @@
     const message = state.persistence === "blocked"
       ? "Language changed for this visit. Browser storage is blocked, so your preference could not be saved."
       : "";
-    const status = document.getElementById("fsLanguageStatus");
-    if (status) status.textContent = message;
+    setStatus(message);
   }
   function wireSettings() {
     const dialog = document.getElementById("fsSettingsDialog");
@@ -207,8 +225,20 @@
         const state = await setLanguage(select.value);
         setPersistenceStatus(state);
       } catch (_) {
-        select.value = language;
-        dialog.querySelector("#fsLanguageStatus").textContent = "This language pack could not be loaded. Your previous language is still active.";
+        syncSelectors();
+        setStatus("This language pack could not be loaded. Your previous language is still active.");
+      }
+    });
+  }
+  function wireHeader() {
+    const select = document.getElementById("language-select");
+    if (!select || select.dataset.i18nWired) return;
+    select.dataset.i18nWired = "true";
+    select.addEventListener("change", async () => {
+      try { setPersistenceStatus(await setLanguage(select.value)); }
+      catch (_) {
+        syncSelectors();
+        setStatus("This language pack could not be loaded. Your previous language is still active.");
       }
     });
   }
@@ -223,6 +253,7 @@
   root.FutureSkillI18n = api;
   function start() {
     wireSettings();
+    wireHeader();
     observer = new MutationObserver(records => {
       for (const record of records) {
         if (record.type === "characterData") writeText(record.target);
@@ -245,12 +276,8 @@
     if (document.readyState === "loading") await new Promise(resolve => document.addEventListener("DOMContentLoaded", resolve, { once: true }));
     start();
     applyLanguage();
-    const select = document.getElementById("fsLanguageSelect");
-    if (select) { select.value = language; select.disabled = false; }
-    if (initialError) {
-      const status = document.getElementById("fsLanguageStatus");
-      if (status) status.textContent = initialError;
-    }
+    syncSelectors();
+    if (initialError) setStatus(initialError);
     return getState();
   })();
   window.addEventListener("storage", event => {

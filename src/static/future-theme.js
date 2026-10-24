@@ -146,8 +146,8 @@
     const links = document.createElement("div");
     links.className = "fs-site-links";
     const items = [
-      ["/", "Career assessment"], ["/reskilling", "Reskilling"], ["/ai-trend", "AI trends"],
-      ["/uncertainty", "Uncertainty Lab"], ["/sdg-impact", "SDG connections"],
+      ["/", "Career assessment"], ["/reskilling", "Reskilling"], ["/ai-trend", "Future Job Trend"],
+      ["/uncertainty", "Employability Predictor"], ["/sdg-impact", "SDG connections"],
       ["/interview-practice/", "Interview practice"],
     ];
     // The existing inventory remains development-only, not a new learner feature.
@@ -245,10 +245,12 @@
       });
       dialog.addEventListener("close", () => settingsButton.focus());
     }
-    const i18nScript = document.createElement("script");
-    i18nScript.src = "/static/future-i18n.js?v=5";
-    i18nScript.async = true;
-    document.head.appendChild(i18nScript);
+    if (!document.querySelector('script[src^="/static/future-i18n.js"]')) {
+      const i18nScript = document.createElement("script");
+      i18nScript.src = "/static/future-i18n.js?v=6";
+      i18nScript.async = true;
+      document.head.appendChild(i18nScript);
+    }
     updateControls();
     // Keep the existing development warning visible without covering navigation.
     const sizeNavigation = () => root.style.setProperty("--fs-navigation-height", `${Math.ceil(nav.getBoundingClientRect().height)}px`);

@@ -63,6 +63,11 @@ html[data-futureskill-page="home"] .future-context {
   letter-spacing: 1.7px;
 }
 html[data-futureskill-page="home"] .future-context-right { display: flex; align-items: center; gap: 8px; color: var(--fs-muted); letter-spacing: .5px; }
+.future-language-control { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; color: var(--fs-ink-soft); font-size: 12px; letter-spacing: normal; }
+html[data-futureskill-page="home"] .future-language-control label { color: var(--fs-ink-soft); font: inherit; }
+html[data-futureskill-page="home"] .future-language-control select { width: auto; min-width: 110px; max-width: 150px; min-height: 36px; padding: 5px 10px; color: var(--fs-ink); background: var(--fs-surface); border: 1px solid var(--fs-line-strong); border-radius: 6px; font-size: 12px; letter-spacing: normal; }
+#headerLanguageStatus { flex-basis: 100%; max-width: 280px; font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; }
+#headerLanguageStatus:empty { display: none; }
 html[data-futureskill-page="home"] header.future-context a[href="/__dev/screens"] { padding: 3px 8px !important; color: var(--fs-muted) !important; background: var(--fs-accent-soft) !important; font: 500 8px/1.6 ui-monospace, monospace !important; letter-spacing: .4px; text-decoration: none; }
 .future-arrow { display: inline-flex; width: 18px; height: 18px; flex: none; vertical-align: middle; }
 .future-arrow svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 1.5; }

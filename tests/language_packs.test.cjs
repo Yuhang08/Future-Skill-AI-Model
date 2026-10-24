@@ -31,11 +31,11 @@ for (const code of ["zh-CN", "ms"]) {
 }
 console.log("PASS: all 42 original assessment questions have Chinese and Malay translations");
 
-function engine({ blocked = false, fail = false, delayed } = {}) {
-  const stored = new Map();
+function engine({ blocked = false, fail = false, delayed, saved = {}, start = false } = {}) {
+  const stored = new Map(Object.entries(saved));
   const element = { nodeType: 1, childNodes: [], hasAttribute: () => false, closest: () => null };
   const document = {
-    readyState: "loading", body: element, documentElement: {},
+    readyState: start ? "complete" : "loading", body: element, documentElement: {},
     addEventListener() {}, getElementById: () => null, querySelectorAll: () => [],
   };
   const window = { dispatchEvent() {}, addEventListener() {} };
@@ -49,11 +49,29 @@ function engine({ blocked = false, fail = false, delayed } = {}) {
     return { ok: !fail, json: async () => packs[code] };
   };
   const context = { window, document, localStorage, fetch, console, setTimeout, clearTimeout,
+    MutationObserver: class { observe() {} },
     CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options?.detail; } } };
   vm.runInNewContext(fs.readFileSync("src/static/future-i18n.js", "utf8"), context);
   return { api: window.FutureSkillI18n, document, stored };
 }
 (async () => {
+  const migrated = engine({ saved: { futureskill_language: "zh" }, start: true });
+  await migrated.api.ready;
+  assert.equal(migrated.api.getLanguage(), "zh-CN");
+  assert.equal(migrated.stored.get("futureskill-language-preference"), "zh-CN");
+  const preferred = engine({ saved: { "futureskill-language-preference": "ms", futureskill_language: "zh" }, start: true });
+  await preferred.api.ready;
+  assert.equal(preferred.api.getLanguage(), "ms", "existing Settings preference takes priority over legacy storage");
+  const invalid = engine({ saved: { "futureskill-language-preference": "unsupported", futureskill_language: "zh" }, start: true });
+  await invalid.api.ready;
+  assert.equal(invalid.api.getLanguage(), "en", "invalid canonical preference retains its English fallback");
+  const alias = engine();
+  await alias.api.setLanguage("zh");
+  assert.equal(alias.api.getLanguage(), "zh-CN");
+  assert.equal(alias.stored.get("futureskill-language-preference"), "zh-CN");
+  assert.equal(alias.stored.get("futureskill_language"), "zh");
+  console.log("PASS: legacy preference migration, canonical precedence and zh alias share one language state");
+
   const { api, document, stored } = engine();
   for (const code of ["zh-CN", "ms", "en", "zh-CN", "en"]) {
     await api.setLanguage(code);

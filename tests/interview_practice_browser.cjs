@@ -177,6 +177,7 @@ async function checkTheme(theme) {
       }]));
     })()`);
     await go("/interview-practice/?view=history", "interview");
+    await wait("!document.querySelector('#historyPage').classList.contains('hidden')", "saved history after asynchronous career initialization");
     assert.equal(await evaluate("document.querySelector('#historyPage').classList.contains('hidden')"), false);
     assert.equal(await evaluate("document.querySelector('#savedInterviews').textContent.includes('Browser-only sample')"), true);
     assert.equal(await evaluate("document.querySelector('#savedInterviews').textContent.includes('Synthetic answer')"), true);
