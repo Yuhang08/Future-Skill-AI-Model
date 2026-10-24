@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from reskilling.sdg_task_evidence import source_status, task_supported_mappings
+from reskilling.sdg_candidate_ranker import (
+    candidate_mappings_for_occupation, occupation_task_profile,
+)
 
 OCCUPATIONS = ROOT / "src" / "career_profiles_clean.csv"
 
@@ -29,10 +32,21 @@ def main():
     occupations = list(csv.DictReader(OCCUPATIONS.open(encoding="utf-8-sig", newline="")))
     counts = Counter()
     supported = 0
+    task_topic_count = 0
+    weak_only_count = 0
+    missing_task_profiles = 0
     print("Examples of task-derived candidates (not measured SDG impact):")
     for career in occupations:
         code, title = career["O*NET-SOC Code"], career["Title"]
         matches, task_status = task_supported_mappings(code, title)
+        candidates = candidate_mappings_for_occupation(code, title, {x["sdg_id"] for x in matches})
+        profile = occupation_task_profile(code)
+        if not profile["occupation_task_count"]:
+            missing_task_profiles += 1
+        if not matches and any(x["candidate_tier"] == "task_topic" for x in candidates):
+            task_topic_count += 1
+        elif not matches:
+            weak_only_count += 1
         if matches:
             supported += 1
             counts.update(str(m["target_id"]) for m in matches)
@@ -45,7 +59,12 @@ def main():
             print(f" {code} {title}: no explicit task rule match (not automatically SDG mapped)")
     print(f"Catalogue occupational records: {len(occupations)}")
     print(f"Occupations with at least one O*NET task-rule candidate: {supported}")
-    print(f"Occupations with no task-rule match: {len(occupations)-supported}")
+    print(f"Occupations with no strict task-target match: {len(occupations)-supported}")
+    print(f"Additional occupations with task-topic-only suggestions: {task_topic_count}")
+    print(f"Occupations with classification-only (weakest) suggestions: {weak_only_count}")
+    print(f"Occupations with no O*NET Task Statements: {missing_task_profiles}")
+    print(f"Total occupations with some analysis: {supported + task_topic_count + weak_only_count}")
+    print("Classification-only is NOT SDG evidence; each suggestion still needs expert review.")
     print("By proposed UN target (counts of occupational candidates):")
     for target, count in sorted(counts.items()):
         print(f"  {target}: {count}")
