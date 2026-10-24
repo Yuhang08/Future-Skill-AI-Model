@@ -20,9 +20,11 @@ TASK_TOPICS = {
         r"crop yield|agricultural production)\b",),
     3: (r"\b(?:patient care|patient treatment|treat patients|clinical care|"
         r"diagnose diseases?|medical services?|community health services?)\b",),
+    # Education-related TRAINING for unrelated jobs is not automatically a
+    # career contribution to UN SDG 4. Require a learning-specific context.
     4: (r"\b(?:teach students?|tutor pupils?|develop curricul\w*|"
-        r"classroom instruction|educational programs?|instructional materials|"
-        r"student learning|educational software)\b",),
+        r"classroom instruction|student learning|educational software|"
+        r"school learning|university teaching|college instruction)\b",),
     5: (r"\b(?:gender equality|gender-based discrimination|women's rights|"
         r"equal pay for women|sexual harassment prevention)\b",),
     6: (r"\b(?:wastewater treatment|sewage treatment|drinking water supply|"
