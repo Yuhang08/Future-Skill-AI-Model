@@ -599,6 +599,8 @@
         const id = index + 1;
         const mapping = activeMappings.find(item => Number(item.sdg_id) === id);
         const candidate = !mapping && activeCandidateMappings.find(item => Number(item.sdg_id) === id);
+        const score = activeGoalScores.find(item => Number(item.sdg_id) === id);
+        const ranked = activeTopGoals.some(item => Number(item.sdg_id) === id);
         const button = node(goalGrid,"button","","goal-node");
         button.type = "button";
         button.dataset.sdgId = String(id);
@@ -607,8 +609,9 @@
         button.style.gridArea = `${desktopSlots[index][0]} / ${desktopSlots[index][1]}`;
         button.style.setProperty("--goal-color",goal[1]);
         if (mapping) button.classList.add("linked");
-        else if (candidate) button.classList.add("tentative");
-        button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Task-to-target hypothesis." : candidate ? "Unverified candidate, needs human review." : "Not assessed."} Open details.`);
+        else if (ranked || candidate) button.classList.add("tentative");
+        if (score) button.classList.add("scored-sdg");
+        button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${score ? "Task-derived relevance index " + score.relevance_index + " out of 100; not verified impact." : mapping ? "Task-to-target hypothesis." : candidate ? "Unverified candidate." : "Not assessed."} Open details.`);
         const icon = node(button,"img");
         icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
         icon.alt = "";
@@ -616,10 +619,14 @@
         const copy = node(button,"span","","goal-node-copy");
         node(copy,"span",`GOAL ${String(id).padStart(2,"0")}`,"goal-index");
         node(copy,"span",goal[0],"goal-name");
-        node(copy,"span",mapping ? "Task-to-target" : candidate ? "Needs review" : "Not assessed","goal-node-status");
+        node(copy,"span",score
+          ? `#${score.rank} · ${score.relevance_index}/100`
+          : mapping ? "Task-to-target" : candidate ? "Needs review" : "Not assessed","goal-node-status");
         button.addEventListener("click",() => {
           lastFocusedGoal = button;
-          if (mapping) {
+          if (score) {
+            showGoalInfo(id,goal,button,candidate,score);
+          } else if (mapping) {
             const card = mappingList.querySelectorAll(".mapping")[activeMappings.indexOf(mapping)];
             const dialog = card && card.querySelector("dialog");
             if (dialog) openDialog(dialog,button);
@@ -648,8 +655,11 @@
       const center = careerCenter.getBoundingClientRect();
       const sx = center.left + center.width/2 - rect.left;
       const sy = center.top + center.height/2 - rect.top;
+      const rankedOrCandidate = activeGoalScores.length ? activeTopGoals : activeCandidateMappings;
+      const confirmedGoals = new Set(activeMappings.map(item => Number(item.sdg_id)));
       [...activeMappings.map(x => ({...x, solid: true})),
-        ...activeCandidateMappings.map(x => ({...x, solid: false}))].forEach(mapping => {
+        ...rankedOrCandidate.filter(x => !confirmedGoals.has(Number(x.sdg_id)))
+          .map(x => ({...x, solid: false}))].forEach(mapping => {
         const button = goalGrid.querySelector(`.goal-node[data-sdg-id="${Number(mapping.sdg_id)}"]`);
         if (!button) return;
         const target = button.getBoundingClientRect();
@@ -663,12 +673,14 @@
       });
     }
 
-    function showGoalInfo(id,goal,opener,candidate=null) {
+    function showGoalInfo(id,goal,opener,candidate=null,score=null) {
       document.getElementById("goalInfoIcon").src = `/static/assets/sdg/sdg-${id}-icon.png`;
       document.getElementById("goalInfoIcon").alt = "";
       document.getElementById("goalInfoTitle").textContent = goal[0];
       document.getElementById("goalInfoNumber").textContent = `Sustainable Development Goal ${id}`;
-      document.getElementById("goalInfoCopy").textContent = candidate
+      document.getElementById("goalInfoCopy").textContent = score
+        ? `Task-derived relevance rank #${score.rank} of 17; index ${score.relevance_index}/100. Evidence: ${score.evidence_basis}. ${(score.task_evidence || []).map(task => `O*NET Task ID ${task.task_id} (task contribution ${task.task_score}): ${task.task}`).join(" ")} Relative thematic matching only; NOT measured contribution, certainty or an official UN mapping.`
+        : candidate
         ? `UNVERIFIED CANDIDATE (not proven impact). ${candidate.relevance_reason} ${(candidate.task_evidence || []).map(e => `O*NET Task ID ${e.task_id}: ${e.task}. ${(e.dwa_activities || []).map(d => `DWA ${d.id}: ${d.name}`).join("; ")}`).join(" ")} Read the official tasks before making any contribution claim.`
         : activeCareer
         ? `${goal[2]} No reviewed career-to-target link is available for ${activeCareer}; no target or evidence has been assigned. This does not mean the role has no possible SDG connection.`
@@ -901,6 +913,9 @@
       activeCareer = "";
       activeMappings = [];
       activeCandidateMappings = [];
+      activeGoalScores = [];
+      activeTopGoals = [];
+      document.getElementById("taskGoalRankings").hidden = true;
       mappingList.replaceChildren();
       pathway.hidden = true;
       pathway.open = false;
@@ -948,6 +963,9 @@
       document.getElementById("taskProfile").open = false;
       activeMappings = [];
       activeCandidateMappings = [];
+      activeGoalScores = [];
+      activeTopGoals = [];
+      document.getElementById("taskGoalRankings").hidden = true;
       try {
         const response = await fetch("/api/sdg/mindmap",{
           method:"POST",
@@ -958,33 +976,48 @@
         if (sequence !== reviewSequence) return;
         if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Could not load role evidence.");
         activeMappings = Array.isArray(data.mappings) ? data.mappings : [];
+        activeGoalScores = Array.isArray(data.goal_scores) ? data.goal_scores : [];
+        activeTopGoals = Array.isArray(data.top_goal_scores) ? data.top_goal_scores : [];
         const stronglyLinked = new Set(activeMappings.map(item => Number(item.sdg_id)));
-        activeCandidateMappings = (Array.isArray(data.candidate_mappings) ? data.candidate_mappings : [])
-          .filter(item => !stronglyLinked.has(Number(item.sdg_id)));
+        // Only show score-based task rankings on the main graph when possible:
+        // do not mix SOC/title guesses with task-derived suggestions.
+        activeCandidateMappings = activeGoalScores.length === 17 ? []
+          : (Array.isArray(data.candidate_mappings) ? data.candidate_mappings : [])
+            .filter(item => !stronglyLinked.has(Number(item.sdg_id)));
         activeCareer = data.career;
         document.getElementById("roleTitle").textContent = activeCareer;
         mapCareerName.textContent = activeCareer;
-        document.getElementById("reviewStatus").textContent =
-          `${activeMappings.length} task-target · ${activeCandidateMappings.length} need review`;
+        document.getElementById("reviewStatus").textContent = activeGoalScores.length === 17
+          ? `17 goals scored · Top 3 task-ranked · ${activeMappings.length} strict target hypotheses`
+          : `${activeMappings.length} task-target · ${activeCandidateMappings.length} need review`;
         results.hidden = false;
         renderLearningContribution(data);
         renderTaskProfile(data);
         renderCandidateSuggestions(data);
+        if (activeGoalScores.length === 17)
+          document.getElementById("candidateSuggestions").hidden = true;
+        renderTaskGoalRankings(data);
         if (activeMappings.length) {
           activeMappings.forEach(renderMapping);
-          message.textContent = `${activeMappings.length} task-to-target hypotheses and ${activeCandidateMappings.length} weaker suggestions. Dotted lines NEED REVIEW; no SDG effect is proven.`;
+          message.textContent = activeGoalScores.length === 17
+            ? "All 17 goals scored from occupational tasks; top three ranked by modeled thematic relevance. Strict Target evidence is separate; no impact is proven."
+            : `${activeMappings.length} task-to-target hypotheses and ${activeCandidateMappings.length} weaker suggestions. Dotted lines NEED REVIEW; no SDG effect is proven.`;
           await renderPathway(data,activeCareer,sequence);
         } else {
           const empty = node(mappingList,"div","","empty-card");
-          node(empty,"strong","No O*NET task-backed SDG connection available");
+          node(empty,"strong",activeGoalScores.length === 17
+            ? "Task-derived Goal ranking available (no narrowly matched UN Target)"
+            : "No O*NET task-backed SDG connection available");
           node(empty,"span", data.task_data_status === "not_installed"
             ? "Official O*NET Task Statements CSV is not installed. Run scripts/import_onet_sdg_tasks.py to obtain genuine data."
             : activeCandidateMappings.length
               ? "No sufficiently explicit task-to-target match. Dashed links are tentative only; inspect the original O*NET tasks below."
               : "No supported SDG connection identified; this is preferable to assigning an arbitrary SDG 8. Review the original O*NET tasks below.");
           pathway.hidden = true;
-          message.textContent = data.task_data_status === "not_installed"
-            ? "Official task CSV missing. Dashed goals are broad unverified guesses, NOT data-validated."
+          message.textContent = activeGoalScores.length === 17
+            ? "Task-derived Top 3 suggestions are shown, even without strict Target matches. Low relevance scores indicate weak thematic evidence."
+            : data.task_data_status === "not_installed"
+            ? "Official task CSV missing. No task-based ranking is available."
             : activeCandidateMappings.length
               ? `No strict task-target match; ${activeCandidateMappings.length} tentative ideas are displayed as dashed links.`
               : "No sufficient SDG association found. Official occupation tasks are available below for manual review.";
