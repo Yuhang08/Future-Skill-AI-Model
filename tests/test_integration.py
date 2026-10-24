@@ -149,9 +149,9 @@ class IntegratedWebTests(unittest.TestCase):
         })
         self.assertEqual(mapping.status_code, 200, mapping.text)
         mapping_data = mapping.json()
-        self.assertEqual(mapping_data['status'], 'curated')
+        self.assertEqual(mapping_data['status'], 'suggested')
         self.assertEqual(
-            [item['target_id'] for item in mapping_data['mappings'] if item['target_id']],
+            [item['target_id'] for item in mapping_data['learning_pathway_mappings']],
             ['4.4', '8.5'],
         )
         self.assertTrue(mapping_data['pathway_skills'])
@@ -200,12 +200,13 @@ class IntegratedWebTests(unittest.TestCase):
         ):
             with self.subTest(career=career):
                 data = self.client.post('/api/sdg/mindmap', json={'career_id': career_id}).json()
-                self.assertEqual(data['status'], 'curated')
+                self.assertEqual(data['status'], 'suggested')
                 self.assertEqual(
-                    {(item['sdg_id'], item['target_id']) for item in data['mappings'] if item['target_id']},
+                    {(item['sdg_id'], item['target_id']) for item in data['learning_pathway_mappings']},
                     {(4, '4.4'), (8, '8.5')},
                 )
-                self.assertTrue(all(item['supporting_evidence'] for item in data['mappings']))
+                self.assertTrue(all(item['supporting_evidence'] for item in data['learning_pathway_mappings']))
+                self.assertTrue(all(item['sdg_id'] not in {4, 8} for item in data['mappings']))
 
         # The reference mockup is not evidence for assigning its sample links.
         unknown = self.client.post('/api/sdg/mindmap', json={
