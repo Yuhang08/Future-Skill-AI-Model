@@ -314,17 +314,46 @@ function renderTree(tree, animate=false) {
     $('treeEmoji').classList.add('pulse-grow');
   }
 }
-function renderGaps(gaps) {
+function completedPracticeLevels(name, gap, tasks) {
+  // Baseline self-ratings must not be displayed as earned progress.
+  // Only fully completed learning-task practice milestones fill the bar.
+  // The milestones are estimates, never automatic proof of mastery.
+  const plannedLevels = Math.max(0, Number(gap.gap) || 0);
+  const estimatedHours = Number(gap.estimated_hours) || 0;
+  if (!plannedLevels || !estimatedHours) return {completed:0, planned:plannedLevels};
+  const completedHours = (Array.isArray(tasks) ? tasks : [])
+    .filter(task => task.skill === name && task.kind === 'learning' && task.completed)
+    .reduce((total, task) => total + (Number(task.hours) || 0), 0);
+  const hoursPerLevel = estimatedHours / plannedLevels;
+  const completed = Math.min(plannedLevels,
+    Math.floor((completedHours + 0.001) / hoursPerLevel));
+  return {completed, planned:plannedLevels};
+}
+function renderGaps(gaps, tasks=[]) {
   const sorted = Object.entries(gaps).sort((a,b) => b[1].priority-a[1].priority);
   $('gapList').innerHTML = sorted.map(([name, g]) => {
-    const hasGap = g.gap > 0;
-    return `<div class="gap-item">
-      <div class="gap-top"><strong>${escapeHtml(name)}</strong><span>${g.current}/5 current · ${g.required}/5 goal</span></div>
-      <div class="gap-bar"><div class="gap-current" style="width:${g.current/5*100}%"></div><div class="gap-require" style="width:${Math.max(0,g.required-g.current)/5*100}%;left:${g.current/5*100}%;right:auto"></div></div>
-      <div class="gap-footer"><span>${hasGap ? `Gap: ${g.gap.toFixed(0)} level${g.gap===1?'':'s'}` : '✓ Currently meets example target'}</span><b>${g.remaining_hours} h estimated practice left</b></div>
-    </div>`;
+    const hasGap = Number(g.gap) > 0;
+    const progress = completedPracticeLevels(name, g, tasks);
+    const percent = progress.planned
+      ? Math.max(0, Math.min(100, progress.completed / progress.planned * 100))
+      : 0;
+    const milestoneText = progress.planned
+      ? progress.completed + ' of ' + progress.planned + ' practice levels completed'
+      : 'No additional practice levels scheduled';
+    return '<div class="gap-item">' +
+      '<div class="gap-top"><strong>' + escapeHtml(name) + '</strong><span>Starting self-rating: ' +
+      g.current + '/5 · target: ' + g.required + '/5</span></div>' +
+      '<div class="gap-bar" role="progressbar" aria-label="' + escapeHtml(name) +
+      ' completed practice milestones" aria-valuemin="0" aria-valuemax="' +
+      progress.planned + '" aria-valuenow="' + progress.completed + '">' +
+      '<div class="gap-current" style="width:' + percent + '%"></div></div>' +
+      '<div class="gap-footer"><span>' + milestoneText +
+      (hasGap ? ' · Gap: ' + g.gap + ' level(s)' : ' · Self-rating meets example target') +
+      '</span><b>' + g.remaining_hours + ' h estimated practice left</b></div>' +
+      '</div>';
   }).join('');
 }
+
 function dateHuman(iso) {
   // Parse in local time (avoid UTC midnight changing a display date).
   const [y,m,d] = iso.split('-').map(Number);
@@ -386,7 +415,7 @@ function renderDashboard(state, animateTree=false) {
   $('planNote').textContent = s.remaining_hours > unfinishedScheduled+0.04
     ? `Estimated practice left: ${s.remaining_hours} h. Your current schedule includes ${unfinishedScheduled.toFixed(1)} h of learning; you may need more weeks to cover the rest. These are planning estimates.`
     : `Estimated practice remaining: ${s.remaining_hours} h. Review time is built into your timetable. Skill mastery should be checked with a project or assessment.`;
-  renderGaps(state.gaps);
+  renderGaps(state.gaps, state.tasks);
   renderPlan(state.tasks);
   renderTree(state.tree, animateTree);
   $('replanHours').value = p.weekly_hours;
