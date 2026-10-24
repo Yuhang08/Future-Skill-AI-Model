@@ -245,6 +245,7 @@
       <section id="taskGoalRankings" class="task-goal-rankings" aria-label="O*NET task-based SDG relevance ranking" hidden>
         <h2>Task-based SDG relevance · Top 3</h2>
         <p class="score-disclaimer">O*NET 31.0 supplies the occupational task statements; FutureSkill's own rule-based model compares their wording with all 17 Goals. Indices (0–100) are not probabilities, achieved impact, or UN-certified connections. Some roles receive only weak exploratory rankings; O*NET and the UN do not validate this model.</p>
+        <p id="rankingReferenceNote" class="score-disclaimer" hidden></p>
         <div id="topGoalCards" class="goal-rank-cards"></div>
         <details class="all-goal-scores">
           <summary>View scores for all 17 SDGs</summary>
@@ -902,7 +903,9 @@
       const header = node(list,"div","","skill-row");
       const copy = node(header,"div");
       node(copy,"div",`${profile.occupation_task_count || 0} tasks · ${profile.core_task_count || 0} Core`,"skill-name");
-      node(copy,"p","Representative O*NET 31.0 occupation tasks (verbatim). These describe duties, not SDG contributions.");
+      node(copy,"p",data.ranking_reference
+        ? `Comparable occupation: ${data.ranking_reference.career} (${data.ranking_reference.career_id}). These are NOT verified tasks of ${data.career}; use as an illustrative comparison only.`
+        : "Representative O*NET 31.0 occupation tasks (verbatim). These describe duties, not SDG contributions.");
       const source = node(header,"div","","skill-description");
       if (profile.source_url) {
         const anchor = node(source,"a","Open official O*NET occupation");
@@ -975,6 +978,12 @@
       const scores = Array.isArray(data.goal_scores) ? data.goal_scores : [];
       const top = Array.isArray(data.top_goal_scores) ? data.top_goal_scores : [];
       section.hidden = scores.length !== 17;
+      const referenceNote = document.getElementById("rankingReferenceNote");
+      const comparable = data.ranking_reference || null;
+      referenceNote.hidden = !comparable;
+      referenceNote.textContent = comparable
+        ? `Comparable O*NET occupation: ${comparable.career} (${comparable.career_id}). These Top 3 scores are reference comparisons, NOT direct evidence for ${data.career} or verified SDG Target links.`
+        : "";
       if (section.hidden) return;
       top.forEach((entry,index) => {
         const card = node(cards,"article","","goal-rank-card");
@@ -1163,7 +1172,7 @@
         activeCareerId = data.career_id || career.id;
         document.getElementById("roleTitle").textContent = activeCareer;
         document.getElementById("reviewStatus").textContent = activeGoalScores.length === 17
-          ? `17 goals scored · Top 3 task-ranked · ${activeMappings.length} strict target hypotheses`
+          ? `${data.ranking_reference ? "Comparable O*NET reference · " : ""}17 goals scored · Top 3 task-ranked · ${activeMappings.length} strict target hypotheses`
           : `${activeMappings.length} task-target · ${activeCandidateMappings.length} need review`;
         results.hidden = false;
         renderLearningContribution(data);
