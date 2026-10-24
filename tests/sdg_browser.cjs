@@ -176,6 +176,22 @@ async function capture(name) {
       'the complete list expands with native keyboard activation');
     assert.equal(await evaluate(`!!document.querySelector('#mapLines, .mindmap-stage')`), false);
     assert.equal(await evaluate(`document.querySelectorAll('#goalGrid [role=listitem]').length`), 17);
+    await evaluate(`document.querySelector('[data-hud-layout="diagram"]').focus()`);
+    await key('Enter', 'Enter', 13, '\r');
+    await waitFor(`document.getElementById('goalGrid').classList.contains('is-perimeter')`, 'optional desktop diagram');
+    assert.equal(await evaluate(`document.querySelector('[data-hud-layout="diagram"]').getAttribute('aria-pressed')`), 'true');
+    assert.equal(await evaluate(`document.querySelectorAll('#goalGrid [role=listitem]').length`), 17,
+      'diagram retains the same accessible seventeen Goal entries');
+    assert.equal(await evaluate(`(() => {
+      const boxes=[...document.querySelectorAll('#goalGrid .goal-list-item')].map(x=>x.getBoundingClientRect());
+      const same=(items,axis)=>items.every(x=>Math.abs(x[axis]-items[0][axis])<1);
+      return same(boxes.slice(0,5),'top') && same(boxes.slice(5,9),'left') &&
+        same(boxes.slice(9,13),'top') && same(boxes.slice(13,17),'left');
+    })()`), true, 'diagram uses five top, four right, four bottom, four left');
+    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line').length`), 0,
+      'browsing independent Goals never invents career connectors');
+    await activate('[data-hud-layout="list"]');
+    await waitFor(`!document.querySelector('#mapLines') && !document.getElementById('goalGrid').classList.contains('is-perimeter')`, 'return to native Goal list');
     for (let id=1; id<=17; id++) {
       await openGoal(id);
       assert.match(await evaluate(`document.querySelector('#goalInfoDialog .goal-evidence-status').textContent`), /No career selected/);
@@ -288,6 +304,26 @@ async function capture(name) {
     const solar = await evaluate(`fetch('/api/sdg/mindmap',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({career_id:'17-2199.11'})}).then(r=>r.json())`);
     assert.ok(solar.mappings.length>0,'use a genuine strict task-rule candidate for drawer checks');
     assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`),solar.mappings.length);
+    await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});
+    await evaluate(`document.getElementById('allGoals').open=true`);
+    await activate('[data-hud-layout="diagram"]');
+    await waitFor(`document.querySelectorAll('#mapLines line').length>0`, 'task-supported diagram connectors');
+    assert.deepEqual(await evaluate(`[...document.querySelectorAll('#mapLines line')].map(x=>Number(x.dataset.sdgId)).sort((a,b)=>a-b)`),
+      [...new Set(solar.mappings.map(x=>Number(x.sdg_id)))].sort((a,b)=>a-b),
+      'connectors represent only the API task-to-Target hypotheses');
+    assert.equal(await evaluate(`[...document.querySelectorAll('.goal-node')].every(button=>
+      (getComputedStyle(button,'::before').content!=='none')===button.classList.contains('linked'))`),true,
+      'traveling border lights belong only to linked Goal cards');
+    await evaluate(`document.getElementById('allGoals').scrollIntoView({behavior:'instant',block:'start'})`);
+    await capture('sdg-optional-diagram-desktop');
+    await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+    await waitFor(`!document.querySelector('#mapLines') && !document.getElementById('goalGrid').classList.contains('is-perimeter')`, 'requested diagram falls back to mobile list');
+    assert.equal(await evaluate(`getComputedStyle(document.getElementById('goalGrid')).gridTemplateColumns.split(' ').length`),1);
+    assert.equal(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`),true);
+    await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});
+    await activate('[data-hud-layout="list"]');
+    await waitFor(`!document.querySelector('#mapLines')`, 'selected career returns to list');
+    console.log('PASS: optional 5–4–4–4 diagram, real Target connectors, linked-only laser and mobile list fallback');
     await activate('.mapping-details-trigger');
     await waitFor(`!!document.querySelector('.mapping-drawer[open]')`,'task evidence drawer');
     await activate('.mapping-drawer[open] .evidence-node');

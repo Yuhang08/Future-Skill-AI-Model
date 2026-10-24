@@ -26,7 +26,7 @@
       button.querySelector("[data-moon]").toggleAttribute("hidden", next !== "dark");
     });
     const themeColor = document.querySelector('meta[name="theme-color"]');
-    if (themeColor) themeColor.content = resolved === "dark" ? "#111b2a" : "#edf3f5";
+    if (themeColor) themeColor.content = resolved === "dark" ? "#030b16" : "#edf5fc";
   }
 
   function setPreference(choice, persist = true) {
@@ -58,12 +58,75 @@
     if (event.key === key || event.key === null) setPreference(normalize(event.newValue), false);
   });
 
+  function buildCyberGrid() {
+    if (!root.hasAttribute("data-futureskill-page") || document.querySelector(".fs-cyber-field")) return;
+    const namespace = "http://www.w3.org/2000/svg";
+    const field = document.createElementNS(namespace, "svg");
+    field.classList.add("fs-cyber-field");
+    field.setAttribute("aria-hidden", "true");
+    field.setAttribute("focusable", "false");
+    const traces = Array.from({ length: 6 }, () => {
+      const path = document.createElementNS(namespace, "path");
+      path.classList.add("fs-cyber-trace");
+      field.appendChild(path);
+      return path;
+    });
+    document.body.prepend(field);
+
+    const snap = value => Math.round(value / 24) * 24;
+    function measureGrid() {
+      const width = window.innerWidth, height = window.innerHeight;
+      // All turns land at grid intersections; long routes leave quiet gaps.
+      const routes = [
+        [[-96, snap(height * .24)], [snap(width * .26), snap(height * .24)], [snap(width * .26), snap(height * .48)], [snap(width * .62), snap(height * .48)]],
+        [[snap(width * .79), -96], [snap(width * .79), snap(height * .36)], [snap(width * .55), snap(height * .36)], [snap(width * .55), snap(height * .74)]],
+        [[width + 96, snap(height * .82)], [snap(width * .72), snap(height * .82)], [snap(width * .72), snap(height * .60)], [snap(width * .30), snap(height * .60)]],
+        [[snap(width * .12), height + 96], [snap(width * .12), snap(height * .68)], [snap(width * .35), snap(height * .68)], [snap(width * .35), snap(height * .38)]],
+        [[snap(width * .44), -96], [snap(width * .44), snap(height * .14)], [snap(width * .92), snap(height * .14)], [snap(width * .92), snap(height * .52)]],
+        [[width + 96, snap(height * .94)], [snap(width * .46), snap(height * .94)], [snap(width * .46), snap(height * .76)], [snap(width * .18), snap(height * .76)]],
+      ];
+      routes.forEach((points, index) => {
+        const path = traces[index];
+        const length = points.slice(1).reduce((sum, point, i) => sum + Math.abs(point[0] - points[i][0]) + Math.abs(point[1] - points[i][1]), 0);
+        path.setAttribute("d", points.map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`).join(" "));
+        path.style.setProperty("--cyber-trace-length", `${length + 100}px`);
+        path.style.setProperty("--cyber-trace-duration", `${Math.max(12, (length + 180) / 70)}s`);
+        path.style.setProperty("--cyber-trace-delay", `${-3.1 * index - 2}s`);
+      });
+    }
+    const pause = () => field.classList.toggle("is-paused", document.hidden);
+    let resizeFrame = 0;
+    const onResize = () => {
+      if (!resizeFrame) resizeFrame = requestAnimationFrame(() => { resizeFrame = 0; measureGrid(); });
+    };
+    const cleanup = event => {
+      if (event.persisted) return;
+      cancelAnimationFrame(resizeFrame);
+      window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", pause);
+      window.removeEventListener("pagehide", cleanup);
+    };
+    window.addEventListener("resize", onResize, { passive: true });
+    document.addEventListener("visibilitychange", pause);
+    window.addEventListener("pagehide", cleanup);
+    measureGrid();
+    pause();
+  }
+
   function buildNavigation() {
+    buildCyberGrid();
     if (document.querySelector(".fs-site-nav")) return;
     const refinement = document.createElement("link");
     refinement.rel = "stylesheet";
     refinement.href = "/static/ui-refinement.css?v=1";
-    document.head.appendChild(refinement);
+    let cyber = document.querySelector('link[href^="/static/future-cyber.css"]');
+    if (!cyber) {
+      cyber = document.createElement("link");
+      cyber.rel = "stylesheet";
+      cyber.href = "/static/future-cyber.css?v=3";
+      document.head.appendChild(cyber);
+    }
+    document.head.insertBefore(refinement, cyber);
     document.querySelectorAll('link[rel="icon"]').forEach(icon => {
       icon.href = "/static/brand-forward.svg";
       icon.type = "image/svg+xml";
@@ -85,6 +148,7 @@
     const items = [
       ["/", "Career assessment"], ["/reskilling", "Reskilling"], ["/ai-trend", "AI trends"],
       ["/uncertainty", "Uncertainty Lab"], ["/sdg-impact", "SDG connections"],
+      ["/interview-practice/", "Interview practice"],
     ];
     // The existing inventory remains development-only, not a new learner feature.
     if (root.dataset.futureskillPage === "inventory") items.push(["/__dev/screens", "Screen inventory"]);

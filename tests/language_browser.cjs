@@ -137,8 +137,9 @@ async function picture(name) {
     await wait("!!window.appState || !!document.querySelector('#questionnaire:not([hidden])') || !!document.querySelector('#dashboard:not([hidden])')");
     assert.deepEqual(await evaluate("[...document.querySelectorAll('#workspaceNav [data-workspace-action]')].map(el=>el.dataset.workspaceAction)"),
       ["overview", "plan", "progress", "edit-profile"]);
-    assert.equal(await evaluate("document.querySelectorAll('#workspaceSidebar a:not([href=\"/careers\"]),#workspaceSidebar [data-workspace-action=\"settings\"]').length"), 0);
+    assert.equal(await evaluate("document.querySelectorAll('#workspaceSidebar a:not([href=\"/careers\"]):not([href=\"/interview-practice/\"]),#workspaceSidebar [data-workspace-action=\"settings\"]').length"), 0);
     assert.equal(await evaluate("document.querySelector('#workspaceSidebar a[href=\"/careers\"]')!==null"), true);
+    assert.equal(await evaluate("document.querySelector('#workspaceSidebar a[href=\"/interview-practice/\"]')!==null"), true);
     assert.equal(await evaluate("document.querySelectorAll('#settingsDialog,#fsWorkspaceLanguageSelect').length"), 0);
     assert.equal(await evaluate("document.querySelectorAll('#fsSettingsDialog').length"), 1);
     assert.equal(await evaluate("!!document.querySelector('#fsSettingsButton svg')"), true);

@@ -141,6 +141,11 @@ prototypes under `test/`, submission material and existing source datasets are
 preserved. See [the website guide](src/README.md) for features, limitations and
 private-data handling.
 
+For PyCharm, select a Python 3.12 virtual environment, install the requirements,
+then right-click the root [`run.py`](run.py) and choose **Run**. See the
+[中文 PyCharm 本地运行指南](docs/pycharm-local-run.md) for updating from GitHub,
+page addresses, optional settings and changing the local port.
+
 ```bash
 # Run these commands from the repository root.
 python -m pip install -r requirements.txt

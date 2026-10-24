@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-futureskill-page="sdg">
 <head>
-  <script src="/static/future-theme.js?v=5"></script>
+  <script src="/static/future-theme.js?v=cyber-5"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FutureSkill AI · Career and SDG explorer</title>
@@ -198,6 +198,8 @@
   <link rel="stylesheet" href="/static/future-theme.css?v=3">
    <link rel="stylesheet" href="/static/future-pages.css?v=sdg-expandable-goals-2">
   <link rel="stylesheet" href="/static/career-context.css?v=1">
+  <link rel="stylesheet" href="/static/sdg-hud.css?v=integration-1">
+  <link rel="stylesheet" href="/static/future-cyber.css?v=3">
 </head>
 <body>
   <header><a href="/" aria-label="FutureSkill AI home"><span class="brand-mark" aria-hidden="true"><img src="/static/brand-forward.svg" alt=""></span> FutureSkill AI</a></header>
@@ -267,7 +269,19 @@
           </div>
           <p>Choose any goal to inspect its definition, available occupational evidence and any separate FutureSkill learning-preparation examples.</p>
         </summary>
-        <div id="goalGrid" class="goal-grid" role="list" aria-label="United Nations Sustainable Development Goals"></div>
+        <div class="hud-layout-toolbar">
+          <div class="hud-layout-controls" role="group" aria-label="Goal layout">
+            <button type="button" data-hud-layout="list" aria-pressed="true">List view</button>
+            <button type="button" data-hud-layout="diagram" aria-pressed="false">Diagram view</button>
+          </div>
+        </div>
+        <div id="hudGoalStage" class="hud-goal-stage">
+          <div id="hudCareerCenter" class="hud-career-center" aria-hidden="true">
+            <small>CAREER CONNECTIONS</small><strong data-hud-career>Explore the goals</strong><span data-hud-count>No task-to-Target links shown</span>
+          </div>
+          <div id="goalGrid" class="goal-grid" role="list" aria-label="United Nations Sustainable Development Goals"></div>
+        </div>
+        <p id="hudDiagramNote" class="hud-diagram-note">Connectors show potential task-to-Target hypotheses only. Goal rankings remain exploratory; neither demonstrates achieved impact.</p>
       </details>
       <details id="learningContribution" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>FutureSkill learning contribution (separate)</h2><span class="pathway-intro">Learning and job-readiness links are NOT direct career-to-SDG mappings.</span></span></summary>
@@ -287,6 +301,7 @@
     <div id="goalInfoContent" class="mapping-drawer-panel"></div>
   </dialog>
   <script src="/static/sdg-career-search.js?v=1"></script>
+  <script src="/static/sdg-hud.js?v=integration-1" defer></script>
   <script>
     const careerInput = document.getElementById("career");
     const message = document.getElementById("message");
