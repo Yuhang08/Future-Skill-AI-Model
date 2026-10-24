@@ -61,7 +61,9 @@
     .mapping-list{display:grid;gap:9px}
     .mapping{--sdg-color:#176a61;background:var(--paper);border:1px solid #e0e7dd;border-radius:12px;overflow:hidden;box-shadow:0 5px 16px #21433d08}
     .mapping-head{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:13px;min-height:76px;padding:12px 15px 12px 17px;background:linear-gradient(100deg,color-mix(in srgb,var(--sdg-color) 7%,#fffefa),#fffefa 67%)}
-    .goal-node.linked.broad-suggestion{border-style:dashed}
+    .goal-node.tentative{border:2px dashed color-mix(in srgb,var(--goal-color) 64%,#dce5dc);background:color-mix(in srgb,var(--goal-color) 5%,#fffefa)}
+    .goal-node.tentative .goal-node-status{color:var(--goal-color);font-weight:700}
+    .map-lines line.tentative-line{stroke-dasharray:2 9;stroke-width:1.6;opacity:.46}
     .mapping-head::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--sdg-color)}
     .goal-number{width:46px;height:46px;display:grid;place-items:center;border-radius:9px;overflow:hidden;background:var(--sdg-color);flex:none}
     .goal-number img{width:100%;height:100%;object-fit:cover}
@@ -231,16 +233,21 @@
         <span id="reviewStatus" class="mono"></span>
       </div>
       <div id="mappingList" class="mapping-list"></div>
+      <details id="taskProfile" class="pathway" hidden>
+        <summary class="pathway-toggle"><span><h2>Official O*NET occupation tasks</h2><span class="pathway-intro">Source tasks are real; SDG conclusions are independent suggestions.</span></span></summary>
+        <div id="taskProfileList" class="skills-list"></div>
+      </details>
       <details id="candidateSuggestions" class="pathway" hidden>
-        <summary class="pathway-toggle"><span><h2>Broader ideas · not task verified</h2><span class="pathway-intro">These title/SOC guesses do not create connections on the SDG map.</span></span></summary>
-        <p class="pathway-intro">These are exploratory themes, not occupational task evidence. Confirm the O*NET tasks and relevant UN target before making stronger claims.</p>
+        <summary class="pathway-toggle"><span><h2>Other SDG possibilities · review required</h2><span class="pathway-intro">Dashed goal nodes. Some suggestions have task-topic clues; broad guesses have no direct task-to-goal support.</span></span></summary>
+        <p class="pathway-intro">Task-topic suggestions cite a real task but do not verify a specific UN Target. Broad title/SOC suggestions are substantially weaker. Neither is evidence of measured SDG impact.</p>
         <div id="candidateList" class="skills-list"></div>
       </details>
       <section class="mindmap-shell" aria-labelledby="mindmapTitle">
         <div class="mindmap-heading">
           <h2 id="mindmapTitle">Career connections · 17 goals</h2>
           <div class="map-legend" aria-label="Map legend">
-            <span class="legend-key"><i class="legend-dot"></i>O*NET task-backed hypothesis</span>
+            <span class="legend-key"><i class="legend-dot"></i>Task-target hypothesis</span>
+            <span class="legend-key"><i class="legend-dot muted"></i>Dashed = tentative, needs review</span>
             <span class="legend-key"><i class="legend-dot muted"></i>Not assessed</span>
           </div>
         </div>
@@ -249,7 +256,7 @@
           <div id="careerCenter" class="career-center"><small>Exploring</small><strong id="mapCareerName">Career</strong></div>
           <div id="goalGrid" class="goal-grid" aria-label="United Nations Sustainable Development Goals"></div>
         </div>
-        <p class="map-caption">Only suggestions supported by actual O*NET 31.0 tasks are linked. If no task matches, no goals are highlighted. Broad title/SOC guesses are displayed separately.</p>
+        <p class="map-caption">Solid links: explicit task-to-target rules. Dashed links: weaker unverified suggestions, sometimes only title/SOC classification. Neither is a proven SDG outcome. Check each role's actual Task IDs below.</p>
       </section>
       <details id="learningContribution" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>FutureSkill learning contribution (separate)</h2><span class="pathway-intro">Learning and job-readiness links are NOT direct career-to-SDG mappings.</span></span></summary>
@@ -313,6 +320,7 @@
       ["Partnerships for the Goals","#19486A","Strengthen the means of implementation and revitalize the global partnership for sustainable development."]
     ];
     let activeMappings = [];
+    let activeCandidateMappings = [];
     let activeCareer = "";
     let lastFocusedGoal = null;
 
@@ -538,6 +546,7 @@
       goals.forEach((goal,index) => {
         const id = index + 1;
         const mapping = activeMappings.find(item => Number(item.sdg_id) === id);
+        const candidate = !mapping && activeCandidateMappings.find(item => Number(item.sdg_id) === id);
         const button = node(goalGrid,"button","","goal-node");
         button.type = "button";
         button.dataset.sdgId = String(id);
@@ -546,7 +555,8 @@
         button.style.gridArea = `${desktopSlots[index][0]} / ${desktopSlots[index][1]}`;
         button.style.setProperty("--goal-color",goal[1]);
         if (mapping) button.classList.add("linked");
-        button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Potential career connection. Open details." : "Not assessed for this career. Open goal information."}`);
+        else if (candidate) button.classList.add("tentative");
+        button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Task-to-target hypothesis." : candidate ? "Unverified candidate, needs human review." : "Not assessed."} Open details.`);
         const icon = node(button,"img");
         icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
         icon.alt = "";
@@ -554,7 +564,7 @@
         const copy = node(button,"span","","goal-node-copy");
         node(copy,"span",`GOAL ${String(id).padStart(2,"0")}`,"goal-index");
         node(copy,"span",goal[0],"goal-name");
-        node(copy,"span",mapping ? "Task-backed hypothesis" : "Not assessed","goal-node-status");
+        node(copy,"span",mapping ? "Task-to-target" : candidate ? "Needs review" : "Not assessed","goal-node-status");
         button.addEventListener("click",() => {
           lastFocusedGoal = button;
           if (mapping) {
@@ -562,7 +572,7 @@
             const dialog = card && card.querySelector("dialog");
             if (dialog) openDialog(dialog,button);
           } else {
-            showGoalInfo(id,goal,button);
+            showGoalInfo(id,goal,button,candidate);
           }
         });
       });
@@ -586,11 +596,13 @@
       const center = careerCenter.getBoundingClientRect();
       const sx = center.left + center.width/2 - rect.left;
       const sy = center.top + center.height/2 - rect.top;
-      activeMappings.forEach(mapping => {
+      [...activeMappings.map(x => ({...x, solid: true})),
+        ...activeCandidateMappings.map(x => ({...x, solid: false}))].forEach(mapping => {
         const button = goalGrid.querySelector(`.goal-node[data-sdg-id="${Number(mapping.sdg_id)}"]`);
         if (!button) return;
         const target = button.getBoundingClientRect();
         const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+        if (!mapping.solid) line.classList.add("tentative-line");
         line.setAttribute("x1",String(sx));
         line.setAttribute("y1",String(sy));
         line.setAttribute("x2",String(target.left + target.width/2 - rect.left));
@@ -599,12 +611,14 @@
       });
     }
 
-    function showGoalInfo(id,goal,opener) {
+    function showGoalInfo(id,goal,opener,candidate=null) {
       document.getElementById("goalInfoIcon").src = `/static/assets/sdg/sdg-${id}-icon.png`;
       document.getElementById("goalInfoIcon").alt = "";
       document.getElementById("goalInfoTitle").textContent = goal[0];
       document.getElementById("goalInfoNumber").textContent = `Sustainable Development Goal ${id}`;
-      document.getElementById("goalInfoCopy").textContent = activeCareer
+      document.getElementById("goalInfoCopy").textContent = candidate
+        ? `UNVERIFIED CANDIDATE (not proven impact). ${candidate.relevance_reason} ${(candidate.task_evidence || []).map(e => `O*NET Task ID ${e.task_id}: ${e.task}`).join(" ")} Read the official tasks below before making any contribution claim.`
+        : activeCareer
         ? `${goal[2]} No reviewed career-to-target link is available for ${activeCareer}; no target or evidence has been assigned. This does not mean the role has no possible SDG connection.`
         : `${goal[2]} Explore this goal independently, or select a supported career to see any reviewed career connections.`;
       const link = document.getElementById("goalInfoLink");
