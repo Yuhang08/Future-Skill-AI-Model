@@ -59,8 +59,32 @@
     .section-label h2{margin:0}
     .section-label span{font-size:10px;color:#718078}
     .mapping-list{display:grid;gap:9px}
+    .task-goal-rankings{padding:19px 20px;margin:14px 0 18px;border:1px solid #d4e3dc;border-radius:16px;background:#f5f9f6;color:#283e3a}
+    .task-goal-rankings h2{font-size:18px;margin:0 0 6px}
+    .task-goal-rankings .score-disclaimer{font-size:12px;line-height:1.55;color:#61756c;margin:0 0 14px}
+    .goal-rank-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+    .goal-rank-card{padding:12px 13px;border-radius:12px;border:1px solid #dce5dc;background:#fff;min-width:0}
+    .goal-rank-card h3{font-size:14px;margin:6px 0}
+    .goal-rank-card .rank-header{display:flex;gap:6px;justify-content:space-between;align-items:center;font-size:11px;color:#526960;font-weight:700}
+    .goal-rank-card .rank-number{font:700 13px "Space Mono",monospace;color:#176a61}
+    .goal-rank-card p{margin:8px 0;color:#52635e;font-size:11px;line-height:1.45}
+    .goal-score-meter{height:7px;border-radius:999px;background:#e6efea;overflow:hidden;margin:10px 0}
+    .goal-score-meter-fill{height:100%;border-radius:inherit;background:#237a67}
+    .task-score-evidence{display:grid;gap:4px;margin-top:8px;padding:9px;background:#f6f8f5;border-radius:7px;font-size:11px;line-height:1.4}
+    .task-score-evidence strong{font-size:10px;color:#3f5b51}
+    .task-score-evidence span{color:#53685c}
+    .all-goal-scores{margin-top:14px;border-top:1px solid #d7e3db;padding-top:10px}
+    .all-goal-scores summary{font-size:12px;font-weight:700;cursor:pointer}
+    .goal-score-line{display:grid;grid-template-columns:minmax(110px,1fr) minmax(95px,1.6fr) 64px;align-items:center;gap:8px;padding:7px 0;font-size:12px}
+    .goal-score-line .goal-score-meter{margin:0}
+    .goal-score-line span:last-child{text-align:right;font:700 11px "Space Mono",monospace}
+    .goal-node.scored-sdg .goal-node-status{font-weight:700;color:#176a61}
+    @media(max-width:760px){.goal-rank-cards{grid-template-columns:1fr}.task-goal-rankings{padding:13px}}
     .mapping{--sdg-color:#176a61;background:var(--paper);border:1px solid #e0e7dd;border-radius:12px;overflow:hidden;box-shadow:0 5px 16px #21433d08}
     .mapping-head{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:13px;min-height:76px;padding:12px 15px 12px 17px;background:linear-gradient(100deg,color-mix(in srgb,var(--sdg-color) 7%,#fffefa),#fffefa 67%)}
+    .goal-node.tentative{border:2px dashed color-mix(in srgb,var(--goal-color) 64%,#dce5dc);background:color-mix(in srgb,var(--goal-color) 5%,#fffefa)}
+    .goal-node.tentative .goal-node-status{color:var(--goal-color);font-weight:700}
+    .map-lines line.tentative-line{stroke-dasharray:2 9;stroke-width:1.6;opacity:.46}
     .mapping-head::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--sdg-color)}
     .goal-number{width:46px;height:46px;display:grid;place-items:center;border-radius:9px;overflow:hidden;background:var(--sdg-color);flex:none}
     .goal-number img{width:100%;height:100%;object-fit:cover}
@@ -151,7 +175,7 @@
     .legend-dot.muted{background:#aebbb0}
     .mindmap-stage{position:relative;isolation:isolate}
     .map-lines{position:absolute;inset:0;width:100%;height:100%;z-index:-1;overflow:visible;pointer-events:none}
-    .map-lines line{stroke:#759b83;stroke-width:2;stroke-dasharray:5 5;opacity:.76;animation:line-in .35s ease-out both}
+    .map-lines line{stroke:#759b83;stroke-width:2.2;stroke-dasharray:none;opacity:.83;animation:line-in .35s ease-out both}
     @keyframes line-in{from{opacity:0}to{opacity:.76}}
     .career-center{position:relative;width:min(300px,100%);min-height:54px;margin:0 auto 12px;padding:11px 16px;border-radius:12px;background:#164a48;color:white;text-align:center;box-shadow:0 7px 18px #1e55431a}
     .career-center small{display:block;color:#cde1d6;font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:700}
@@ -193,20 +217,20 @@
   <main>
     <div class="topline">
       <span class="eyebrow">Career pathway explorer</span>
-      <span class="status-pill">Prototype · selected targets only</span>
+      <span class="status-pill">Prototype · 923 careers · goal-level suggestions</span>
     </div>
     <section class="intro">
       <div>
         <h1>Explore the work<br>behind the goals.</h1>
-        <p>See where career preparation may connect to the UN Sustainable Development Goals.</p>
+        <p>Explore potential links between occupation specialties and the UN Sustainable Development Goals.</p>
       </div>
-      <aside class="distinction"><strong>Potential alignment is not impact.</strong>These are illustrative learning links, not proof of real-world change.</aside>
+      <aside class="distinction"><strong>Potential alignment is not impact.</strong>Occupation-to-goal suggestions are rule-based. They do not prove real-world impact.</aside>
     </section>
     <details class="about">
       <summary>About this prototype and how to read it</summary>
       <div class="about-copy">
-        <p>Explore how a role’s skill requirements and learning pathway may relate to selected UN targets. Each reviewed mapping includes its reasoning, supporting evidence, suggested action and limits.</p>
-        <p>Prototype mappings currently connect selected learning pathways to SDG 4.4 and SDG 8.5. Skill requirements are illustrative; other roles are not assigned targets.</p>
+        <p>Search all 923 O*NET occupations. Career connections require genuine O*NET occupation task records. Broad title/SOC guesses are shown separately and never as verified links.</p>
+        <p>Occupation suggestions are separate from FutureSkill learning pathways. The learning product may support SDG 4.4 and 8.5; those are NOT automatically career goals.</p>
         <p>Evidence availability varies by role. Employment outcomes, equitable access and broader SDG-level contribution require separate evidence and follow-up data. A mapping does not show that a learner, career or product has caused measurable progress.</p>
         <p>Official UN goal icons identify the goals; their use does not imply UN endorsement. Photographs are representative, not evidence of FutureSkill outcomes.</p>
       </div>
@@ -220,22 +244,41 @@
         </div>
         <button id="submitButton" type="submit" disabled>Explore career</button>
       </form>
-      <p id="careerChoiceStatus" class="career-choice-status" role="status" aria-live="polite">Type a role and select a catalogue result. Suggestions do not assign an SDG mapping.</p>
+      <p id="careerChoiceStatus" class="career-choice-status" role="status" aria-live="polite">Select a career for occupation-based SDG suggestions; any learning-pathway links appear in a separate section.</p>
     </section>
-    <p id="message" class="state-message" role="status" aria-live="polite">Browse the goals, or select a supported career to explore its reviewed connections.</p>
+    <p id="message" class="state-message" role="status" aria-live="polite">Browse all 17 goals, or select a career for its possible SDG connections.</p>
     <div id="loading" hidden aria-label="Loading career evidence"><div class="skeleton"></div><div class="loading-line"><span></span></div></div>
     <section id="results" hidden>
       <div class="section-label">
         <h2 id="roleTitle">Career connections</h2>
         <span id="reviewStatus" class="mono"></span>
       </div>
+      <section id="taskGoalRankings" class="task-goal-rankings" aria-label="O*NET task-based SDG relevance ranking" hidden>
+        <h2>Task-based SDG relevance · Top 3</h2>
+        <p class="score-disclaimer">Every occupation's genuine O*NET task statements are compared with all 17 SDGs. These are model-estimated thematic relevance indices (0–100), NOT probability, achieved impact, or UN-certified connections. Even a low-scoring career receives exploratory rankings, with weak evidence clearly identified.</p>
+        <div id="topGoalCards" class="goal-rank-cards"></div>
+        <details class="all-goal-scores">
+          <summary>View scores for all 17 SDGs</summary>
+          <div id="allGoalScoreLines"></div>
+        </details>
+      </section>
       <div id="mappingList" class="mapping-list"></div>
+      <details id="taskProfile" class="pathway" hidden>
+        <summary class="pathway-toggle"><span><h2>Official O*NET occupation tasks</h2><span class="pathway-intro">Source tasks are real; SDG conclusions are independent suggestions.</span></span></summary>
+        <div id="taskProfileList" class="skills-list"></div>
+      </details>
+      <details id="candidateSuggestions" class="pathway" hidden>
+        <summary class="pathway-toggle"><span><h2>Other SDG possibilities · review required</h2><span class="pathway-intro">Dashed goal nodes. Some suggestions have task-topic clues; broad guesses have no direct task-to-goal support.</span></span></summary>
+        <p class="pathway-intro">Task-topic suggestions cite a real task but do not verify a specific UN Target. Broad title/SOC suggestions are substantially weaker. Neither is evidence of measured SDG impact.</p>
+        <div id="candidateList" class="skills-list"></div>
+      </details>
       <section class="mindmap-shell" aria-labelledby="mindmapTitle">
         <div class="mindmap-heading">
           <h2 id="mindmapTitle">Career connections · 17 goals</h2>
           <div class="map-legend" aria-label="Map legend">
-            <span class="legend-key"><i class="legend-dot"></i>Reviewed potential link</span>
-            <span class="legend-key"><i class="legend-dot muted"></i>Not assessed</span>
+            <span class="legend-key"><i class="legend-dot"></i>Task-target hypothesis</span>
+            <span class="legend-key"><i class="legend-dot muted"></i>Dashed = tentative, needs review</span>
+            <span class="legend-key"><i class="legend-dot muted"></i>Task-derived rank (not impact)</span>
           </div>
         </div>
         <div id="mindmapStage" class="mindmap-stage">
@@ -243,8 +286,13 @@
           <div id="careerCenter" class="career-center"><small>Exploring</small><strong id="mapCareerName">Career</strong></div>
           <div id="goalGrid" class="goal-grid" aria-label="United Nations Sustainable Development Goals"></div>
         </div>
-        <p class="map-caption">Select any goal to explore it. Only reviewed career links are connected; other goals are not assessed for this role.</p>
+        <p class="map-caption">Each goal has a task-based relevance index calculated from the selected career's O*NET duties. The top three have dashed exploratory connections. Solid connections are separate, narrower UN target hypotheses. Neither means verified SDG impact.</p>
       </section>
+      <details id="learningContribution" class="pathway" hidden>
+        <summary class="pathway-toggle"><span><h2>FutureSkill learning contribution (separate)</h2><span class="pathway-intro">Learning and job-readiness links are NOT direct career-to-SDG mappings.</span></span></summary>
+        <p class="pathway-intro">Goal 4 / Goal 8 here describes the FutureSkill learning programme only. It does not mean the selected job directly improves education or guarantees decent work.</p>
+        <div id="learningContributionList" class="skills-list"></div>
+      </details>
       <details id="pathway" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>Learning pathway</h2><span class="pathway-intro">Skills and practice connected to preparation for this role.</span></span></summary>
         <p class="pathway-intro">These skills and learning actions describe preparation for the selected role. Completion does not guarantee employment or SDG outcomes.</p>
@@ -252,7 +300,7 @@
         <div id="assessmentStatus" class="not-assessed"></div>
       </details>
     </section>
-    <p class="footnote">Potential relationship only. This prototype does not evaluate impact.</p>
+    <p class="footnote">Occupational task data: O*NET 31.0 Database, U.S. Department of Labor / Employment and Training Administration, used under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. O*NET® is a trademark of USDOL/ETA. FutureSkill AI independently created the task-to-SDG heuristic and is not endorsed by USDOL/ETA or the United Nations. Matching tasks does not demonstrate measurable impact.</p>
   </main>
   <dialog id="goalInfoDialog" class="goal-info-dialog" aria-labelledby="goalInfoTitle">
     <div class="goal-info-content">
@@ -302,6 +350,9 @@
       ["Partnerships for the Goals","#19486A","Strengthen the means of implementation and revitalize the global partnership for sustainable development."]
     ];
     let activeMappings = [];
+    let activeCandidateMappings = [];
+    let activeGoalScores = [];
+    let activeTopGoals = [];
     let activeCareer = "";
     let lastFocusedGoal = null;
 
@@ -387,16 +438,18 @@
       icon.loading = "lazy";
       const headCopy = node(head, "div");
       node(headCopy, "h3", mapping.sdg_name || (goalInfo && goalInfo[0]) || "Sustainable Development Goal");
-      node(headCopy, "p", `Potential link through career skill practice${mapping.target_id ? ` · target ${mapping.target_id}` : ""}.`);
+      node(headCopy, "p", mapping.specificity === "onet_task"
+        ? `O*NET Task ID-backed Target ${mapping.target_id} candidate · human review needed; not proven impact.`
+        : "Unverified occupational-theme suggestion.");
       const headActions = node(head, "div", "", "mapping-head-actions");
-      node(headActions, "span", `TARGET ${mapping.target_id || "—"}`, "target-tag");
+      node(headActions, "span", mapping.specificity === "onet_task" ? `O*NET TASK · TARGET ${mapping.target_id}` : "UNVERIFIED", "target-tag");
       const drawerId = `mapping-drawer-${index}`;
       const titleId = `mapping-drawer-title-${index}`;
       const openButton = node(headActions, "button", "Show more", "mapping-details-trigger");
       openButton.type = "button";
       openButton.setAttribute("aria-haspopup", "dialog");
       openButton.setAttribute("aria-controls", drawerId);
-      openButton.setAttribute("aria-label", `Show more about SDG ${mapping.sdg_id}, Target ${mapping.target_id || ""}`);
+      openButton.setAttribute("aria-label", `Show more about SDG ${mapping.sdg_id}${mapping.target_id ? `, Target ${mapping.target_id}` : " suggestion"}`);
       const drawer = node(article, "dialog", "", "mapping-drawer");
       drawer.style.setProperty("--sdg-color", visual.color);
       drawer.id = drawerId;
@@ -404,12 +457,12 @@
       const drawerPanel = node(drawer, "div", "", "mapping-drawer-panel");
       const drawerHeader = node(drawerPanel, "div", "", "mapping-drawer-header");
       const drawerHeading = node(drawerHeader, "div");
-      node(drawerHeading, "span", `SDG ${mapping.sdg_id} · TARGET ${mapping.target_id || "—"}`, "drawer-target");
+      node(drawerHeading, "span", mapping.target_id ? `SDG ${mapping.sdg_id} · TARGET ${mapping.target_id}` : `SDG ${mapping.sdg_id} · RULE-BASED SUGGESTION`, "drawer-target");
       const drawerTitle = node(drawerHeading, "h2", mapping.sdg_name || "Sustainable Development Goal");
       drawerTitle.id = titleId;
       const closeButton = node(drawerHeader, "button", "Close", "mapping-drawer-close");
       closeButton.type = "button";
-      closeButton.setAttribute("aria-label", `Close details for Target ${mapping.target_id || ""}`);
+      closeButton.setAttribute("aria-label", `Close details for SDG ${mapping.sdg_id}`);
       openButton.addEventListener("click", () => openDialog(drawer, openButton));
       closeButton.addEventListener("click", () => drawer.close());
       drawer.addEventListener("click", event => { if (event.target === drawer) drawer.close(); });
@@ -419,7 +472,7 @@
       const largeIcon = node(visualCopy, "img", "", "drawer-icon");
       largeIcon.src = visual.icon;
       largeIcon.alt = `United Nations Sustainable Development Goal ${mapping.sdg_id} icon`;
-      node(visualCopy, "h3", `Target ${mapping.target_id || "—"}`);
+      node(visualCopy, "h3", mapping.target_id ? `Target ${mapping.target_id}` : `SDG ${mapping.sdg_id} · Suggested Goal`);
       node(visualCopy, "p", mapping.target_summary || "Target summary not provided.");
       if (visual.photo) {
         const photoWrap = node(visualPanel, "div", "", "drawer-photo-wrap");
@@ -434,7 +487,7 @@
       const evidence = Array.isArray(mapping.supporting_evidence) ? mapping.supporting_evidence : [];
       const sources = Array.isArray(mapping.evidence_source) ? mapping.evidence_source : [];
       const overview = node(drawerPanel, "div", "", "evidence-overview");
-      [[evidence.length,"Evidence statements"],[sources.length,"Reference links"],[mapping.user_action ? 1 : 0,"Suggested next step"]].forEach(([value,label]) => {
+      [[evidence.length,"Mapping rationale notes"],[sources.length,"Reference links"],[mapping.user_action ? 1 : 0,"Verification step"]].forEach(([value,label]) => {
         const stat = node(overview,"div","","evidence-stat");
         node(stat,"strong",value);
         node(stat,"span",label);
@@ -445,9 +498,9 @@
       node(evidenceColumn, "p", mapping.relevance_reason || "A role-specific explanation has not been provided.");
       if (evidence.length) {
         const evidenceBox = node(evidenceColumn, "div", "", "evidence-box");
-        node(evidenceBox, "div", "Evidence map · choose a node", "field-label");
+        node(evidenceBox, "div", "O*NET task evidence · choose a node", "field-label");
         const evidenceMap = node(evidenceBox, "div", "", "evidence-map");
-        const root = node(evidenceMap,"div",`SDG ${mapping.sdg_id} · Target ${mapping.target_id || "—"}`,"evidence-root");
+        const root = node(evidenceMap,"div",mapping.target_id ? `SDG ${mapping.sdg_id} · Target ${mapping.target_id}` : `SDG ${mapping.sdg_id} · Suggested`,"evidence-root");
         const rootIcon = node(root,"img");
         rootIcon.src = visual.icon;
         rootIcon.alt = "";
@@ -460,11 +513,11 @@
           pairs.push({
             skill: first,
             practice: second,
-            skillLabel: requirement ? `Skill · ${requirement[1]}` : "Skill evidence",
-            practiceLabel: second ? "Practice activity" : null
+            skillLabel: requirement ? `Skill · ${requirement[1]}` : "Occupation task",
+            practiceLabel: second ? (mapping.mapping_kind === "occupation_theme" ? "Rule note" : "Occupation task") : null
           });
         }
-        const sharedDetail = node(evidenceBox,"div","Select a skill or practice node to read its full source statement.","evidence-detail");
+        const sharedDetail = node(evidenceBox,"div","Select a task to read the full O*NET evidence wording.","evidence-detail");
         sharedDetail.id = `evidence-detail-${index}`;
         sharedDetail.setAttribute("role", "status");
         sharedDetail.setAttribute("aria-live", "polite");
@@ -476,7 +529,7 @@
             evidenceButton.type = "button";
             evidenceButton.setAttribute("aria-controls", sharedDetail.id);
             evidenceButton.setAttribute("aria-label", `Read ${kind} statement for ${pair.skillLabel.replace(/^Skill · /, "")}`);
-            if (kind === "practice") evidenceButton.classList.add("practice");
+            if (kind === "practice" && mapping.mapping_kind !== "occupation_theme") evidenceButton.classList.add("practice");
             evidenceButton.addEventListener("click",() => {
               sharedDetail.textContent = source;
               branchWrap.querySelectorAll(".evidence-node").forEach(button => button.setAttribute("aria-pressed",String(button === evidenceButton)));
@@ -485,9 +538,29 @@
           });
         });
         const full = node(evidenceBox,"details","","evidence-full");
-        node(full,"summary","Read all full evidence wording");
+        node(full,"summary","Read all occupation task statements");
         const ul = node(full,"ul");
         evidence.forEach(item => node(ul,"li",item));
+      }
+      const originalTasks = Array.isArray(mapping.task_evidence) ? mapping.task_evidence : [];
+      if (originalTasks.length) {
+        const details = node(evidenceColumn,"details","","evidence-full");
+        node(details,"summary","View original O*NET Task IDs, DWAs and task ratings");
+        originalTasks.forEach(task => {
+          const wrap = node(details,"div","","evidence-box");
+          node(wrap,"div",`Task ID ${task.task_id} · ${task.task_type || "Unclassified"}`,"field-label");
+          node(wrap,"p",task.task);
+          const ratings = task.task_ratings || {};
+          const values = [];
+          if (ratings.importance_1_to_5 != null)
+            values.push(`Task importance: ${ratings.importance_1_to_5}/5`);
+          if (ratings.relevance_pct != null)
+            values.push(`Task relevance: ${ratings.relevance_pct}%`);
+          if (values.length)
+            node(wrap,"p",values.join(" · ") + " · occupational statistics, NOT SDG confidence");
+          (Array.isArray(task.dwa_activities) ? task.dwa_activities : []).forEach(dwa =>
+            node(wrap,"p",`Official DWA ${dwa.id} · ${dwa.name}`));
+        });
       }
       renderSources(evidenceColumn, mapping.evidence_source);
       if (visual.iconUrl) {
@@ -525,6 +598,9 @@
       goals.forEach((goal,index) => {
         const id = index + 1;
         const mapping = activeMappings.find(item => Number(item.sdg_id) === id);
+        const candidate = !mapping && activeCandidateMappings.find(item => Number(item.sdg_id) === id);
+        const score = activeGoalScores.find(item => Number(item.sdg_id) === id);
+        const ranked = activeTopGoals.some(item => Number(item.sdg_id) === id);
         const button = node(goalGrid,"button","","goal-node");
         button.type = "button";
         button.dataset.sdgId = String(id);
@@ -533,7 +609,9 @@
         button.style.gridArea = `${desktopSlots[index][0]} / ${desktopSlots[index][1]}`;
         button.style.setProperty("--goal-color",goal[1]);
         if (mapping) button.classList.add("linked");
-        button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Reviewed potential career link. Open details." : "Not assessed for this career. Open goal information."}`);
+        else if (ranked || candidate) button.classList.add("tentative");
+        if (score) button.classList.add("scored-sdg");
+        button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${score ? "Task-derived relevance index " + score.relevance_index + " out of 100; not verified impact." : mapping ? "Task-to-target hypothesis." : candidate ? "Unverified candidate." : "Not assessed."} Open details.`);
         const icon = node(button,"img");
         icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
         icon.alt = "";
@@ -541,15 +619,19 @@
         const copy = node(button,"span","","goal-node-copy");
         node(copy,"span",`GOAL ${String(id).padStart(2,"0")}`,"goal-index");
         node(copy,"span",goal[0],"goal-name");
-        node(copy,"span",mapping ? "Potential link" : "Not assessed","goal-node-status");
+        node(copy,"span",score
+          ? `#${score.rank} · ${score.relevance_index}/100`
+          : mapping ? "Task-to-target" : candidate ? "Needs review" : "Not assessed","goal-node-status");
         button.addEventListener("click",() => {
           lastFocusedGoal = button;
-          if (mapping) {
+          if (score) {
+            showGoalInfo(id,goal,button,candidate,score);
+          } else if (mapping) {
             const card = mappingList.querySelectorAll(".mapping")[activeMappings.indexOf(mapping)];
             const dialog = card && card.querySelector("dialog");
             if (dialog) openDialog(dialog,button);
           } else {
-            showGoalInfo(id,goal,button);
+            showGoalInfo(id,goal,button,candidate);
           }
         });
       });
@@ -573,11 +655,16 @@
       const center = careerCenter.getBoundingClientRect();
       const sx = center.left + center.width/2 - rect.left;
       const sy = center.top + center.height/2 - rect.top;
-      activeMappings.forEach(mapping => {
+      const rankedOrCandidate = activeGoalScores.length ? activeTopGoals : activeCandidateMappings;
+      const confirmedGoals = new Set(activeMappings.map(item => Number(item.sdg_id)));
+      [...activeMappings.map(x => ({...x, solid: true})),
+        ...rankedOrCandidate.filter(x => !confirmedGoals.has(Number(x.sdg_id)))
+          .map(x => ({...x, solid: false}))].forEach(mapping => {
         const button = goalGrid.querySelector(`.goal-node[data-sdg-id="${Number(mapping.sdg_id)}"]`);
         if (!button) return;
         const target = button.getBoundingClientRect();
         const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+        if (!mapping.solid) line.classList.add("tentative-line");
         line.setAttribute("x1",String(sx));
         line.setAttribute("y1",String(sy));
         line.setAttribute("x2",String(target.left + target.width/2 - rect.left));
@@ -586,12 +673,16 @@
       });
     }
 
-    function showGoalInfo(id,goal,opener) {
+    function showGoalInfo(id,goal,opener,candidate=null,score=null) {
       document.getElementById("goalInfoIcon").src = `/static/assets/sdg/sdg-${id}-icon.png`;
       document.getElementById("goalInfoIcon").alt = "";
       document.getElementById("goalInfoTitle").textContent = goal[0];
       document.getElementById("goalInfoNumber").textContent = `Sustainable Development Goal ${id}`;
-      document.getElementById("goalInfoCopy").textContent = activeCareer
+      document.getElementById("goalInfoCopy").textContent = score
+        ? `Task-derived relevance rank #${score.rank} of 17; index ${score.relevance_index}/100. Evidence: ${score.evidence_basis}. ${(score.task_evidence || []).map(task => `O*NET Task ID ${task.task_id} (task contribution ${task.task_score}): ${task.task}`).join(" ")} Relative thematic matching only; NOT measured contribution, certainty or an official UN mapping.`
+        : candidate
+        ? `UNVERIFIED CANDIDATE (not proven impact). ${candidate.relevance_reason} ${(candidate.task_evidence || []).map(e => `O*NET Task ID ${e.task_id}: ${e.task}. ${(e.dwa_activities || []).map(d => `DWA ${d.id}: ${d.name}`).join("; ")}`).join(" ")} Read the official tasks before making any contribution claim.`
+        : activeCareer
         ? `${goal[2]} No reviewed career-to-target link is available for ${activeCareer}; no target or evidence has been assigned. This does not mean the role has no possible SDG connection.`
         : `${goal[2]} Explore this goal independently, or select a supported career to see any reviewed career connections.`;
       const link = document.getElementById("goalInfoLink");
@@ -672,12 +763,170 @@
       }
     }
 
+    function renderTaskProfile(data) {
+      const section = document.getElementById("taskProfile");
+      const list = document.getElementById("taskProfileList");
+      list.replaceChildren();
+      section.open = false;
+      const profile = data.task_profile || {};
+      const tasks = Array.isArray(profile.representative_tasks) ? profile.representative_tasks : [];
+      section.hidden = tasks.length === 0;
+      if (!tasks.length) return;
+      const header = node(list,"div","","skill-row");
+      const copy = node(header,"div");
+      node(copy,"div",`${profile.occupation_task_count || 0} tasks · ${profile.core_task_count || 0} Core`,"skill-name");
+      node(copy,"p","Representative O*NET occupation tasks (verbatim). These describe duties, not SDG contributions.");
+      const source = node(header,"div","","skill-description");
+      if (profile.source_url) {
+        const anchor = node(source,"a","Open official O*NET occupation");
+        anchor.href = profile.source_url;
+        anchor.target = "_blank";
+        anchor.rel = "noopener noreferrer";
+      }
+      tasks.forEach(task => {
+        const row = node(list,"div","","skill-row");
+        const label = node(row,"div");
+        node(label,"div",`Task ID ${task.task_id} · ${task.task_type || "not classified"}`,"skill-name");
+        node(label,"p",task.task);
+        const meta = node(row,"div","","skill-description");
+        const rating = task.task_ratings || {};
+        const parts = [];
+        if (rating.importance_1_to_5 != null)
+          parts.push(`O*NET task importance: ${rating.importance_1_to_5}/5`);
+        if (rating.relevance_pct != null)
+          parts.push(`Task relevance: ${rating.relevance_pct}%`);
+        if (parts.length) node(meta,"p",parts.join(" · ") + " (occupation ratings, NOT SDG probability)");
+        const dwas = Array.isArray(task.dwa_activities) ? task.dwa_activities : [];
+        dwas.forEach(dwa => node(meta,"p",`DWA ${dwa.id}: ${dwa.name}`));
+      });
+    }
+
+    function renderCandidateSuggestions(data) {
+      const section = document.getElementById("candidateSuggestions");
+      const list = document.getElementById("candidateList");
+      list.replaceChildren();
+      section.open = false;
+      const suggestions = Array.isArray(data.candidate_mappings) ? data.candidate_mappings : [];
+      section.hidden = suggestions.length === 0;
+      suggestions.forEach(item => {
+        const entry = node(list, "div", "", "skill-row");
+        const primary = node(entry, "div");
+        node(primary,"div",`Goal ${item.sdg_id} · ${item.sdg_name}`,"skill-name");
+        node(primary,"p",item.relevance_reason || "Preliminary SDG suggestion.");
+        const note = node(entry,"div","","skill-description");
+        const tier = item.candidate_tier;
+        const tierText = tier === "task_topic"
+          ? "TASK-TOPIC CANDIDATE · original task phrase, no verified UN target"
+          : tier === "dwa_topic"
+          ? "DWA-TOPIC CANDIDATE · linked work activity, weaker than explicit task wording"
+          : "CLASSIFICATION-ONLY GUESS · no direct occupation-task SDG link";
+        node(note,"div",tierText,"skill-name");
+        (Array.isArray(item.task_evidence) ? item.task_evidence : []).forEach(task => {
+          node(note,"p",`O*NET Task ID ${task.task_id}: ${task.task}`);
+          (Array.isArray(task.dwa_activities) ? task.dwa_activities : []).forEach(dwa =>
+            node(note,"p",`Linked DWA ${dwa.id}: ${dwa.name}`));
+          const rating = task.task_ratings || {};
+          if (rating.importance_1_to_5 != null)
+            node(note,"p",`O*NET task importance ${rating.importance_1_to_5}/5; NOT a measure of SDG contribution`);
+        });
+        const url = "https://www.onetonline.org/link/details/" + encodeURIComponent(data.career_id || "");
+        if (data.task_profile && data.task_profile.occupation_task_count) {
+          const link = node(note,"a","Read source tasks");
+          link.href = url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+        }
+      });
+    }
+
+    function renderTaskGoalRankings(data) {
+      const section = document.getElementById("taskGoalRankings");
+      const cards = document.getElementById("topGoalCards");
+      const all = document.getElementById("allGoalScoreLines");
+      cards.replaceChildren();
+      all.replaceChildren();
+      const scores = Array.isArray(data.goal_scores) ? data.goal_scores : [];
+      const top = Array.isArray(data.top_goal_scores) ? data.top_goal_scores : [];
+      section.hidden = scores.length !== 17;
+      if (section.hidden) return;
+      top.forEach((entry,index) => {
+        const card = node(cards,"article","","goal-rank-card");
+        const header = node(card,"div","","rank-header");
+        node(header,"span",`#${index + 1} · SDG ${entry.sdg_id}`);
+        node(header,"span",`${entry.relevance_index}/100`,"rank-number");
+        node(card,"h3",entry.sdg_name);
+        const meter = node(card,"div","","goal-score-meter");
+        const fill = node(meter,"div","","goal-score-meter-fill");
+        fill.style.width = `${Math.max(0, Math.min(100, Number(entry.relevance_index) || 0))}%`;
+        node(card,"p",entry.evidence_basis === "direct_task_topic"
+          ? "Task wording matches this Goal theme. Exploratory relevance only."
+          : entry.evidence_basis === "linked_dwa_topic"
+            ? "Linked detailed work activities suggest this Goal."
+            : entry.evidence_basis === "no_detected_overlap"
+            ? "No detectable SDG phrase overlap. Ranking is a weak exploratory comparison, not evidence."
+            : "Weak lexical resemblance only; human review required.");
+        (entry.task_evidence || []).slice(0,3).forEach(task => {
+          const evidence = node(card,"div","","task-score-evidence");
+          node(evidence,"strong",`O*NET Task ID ${task.task_id} · Score contribution ${task.task_score}`);
+          node(evidence,"span",task.task);
+          if (Array.isArray(task.phrase_matches) && task.phrase_matches.length)
+            node(evidence,"span",`Matched task themes: ${task.phrase_matches.join(", ")}`);
+          if (Array.isArray(task.dwa_phrase_matches) && task.dwa_phrase_matches.length)
+            node(evidence,"span",`Matched DWA themes: ${task.dwa_phrase_matches.join(", ")}`);
+        });
+      });
+      scores.sort((a,b)=>Number(a.sdg_id)-Number(b.sdg_id)).forEach(entry => {
+        const line = node(all,"div","","goal-score-line");
+        node(line,"span",`SDG ${entry.sdg_id} · ${entry.sdg_name}`);
+        const bar = node(line,"div","","goal-score-meter");
+        const fill = node(bar,"div","","goal-score-meter-fill");
+        fill.style.width = `${Math.max(0, Math.min(100, Number(entry.relevance_index) || 0))}%`;
+        node(line,"span",`${entry.relevance_index}/100`);
+      });
+    }
+
+    function renderLearningContribution(data) {
+      const section = document.getElementById("learningContribution");
+      const list = document.getElementById("learningContributionList");
+      list.replaceChildren();
+      section.open = false;
+      const links = Array.isArray(data.learning_pathway_mappings)
+        ? data.learning_pathway_mappings : [];
+      section.hidden = links.length === 0;
+      links.forEach(item => {
+        const row = node(list, "div", "", "skill-row");
+        const copy = node(row, "div");
+        node(copy, "div", `FutureSkill learning link: SDG ${item.sdg_id} · Target ${item.target_id}`, "skill-name");
+        node(copy, "p", item.relevance_reason || "Illustrative learning preparation only.");
+        const details = node(row, "div", "", "skill-description");
+        node(details, "p", item.impact_limitations || "Not an occupational SDG impact claim.");
+        const official = (item.evidence_source || []).find(source =>
+          typeof source.url === "string" && source.url.startsWith("https://sdgs.un.org/goals/"));
+        if (official) {
+          const link = node(details, "a", "Read official UN target");
+          link.href = official.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+        }
+      });
+    }
+
     function browseIndependentGoals() {
       activeCareer = "";
       activeMappings = [];
+      activeCandidateMappings = [];
+      activeGoalScores = [];
+      activeTopGoals = [];
+      document.getElementById("taskGoalRankings").hidden = true;
       mappingList.replaceChildren();
       pathway.hidden = true;
       pathway.open = false;
+      document.getElementById("learningContribution").hidden = true;
+      document.getElementById("learningContribution").open = false;
+      document.getElementById("candidateSuggestions").hidden = true;
+      document.getElementById("candidateSuggestions").open = false;
+      document.getElementById("taskProfile").hidden = true;
+      document.getElementById("taskProfile").open = false;
       document.getElementById("roleTitle").textContent = "Explore all 17 goals";
       document.getElementById("reviewStatus").textContent = "NO CAREER SELECTED";
       mapCareerName.textContent = "Choose a supported career";
@@ -708,7 +957,17 @@
       mapLines.replaceChildren();
       pathway.hidden = true;
       pathway.open = false;
+      document.getElementById("learningContribution").hidden = true;
+      document.getElementById("learningContribution").open = false;
+      document.getElementById("candidateSuggestions").hidden = true;
+      document.getElementById("candidateSuggestions").open = false;
+      document.getElementById("taskProfile").hidden = true;
+      document.getElementById("taskProfile").open = false;
       activeMappings = [];
+      activeCandidateMappings = [];
+      activeGoalScores = [];
+      activeTopGoals = [];
+      document.getElementById("taskGoalRankings").hidden = true;
       try {
         const response = await fetch("/api/sdg/mindmap",{
           method:"POST",
@@ -718,22 +977,52 @@
         const data = await response.json();
         if (sequence !== reviewSequence) return;
         if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Could not load role evidence.");
-        activeMappings = data.status === "curated" && Array.isArray(data.mappings) ? data.mappings : [];
+        activeMappings = Array.isArray(data.mappings) ? data.mappings : [];
+        activeGoalScores = Array.isArray(data.goal_scores) ? data.goal_scores : [];
+        activeTopGoals = Array.isArray(data.top_goal_scores) ? data.top_goal_scores : [];
+        const stronglyLinked = new Set(activeMappings.map(item => Number(item.sdg_id)));
+        // Only show score-based task rankings on the main graph when possible:
+        // do not mix SOC/title guesses with task-derived suggestions.
+        activeCandidateMappings = activeGoalScores.length === 17 ? []
+          : (Array.isArray(data.candidate_mappings) ? data.candidate_mappings : [])
+            .filter(item => !stronglyLinked.has(Number(item.sdg_id)));
         activeCareer = data.career;
         document.getElementById("roleTitle").textContent = activeCareer;
         mapCareerName.textContent = activeCareer;
-        document.getElementById("reviewStatus").textContent = data.status === "curated" && activeMappings.length ? "POTENTIAL LINKS · PROTOTYPE" : "NOT REVIEWED";
+        document.getElementById("reviewStatus").textContent = activeGoalScores.length === 17
+          ? `17 goals scored · Top 3 task-ranked · ${activeMappings.length} strict target hypotheses`
+          : `${activeMappings.length} task-target · ${activeCandidateMappings.length} need review`;
         results.hidden = false;
-        if (data.status === "curated" && activeMappings.length) {
+        renderLearningContribution(data);
+        renderTaskProfile(data);
+        renderCandidateSuggestions(data);
+        if (activeGoalScores.length === 17)
+          document.getElementById("candidateSuggestions").hidden = true;
+        renderTaskGoalRankings(data);
+        if (activeMappings.length) {
           activeMappings.forEach(renderMapping);
-          message.textContent = `${activeMappings.length} reviewed potential links. Select a goal to explore.`;
+          message.textContent = activeGoalScores.length === 17
+            ? "All 17 goals scored from occupational tasks; top three ranked by modeled thematic relevance. Strict Target evidence is separate; no impact is proven."
+            : `${activeMappings.length} task-to-target hypotheses and ${activeCandidateMappings.length} weaker suggestions. Dotted lines NEED REVIEW; no SDG effect is proven.`;
           await renderPathway(data,activeCareer,sequence);
         } else {
           const empty = node(mappingList,"div","","empty-card");
-          node(empty,"strong","No reviewed role-to-target mapping");
-          node(empty,"span","This supported career has not been reviewed against the currently curated targets. No target relationship is inferred. This does not mean the role has no possible SDG connection.");
+          node(empty,"strong",activeGoalScores.length === 17
+            ? "Task-derived Goal ranking available (no narrowly matched UN Target)"
+            : "No O*NET task-backed SDG connection available");
+          node(empty,"span", data.task_data_status === "not_installed"
+            ? "Official O*NET Task Statements CSV is not installed. Run scripts/import_onet_sdg_tasks.py to obtain genuine data."
+            : activeCandidateMappings.length
+              ? "No sufficiently explicit task-to-target match. Dashed links are tentative only; inspect the original O*NET tasks below."
+              : "No supported SDG connection identified; this is preferable to assigning an arbitrary SDG 8. Review the original O*NET tasks below.");
           pathway.hidden = true;
-          message.textContent = "Supported career · not yet reviewed. Goals are available to explore; no career links are assigned.";
+          message.textContent = activeGoalScores.length === 17
+            ? "Task-derived Top 3 suggestions are shown, even without strict Target matches. Low relevance scores indicate weak thematic evidence."
+            : data.task_data_status === "not_installed"
+            ? "Official task CSV missing. No task-based ranking is available."
+            : activeCandidateMappings.length
+              ? `No strict task-target match; ${activeCandidateMappings.length} tentative ideas are displayed as dashed links.`
+              : "No sufficient SDG association found. Official occupation tasks are available below for manual review.";
         }
         if (sequence !== reviewSequence) return;
         renderGoals();

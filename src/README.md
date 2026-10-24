@@ -40,7 +40,7 @@ files out of Git. Use a separate writable data directory for testing.
 
 - `/ai-trend` displays ten qualitative category scenarios. The upstream data cites the World Economic Forum Future of Jobs Report 2025 without page-level citations; the page labels the scenario data as unvalidated.
 - `/uncertainty` runs the upstream hand-set scenario formula. Its starting value and coefficients are illustrative assumptions, not labor-market forecasts.
-- `/sdg-impact` shows limited potential alignments to UN SDG targets 4.4 and 8.5 for five explicitly mapped reskilling pathways. The role skills and practice activities come from FutureSkill's illustrative catalogue; unsupported roles remain unreviewed, and no employment or measured SDG impact is claimed.
+- `/sdg-impact` now ranks **all 17 SDG Goals for every one of 923 real O*NET occupations** from its original O*NET 31.0 Task Statements and linked activities (no job-group SDG 8 default). The goal-level 0–100 thematic-relevance indices are computed by weighted task phrases/lexical overlap, Core/Supplemental type and available IM/RT task metadata. Clicking a goal reveals exact contributing Task IDs. Top 3 goals show as exploratory graph connections; prior Target-specific `mappings` remain separate, stricter hypotheses. These are **NOT probabilities, independently validated connections or measured SDG outcomes**. Export 15,691 career × goal rows using `python scripts/export_923_task_goal_rankings.py`. See `docs/sdg-923-rule-based.md` for transparent formula and test instructions.
 - All three are linked from the homepage under **Explore More Features**. No RunPod model or external API key is required for these prototype pages.
 
 ## Technical layout

@@ -1,0 +1,533 @@
+# Task-to-SDG Relevance Ranking v5 — all 923 O*NET occupations
+
+## What changed, in response to the "398 unmapped occupations" request?
+
+Rather than forcing the 398 occupations into arbitrary SDG categories or
+showing an empty mindmap, FutureSkill now **scores every real occupational Task
+Statement against each of the 17 SDG GOALS**. Each occupation has a **Top 3
+exploratory ranking** plus a score for all 17 goals, with underlying original
+O*NET Task IDs and text. The previous stricter UN *Target*-level rules still
+exist separately, and are NOT promoted or fabricated by the new ranking.
+
+This is not a UN-approved occupation-to-SDG mapping and does NOT measure
+actual SDG achievement, outcomes, job creation, equality, or success.
+
+## Auditable formula (domain-specific prototype, not trained ML)
+
+For a specific O*NET Task `t` and SDG Goal `g`:
+
+```
+TextSignal(t,g) =
+    1.00 × min(2, direct task-phrase hits)
+  + 0.42 × min(2, officially linked DWA phrase hits)
+  + 0.45 × bounded word/character lexical overlap
+
+TaskWeight(t) =
+    1.00 if O*NET Task Type is Core else 0.70
+  × (0.70 + 0.30 × importance/5)
+  × (0.80 + 0.20 × relevance/100)
+
+TaskGoalEvidence(t,g) = TextSignal(t,g) × TaskWeight(t)
+
+CareerRaw(g) =
+    mean of the three highest TaskGoalEvidence scores
+  + 0.035 × ln(1 + number of task scores >= 0.08)
+
+GoalRelevanceIndex(g) = 100 × CareerRaw(g) / (1.50 + CareerRaw(g))
+```
+
+Note: The displayed implementation applies the Core factor to the two
+occupational rating factors; when source importance/relevance are missing,
+neutral assumptions (0.6, 0.7) are used *for ordering only*, not represented
+as observed O*NET ratings. Neither ratings nor displayed relevance index
+should ever be called a probability of sustainable impact. Phrase banks and
+weights are **FutureSkill's authored modelling assumptions** and subject to
+human semantic review.
+
+This is a **goal-level similarity rank**, NOT a certified correspondence to
+any of the 169 specific UN SDG Targets. It can give low but nonzero scores
+from weak lexical overlap, and top three results are provided even for jobs
+whose real tasks have no distinctive SDG terminology. Such cases are marked
+`weak_exploratory_ranking`, not verified alignment.
+
+## UI and API
+
+- `POST /api/sdg/mindmap` with body `{"career_id": "17-2199.11"}` returns:
+  `goal_scores`: 17 entries (rank, 0–100 relevance index, evidence basis,
+  Task IDs/text/individual task contributions);
+  `top_goal_scores`: first three entries;
+  `goal_scoring_method`: transparent limitations.
+- The `/sdg-impact` webpage displays top 3 scored goals and all 17 bars.
+  Clicking **any** Goal reveals its official task evidence.
+- Previous `mappings` are still the narrow rule-based **Target** hypotheses
+  (solid connections); previous `candidate_mappings` remain for other
+  consumers but are hidden from the primary task-score graph.
+- `get_sdg_alignment_by_id(..., include_goal_scores=True)` activates ranking
+  explicitly. Default false preserves existing audits and assessment
+  integrations. Non-O*NET prototype names do not invent job tasks.
+
+## Run on user's existing repository in PyCharm / PowerShell
+
+```powershell
+git switch feature/all-923-career-sdg-mapping
+git pull --ff-only origin feature/all-923-career-sdg-mapping
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests -p "test_sdg_task_goal*.py" -v
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python scripts/export_923_task_goal_rankings.py
+python -m uvicorn main:app --app-dir src --reload --port 5000
+```
+
+Inspect `http://127.0.0.1:5000/sdg-impact` and test a solar engineer,
+water/wastewater operator, an elementary school teacher, a generic manager
+and a less-easily classified role. Ranking must use **real occupational
+tasks**, not a SOC 11 → 8 fallback.
+
+The export `reports/sdg_task_goal_rankings_923.csv` includes exactly
+**923 × 17 = 15,691 rows**, with source Task IDs, Goal-level relevance
+indices and explicit evidence labels. This job may be CPU-intensive because
+it scores every task across the complete catalogue; it never downloads or
+fabricates occupational records.
+
+## Limitations / sources
+
+- O*NET Task Statements/DWA/Task Ratings are **U.S. occupational data**,
+  and are not themselves Malaysia-specific nor SDG impact indicators.
+- UN Goal texts: https://sdgs.un.org/goals
+- O*NET 31.0 Task Statements:
+  https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html
+- O*NET 31.0 Tasks-to-DWAs:
+  https://www.onetcenter.org/dictionary/31.0/csv/tasks_to_dwas.html
+- O*NET 31.0 Task Ratings:
+  https://www.onetcenter.org/dictionary/31.0/csv/task_ratings.html
+- Attribution: O*NET 31.0 Database, USDOL/ETA, CC BY 4.0.
+- Scores have **not** been empirically calibrated. To claim real precision,
+  create a human-labeled benchmark across low- and high-scoring occupations,
+  validate precision@3, false positives and missed goals, then revise the
+  algorithm transparently. 100% ranking coverage does **not** imply
+  100% correct mappings.
+
+---
+
+## Fix: remove unsupported broad SOC suggestions in the latest five-role check
+
+The user confirmed the **strict** corrections worked: Embalmers have no SDG,
+Water/Wastewater Operators retain candidate Target 6.3, and Interior Designers
+retain task-supported candidate 12.5. However, the CSV still showed
+classification-only goals `9;12` for Boiler Operators and `9;11` for
+Refuse/Recyclable Collectors, both inherited from broad occupational group
+fallbacks, not the relevant Task IDs.
+
+We have disabled automatic title/SOC fallback goals for mixed major groups
+**27 (arts/design), 49 (installation/repair), 51 (manufacturing) and 53
+(transport/material moving)**. These very diverse groups cannot reliably
+share one generic SDG goal. The individual career still has its actual O*NET
+task profile, any strict task-to-target matches, any task/DWA-level candidates,
+and any specific title-based theme. The result may correctly have **no SDG
+suggestion** when none of those applies.
+
+This intentionally reduces spurious dotted-line "classification-only"
+connections, **not** the ability to analyze all 923 careers. It is not a
+measured improvement in precision and is not an O*NET or UN endorsement.
+
+After pulling and running the tests, re-export the CSV and compare
+`task_based_targets`, `task_topic_goals`, `dwa_topic_goals` and
+`classification_only_goals`; do not judge all candidates by one column.
+
+---
+
+## Further strict-target audit: 62-candidate list
+
+The latest manual audit used O*NET task descriptions and official UN Target
+definitions. These three concrete rule failures have now been corrected:
+
+- **Embalmers (39-4011.00), O*NET Task ID 4504 → NOT 12.5**:
+  preventing the escape of bodily waste matter is containment, not material
+  waste reduction, reuse or recycling. A core task alone is insufficient.
+- **Stationary Engineers / Boiler Operators (51-8021.00), Task ID 10470 →
+  NOT 6.3**: boiler water testing for corrosion prevention maintains
+  machinery; it does not in itself improve ambient water quality or
+  wastewater treatment.
+- **Refuse/Recyclable Material Collectors (53-7081.00), Task ID 20313 →
+  NOT automatically 12.5**: dumping materials at disposal sites is not
+  evidence that recyclable material is actually recycled. The adjective
+  `recyclable` must NOT be confused with the action `recycle`.
+
+**Preserve genuine potential matches:** Interior Designers, Task ID 20998,
+explicitly describe using recycled materials where feasible, and metal
+casters describe collecting scrap for recycling. Both are reasonable
+**task-supported suggestions for 12.5**, not measured SDG outcomes.
+
+UN Goal 12 Target 12.5 is specifically about prevention, reduction,
+recycling and reuse; UN Goal 6 Target 6.3 concerns pollution and water
+quality. Distinguish an environmentally relevant *occupation* from an
+unreviewed *Target-specific* contribution hypothesis.
+
+Additional regression checks were added to
+`tests/test_sdg_target_precision.py` for these cases and exact O*NET
+Task IDs where official CSV is installed. Expected strict-target counts
+will change; counts alone cannot certify mapping accuracy.
+
+---
+
+# Follow-up review of the 83 task-target candidates
+
+Review of the user's latest list uncovered overbroad UN target interpretations.
+The latest rules now require stronger and correctly scoped evidence:
+
+- **10.2**: special assistance to an individual airline passenger is not by
+  itself evidence of a program promoting social/economic inclusion.
+- **13.2**: fuel-saving route optimization (O*NET Task ID 19923) is an
+  environmental activity, but not the integration of climate measures into
+  *national policies, strategies and planning*.
+- **6.3**: public-health lectures listing sewage/water safety (Task ID
+  17219) are not direct wastewater treatment / water-quality management.
+- **12.3**: *preventing/reducing* food loss and waste is different from merely
+  collecting or recycling food waste after it occurs.
+- **12.5**: direct waste prevention, material recycling/reuse operations;
+  ordinary disposal and teaching about recycling do not establish this Target.
+- **4.1 / 4.2**: UN 4.1 applies to primary and secondary schooling;
+  UN 4.2 covers preschool and early-childhood education. Kindergarten and
+  preschool teaching are explicitly handled under 4.2. Substitute teachers
+  without a specific grade level no longer automatically imply 4.1.
+
+**O*NET occupation duties are real; their association with a UN Target is a
+separate, human-unreviewed hypothesis.** Some narrower classifications may
+produce fewer solid map connections and more dashed goal-level suggestions.
+This is not a scientific precision score.
+
+Official UN definitions:
+https://sdgs.un.org/goals/goal4
+https://sdgs.un.org/goals/goal6
+https://sdgs.un.org/goals/goal10
+https://sdgs.un.org/goals/goal12
+https://sdgs.un.org/goals/goal13
+
+Run the regression suite after pulling:
+
+```powershell
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests -p "test_sdg_target_precision.py" -v
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python scripts/audit_sdg_task_evidence.py
+python scripts/export_923_sdg_review.py
+```
+
+The targeted suite includes assertions against genuine O*NET Task IDs
+9643, 19923, and 17219 when the official 31.0 CSV is installed.
+The original source CSVs must not be modified by code changes.
+
+---
+
+# SDG Target precision correction — 24 October 2026
+
+**Purpose:** reduce false positives found during review of the 923-career CSV.
+The following Target claims now need narrower O*NET occupational evidence:
+
+| Target | Old overly broad rule | Current task-to-target requirement |
+| --- | --- | --- |
+| 1.3 (social protection) | Generic "financial assistance" caused student-loan roles to match | Explicit government/public benefit, social-protection, welfare or similar program + administrative duty; core task |
+| 9.5 (scientific research/R&D) | Merely designing/testing software or providing IT support could match | Explicit scientific research, R&D, or innovative/new technology/product development; core task |
+| 12.5 (waste reduction) | Training or teaching about recycling could match | Direct waste prevention/recycling/reuse operational duty; reject education/training-only wording; core task |
+| 4.1 (primary and secondary education) | University, adult, preschool or museum instruction could match | K–12 teaching occupation code plus school/pupil/student instructional task; core task |
+| 3.8 (universal health coverage) | Any healthcare service/patient care counted as coverage | Explicit expansion or improvement of access to essential health services; core task |
+
+These rules are **conservative heuristics, not validated occupation–SDG
+causality**. Some truly relevant roles may now appear under the **dashed
+task-topic/DWA-topic candidate tier** or no suggestion, instead of a solid
+specific Target. That is intentional until their Target relationship is
+reviewed.
+
+Goal 4 task-topic discovery also no longer treats *generic internal staff
+training*, routine educational presentations, or instruction manuals as direct
+Quality Education work. Education-related career themes still need their
+specific O*NET task context.
+
+To validate this change against synthetic negative controls and the local
+official O*NET source:
+
+```powershell
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests -p "test_sdg_target_precision.py" -v
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python scripts/audit_sdg_task_evidence.py
+python scripts/export_923_sdg_review.py
+```
+
+The `test_sdg_target_precision.py` suite tests synthetic positive/negative
+sentences and, where the official CSV exists, checks that known overbroad
+occupation/Target pairs have been removed. Any **change in the count of
+strictly matched occupations is a coverage change, not a measured improvement
+in Precision**. Independent manual labeling of a representative random
+sample is necessary to estimate actual mapping correctness.
+
+UN references: https://sdgs.un.org/goals/goal1,
+https://sdgs.un.org/goals/goal3,
+https://sdgs.un.org/goals/goal4,
+https://sdgs.un.org/goals/goal9,
+https://sdgs.un.org/goals/goal12.
+
+---
+
+## Correction: no automatic Goal 8 for management or commercial occupations
+
+Earlier versions classified all SOC 11 Management Occupations, and several
+other business/service SOC groups, as SDG 8 solely because they are jobs.
+This was **not valid occupational evidence**. Broad default Goal 8
+assignments have now been removed for SOC major groups 11, 13, 39, 41 and 43.
+
+Clearly described specialist roles can still receive a **classification-only**
+suggestion (e.g. Legislators → potential Goal 16, Hydroelectric Production
+Managers → potential Goal 7, IT Systems Managers → potential Goal 9).
+These are unverified **title-topic** directions, not demonstrated impacts.
+
+An occupation with no narrow Task-to-Target rule, no distinctive Task/DWA
+theme, and no sufficiently specific title is now **UNASSIGNED** as an SDG
+candidate, while keeping its actual O*NET task profile and source IDs.
+This is scientifically preferable to inventing a Goal 8 connection.
+
+Export and audit preserve all **923 distinct occupational analyses** while
+counting such cases in `no_sdg_suggestion`. A 923-row analysis file does
+not require 923 assigned goals or imply accuracy.
+
+---
+
+# SDG Mapping v4 — O*NET Task Importance + Detailed Work Activities (24 Oct 2026)
+
+## What the new version actually improves
+
+FutureSkill matches careers by exact 10-character O*NET-SOC code, and task
+ratings/activities by the pair **(O*NET-SOC Code, Task ID)**. This prevents
+one occupation's task score or detailed activity being attached to a different
+occupation that happens to reuse an ID.
+
+Two **optional genuine O*NET 31.0 supplements** are supported:
+- `tasks_to_dwas.csv`: **24,087** links between Task IDs and Detailed Work
+  Activities (DWAs), with DWA Element IDs/names.
+  https://www.onetcenter.org/dictionary/31.0/csv/tasks_to_dwas.html
+- `task_ratings.csv`: **165,780** records with task importance (IM, 1..5),
+  relevance (RT, 0..100), and frequency categories (FT). Ratings are available
+  for **911** occupations, NOT all 923 catalogue roles.
+  https://www.onetcenter.org/dictionary/31.0/csv/task_ratings.html
+
+FutureSkill uses **only IM/RT** to order evidence from tasks belonging to
+the same occupation, and reports the *observed* ratings next to Task IDs.
+`Recommend Suppress=Y` entries are not used, and missing ratings remain
+absent. It never converts task importance into an SDG probability.
+
+The algorithm now has **four, separately labelled tiers**:
+1. **Narrow task-to-UN-target rule** (solid connection). This is an unreviewed
+   research hypothesis supported by official Task text and Task ID, NOT impact.
+2. **Task-topic match** (dashed). True occupational task text contains a
+   distinctive goal-level subject, without verified UN target alignment.
+3. **DWA-topic match** (dashed). An officially linked Detailed Work Activity
+   contains a distinctive theme; this is explicitly weaker than a task phrase
+   and has NO asserted target-level evidence.
+4. **Classification only** (dashed). A job title/SOC family gives a broad
+   unverified idea when nothing more specific was found. Original real
+   occupational tasks remain visible, but are **not cited as proof** that
+   this mapping is correct.
+
+**All four are unverified occupational hypotheses**; no causal SDG outcomes,
+confidence percentages or UN/O*NET endorsement are claimed. A larger number
+of matches is NOT evidence of improved precision.
+
+## Install official datasets in your PyCharm terminal
+
+```powershell
+git switch feature/all-923-career-sdg-mapping
+git pull --ff-only origin feature/all-923-career-sdg-mapping
+python scripts/import_onet_sdg_context.py
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests -p "test_sdg_onet_context.py" -v
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python scripts/audit_sdg_task_evidence.py
+python scripts/export_923_sdg_review.py
+python -m uvicorn main:app --app-dir src --reload --port 5000
+```
+
+Downloaded source paths:
+`src/data/onet_tasks_to_dwas.csv` and
+`src/data/onet_task_ratings.csv`.
+
+The export `reports/sdg_mapping_923_review.csv` now includes DWA-only
+suggestions, raw IM relevance metadata, source completeness, and sample
+Task/DWA IDs for all 923 occupations.
+
+To deploy the extra O*NET data to Render, after validating provenance/license
+and running tests, explicitly commit those two genuine downloaded CSV files:
+
+```powershell
+git add src/data/onet_tasks_to_dwas.csv src/data/onet_task_ratings.csv
+git commit -m "data: add O*NET 31.0 DWA links and task ratings"
+git push origin feature/all-923-career-sdg-mapping
+```
+
+Do not remove the existing `src/data/onet_task_statements.csv` or
+overwrite other career/reskilling data.
+
+## Why this is more defensible, but not proven accurate
+
+O*NET Task Statements are job descriptions, Tasks-to-DWAs maps real occupational
+activities, and Task Ratings describe how important those tasks are to the
+occupation. **None of these sources contains a United Nations-approved
+occupation-to-SDG crosswalk**. Linking a job duty to the specific SDG target
+and claiming impact still needs expert review or outcome evidence.
+
+For example, a Chef ordering ingredients is NOT evidence that food waste has
+been reduced (UN 12.3). The task must explicitly discuss waste prevention
+before the narrow 12.3 rule proposes a task-to-target link. Without evidence,
+the system preserves a clearly unverified hypothesis.
+
+---
+
+## Upgrade: 923 role-specific analyses (not 923 verified impacts)
+
+The prior strict task rules matched 280 of 923 careers in the first local
+audit; 643 had no *strict* task-to-target match. The newer analysis
+**does not force those 643 occupations into a supposedly proven UN target**.
+
+All 923 now receive a structured result:
+- **Task-to-target hypotheses:** prior strict rules, with real O*NET Task IDs;
+  mapped as main links. They remain unreviewed.
+- **Task-topic suggestions:** broader but distinctive topics extracted from
+  real job-task text, showing the source Task IDs. These are dashed,
+  unverified **goal-level** possibilities — not verified targets.
+- **Classification-only suggestions:** the weakest occupational title/SOC
+  suggestions, marked as such. The profile lists genuine job tasks to inspect,
+  but those tasks are **not cited as proof of the suggested SDG**.
+
+In the interactive mind map, solid links denote strict task-to-target
+hypotheses; dashed links require review. Different visual styles communicate
+the evidence tier and do not imply causal impact.
+
+`task_profile` reports each occupation's number of official tasks, number of
+Core tasks, and up to three verbatim representative tasks with their IDs and
+the official occupation link. This is role-specific context, not an impact
+estimate.
+
+### Export the complete 923-row review file
+
+```powershell
+$env:PYTHONPATH="src"
+python scripts/audit_sdg_task_evidence.py
+python scripts/export_923_sdg_review.py
+```
+
+This creates `reports/sdg_mapping_923_review.csv` with exactly one row
+per occupation, official Task IDs, tiered goal suggestions and source status.
+Rows labelled `classification_only` are NOT validated SDG mappings. Review
+those rows, especially when considering an official submission.
+
+The "923/923" count is **availability of an individualised analysis**, not
+classification accuracy. No calibrated confidence probability is claimed.
+Neither O*NET nor the UN independently approves these project-authored
+occupational correspondences.
+
+---
+
+# FutureSkill AI — Evidence-based SDG candidate mapping (O*NET 31.0)
+
+## Important conclusion
+
+The original CSV of 923 occupations has **only O*NET-SOC codes, titles and
+RIASEC interest measures**, not job duties. Assigning SDG 12 to all chefs or
+SDG 4 to IT roles based only on occupation type is **not verified**. It is
+incorrect to describe such suggestions as validated impacts.
+
+Official sources checked:
+- O*NET 31.0 [Task Statements](https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html),
+  published as `task_statements.csv`, contains **18,838 occupational task
+  records** with the occupational code, task ID, full task text, Task Type and
+  source date.
+- UN [Goal 12 / Target 12.3](https://sdgs.un.org/goals/goal12) refers explicitly
+  to reducing food waste and food losses.
+- O*NET [Chefs and Head Cooks (35-1011.00)](https://www.onetonline.org/link/details/35-1011.00)
+  lists tasks such as ordering supplies, estimating ingredient amounts,
+  checking food quality and planning menus based on expected demand. **These
+  do not establish that an individual chef has reduced food waste.**
+
+## Latest website contract
+
+The career explorer still searches **923 occupations**, but now returns:
+
+1. `mappings` — **only** suggested UN-target links triggered by *real task
+   statements*, with an actual O*NET Task ID, task text, Core/Supplemental
+   label and official source URLs. Such links are named
+   `task_based_candidate` and `task_signal_unreviewed` — NOT measured
+   impacts or endorsement by the UN.
+2. `candidate_mappings` — low-specificity career-name/SOC-group *guesses*.
+   These are browsable in a separate disclosure, **not drawn as graph edges**.
+3. `learning_pathway_mappings` — prior FutureSkill education / reskilling
+   preparation links (UN 4.4, 8.5), separate from occupation contributions.
+4. `task_data_status` — `available`, `not_installed`,
+   `invalid_file`, or `occupation_tasks_missing`. When no source CSV is
+   installed, the app does **not** invent task-backed mappings.
+
+## Real-data installation (Windows PowerShell)
+
+From the **repository root**, using your PyCharm virtual environment:
+
+```powershell
+git switch feature/all-923-career-sdg-mapping
+git pull --ff-only origin feature/all-923-career-sdg-mapping
+python scripts/import_onet_sdg_tasks.py
+$env:PYTHONPATH="src"
+python scripts/audit_sdg_task_evidence.py
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python -m uvicorn main:app --app-dir src --reload --port 5000
+```
+
+If the automatic download fails, open the official [O*NET Task Statements
+page](https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html)
+and download `task_statements.csv` manually. Move that file to
+`src/data/onet_task_statements.csv`. **Do not use an invented dataset.**
+
+The official source is not automatically downloaded by the server at startup;
+deployment with Render is deterministic and never calls the O*NET website
+during an API request.
+
+**To deploy the true task evidence on Render**, the downloaded CSV must be
+checked into your GitHub branch and included in the merge to `main`:
+```powershell
+git add src/data/onet_task_statements.csv
+git commit -m "data: add original O*NET 31.0 task statements for auditable SDG mapping"
+git push origin feature/all-923-career-sdg-mapping
+```
+
+Review the dataset license and ensure the file is the official O*NET release
+before publishing. Without that CSV on Render, the website will explicitly
+state no real task records are installed; it will *not* draw the old Chef→12
+line as if it had supporting duties.
+
+## What evidence supports
+
+A narrowly matched task such as explicit food-waste reduction may be
+considered for UN Target 12.3. Simply ordering groceries or estimating
+ingredient quantities **does not pass** this target rule. A job title or
+industry classification never establishes an outcome.
+
+The mapping rules are authored FutureSkill heuristics. A task statement and a
+UN target may be directly relevant without verifying a benefit. Before
+claiming real contribution, validate the rule manually against the UN target
+and collect real outcome or programme evidence.
+
+## License and attribution
+
+> This page includes information from the O*NET 31.0 Database by the
+> U.S. Department of Labor, Employment and Training Administration
+> (USDOL/ETA). Used under the CC BY 4.0 license. O*NET® is a trademark
+> of USDOL/ETA. FutureSkill AI has added its own UN SDG matching
+> heuristics; USDOL/ETA has not approved, endorsed or tested them.
+
+License: https://www.onetcenter.org/license_db.html
+
+## Caveats
+
+- O*NET is a U.S. occupational data source, not Malaysia-specific evidence.
+- `task_supported` means **a rule found a matching real occupational duty**,
+  not that SDG impact is measured or externally validated.
+- Some of the 923 records may have no narrow task-rule match; these remain
+  explicitly unassigned on the goal graph, not automatically assigned an SDG.
+- Current target rules cover selected, carefully specified goals, not all
+  169 UN SDG targets. The coverage audit reports the true count.
