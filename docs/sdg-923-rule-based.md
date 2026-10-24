@@ -1,3 +1,30 @@
+## Fix: remove unsupported broad SOC suggestions in the latest five-role check
+
+The user confirmed the **strict** corrections worked: Embalmers have no SDG,
+Water/Wastewater Operators retain candidate Target 6.3, and Interior Designers
+retain task-supported candidate 12.5. However, the CSV still showed
+classification-only goals `9;12` for Boiler Operators and `9;11` for
+Refuse/Recyclable Collectors, both inherited from broad occupational group
+fallbacks, not the relevant Task IDs.
+
+We have disabled automatic title/SOC fallback goals for mixed major groups
+**27 (arts/design), 49 (installation/repair), 51 (manufacturing) and 53
+(transport/material moving)**. These very diverse groups cannot reliably
+share one generic SDG goal. The individual career still has its actual O*NET
+task profile, any strict task-to-target matches, any task/DWA-level candidates,
+and any specific title-based theme. The result may correctly have **no SDG
+suggestion** when none of those applies.
+
+This intentionally reduces spurious dotted-line "classification-only"
+connections, **not** the ability to analyze all 923 careers. It is not a
+measured improvement in precision and is not an O*NET or UN endorsement.
+
+After pulling and running the tests, re-export the CSV and compare
+`task_based_targets`, `task_topic_goals`, `dwa_topic_goals` and
+`classification_only_goals`; do not judge all candidates by one column.
+
+---
+
 ## Further strict-target audit: 62-candidate list
 
 The latest manual audit used O*NET task descriptions and official UN Target
