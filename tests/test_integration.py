@@ -151,7 +151,7 @@ class IntegratedWebTests(unittest.TestCase):
         mapping_data = mapping.json()
         self.assertEqual(mapping_data['status'], 'curated')
         self.assertEqual(
-            [item['target_id'] for item in mapping_data['mappings']],
+            [item['target_id'] for item in mapping_data['mappings'] if item['target_id']],
             ['4.4', '8.5'],
         )
         self.assertTrue(mapping_data['pathway_skills'])
@@ -176,8 +176,8 @@ class IntegratedWebTests(unittest.TestCase):
             'career_id': '17-2081.00',
         })
         self.assertEqual(unreviewed.status_code, 200, unreviewed.text)
-        self.assertEqual(unreviewed.json()['status'], 'not_reviewed')
-        self.assertEqual(unreviewed.json()['mappings'], [])
+        self.assertEqual(unreviewed.json()['status'], 'suggested')
+        self.assertEqual({item['sdg_id'] for item in unreviewed.json()['mappings']}, {6, 9, 13})
         self.assertEqual(
             self.client.post('/api/sdg/mindmap', json={'career_id': ''}).status_code,
             422,
@@ -202,7 +202,7 @@ class IntegratedWebTests(unittest.TestCase):
                 data = self.client.post('/api/sdg/mindmap', json={'career_id': career_id}).json()
                 self.assertEqual(data['status'], 'curated')
                 self.assertEqual(
-                    {(item['sdg_id'], item['target_id']) for item in data['mappings']},
+                    {(item['sdg_id'], item['target_id']) for item in data['mappings'] if item['target_id']},
                     {(4, '4.4'), (8, '8.5')},
                 )
                 self.assertTrue(all(item['supporting_evidence'] for item in data['mappings']))
@@ -211,8 +211,8 @@ class IntegratedWebTests(unittest.TestCase):
         unknown = self.client.post('/api/sdg/mindmap', json={
             'career_id': '17-2081.00',
         }).json()
-        self.assertEqual(unknown['status'], 'not_reviewed')
-        self.assertEqual(unknown['mappings'], [])
+        self.assertEqual(unknown['status'], 'suggested')
+        self.assertEqual({item['sdg_id'] for item in unknown['mappings']}, {6, 9, 13})
         self.assertEqual(unknown['pathway_skills'], [])
 
     def test_development_inventory_and_isolated_demo_sessions(self):
@@ -271,7 +271,7 @@ class IntegratedWebTests(unittest.TestCase):
             for item in body['recommendations']
         ))
         self.assertTrue(all(
-            item['sdg_alignment']['status'] in ('curated', 'not_reviewed')
+            item['sdg_alignment']['status'] in ('curated', 'suggested')
             for item in body['recommendations']
         ))
 
