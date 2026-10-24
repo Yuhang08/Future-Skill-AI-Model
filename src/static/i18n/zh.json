@@ -10,7 +10,7 @@
   "reskilling_roadmap": "技能提升学习路线图",
   "sdg_mapping": "可持续发展目标关联",
   "career_recommendations": "职业推荐",
-  "start_assessment": "开始测评",
+  "start_assessment": "开始职业测评",
   "next": "下一步",
   "previous": "上一步",
   "submit": "提交",
@@ -30,5 +30,8 @@
   "try_again": "重试",
   "save": "保存",
   "back_home": "返回首页",
-  "ai_chatbot": "人工智能聊天助手"
+  "ai_chatbot": "人工智能聊天助手",
+  "start_with_interests": "从你的兴趣开始",
+  "search_career_catalogue": "搜索职业目录",
+  "find_career": "寻找职业"
 }
