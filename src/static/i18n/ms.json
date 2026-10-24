@@ -10,7 +10,7 @@
   "reskilling_roadmap": "Pelan Pembelajaran Semula Kemahiran",
   "sdg_mapping": "Pemetaan Matlamat Pembangunan Mampan",
   "career_recommendations": "Cadangan Kerjaya",
-  "start_assessment": "Mulakan Penilaian",
+  "start_assessment": "Mulakan Penilaian Kerjaya",
   "next": "Seterusnya",
   "previous": "Sebelumnya",
   "submit": "Hantar",
@@ -30,5 +30,8 @@
   "try_again": "Cuba Lagi",
   "save": "Simpan",
   "back_home": "Kembali ke Laman Utama",
-  "ai_chatbot": "Pembantu Sembang AI"
+  "ai_chatbot": "Pembantu Sembang AI",
+  "start_with_interests": "Mulakan dengan minat anda",
+  "search_career_catalogue": "Cari dalam katalog kerjaya",
+  "find_career": "Cari kerjaya"
 }
