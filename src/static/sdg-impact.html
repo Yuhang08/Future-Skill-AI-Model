@@ -635,9 +635,14 @@
         const statusText = !activeCareer
           ? "Explore goal"
           : mapping ? (mapping.target_id ? `Target ${mapping.target_id} · candidate` : "Task-to-Target candidate")
-          : candidate ? (candidate.candidate_tier === "classification_only" ? "Classification-only" : "Needs review")
+          : ranked && score
+            ? `Top 3 model ranking · ${score.review_status === "task_text_candidate" ? "task theme" : score.review_status === "dwa_candidate" ? "work activity" : "weak evidence"}`
           : score ? (score.review_status === "task_text_candidate" ? "Task-theme · not reviewed" : "Weak exploratory ranking")
-          : activeTaskDataStatus === "not_installed" ? "Task source unavailable" : "No target evidence";
+          : candidate ? (candidate.candidate_tier === "classification_only" ? "Classification-only" : "Needs review")
+          : activeTaskDataStatus === "not_installed" ? "Task source unavailable"
+          : activeTaskDataStatus === "invalid_file" ? "Task source invalid"
+          : activeTaskDataStatus === "occupation_tasks_missing" ? "Occupation tasks missing"
+          : "No target evidence";
         button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${statusText}. Open evidence details.`);
         const icon = node(button,"img");
         icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
@@ -646,7 +651,7 @@
         const copy = node(button,"span","","goal-node-copy");
         node(copy,"span",`GOAL ${String(id).padStart(2,"0")}`,"goal-index");
         node(copy,"span",goal[0],"goal-name");
-        node(copy,"span",score ? `#${score.rank} · ${score.relevance_index}/100 · ${statusText}` : statusText,"goal-node-status");
+        node(copy,"span",score ? `${ranked ? "TOP 3 · " : ""}#${score.rank} · ${score.relevance_index}/100 · ${statusText}` : statusText,"goal-node-status");
         button.addEventListener("click",() => {
           showGoalInfo(id,goal,button,mapping,candidate,score);
         });
@@ -1184,6 +1189,10 @@
               : "No supported SDG connection identified; this is preferable to assigning an arbitrary SDG 8. Review the original O*NET tasks below.");
           message.textContent = activeGoalScores.length === 17
             ? "Task-derived Top 3 suggestions are shown, even without strict Target matches. Low relevance scores indicate weak thematic evidence."
+            : data.task_data_status === "invalid_file"
+            ? "O*NET Task Statements CSV is invalid or empty on this deployment. Restore the official task data to enable Top 3 ranking."
+            : data.task_data_status === "occupation_tasks_missing"
+            ? "This occupation has no matching O*NET Task Statements in the deployed dataset. No task-based ranking can be calculated."
             : data.task_data_status === "not_installed"
             ? "Official task CSV missing. No task-based ranking is available."
             : activeCandidateMappings.length
