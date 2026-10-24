@@ -155,7 +155,7 @@ class IntegratedWebTests(unittest.TestCase):
             ['4.4', '8.5'],
         )
         self.assertTrue(mapping_data['pathway_skills'])
-        self.assertIn('illustrative', mapping_data['evidence_scope'])
+        self.assertIn('unverified', mapping_data['evidence_scope'])
         self.assertEqual(mapping_data['pathway_career'], 'Data Analyst')
         sql = next(item for item in mapping_data['pathway_skills'] if item['name'] == 'SQL')
         self.assertIsNone(sql['current_level'])
