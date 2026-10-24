@@ -453,7 +453,7 @@
       node(evidenceColumn, "p", mapping.relevance_reason || "A role-specific explanation has not been provided.");
       if (evidence.length) {
         const evidenceBox = node(evidenceColumn, "div", "", "evidence-box");
-        node(evidenceBox, "div", "Evidence map · choose a node", "field-label");
+        node(evidenceBox, "div", "Classification rationale · choose a node", "field-label");
         const evidenceMap = node(evidenceBox, "div", "", "evidence-map");
         const root = node(evidenceMap,"div",mapping.target_id ? `SDG ${mapping.sdg_id} · Target ${mapping.target_id}` : `SDG ${mapping.sdg_id} · Suggested`,"evidence-root");
         const rootIcon = node(root,"img");
@@ -468,11 +468,11 @@
           pairs.push({
             skill: first,
             practice: second,
-            skillLabel: requirement ? `Skill · ${requirement[1]}` : "Skill evidence",
-            practiceLabel: second ? "Practice activity" : null
+            skillLabel: requirement ? `Skill · ${requirement[1]}` : "Classification note",
+            practiceLabel: second ? "Learning practice" : null
           });
         }
-        const sharedDetail = node(evidenceBox,"div","Select a skill or practice node to read its full source statement.","evidence-detail");
+        const sharedDetail = node(evidenceBox,"div","Select a note to view the full classification rationale.","evidence-detail");
         sharedDetail.id = `evidence-detail-${index}`;
         sharedDetail.setAttribute("role", "status");
         sharedDetail.setAttribute("aria-live", "polite");
@@ -493,7 +493,7 @@
           });
         });
         const full = node(evidenceBox,"details","","evidence-full");
-        node(full,"summary","Read all full evidence wording");
+        node(full,"summary","Read full classification notes");
         const ul = node(full,"ul");
         evidence.forEach(item => node(ul,"li",item));
       }
