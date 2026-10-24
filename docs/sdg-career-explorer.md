@@ -1,3 +1,9 @@
+> **Historical design note (superseded):** This file describes the earlier
+> restricted prototype. The current branch shows 923 unverified occupational
+> theme suggestions on the career map and keeps FutureSkill learning Target
+> 4.4 / 8.5 links in a separate disclosure. See
+> [sdg-923-rule-based.md](sdg-923-rule-based.md) for the active implementation.
+
 # SDG career explorer: diagnosis and selection contract
 
 ## Workspace diagnosis
