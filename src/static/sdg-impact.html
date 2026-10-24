@@ -469,7 +469,7 @@
             skill: first,
             practice: second,
             skillLabel: requirement ? `Skill · ${requirement[1]}` : "Classification note",
-            practiceLabel: second ? "Learning practice" : null
+            practiceLabel: second ? (mapping.mapping_kind === "occupation_theme" ? "Rule note" : "Practice activity") : null
           });
         }
         const sharedDetail = node(evidenceBox,"div","Select a note to view the full classification rationale.","evidence-detail");
@@ -484,7 +484,7 @@
             evidenceButton.type = "button";
             evidenceButton.setAttribute("aria-controls", sharedDetail.id);
             evidenceButton.setAttribute("aria-label", `Read ${kind} statement for ${pair.skillLabel.replace(/^Skill · /, "")}`);
-            if (kind === "practice") evidenceButton.classList.add("practice");
+            if (kind === "practice" && mapping.mapping_kind !== "occupation_theme") evidenceButton.classList.add("practice");
             evidenceButton.addEventListener("click",() => {
               sharedDetail.textContent = source;
               branchWrap.querySelectorAll(".evidence-node").forEach(button => button.setAttribute("aria-pressed",String(button === evidenceButton)));
