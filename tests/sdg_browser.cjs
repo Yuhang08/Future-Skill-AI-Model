@@ -174,8 +174,8 @@ async function capture(name) {
     assert.equal(await evaluate(`document.querySelector('#candidateSuggestions').hidden`), false);
     assert.equal(await evaluate(`document.querySelector('#learningContribution').hidden`), false);
     assert.match(await evaluate(`document.getElementById('candidateList').textContent`), /Goal 9/);
-    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 4\\.4/);
-    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 8\\.5/);
+    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 4\.4/);
+    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 8\.5/);
     await waitFor(`Array.from(document.querySelectorAll('.goal-node img')).every(img => img.complete && img.naturalWidth > 0)`, 'all 17 official goal icons');
     assert.equal(await evaluate(`document.querySelector('details.about').open`), false);
     console.log('PASS: prototype has no fabricated O*NET evidence; broad guess and training outcomes are separate');
@@ -199,7 +199,7 @@ async function capture(name) {
     await career('Software Developer');
     assert.equal(await evaluate(`document.querySelector('.goal-node[data-sdg-id="4"]').classList.contains('linked')`), false);
     assert.equal(await evaluate(`document.querySelector('.goal-node[data-sdg-id="8"]').classList.contains('linked')`), false);
-    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 4\\.4/);
+    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 4\.4/);
     console.log('PASS: career switching never turns FutureSkill learning links into occupation evidence');
 
     await send('Network.setBlockedURLs', { urls: ['*/api/sdg/mindmap'] });
