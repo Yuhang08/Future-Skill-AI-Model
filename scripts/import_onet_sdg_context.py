@@ -28,7 +28,7 @@ FILES = {
 
 
 def validated_content(raw, name, required, min_rows):
-    if len(raw) > 30 * 1024 * 1024:
+    if len(raw) > 150 * 1024 * 1024:
         raise ValueError(f"{name}: unexpectedly large download")
     text = raw.decode("utf-8-sig")
     reader = csv.DictReader(io.StringIO(text, newline=""))
@@ -59,7 +59,7 @@ def main():
                 url, headers={"User-Agent": "FutureSkillAI-SDG-Research/1.0"}
             )
             with urllib.request.urlopen(req, timeout=90) as response:
-                raw = response.read(30 * 1024 * 1024 + 1)
+                raw = response.read(150 * 1024 * 1024 + 1)
             count = validated_content(raw, name, required, minimum)
         except (OSError, ValueError, UnicodeError) as exc:
             print(f"FAILED for {name}: {exc}")
