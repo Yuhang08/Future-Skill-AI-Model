@@ -187,7 +187,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/static/future-theme.css?v=2">
   <link rel="stylesheet" href="/static/future-pages.css?v=sdg-career-selection-1">
-  <link rel="stylesheet" href="/static/sdg-hud.css?v=1">
+  <link rel="stylesheet" href="/static/sdg-hud.css?v=radial-2">
   <script src="/static/sdg-hud.js?v=1" defer></script>
 </head>
 <body>
@@ -542,24 +542,17 @@
 
     function renderGoals() {
       goalGrid.replaceChildren(careerCenter);
-      const desktopSlots = [
-        [1,1],[1,2],[1,3],[1,4],[1,5],
-        [2,5],[3,5],[4,5],[5,5],
-        [5,4],[5,3],[5,2],[5,1],
-        [4,1],[3,1],[2,1],[2,2]
-      ];
       goals.forEach((goal,index) => {
         const id = index + 1;
         const mapping = activeMappings.find(item => Number(item.sdg_id) === id);
         const button = node(goalGrid,"button","","goal-node");
         button.type = "button";
         button.dataset.sdgId = String(id);
-        button.dataset.gridRow = String(desktopSlots[index][0]);
-        button.dataset.gridColumn = String(desktopSlots[index][1]);
-        button.style.gridArea = `${desktopSlots[index][0]} / ${desktopSlots[index][1]}`;
+        button.style.setProperty("--goal-angle",`${-90 + index * 360 / goals.length}deg`);
         button.style.setProperty("--goal-color",goal[1]);
         if (mapping) button.classList.add("linked");
         button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Reviewed potential career link. Open details." : "Not assessed for this career. Open goal information."}`);
+        button.title = button.getAttribute("aria-label");
         const icon = node(button,"img");
         icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
         icon.alt = "";
@@ -579,18 +572,37 @@
           }
         });
       });
-      requestAnimationFrame(drawMapLines);
+      scheduleMapLines();
+    }
+
+    let mapLineFrame = 0;
+    function scheduleMapLines() {
+      if (mapLineFrame) return;
+      mapLineFrame = requestAnimationFrame(() => {
+        mapLineFrame = 0;
+        drawMapLines();
+      });
     }
 
     function drawMapLines() {
       if (results.hidden) return;
-      if (window.matchMedia("(max-width: 720px)").matches) {
-        goalGrid.querySelectorAll(".goal-node").forEach(button => { button.style.gridArea = ""; });
+      const radial = !window.matchMedia("(max-width: 720px)").matches;
+      goalGrid.classList.toggle("is-radial",radial);
+      if (!radial) {
+        ["--orbit-height","--goal-diameter","--goal-radius"].forEach(property => {
+          if (goalGrid.style.getPropertyValue(property)) goalGrid.style.removeProperty(property);
+        });
         mapLines.replaceChildren();
         return;
       }
-      goalGrid.querySelectorAll(".goal-node").forEach(button => {
-        button.style.gridArea = `${button.dataset.gridRow} / ${button.dataset.gridColumn}`;
+      const width = goalGrid.clientWidth;
+      if (width <= 0) { mapLines.replaceChildren(); return; }
+      const height = Math.min(width,760);
+      const diameter = Math.min(100,Math.max(66,height * .135));
+      const radius = Math.max(0,(height - diameter) / 2 - 16);
+      [["--orbit-height",height],["--goal-diameter",diameter],["--goal-radius",radius]].forEach(([property,value]) => {
+        const pixels = `${value}px`;
+        if (goalGrid.style.getPropertyValue(property) !== pixels) goalGrid.style.setProperty(property,pixels);
       });
       const rect = mindmapStage.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
@@ -603,11 +615,19 @@
         const button = goalGrid.querySelector(`.goal-node[data-sdg-id="${Number(mapping.sdg_id)}"]`);
         if (!button) return;
         const target = button.getBoundingClientRect();
+        const tx = target.left + target.width/2 - rect.left;
+        const ty = target.top + target.height/2 - rect.top;
+        const distance = Math.hypot(tx - sx,ty - sy);
+        const startRadius = Math.min(center.width,center.height)/2 + 5;
+        const endRadius = Math.min(target.width,target.height)/2 + 5;
+        if (!distance || distance <= startRadius + endRadius) return;
+        const ux = (tx - sx)/distance;
+        const uy = (ty - sy)/distance;
         const line = document.createElementNS("http://www.w3.org/2000/svg","line");
-        line.setAttribute("x1",String(sx));
-        line.setAttribute("y1",String(sy));
-        line.setAttribute("x2",String(target.left + target.width/2 - rect.left));
-        line.setAttribute("y2",String(target.top + target.height/2 - rect.top));
+        line.setAttribute("x1",String(sx + ux * startRadius));
+        line.setAttribute("y1",String(sy + uy * startRadius));
+        line.setAttribute("x2",String(tx - ux * endRadius));
+        line.setAttribute("y2",String(ty - uy * endRadius));
         mapLines.appendChild(line);
       });
     }
@@ -799,7 +819,28 @@
       },
     });
     document.getElementById("careerForm").addEventListener("submit",reviewCareer);
-    window.addEventListener("resize",drawMapLines);
+    window.addEventListener("resize",scheduleMapLines);
+    let lastMapWidth = -1;
+    const mapResizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(entries => {
+      const width = entries[0]?.contentRect.width;
+      // Setting the orbit height changes this observed box too; only width
+      // changes need another layout pass, so the observer cannot feed itself.
+      if (typeof width !== "number" || Math.abs(width - lastMapWidth) < .5) return;
+      lastMapWidth = width;
+      scheduleMapLines();
+    }) : null;
+    mapResizeObserver?.observe(goalGrid);
+    window.addEventListener("pagehide",() => {
+      mapResizeObserver?.disconnect();
+      if (mapLineFrame) cancelAnimationFrame(mapLineFrame);
+      mapLineFrame = 0;
+    });
+    window.addEventListener("pageshow",event => {
+      if (!event.persisted) return;
+      lastMapWidth = -1;
+      mapResizeObserver?.observe(goalGrid);
+      scheduleMapLines();
+    });
     document.addEventListener("keydown",event => {
       if (event.key === "Escape" && goalInfoDialog.open && lastFocusedGoal && lastFocusedGoal.isConnected) lastFocusedGoal.focus();
     });
