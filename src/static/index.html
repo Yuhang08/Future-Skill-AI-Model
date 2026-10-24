@@ -430,8 +430,16 @@ button:hover { background: #4432c0; opacity: 1; }
      WEBSITE HEADER
 ===================================== -->
 
-<header>
-    FutureSkill AI
+<header style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <span>FutureSkill AI</span>
+    <div style="display:flex;align-items:center;gap:10px;font-size:14px;letter-spacing:normal">
+       <label for="language-select" data-i18n="language">Language</label>
+       <select id="language-select" aria-label="Website language" style="background:#fff;color:#123447;border-radius:8px;padding:7px 10px;border:1px solid #9cb8cb">
+         <option value="en">English</option>
+         <option value="zh">简体中文</option>
+         <option value="ms">Bahasa Melayu</option>
+       </select>
+    </div>
 </header>
 
 <main>
@@ -444,7 +452,7 @@ button:hover { background: #4432c0; opacity: 1; }
 
     <div class="hero">
 
-        <h1>Discover Your Future Career</h1>
+        <h1 data-i18n="discover_title">Discover Your Future Career</h1>
 
         <p>
             Discover your interests, explore your
@@ -459,16 +467,16 @@ button:hover { background: #4432c0; opacity: 1; }
         <div class="entry-choices" aria-label="Choose how to explore careers">
             <article class="entry-choice">
                 <span class="entry-choice-kicker">EXPLORE CAREERS</span>
-                <h2>Start with your interests</h2>
+                <h2 data-i18n="start_with_interests">Start with your interests</h2>
                 <p>Take the assessment for exploratory recommendations, or browse the catalogue first.</p>
-                <button onclick="startAssessment()">Start Career Assessment</button>
+                <button onclick="startAssessment()" data-i18n="start_assessment">Start Career Assessment</button>
                 <a class="entry-choice-link" href="/careers">Browse careers without the assessment</a>
             </article>
             <article class="entry-choice">
                 <span class="entry-choice-kicker">I KNOW MY TARGET ROLE</span>
-                <h2>Search the career catalogue</h2>
+                <h2 data-i18n="search_career_catalogue">Search the career catalogue</h2>
                 <p>Choose a role directly. You can review available pathway support before starting.</p>
-                <a class="entry-choice-button" href="/careers?mode=target">Find a career</a>
+                <a class="entry-choice-button" href="/careers?mode=target" data-i18n="find_career">Find a career</a>
             </article>
         </div>
 
@@ -691,6 +699,7 @@ button:hover { background: #4432c0; opacity: 1; }
 </main>
 
 
+<script src="/static/js/language.js?v=1" defer></script>
 <script src="/static/assessment-progress.js?v=2"></script>
 <script src="/static/assessment-report.js?v=2"></script>
 <script src="/static/career-ui.js?v=2"></script>
