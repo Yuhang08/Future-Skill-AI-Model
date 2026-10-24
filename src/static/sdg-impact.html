@@ -187,17 +187,19 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/static/future-theme.css?v=2">
   <link rel="stylesheet" href="/static/future-pages.css?v=sdg-career-selection-1">
+  <link rel="stylesheet" href="/static/sdg-hud.css?v=1">
+  <script src="/static/sdg-hud.js?v=1" defer></script>
 </head>
 <body>
-  <header><a href="/" aria-label="FutureSkill AI home"><span class="brand-mark" aria-hidden="true"><img src="/static/futureskill-atom.svg?v=1" alt=""></span> FutureSkill AI</a></header>
+  <header class="hud-page-header"><a href="/" aria-label="FutureSkill AI home"><span class="brand-mark" aria-hidden="true"><img src="/static/futureskill-atom.svg?v=1" alt=""></span> FutureSkill AI <span class="hud-header-divider" aria-hidden="true">/</span><span class="hud-header-section">SDG CONNECTIONS</span></a><span class="hud-header-note"><i class="hud-dot" aria-hidden="true"></i> CAREER EXPLORATION SYSTEM</span></header>
   <main>
     <div class="topline">
-      <span class="eyebrow">Career pathway explorer</span>
+      <span class="eyebrow"><span class="hud-prefix" aria-hidden="true">[ FS / 04 ]</span> Career pathway explorer</span>
       <span class="status-pill">Prototype · selected targets only</span>
     </div>
     <section class="intro">
       <div>
-        <h1>Explore the work<br>behind the goals.</h1>
+        <h1>Map your potential.<br><span>Connect the goals.</span></h1>
         <p>See where career preparation may connect to the UN Sustainable Development Goals.</p>
       </div>
       <aside class="distinction"><strong>Potential alignment is not impact.</strong>These are illustrative learning links, not proof of real-world change.</aside>
@@ -211,26 +213,45 @@
         <p>Official UN goal icons identify the goals; their use does not imply UN endorsement. Photographs are representative, not evidence of FutureSkill outcomes.</p>
       </div>
     </details>
-    <section class="search-panel" aria-label="Choose a career">
+    <section class="search-panel hud-panel" aria-label="Choose a career">
+      <div class="hud-panel-caption"><span><i class="hud-dot" aria-hidden="true"></i> 01 / CAREER INPUT</span><span>SELECT A ROLE TO EXPLORE</span></div>
       <form id="careerForm" class="controls" autocomplete="off">
         <div class="career-search-field">
           <label class="sr-only" for="career">Search and select a supported career or role</label>
           <input id="career" maxlength="100" placeholder="Search careers (e.g. Data Analyst)" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-controls="careerOptions" aria-expanded="false" aria-required="true" aria-describedby="careerChoiceStatus">
           <div id="careerOptions" class="career-options" role="listbox" aria-label="Career suggestions" hidden></div>
         </div>
-        <button id="submitButton" type="submit" disabled>Explore career</button>
+        <button id="submitButton" type="submit" disabled>Explore career <span class="hud-button-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></button>
       </form>
       <p id="careerChoiceStatus" class="career-choice-status" role="status" aria-live="polite">Type a role and select a catalogue result. Suggestions do not assign an SDG mapping.</p>
     </section>
     <p id="message" class="state-message" role="status" aria-live="polite">Browse the goals, or select a supported career to explore its reviewed connections.</p>
     <div id="loading" hidden aria-label="Loading career evidence"><div class="skeleton"></div><div class="loading-line"><span></span></div></div>
     <section id="results" hidden>
-      <div class="section-label">
-        <h2 id="roleTitle">Career connections</h2>
+      <div class="section-label hud-results-label">
+        <div><span class="hud-section-index">02 / CONNECTION EXPLORER</span><h2 id="roleTitle">Career connections</h2></div>
         <span id="reviewStatus" class="mono"></span>
       </div>
-      <div id="mappingList" class="mapping-list"></div>
-      <section class="mindmap-shell" aria-labelledby="mindmapTitle">
+      <div class="hud-workspace">
+        <aside class="hud-sidebar" aria-label="Career mapping overview">
+          <section class="hud-panel hud-coverage-panel" aria-labelledby="hudCoverageTitle">
+            <div class="hud-panel-caption"><span id="hudCoverageTitle">REVIEWED CONNECTIONS</span><span class="hud-panel-code">A.01</span></div>
+            <div class="hud-coverage-dial" id="hudCoverageDial"><div class="hud-dial-orbit" aria-hidden="true"></div><div class="hud-dial-ticks" aria-hidden="true"></div><div class="hud-dial-value"><strong id="hudLinkedCount">0</strong><span>LINKED GOALS</span></div></div>
+            <div class="hud-count-row"><span>Goals available</span><strong id="hudTotalCount">17</strong></div>
+            <div class="hud-count-row"><span>Not assessed</span><strong id="hudUnreviewedCount">17</strong></div>
+            <p id="hudCoverageNote" class="hud-coverage-note">Choose a career to explore its reviewed potential links.</p>
+          </section>
+          <section class="hud-panel hud-role-panel" aria-labelledby="hudRoleTitle">
+            <div class="hud-panel-caption"><span id="hudRoleTitle">SELECTED ROLE</span><span class="hud-panel-code">A.02</span></div>
+            <h3 id="hudSelectedRole">No career selected</h3>
+            <div class="hud-target-summary"><span>Reviewed targets</span><strong id="hudMappingCount">0</strong></div>
+            <ul id="hudTargetList" class="hud-target-list"><li class="hud-target-empty">Select a catalogue role to see reviewed targets.</li></ul>
+          </section>
+          <div class="hud-scope-note"><span class="hud-scope-mark" aria-hidden="true">!</span><div><strong>Evidence, with context.</strong><p>Connections show potential alignment. They do not measure impact or career suitability.</p></div></div>
+        </aside>
+        <div class="hud-map-column">
+      <section class="mindmap-shell hud-panel" aria-labelledby="mindmapTitle">
+        <div class="hud-panel-caption"><span><i class="hud-dot" aria-hidden="true"></i> SDG CONNECTION MATRIX</span><span class="hud-panel-code">B.01 / UN GOALS</span></div>
         <div class="mindmap-heading">
           <h2 id="mindmapTitle">Career connections · 17 goals</h2>
           <div class="map-legend" aria-label="Map legend">
@@ -239,18 +260,23 @@
           </div>
         </div>
         <div id="mindmapStage" class="mindmap-stage">
+          <div class="hud-map-reticle" aria-hidden="true"><span class="hud-reticle-axis hud-reticle-axis-x"></span><span class="hud-reticle-axis hud-reticle-axis-y"></span></div>
           <svg id="mapLines" class="map-lines" aria-hidden="true"></svg>
           <div id="careerCenter" class="career-center"><small>Exploring</small><strong id="mapCareerName">Career</strong></div>
           <div id="goalGrid" class="goal-grid" aria-label="United Nations Sustainable Development Goals"></div>
         </div>
         <p class="map-caption">Select any goal to explore it. Only reviewed career links are connected; other goals are not assessed for this role.</p>
       </section>
+      <div class="hud-reviewed-heading"><h3>Reviewed connections</h3><span>OPEN A TARGET TO EXAMINE THE EVIDENCE</span></div>
+      <div id="mappingList" class="mapping-list"></div>
       <details id="pathway" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>Learning pathway</h2><span class="pathway-intro">Skills and practice connected to preparation for this role.</span></span></summary>
         <p class="pathway-intro">These skills and learning actions describe preparation for the selected role. Completion does not guarantee employment or SDG outcomes.</p>
         <div id="skillsList" class="skills-list"></div>
         <div id="assessmentStatus" class="not-assessed"></div>
       </details>
+        </div>
+      </div>
     </section>
     <p class="footnote">Potential relationship only. This prototype does not evaluate impact.</p>
   </main>
