@@ -30,7 +30,6 @@ MAJOR_GROUP_THEMES = {
     "21": ((10,), "social and community support"),
     "23": ((16,), "legal services and justice institutions"),
     "25": ((4,), "education and instruction"),
-    "27": ((11,), "arts, design and cultural activity"),
     "29": ((3,), "healthcare practice"),
     "31": ((3,), "healthcare support"),
     "33": ((16,), "protective and public services"),
@@ -38,11 +37,13 @@ MAJOR_GROUP_THEMES = {
     "37": ((11,), "building and grounds maintenance"),
     "45": ((2, 15), "farming, fisheries and natural resources"),
     "47": ((9, 11), "construction and the built environment"),
-    "49": ((9, 12), "installation, repair and maintenance"),
-    "51": ((9, 12), "manufacturing and production"),
-    "53": ((9, 11), "transport and material movement"),
 }
 
+# No automatic SDG fallback for mixed fields SOC 27, 49, 51, 53.
+# An interior designer is not automatically "Sustainable Cities"; a boiler
+# operator is not inherently "Industry/Consumption"; a refuse collector
+# is not automatically both "Industry" and "Sustainable Cities".
+# Task/DWA evidence and clearly specialist titles remain available.
 # More specific titles take priority over the broad occupational major group.
 # Ordered from more specific to more general; return at most three theme goals.
 TITLE_THEMES = (
