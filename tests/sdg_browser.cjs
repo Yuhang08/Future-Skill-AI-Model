@@ -164,19 +164,19 @@ async function capture(name) {
     await key('Enter', 'Enter', 13, '\r');
     assert.equal(await evaluate(`careerSearch.selection().id`), 'prototype:data-analyst');
     await evaluate(`document.getElementById('careerForm').requestSubmit()`);
-    await waitFor(`document.querySelectorAll('.mapping').length===2 &&
-      document.querySelectorAll('.goal-node.linked').length===2 &&
+    await waitFor(`document.querySelectorAll('.mapping').length===3 &&
+      document.querySelectorAll('.goal-node.linked').length===3 &&
       !document.getElementById('submitButton').disabled`, 'selected canonical Data Analyst mapping');
     assert.deepEqual(mindmapRequests.at(-1), { career_id: 'prototype:data-analyst' });
-    assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 2);
-    assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 2);
-    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line').length`), 2);
+    assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 3);
+    assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 3);
+    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line').length`), 3);
     assert.equal(await evaluate(`document.querySelector('details.about').open`), false);
     assert.equal(await evaluate(`document.getElementById('pathway').open`), false);
     assert.equal(await evaluate(`document.querySelectorAll('dialog[open]').length`), 0);
     assert.equal(await evaluate(`Array.from(document.querySelectorAll('.mapping-head p')).every(p => p.textContent.length < 110)`), true);
     await waitFor(`Array.from(document.querySelectorAll('.goal-node img')).every(img => img.complete && img.naturalWidth > 0)`, 'all official goal icons');
-    console.log('PASS: concise default view, 17 official icons, only 2 reviewed links');
+    console.log('PASS: concise default view, 17 official icons, 2 curated target links + 1 role-level suggestion');
 
     await activate('.goal-node[data-sdg-id="1"]');
     await waitFor(`document.getElementById('goalInfoDialog').open`, 'unassessed goal information');
@@ -228,9 +228,9 @@ async function capture(name) {
     console.log('PASS: reviewed node navigation and mobile layout without page overflow');
 
     await career('Environmental Engineer');
-    assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 0);
-    assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 0);
-    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line').length`), 0);
+    assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 3);
+    assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 3);
+    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line').length`), 3);
     assert.equal(await evaluate(`document.getElementById('pathway').hidden`), true);
     await activate('.goal-node[data-sdg-id="4"]');
     assert.match(await evaluate(`document.getElementById('goalInfoCopy').textContent`), /Environmental Engineers/);
