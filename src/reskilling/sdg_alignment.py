@@ -5,7 +5,7 @@ from difflib import SequenceMatcher
 from functools import lru_cache
 
 from .catalog import CAREERS
-from .sdg_occupation_rules import infer_occupation_sdg_mappings
+from .sdg_candidate_ranker import candidate_mappings_for_occupation, occupation_task_profile
 from .sdg_task_evidence import task_supported_mappings
 from career_engine import load_careers
 
@@ -245,6 +245,7 @@ def _unknown_alignment(title):
         "pathway_career": None,
         "status": "unknown",
         "task_data_status": "unknown",
+        "task_profile": None,
         "mappings": [],
         "candidate_mappings": [],
         "learning_pathway_mappings": [],
@@ -260,8 +261,12 @@ def _build_alignment(career_id, current_skills=None):
     career_name = ROLE_BY_ID.get(career_id)
     # Real occupational task records, not job titles, drive highlighted nodes.
     task_mappings, task_data_status = task_supported_mappings(career_id, career["title"])
-    # Show broad title/SOC guesses separately; they are NEVER graph connections.
-    candidate_mappings = infer_occupation_sdg_mappings(career_id, career["title"])
+    # Each role has an independently inspectable O*NET task profile and up to
+    # three ranked candidate goals. Never confuse them with verified impacts.
+    task_profile = occupation_task_profile(career_id)
+    candidate_mappings = candidate_mappings_for_occupation(
+        career_id, career["title"], {m["sdg_id"] for m in task_mappings}
+    )
     if career_name is None or career_name not in CAREERS:
         return {
             "career": career["title"],
@@ -269,6 +274,7 @@ def _build_alignment(career_id, current_skills=None):
             "pathway_career": None,
             "status": "task_supported" if task_mappings else "no_task_evidence",
             "task_data_status": task_data_status,
+            "task_profile": task_profile,
             "mappings": task_mappings,
             "candidate_mappings": candidate_mappings,
             "learning_pathway_mappings": [],
@@ -347,6 +353,7 @@ def _build_alignment(career_id, current_skills=None):
         "pathway_career": career_name,
         "status": "task_supported" if task_mappings else "no_task_evidence",
         "task_data_status": task_data_status,
+        "task_profile": task_profile,
         "mappings": task_mappings,
         "candidate_mappings": candidate_mappings,
         "learning_pathway_mappings": learning_mappings,
