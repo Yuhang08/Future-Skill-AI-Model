@@ -46,7 +46,15 @@ class SDGCareerTests(unittest.TestCase):
             self.assertEqual(set(mapping['supporting_source_ids']),
                              {source['id'] for source in mapping['evidence_source']})
             self.assertTrue(all(source['url'] and source['scope'] for source in mapping['evidence_source']))
-            self.assertIn('impact', mapping['impact_limitations'].lower())
+            # Existing curated target links use different evidence-limitation
+            # wording from the new rule-based occupational suggestions.
+            limitations = mapping['impact_limitations'].lower()
+            if mapping['review_status'] == 'curated_illustrative':
+                self.assertIn('measurable progress', limitations)
+                self.assertIn('not independently validated', limitations)
+            else:
+                self.assertIn('impact', limitations)
+                self.assertIn('not verified', limitations)
 
     def test_existing_occupational_alias_mappings_are_preserved(self):
         for title, career_id in (
