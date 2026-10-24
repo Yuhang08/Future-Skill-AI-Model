@@ -60,311 +60,606 @@
   "SDG alignment evidence": "Bukti perkaitan dengan SDG",
   "Review role-to-target reasoning, sources and what the evidence cannot establish.": "Semak alasan perkaitan peranan dengan sasaran, sumber serta perkara yang tidak dapat dibuktikan oleh bukti tersebut.",
   "Curated targets only": "Sasaran terpilih sahaja",
-  "Career assessment":"Penilaian kerjaya","Reskilling":"Peningkatan kemahiran","AI trends":"Trend AI","Uncertainty Lab":"Makmal Ketidakpastian","SDG connections":"Hubungan SDG","Settings":"Tetapan","Language":"Bahasa","Close settings":"Tutup tetapan","Switch to light mode":"Tukar kepada mod cerah","Switch to dark mode":"Tukar kepada mod gelap","Light mode":"Mod cerah","Dark mode":"Mod gelap","Main navigation":"Navigasi utama",
-  "Occupational titles, imported career information, and external source titles may remain in English.":"Tajuk pekerjaan, maklumat kerjaya yang diimport dan tajuk sumber luaran mungkin kekal dalam bahasa Inggeris.",
-  "Discover Your Future Career":"Teroka Kerjaya Masa Depan Anda","Discover your interests, explore your strengths, and find career opportunities that align with your future.":"Kenali minat dan kekuatan anda, kemudian teroka pilihan kerjaya yang selari dengan hala tuju masa depan anda.","42 Questions | 3 Assessment Parts":"42 Soalan | 3 Bahagian Penilaian","Start Career Assessment":"Mulakan Penilaian Kerjaya","Already know your goal? Explore your reskilling pathway →":"Sudah tahu matlamat anda? Teroka laluan peningkatan kemahiran →","RIASEC Assessment":"Penilaian Minat RIASEC","Explore your six occupational interest dimensions.":"Teroka enam dimensi minat pekerjaan.","Subject Preferences":"Keutamaan Mata Pelajaran","Discover which academic fields interest you most.":"Kenal pasti bidang akademik yang paling menarik minat anda.","Career Recommendations":"Cadangan Penerokaan Kerjaya","Explore careers based on your interests and preferences.":"Teroka kerjaya berdasarkan minat dan keutamaan anda.","Your Career Assessment Results":"Keputusan Penilaian Kerjaya Anda","Top 10 Career Recommendations":"10 Cadangan Penerokaan Kerjaya Teratas","Build your personalised learning pathway":"Bina laluan pembelajaran peribadi anda","Retake Assessment":"Ulang Penilaian",
-  "Part A: RIASEC Interests":"Bahagian A: Minat RIASEC","Part B: Subject Preferences":"Bahagian B: Keutamaan Mata Pelajaran","Part C: Skills Self-Assessment":"Bahagian C: Penilaian Kendiri Kemahiran","How much would you enjoy doing these activities?":"Sejauh manakah anda gemar melakukan aktiviti berikut?","How interested are you in these subjects?":"Sejauh manakah anda berminat dengan mata pelajaran berikut?","How confident are you in your current abilities?":"Sejauh manakah keyakinan anda terhadap kebolehan semasa?",
-  "Build or repair a simple electronic device.":"Membina atau membaiki peranti elektronik ringkas.","Use tools to assemble a physical product.":"Menggunakan alatan untuk memasang produk fizikal.","Test or troubleshoot a piece of equipment.":"Menguji peralatan atau mencari punca kerosakan.","Work with machines or practical technology.":"Bekerja dengan mesin atau teknologi praktikal.","Solve challenging mathematical problems.":"Menyelesaikan masalah matematik yang mencabar.","Investigate why a scientific phenomenon happens.":"Menyiasat sebab sesuatu fenomena saintifik berlaku.","Analyse data to discover patterns.":"Menganalisis data untuk menemui corak.","Develop logical explanations for complex problems.":"Membina penjelasan logik bagi masalah yang rumit.","Create an original visual design.":"Menghasilkan reka bentuk visual yang asli.","Write creative stories or scripts.":"Menulis cerita kreatif atau skrip.","Develop new artistic concepts.":"Membangunkan konsep seni baharu.","Express ideas through art or creative media.":"Menyampaikan idea melalui seni atau media kreatif.","Explain difficult concepts to other people.":"Menerangkan konsep yang sukar kepada orang lain.","Help someone understand a new skill.":"Membantu seseorang memahami kemahiran baharu.","Support people facing a problem.":"Menyokong orang yang sedang menghadapi masalah.","Collaborate with others to help a community.":"Bekerjasama dengan orang lain untuk membantu komuniti.","Lead a team to complete a project.":"Memimpin pasukan untuk menyiapkan projek.","Persuade others to support an idea.":"Meyakinkan orang lain supaya menyokong sesuatu idea.","Start a business or new initiative.":"Memulakan perniagaan atau inisiatif baharu.","Organise people to achieve a goal.":"Menyelaraskan orang ramai untuk mencapai matlamat.","Organise information into clear records.":"Menyusun maklumat menjadi rekod yang jelas.","Check data carefully for errors.":"Memeriksa data dengan teliti untuk mencari kesilapan.","Follow detailed procedures accurately.":"Mengikuti prosedur terperinci dengan tepat.","Maintain an organised database or system.":"Menyelenggara pangkalan data atau sistem yang teratur.",
-  "Developing software or mobile applications.":"Membangunkan perisian atau aplikasi mudah alih.","Learning about artificial intelligence and cybersecurity.":"Mempelajari kecerdasan buatan dan keselamatan siber.","Studying advanced mathematics and statistics.":"Mempelajari matematik lanjutan dan statistik.","Using mathematical models to solve real problems.":"Menggunakan model matematik untuk menyelesaikan masalah sebenar.","Teaching students and explaining complex ideas.":"Mengajar pelajar dan menerangkan idea yang rumit.","Designing learning activities and educational materials.":"Mereka bentuk aktiviti pembelajaran dan bahan pendidikan.","Learning about medicine and human health.":"Mempelajari perubatan dan kesihatan manusia.","Working in healthcare or medical research.":"Bekerja dalam penjagaan kesihatan atau penyelidikan perubatan.","Studying entrepreneurship, finance and management.":"Mempelajari keusahawanan, kewangan dan pengurusan.","Developing business strategies and marketing plans.":"Membangunkan strategi perniagaan dan rancangan pemasaran.","Designing engineering systems and technology.":"Mereka bentuk sistem kejuruteraan dan teknologi.","Applying physics to practical engineering problems.":"Menggunakan fizik untuk masalah kejuruteraan praktikal.",
-  "Solving mathematical and logical problems.":"Menyelesaikan masalah matematik dan logik.","Writing and debugging computer programs.":"Menulis dan menyahpepijat program komputer.","Analysing data and interpreting results.":"Menganalisis data dan mentafsir hasil.","Explaining information clearly to others.":"Menerangkan maklumat dengan jelas kepada orang lain.","Planning projects and leading a team.":"Merancang projek dan memimpin pasukan.","Generating original solutions to problems.":"Menghasilkan penyelesaian asli bagi masalah.",
-  "Strongly dislike":"Sangat tidak suka","Dislike":"Tidak suka","Neutral":"Neutral","Like":"Suka","Strongly like":"Sangat suka","Not confident":"Tidak yakin","Slightly confident":"Sedikit yakin","Moderately confident":"Agak yakin","Very confident":"Yakin","Extremely confident":"Sangat yakin","Previous":"Sebelumnya","Next":"Seterusnya","Part {n} of 3":"Bahagian {n} daripada 3","Question {n}, {state}":"Soalan {n}, {state}","Answered":"Dijawab","Unanswered":"Belum dijawab","answer required":"jawapan diperlukan","Clear saved draft":"Padam draf tersimpan","Quiz navigation":"Navigasi soal selidik","Assessment sections":"Bahagian penilaian","Overall assessment completion":"Kemajuan keseluruhan penilaian","{n} of {total} answered":"{n} daripada {total} dijawab","{part}: {n} of {total} answered":"{part}: {n} daripada {total} dijawab","{n}. {question}":"{n}. {question}",
-  "A guide for reflection":"Panduan untuk refleksi","Your results at a glance":"Ringkasan keputusan anda","Three separate views of what you reported—not a verified competency test or a prediction of employment.":"Tiga sudut berasingan berdasarkan laporan anda—bukan ujian kecekapan yang disahkan atau ramalan pekerjaan.","Interests":"Minat","Subjects":"Mata pelajaran","Confidence":"Keyakinan","Careers":"Kerjaya","Your career interests — RIASEC":"Minat kerjaya anda — RIASEC","Calculated interest code":"Kod minat yang dikira","Why this code?":"Apakah maksud kod ini?","Your subject preferences":"Keutamaan mata pelajaran anda","Your self-reported skills":"Kemahiran yang anda laporkan sendiri","What to explore next":"Perkara seterusnya untuk diteroka","How to read this report":"Cara membaca laporan ini","Calculation, sources & limitations":"Pengiraan, sumber dan batasan","Review my answers":"Semak jawapan saya","Explore reskilling options":"Teroka pilihan peningkatan kemahiran","View career recommendations":"Lihat cadangan penerokaan kerjaya",
-  "Career pathway explorer":"Peneroka laluan kerjaya","Explore the work behind the goals.":"Teroka pekerjaan di sebalik matlamat.","Choose a career":"Pilih kerjaya","Search careers (e.g. Data Analyst)":"Cari kerjaya (cth. Data Analyst)","Explore career":"Teroka kerjaya","Browse the goals, or select a supported career to explore its reviewed connections.":"Lihat matlamat atau pilih kerjaya yang disokong untuk meneroka hubung kait yang telah disemak.","Career connections · 17 goals":"Hubungan kerjaya · 17 matlamat","Reviewed potential link":"Hubungan berpotensi yang disemak","Not assessed":"Belum dinilai","Learning pathway":"Laluan pembelajaran","Close":"Tutup","Explore the UN goal":"Teroka matlamat PBB","Potential relationship only. This prototype does not evaluate impact.":"Hubungan yang berpotensi sahaja. Prototaip ini tidak menilai impak.",
-  "Not at all":"Langsung tidak","Slightly":"Sedikit","Moderately":"Sederhana","Very much":"Sangat","Extremely":"Amat sangat","1 = Not confident":"1 = Tidak yakin","5 = Very confident":"5 = Sangat yakin","1 = Strongly dislike":"1 = Sangat tidak suka","5 = Strongly like":"5 = Sangat suka","Get Recommendations":"Lihat Cadangan","{n} / {total} questions answered":"{n} daripada {total} soalan dijawab","Preview only — sample answers are not saved.":"Pratonton sahaja — jawapan contoh tidak disimpan.","Saved on this device for 30 days. Not synced.":"Disimpan pada peranti ini selama 30 hari. Tidak disegerakkan.","Device storage is unavailable. Answers are kept only until this page closes.":"Storan peranti tidak tersedia. Jawapan disimpan sehingga halaman ini ditutup.","Draft restored. Stored on this device for 30 days; not synced.":"Draf dipulihkan. Disimpan pada peranti ini selama 30 hari; tidak disegerakkan.","This question needs an answer. Choose a rating from 1 to 5.":"Soalan ini memerlukan jawapan. Pilih penilaian daripada 1 hingga 5.","Clear all assessment answers saved on this device? Existing career results and learning plans will not be deleted.":"Padam semua jawapan penilaian yang disimpan pada peranti ini? Keputusan kerjaya dan pelan pembelajaran sedia ada tidak akan dipadam.","This report could not be prepared":"Laporan ini tidak dapat disediakan","Realistic":"Praktikal","Investigative":"Penyiasatan","Artistic":"Kreatif","Social":"Sosial","Enterprising":"Keusahawanan","Conventional":"Konvensional","Build or repair equipment; work physically or outdoors.":"Membina atau membaiki peralatan; melakukan kerja fizikal atau di luar.","Study or research objects, organisms, data, or human behavior.":"Mengkaji objek, organisma, data atau tingkah laku manusia.","Make original art, design, writing, or music.":"Menghasilkan seni, reka bentuk, penulisan atau muzik asli.","Help, teach, advise, or serve other people.":"Membantu, mengajar, menasihati atau berkhidmat kepada orang lain.","Manage, negotiate, market, sell, or lead.":"Mengurus, berunding, memasarkan, menjual atau memimpin.","Follow procedures to organize information or data.":"Mengikuti prosedur untuk menyusun maklumat atau data.","This area concerns practical, hands-on activities such as working with tools, equipment, materials, or the outdoors.":"Bidang ini meliputi aktiviti praktikal seperti menggunakan alatan, peralatan dan bahan, atau bekerja di luar.","This area concerns investigating questions, studying how things work, and researching evidence about the world or people.":"Bidang ini meliputi penyiasatan soalan, kajian tentang cara sesuatu berfungsi dan penyelidikan bukti tentang dunia atau manusia.","This area concerns creating original work and expressing ideas through visual art, design, writing, music, or other media.":"Bidang ini meliputi penciptaan karya asli dan penyampaian idea melalui seni visual, reka bentuk, penulisan, muzik atau media lain.","This area concerns activities centered on helping people, teaching, advising, supporting, or providing a service.":"Bidang ini meliputi aktiviti membantu, mengajar, menasihati, menyokong orang lain atau menyediakan perkhidmatan.","This area concerns persuading or coordinating with others, leading initiatives, and activities such as marketing, sales, negotiation, or management.":"Bidang ini meliputi usaha memujuk atau menyelaras orang lain, memimpin inisiatif serta aktiviti pemasaran, jualan, rundingan atau pengurusan.","This area concerns organizing information, maintaining records, and following established procedures to work with data.":"Bidang ini meliputi penyusunan maklumat, penyelenggaraan rekod dan pematuhan prosedur untuk mengendalikan data.","Would you like to try a small repair, build, or outdoor project?":"Adakah anda ingin mencuba projek pembaikan kecil, binaan atau aktiviti luar?","What question could you investigate using observation, reading, or a small experiment?":"Apakah soalan yang boleh anda kaji melalui pemerhatian, bacaan atau eksperimen kecil?","What would you enjoy making if you could choose the format and audience?":"Apakah yang anda suka hasilkan jika boleh memilih format dan khalayak?","Who might benefit from something you could explain, teach, or help with?":"Siapakah yang mungkin mendapat manfaat daripada penerangan, pengajaran atau bantuan anda?","What idea or small project would you like to organize people around?":"Apakah idea atau projek kecil yang ingin anda usahakan bersama orang lain?","What information could you organize into a clear, useful system?":"Maklumat apakah yang boleh anda susun menjadi sistem yang jelas dan berguna?","Scores use the existing 20–100 scale: four answers summed, divided by 20, then multiplied by 100.":"Skor menggunakan skala sedia ada 20–100: empat jawapan dijumlahkan, dibahagi 20, kemudian didarab 100.","Equal scores follow the fixed R–I–A–S–E–C ordering in the displayed three-letter code. A letter's position in a tie does not establish a primary, secondary, or tertiary strength.":"Skor seri mengikut susunan tetap R–I–A–S–E–C dalam kod tiga huruf. Kedudukan huruf dalam seri tidak menentukan kekuatan utama, kedua atau ketiga.","The code shows the three highest calculated interest scores. It is a shorthand for these responses, not a fixed personal identity.":"Kod ini menunjukkan tiga skor minat tertinggi yang dikira. Ia ringkasan jawapan ini, bukan identiti peribadi yang tetap.","Your subject ratings are equal, so none is distinguished.":"Penilaian mata pelajaran anda sama, jadi tiada yang menonjol.","These scores are not percentiles, probabilities of career success, or percentages of your personality. The bars share a 20–100 axis; 20 is the minimum possible response score, not an absence of interests.":"Skor ini bukan persentil, kebarangkalian kejayaan kerjaya atau peratusan personaliti anda. Bar menggunakan paksi 20–100; 20 ialah skor jawapan minimum, bukan ketiadaan minat.","General activity descriptions are adapted from O*NET. This custom questionnaire is not the official Interest Profiler and does not inherit its validation, norms, or reliability.":"Penerangan aktiviti umum diadaptasi daripada O*NET. Soal selidik tersuai ini bukan Interest Profiler rasmi dan tidak mewarisi kesahan, norma atau kebolehpercayaannya.","AI-written assessment review is unavailable: no AI provider or assessment-review service is configured. This deterministic report is available without AI, and does not send your answers to an AI service.":"Semakan penilaian oleh AI tidak tersedia: penyedia AI atau perkhidmatan semakan belum dikonfigurasikan. Laporan deterministik ini tidak menggunakan AI dan jawapan anda tidak dihantar kepada perkhidmatan AI.",
-  "Career exploration · prototype data":"Penerokaan kerjaya · data prototaip","AI Career Trend Explorer":"Peneroka Trend Kerjaya AI","Review broad skill and career-category directions from the imported project data.":"Lihat arah umum kemahiran dan kategori kerjaya daripada data projek yang diimport.","Not a validated forecast:":"Bukan ramalan yang disahkan:","the historical labels are qualitative and future labels are hand-built scenarios. This dataset contains no annual employment counts and should not be used to predict an individual’s job prospects.":"label sejarah bersifat kualitatif dan label masa depan ialah senario yang dibina secara manual. Data ini tiada bilangan pekerjaan tahunan dan tidak patut digunakan untuk meramal prospek kerja seseorang.","Geographic scope":"Skop geografi","Scenario period":"Tempoh senario","Model type":"Jenis model","Categories":"Kategori","Filter categories":"Tapis kategori","Loading imported category scenarios…":"Memuatkan senario kategori yang diimport…","Source and limitations":"Sumber dan batasan","Drivers":"Faktor pendorong","Skills mentioned":"Kemahiran yang disebut","No categories match that search.":"Tiada kategori sepadan dengan carian.","AI Uncertainty Lab":"Makmal Ketidakpastian AI","What-if scenarios · prototype model":"Senario andaian · model prototaip","Change assumptions and compare how this simple rule-based model responds.":"Ubah andaian dan bandingkan tindak balas model berasaskan peraturan yang ringkas ini.","These are not employment forecasts.":"Ini bukan ramalan pekerjaan.","The imported model uses hand-set coefficients and an illustrative 68.9% starting value. It has not been calibrated against labour-market data. Do not use the outputs as probabilities or career advice.":"Model yang diimport menggunakan pekali yang ditetapkan secara manual dan nilai permulaan ilustrasi 68.9%. Model ini tidak ditentukur menggunakan data pasaran buruh. Jangan gunakan hasil sebagai kebarangkalian atau nasihat kerjaya.","Scenario assumptions":"Andaian senario","Starting scenario":"Senario permulaan","Illustrative starting value (%)":"Nilai permulaan ilustrasi (%)","Run this scenario":"Jalankan senario ini","Compare all six scenarios":"Bandingkan kesemua enam senario","Loading the scenario set…":"Memuatkan set senario…","Employment-to-Population Ratio":"Nisbah pekerjaan kepada penduduk","2031 illustrative result:":"Hasil ilustrasi 2031:","Output from the scenario formula, not an observed or validated employment rate.":"Hasil formula senario, bukan kadar pekerjaan yang diperhatikan atau disahkan.","Loading the scenario chart…":"Memuatkan carta senario…","Illustrative model outputs only, not forecasts. The percentage axis is zoomed to the scenario values. No validated uncertainty interval is available.":"Hasil model ilustrasi sahaja, bukan ramalan. Paksi peratus dizum kepada nilai senario. Tiada julat ketidakpastian yang disahkan.","Year-by-year values":"Nilai mengikut tahun","Occupational growth assumptions":"Andaian pertumbuhan pekerjaan","These percentages are formula outputs from assumed sensitivity weights, not measured job growth.":"Peratus ini ialah hasil formula daripada wajaran sensitiviti andaian, bukan pertumbuhan pekerjaan yang diukur.","Preset comparison":"Perbandingan pratetap","AI development speed":"Kelajuan pembangunan AI","Automation intensity":"Tahap automasi","Worker transition capacity":"Keupayaan peralihan pekerja","Economic conditions":"Keadaan ekonomi","AI-goal misalignment severity":"Tahap ketidakselarasan matlamat AI","Other factors (policy, demographics)":"Faktor lain (dasar, demografi)",
-  "Profile":"Profil","Appearance":"Rupa paparan","Privacy and data":"Privasi dan data","Open learning profile":"Buka profil pembelajaran","Choose how the reskilling workspace looks on this browser.":"Pilih rupa ruang peningkatan kemahiran pada pelayar ini.","Light":"Cerah","Dark":"Gelap","System":"Sistem","More for your workspace":"Lagi untuk ruang kerja anda","These options are not available yet.":"Pilihan ini belum tersedia.","CV import":"Import CV","Notifications":"Pemberitahuan","Cross-device sync":"Penyegerakan antara peranti","Not available":"Tidak tersedia","This prototype does not offer account-level cross-device sync. Your appearance choice is saved in this browser; learning data uses the app’s existing session.":"Prototaip ini tidak menyediakan penyegerakan akaun merentas peranti. Pilihan rupa disimpan dalam pelayar ini; data pembelajaran menggunakan sesi aplikasi sedia ada.",
-  "Which best describes you?":"Yang manakah paling menggambarkan diri anda?","Student / fresh graduate":"Pelajar / graduan baharu","Currently employed":"Sedang bekerja","Planning a career change":"Merancang perubahan kerjaya","Returning to work or learning":"Kembali bekerja atau belajar","Your current industry or community":"Industri atau komuniti semasa anda","Your general experience":"Pengalaman umum anda","Your target career":"Kerjaya sasaran anda","What would you like to achieve?":"Apakah yang ingin anda capai?","How many hours can you study per week?":"Berapa jam anda boleh belajar setiap minggu?","How many weeks do you want to plan?":"Berapa minggu yang ingin anda rancangkan?","Which days work best for you?":"Hari manakah paling sesuai untuk anda?","How do you like to learn?":"Bagaimanakah anda suka belajar?","Hands-on projects":"Projek amali","Video tutorials + practice":"Tutorial video + latihan","Reading + practice":"Bacaan + latihan","Continue →":"Teruskan →","Generate my pathway":"Jana laluan saya","Return to dashboard":"Kembali ke papan pemuka","About you":"Tentang anda","Your skills":"Kemahiran anda","Your schedule":"Jadual anda","Build your learning profile":"Bina profil pembelajaran anda","About 2–3 minutes":"Kira-kira 2–3 minit","Monday":"Isnin","Tuesday":"Selasa","Wednesday":"Rabu","Thursday":"Khamis","Friday":"Jumaat","Saturday":"Sabtu","Sunday":"Ahad",
-  "Your highest subject ratings are tied across {subjects}.":"Penilaian mata pelajaran tertinggi anda seri: {subjects}.","Your highest subject rating is {subject}.":"Penilaian mata pelajaran tertinggi anda ialah {subject}.","Your highest confidence rating is {score} / 5 for {skills}; your lowest is {low} / 5 for {lowSkills}.":"Penilaian keyakinan tertinggi anda ialah {score} / 5 untuk {skills}; terendah ialah {low} / 5 untuk {lowSkills}.","Tied interest scores: {ties}. Ties are not ordered as primary, secondary, or tertiary strengths.":"Skor minat seri: {ties}. Seri tidak disusun sebagai kekuatan utama, kedua atau ketiga.","There is also a tie at the three-area profile-code cutoff: {areas} share a score of {score}. The code is not used in recommendation ranking.":"Terdapat juga seri pada had kod profil tiga bidang: {areas} berkongsi skor {score}. Kod ini tidak digunakan dalam pemeringkatan cadangan.","A possible combination to explore: {first} and {second}. Try these two reflection questions together: “{question1}” and “{question2}” This is an exploratory prompt, not a role recommendation.":"Gabungan yang boleh diteroka: {first} dan {second}. Cuba fikirkan dua soalan refleksi ini bersama-sama: “{question1}” dan “{question2}” Ini panduan penerokaan, bukan cadangan jawatan.","Language changed for this visit. Browser storage is blocked, so your preference could not be saved.":"Bahasa ditukar untuk lawatan ini. Storan pelayar disekat, jadi pilihan anda tidak dapat disimpan.","This language pack could not be loaded. Your previous language is still active.":"Pek bahasa ini tidak dapat dimuatkan. Bahasa sebelumnya masih digunakan.","Loading language pack…":"Memuatkan pek bahasa…","Saved language pack could not be loaded. English remains active.":"Pek bahasa tersimpan tidak dapat dimuatkan. Bahasa Inggeris masih digunakan.","The saved draft is expired or incompatible. Start fresh; new answers will save on this device.":"Draf tersimpan telah luput atau tidak serasi. Mulakan semula; jawapan baharu akan disimpan pada peranti ini.","Answers save on this device for 30 days. On a shared device, clear your draft when finished.":"Jawapan disimpan pada peranti ini selama 30 hari. Pada peranti kongsi, padam draf selepas selesai.",
-  "Browser storage is blocked. Your language choice will apply for this visit only.":"Storan pelayar disekat. Pilihan bahasa anda hanya digunakan untuk lawatan ini.",
-  "Close assessment":"Tutup penilaian","e.g. Education, Retail, Technology":"cth. Pendidikan, Peruncitan, Teknologi","e.g. Build my first data analysis portfolio project":"cth. Bina projek portfolio analisis data pertama saya","About this prototype and how to read it":"Tentang prototaip ini dan cara membacanya","Potential alignment is not impact.":"Potensi penjajaran bukan impak.","These are illustrative learning links, not proof of real-world change.":"Ini hubungan pembelajaran ilustrasi, bukan bukti perubahan sebenar.","Explore how a role’s skill requirements and learning pathway may relate to selected UN targets. Each reviewed mapping includes its reasoning, supporting evidence, suggested action and limits.":"Teroka kemungkinan hubungan keperluan kemahiran dan laluan pembelajaran sesuatu peranan dengan sasaran PBB terpilih. Setiap pemetaan yang disemak merangkumi alasan, bukti sokongan, tindakan dicadangkan dan batasannya.","Prototype mappings currently connect selected learning pathways to SDG 4.4 and SDG 8.5. Skill requirements are illustrative; other roles are not assigned targets.":"Pemetaan prototaip kini menghubungkan laluan pembelajaran terpilih kepada SDG 4.4 dan SDG 8.5. Keperluan kemahiran hanya ilustrasi; peranan lain tidak diberikan sasaran.","Evidence availability varies by role. Employment outcomes, equitable access and broader SDG-level contribution require separate evidence and follow-up data. A mapping does not show that a learner, career or product has caused measurable progress.":"Ketersediaan bukti berbeza mengikut peranan. Hasil pekerjaan, akses saksama dan sumbangan SDG yang lebih luas memerlukan bukti serta data susulan berasingan. Pemetaan tidak membuktikan bahawa pelajar, kerjaya atau produk menyebabkan kemajuan yang boleh diukur.","Official UN goal icons identify the goals; their use does not imply UN endorsement. Photographs are representative, not evidence of FutureSkill outcomes.":"Ikon matlamat rasmi PBB mengenal pasti matlamat; penggunaannya tidak bermaksud PBB mengendorsinya. Foto bersifat perwakilan, bukan bukti hasil FutureSkill.","Search and select a supported career or role":"Cari dan pilih kerjaya atau peranan yang disokong","Type a role and select a catalogue result. Suggestions do not assign an SDG mapping.":"Taip peranan dan pilih hasil katalog. Cadangan tidak menetapkan pemetaan SDG.","Select a supported career to explore its reviewed connections.":"Pilih kerjaya yang disokong untuk meneroka hubung kait yang disemak.","Select any goal to explore it. Only reviewed career links are connected; other goals are not assessed for this role.":"Pilih mana-mana matlamat untuk diteroka. Hanya hubungan kerjaya yang disemak disambungkan; matlamat lain belum dinilai untuk peranan ini.","Monday":"Isnin","Tuesday":"Selasa","Wednesday":"Rabu","Thursday":"Khamis","Friday":"Jumaat","Saturday":"Sabtu","Sunday":"Ahad","Your highest subject rating is {subject}.":"Penilaian mata pelajaran tertinggi anda ialah {subject}.","Close assessment":"Tutup penilaian","Language changed for this visit. Browser storage is blocked, so your preference could not be saved.":"Bahasa ditukar untuk lawatan ini. Storan pelayar disekat, jadi pilihan anda tidak dapat disimpan.",
-  "You reported enjoyment of subject activities on a 1–5 scale. Interest does not demonstrate subject ability. The meanings and questions below are FutureSkill reflection prompts, not validated ability interpretations.":"Anda melaporkan minat terhadap aktiviti mata pelajaran menggunakan skala 1–5. Minat tidak membuktikan kebolehan dalam mata pelajaran. Maksud dan soalan di bawah ialah panduan refleksi FutureSkill, bukan tafsiran kebolehan yang disahkan.","These 1–5 ratings describe reported confidence, not independently assessed proficiency or occupational readiness. A lower rating alone is not a weakness. Practice can help you gather examples, but does not verify proficiency without an assessment and rubric. These broad ratings are separate from role-specific requirements and do not affect career rankings.":"Penilaian 1–5 ini menggambarkan keyakinan yang dilaporkan, bukan kecekapan atau kesediaan pekerjaan yang dinilai secara bebas. Penilaian rendah sahaja bukan kelemahan. Latihan boleh membantu mengumpulkan contoh, tetapi tidak mengesahkan kecekapan tanpa penilaian dan rubrik. Penilaian umum ini berasingan daripada keperluan peranan khusus dan tidak mempengaruhi kedudukan kerjaya.","FutureSkill’s recommendation engine uses a 65% interest index and 35% subject index. The interest index combines 85% scaled Pearson profile-shape similarity and 15% above-your-own-mean emphasis; a flat profile is neutral at 50. Subject fields use title-matching heuristics, with unclassified fields neutral, and diversity selection can change recommendation order. The three-letter profile code is not an input to ranking. Where there is a tie at the code cutoff, this report names every tied area.":"Enjin cadangan FutureSkill menggunakan indeks minat 65% dan indeks mata pelajaran 35%. Indeks minat menggabungkan 85% persamaan bentuk profil Pearson berskala dan 15% penekanan minat melebihi purata anda sendiri; profil rata dianggap neutral pada 50. Bidang mata pelajaran menggunakan heuristik padanan tajuk, bidang yang tidak dikelaskan dianggap neutral dan pemilihan kepelbagaian boleh mengubah susunan cadangan. Kod profil tiga huruf bukan input pemeringkatan. Jika terdapat seri pada had kod, laporan ini menyenaraikan setiap bidang yang seri.","This FutureSkill questionnaire is custom and is NOT the official O*NET Interest Profiler. It does not inherit the official instrument’s validation, norms, or reliability. The six interest areas are provided here for career exploration only.":"Soal selidik FutureSkill ini dibina khas dan BUKAN O*NET Interest Profiler rasmi. Ia tidak mewarisi kesahan, norma atau kebolehpercayaan instrumen rasmi. Enam bidang minat ini disediakan untuk penerokaan kerjaya sahaja.","The engine returned {count} careers, starting with {career}. Explore their work activities rather than treating the order as a verdict.":"Enjin memberikan {count} cadangan kerjaya, bermula dengan {career}. Teroka aktiviti kerja dan jangan anggap susunan ini sebagai keputusan muktamad.","No engine recommendations were returned. You can still review your answers or explore the explicitly labeled prototype learning templates.":"Tiada cadangan kerjaya daripada enjin. Anda masih boleh menyemak jawapan atau meneroka templat pembelajaran prototaip yang dilabel dengan jelas.","Computing & technology":"Pengkomputeran dan teknologi","Mathematics & statistics":"Matematik dan statistik","Teaching & learning":"Pengajaran dan pembelajaran","Health & medicine":"Kesihatan dan perubatan","Business & enterprise":"Perniagaan dan perusahaan","Engineering & design":"Kejuruteraan dan reka bentuk","Mathematical & logical problem-solving":"Penyelesaian masalah matematik dan logik","Coding & debugging":"Pengekodan dan penyahpepijatan","Data analysis":"Analisis data","Communication":"Komunikasi","Planning & team coordination":"Perancangan dan penyelarasan pasukan","Creative problem-solving":"Penyelesaian masalah kreatif"
-  ,"A results object is needed to prepare this report.":"Objek keputusan diperlukan untuk menyediakan laporan ini."
-  ,"Career Assessment":"Penilaian Kerjaya"
-  ,"Career recommendation data is incomplete or in an unexpected format. Your profile scores are not being replaced.":"Data cadangan kerjaya tidak lengkap atau dalam format yang tidak dijangka. Skor profil anda tidak digantikan."
-  ,"Confidence ratings are incomplete or outside the expected 1–5 range. No scores have been estimated.":"Penilaian keyakinan tidak lengkap atau di luar julat 1–5 yang dijangka. Tiada skor dianggarkan."
-  ,"Explore a learning pathway":"Teroka laluan pembelajaran"
-  ,"FutureSkill’s recommendation engine uses a 65% interest index and 35% subject index.":"Enjin cadangan FutureSkill menggunakan indeks minat 65% dan indeks mata pelajaran 35%."
-  ,"Interest results are incomplete or outside the expected 20–100 range. No scores have been estimated.":"Keputusan minat tidak lengkap atau di luar julat 20–100 yang dijangka. Tiada skor dianggarkan."
-  ,"No close-score threshold or statistical significance is inferred.":"Tiada ambang skor hampir atau kepentingan statistik disimpulkan."
-  ,"No close-score threshold or statistical significance is inferred. The report compares exact calculated values, discloses ties, and offers reflection questions rather than diagnoses.":"Laporan ini tidak menyimpulkan ambang skor hampir atau kepentingan statistik. Ia membandingkan nilai kiraan tepat, menyatakan seri dan menawarkan soalan refleksi, bukan diagnosis."
-  ,"Results report sections":"Bahagian laporan keputusan"
-  ,"Review your answers":"Semak jawapan anda"
-  ,"Skills are not ranking inputs. Any “Shared interest strengths” shown on career cards means interests above your own profile mean; it does not verify a skill. Career recommendations are exploratory, not probabilities or evidence of occupational fit.":"Kemahiran bukan input pemeringkatan. “Kekuatan minat bersama” pada kad kerjaya merujuk minat melebihi purata profil anda, bukan pengesahan kemahiran. Cadangan kerjaya bersifat penerokaan, bukan kebarangkalian atau bukti kesesuaian pekerjaan."
-  ,"Skills are separate from role-specific requirements and do not affect career rankings.":"Kemahiran dinilai berasingan daripada keperluan peranan khusus dan tidak mempengaruhi kedudukan kerjaya."
-  ,"Subject results are incomplete or outside the expected 1–5 range. No scores have been estimated.":"Keputusan mata pelajaran tidak lengkap atau di luar julat 1–5 yang dijangka. Tiada skor dianggarkan."
-  ,"The report container is unavailable.":"Ruang laporan tidak tersedia."
-  ,"These 1–5 ratings describe reported confidence, not independently assessed proficiency or occupational readiness. A lower rating alone is not a weakness.":"Penilaian 1–5 ini menggambarkan keyakinan yang dilaporkan, bukan kecekapan atau kesediaan kerja yang dinilai secara bebas. Skor rendah sahaja bukan kelemahan."
-  ,"Try one low-stakes activity":"Cuba aktiviti berisiko rendah"
-  ,"You rated every skill {score} / 5 for confidence.":"Anda menilai keyakinan bagi setiap kemahiran pada {score} / 5."
-  ,"Your confidence ratings are equal":"Penilaian keyakinan anda sama"
-  ,"Your interests are equal":"Penilaian minat anda sama"
-  ,"Your recommendations are exploratory, not predictions.":"Cadangan ini untuk penerokaan, bukan ramalan."
-  ,"Your subject ratings are equal at {score} / 5; none is distinguished.":"Penilaian mata pelajaran anda semuanya {score} / 5; tiada yang menonjol."
-  ,"{subjects} has your highest subject rating.":"Penilaian mata pelajaran tertinggi anda ialah {subjects}."
-  ,"{subject} has your highest subject rating.":"Penilaian mata pelajaran tertinggi anda ialah {subject}."
-  ,"Your answers do not identify a clear leading interest area. All six interest scores are {score} / 100.":"Jawapan anda tidak menunjukkan bidang minat yang jelas mendahului yang lain. Kesemua enam skor minat ialah {score} / 100."
-  ,"Your highest interest areas are tied: {areas}.":"Bidang minat tertinggi anda seri: {areas}."
-  ,"Your highest interest area is {area}. This is a starting point for exploration, not a label.":"Bidang minat tertinggi anda ialah {area}. Ini titik permulaan penerokaan, bukan label tetap."
-  ,"Review the details shaping your learning plan.":"Semak butiran yang membentuk pelan pembelajaran anda."
-  ,"Choose how FutureSkill looks on this browser.":"Pilih rupa FutureSkill pada pelayar ini."
-  ,"Unavailable; enter skills manually during setup":"Tidak tersedia; masukkan kemahiran secara manual semasa persediaan"
-  ,"Choose learning reminders":"Pilih peringatan pembelajaran"
-  ,"Continue your plan on another device":"Teruskan pelan anda pada peranti lain"
-  ,"Explore careers":"Teroka kerjaya"
-  ,"Explore careers with the assessment":"Teroka kerjaya dengan penilaian"
-  ,"Browse careers without the assessment":"Lihat katalog kerjaya tanpa penilaian"
-  ,"I KNOW MY TARGET ROLE":"SAYA SUDAH TAHU PERANAN SASARAN"
-  ,"Start with your interests":"Mulakan dengan minat anda"
-  ,"Take the assessment for exploratory recommendations, or browse the catalogue first.":"Lengkapkan penilaian untuk cadangan penerokaan, atau lihat katalog dahulu."
-  ,"Choose a role directly. You can review available pathway support before starting.":"Pilih peranan secara terus. Anda boleh menyemak sokongan laluan yang tersedia sebelum bermula."
-  ,"Find a career":"Cari kerjaya"
-  ,"YOUR WORKSPACE":"RUANG KERJA ANDA"
-  ,"Explore a direction at your pace.":"Teroka hala tuju mengikut rentak anda."
-  ,"My career overview":"Ringkasan kerjaya saya"
-  ,"My profile & assessment":"Profil & penilaian saya"
-  ,"My learning pathway":"Laluan pembelajaran saya"
-  ,"Further exploration":"Penerokaan lanjut"
-  ,"Explore, don’t predict.":"Teroka, bukan meramal."
-  ,"Career information and pathways vary in coverage.":"Liputan maklumat kerjaya dan laluan pembelajaran berbeza-beza."
-  ,"Your career overview":"Ringkasan kerjaya anda"
-  ,"Use your questionnaire responses as a starting point, then inspect careers and decide what you want to explore.":"Gunakan jawapan soal selidik sebagai titik permulaan, kemudian lihat maklumat kerjaya dan tentukan perkara yang ingin diteroka."
-  ,"A short reading of your answers":"Ringkasan jawapan anda"
-  ,"Three separate questionnaire views—not a competency test or an employment prediction.":"Tiga sudut berasingan daripada soal selidik—bukan ujian kecekapan atau ramalan pekerjaan."
-  ,"Self-reported confidence":"Keyakinan yang dilaporkan sendiri"
-  ,"Three careers to explore first":"Tiga kerjaya untuk diteroka dahulu"
-  ,"These are the first three entries in the existing engine order, not statistically established best careers.":"Ini ialah tiga entri pertama mengikut susunan enjin sedia ada, bukan kerjaya terbaik yang ditentukan secara statistik."
-  ,"Choose your next step":"Pilih langkah seterusnya"
-  ,"No assessment results in this browser session. Browse the catalogue or take the optional assessment; no personalized recommendation will be made without results.":"Tiada keputusan penilaian dalam sesi pelayar ini. Lihat katalog atau ambil penilaian pilihan; cadangan peribadi tidak akan dibuat tanpa keputusan."
-  ,"Browse the career catalogue":"Lihat katalog kerjaya"
-  ,"Review the interests, subject preferences, and confidence ratings you reported. They are distinct from verified occupational requirements.":"Semak minat, keutamaan mata pelajaran dan penilaian keyakinan yang anda laporkan. Semua ini berbeza daripada keperluan pekerjaan yang disahkan."
-  ,"No assessment report in this session":"Tiada laporan penilaian dalam sesi ini"
-  ,"Take the assessment to create a report. This page will not create estimated scores.":"Ambil penilaian untuk menghasilkan laporan. Halaman ini tidak akan menganggarkan skor."
-  ,"Career details":"Butiran kerjaya"
-  ,"Explore catalogue evidence before deciding whether this role interests you.":"Lihat bukti dalam katalog sebelum menentukan sama ada peranan ini menarik minat anda."
-  ,"Why this appeared":"Sebab kerjaya ini dipaparkan"
-  ,"About your selected career":"Tentang kerjaya yang dipilih"
-  ,"The local catalogue has no sourced duties for this role. Open the official occupation profile to inspect its details.":"Katalog tempatan tiada maklumat tugas bersumber bagi peranan ini. Buka profil pekerjaan rasmi untuk melihat butirannya."
-  ,"Sourced work-duty details are not present in FutureSkill’s local catalogue. Review the official occupation profile before drawing conclusions about daily work or requirements.":"Katalog tempatan FutureSkill tidak menyediakan butiran tugas bersumber. Semak profil pekerjaan rasmi sebelum membuat kesimpulan tentang tugas harian atau keperluan."
-  ,"Open O*NET OnLine occupation profile":"Buka profil pekerjaan O*NET OnLine"
-  ,"Catalogue interest profile":"Profil minat dalam katalog"
-  ,"The existing engine stores this occupation profile; these values are not personal results.":"Enjin sedia ada menyimpan profil pekerjaan ini; nilai ini bukan keputusan peribadi anda."
-  ,"These are the career dataset’s existing values on a 0–7 scale. Their provenance and validation are not independently established here. They are not learner scores or measures of career success.":"Ini ialah nilai sedia ada dalam set data kerjaya pada skala 0–7. Sumber dan pengesahannya belum disahkan secara bebas di sini. Nilai ini bukan skor pelajar atau ukuran kejayaan kerjaya."
-  ,"Your starting point":"Titik permulaan anda"
-  ,"This assessment does not measure role-specific proficiency or occupational readiness. Broad confidence ratings are self-reported and cannot be converted into role requirements.":"Penilaian ini tidak mengukur kemahiran khusus peranan atau kesediaan pekerjaan. Penilaian keyakinan umum dilaporkan sendiri dan tidak boleh dianggap sebagai keperluan peranan."
-  ,"A supported learning template is available: {template}. Its skills and requirements are illustrative, not independently validated occupational benchmarks.":"Templat pembelajaran yang disokong tersedia: {template}. Kemahiran dan keperluannya ialah contoh, bukan penanda aras pekerjaan yang disahkan secara bebas."
-  ,"No supported role-specific pathway template is available for this catalogue entry. The reskilling studio will explain its available templates; do not treat another template as a verified match.":"Tiada templat laluan khusus peranan yang disokong untuk entri katalog ini. Ruang peningkatan kemahiran akan menerangkan templat yang tersedia; jangan anggap templat lain sebagai padanan yang disahkan."
-  ,"Your saved learning pathway is {career}. Browsing this career does not change it.":"Laluan pembelajaran yang disimpan menggunakan sasaran {career}. Melihat kerjaya ini tidak mengubahnya."
-  ,"Choose this target and review pathway options":"Pilih sasaran ini dan semak pilihan laluan"
-  ,"Try it before choosing":"Cuba sebelum memilih"
-  ,"Open the official profile, choose one listed work activity to investigate, and write down a question about what it involves. This is an exploration exercise, not a proficiency test.":"Buka profil rasmi, pilih satu aktiviti kerja untuk disiasat dan tulis soalan tentang perkara yang terlibat. Ini latihan penerokaan, bukan ujian kecekapan."
-  ,"Explore sourced work information":"Teroka maklumat kerja bersumber"
-  ,"Potential SDG connections":"Hubungan SDG yang berpotensi"
-  ,"No reviewed role-to-target mapping is available. No connection is inferred.":"Tiada pemetaan peranan kepada sasaran yang telah disemak. Tiada hubungan dibuat andaian."
-  ,"Open the SDG evidence view":"Buka paparan bukti SDG"
-  ,"AI and work-trend context":"Konteks AI dan trend pekerjaan"
-  ,"The current trend prototype has no career-specific mapping for this occupation. No trend is inferred from its title.":"Prototaip trend semasa tiada pemetaan khusus kerjaya ini. Trend tidak dibuat andaian berdasarkan tajuknya."
-  ,"This is a qualitative, rule-based category scenario—not a validated occupation-specific forecast.":"Ini senario kategori kualitatif berasaskan peraturan, bukan ramalan khusus pekerjaan yang disahkan."
-  ,"Trend source and limitations":"Sumber dan batasan trend"
-  ,"Open AI trends":"Buka trend AI"
-  ,"Assessment engine indices":"Indeks enjin penilaian"
-  ,"This role was returned at position {rank} of {total}. Existing indices: interest {interest}, subject {subject}, combined {combined} on their engine scales. These values do not indicate employment outcomes.":"Peranan ini berada pada kedudukan {rank} daripada {total}. Indeks enjin sedia ada: minat {interest}, mata pelajaran {subject}, gabungan {combined} mengikut skala enjin. Nilai ini tidak menunjukkan hasil pekerjaan."
-  ,"Compare career options":"Bandingkan pilihan kerjaya"
-  ,"Review differences using available catalogue and assessment evidence. A comparison is not a prediction of job outcomes.":"Semak perbezaan berdasarkan bukti katalog dan penilaian yang tersedia. Perbandingan ini bukan ramalan hasil pekerjaan."
-  ,"Choose a second role to compare.":"Pilih peranan kedua untuk dibandingkan."
-  ,"Search and explicitly select a second catalogue role. Comparisons are limited to two.":"Cari dan pilih peranan kedua daripada katalog secara jelas. Perbandingan dihadkan kepada dua peranan."
-  ,"Search a second career":"Cari kerjaya kedua"
-  ,"Choose a role to compare.":"Pilih peranan untuk dibandingkan."
-  ,"Choose your first career":"Pilih kerjaya pertama"
-  ,"Side-by-side evidence":"Bukti sebelah-menyebelah"
-  ,"Evidence":"Bukti"
-  ,"Occupation profile":"Profil pekerjaan"
-  ,"Open official O*NET profile for work details":"Buka profil rasmi O*NET untuk butiran kerja"
-  ,"Assessment engine order":"Susunan enjin penilaian"
-  ,"No personalized assessment result in this session":"Tiada keputusan penilaian peribadi dalam sesi ini"
-  ,"Skill readiness":"Kesediaan kemahiran"
-  ,"Not assessed by broad confidence ratings":"Tidak dinilai melalui penilaian keyakinan umum"
-  ,"Only an exact existing prototype mapping is shown on detail":"Butiran hanya memaparkan pemetaan tepat dalam prototaip sedia ada"
-  ,"Reviewed mappings only; see detail view":"Pemetaan yang telah disemak sahaja; lihat butiran"
-  ,"Catalogue interest profiles":"Profil minat dalam katalog"
-  ,"Continue exploring":"Teruskan penerokaan"
-  ,"Return to career search":"Kembali ke carian kerjaya"
-  ,"Search the catalogue":"Cari dalam katalog"
-  ,"Search is limited to the career exploration catalogue; it does not search learner data.":"Carian terhad kepada katalog penerokaan kerjaya dan tidak mencari data pelajar."
-  ,"Search careers by title":"Cari kerjaya mengikut tajuk"
-  ,"Search the existing occupation catalogue by title. Search results are catalogue entries, not personalized recommendations or verified pathway requirements.":"Cari katalog pekerjaan sedia ada mengikut tajuk. Hasil carian ialah entri katalog, bukan cadangan peribadi atau keperluan laluan yang disahkan."
-  ,"Loading catalogue entries…":"Memuatkan entri katalog…"
-  ,"Show more careers":"Tunjukkan lebih banyak kerjaya"
-  ,"No catalogue entries matched that title. Try a broader search.":"Tiada entri katalog sepadan dengan tajuk itu. Cuba carian yang lebih umum."
-  ,"{shown} of {total} catalogue entries shown.":"Memaparkan {shown} daripada {total} entri katalog."
-  ,"Explore this career":"Teroka kerjaya ini"
-  ,"Compare":"Bandingkan"
-  ,"O*NET profile":"Profil O*NET"
-  ,"See all {total} engine recommendations":"Lihat semua {total} cadangan enjin"
-  ,"The initial three recommendations are a presentation choice, not statistically established best careers.":"Tiga cadangan awal dipilih untuk paparan, bukan kerjaya terbaik yang ditentukan secara statistik."
-  ,"Career workspace":"Ruang kerja kerjaya"
-  ,"Any new plan requires explicit review.":"Sebarang pelan baharu memerlukan semakan yang jelas."
-  ,"CAREER CONTEXT":"KONTEKS KERJAYA"
-  ,"You are exploring this career. It is separate from your saved learning target.":"Anda sedang meneroka kerjaya ini. Ia berasingan daripada sasaran pembelajaran yang disimpan."
-  ,"Career-specific trend mappings are shown only when the existing prototype includes this exact occupation.":"Pemetaan trend khusus kerjaya hanya dipaparkan jika prototaip sedia ada merangkumi pekerjaan yang tepat ini."
-  ,"Return to career details":"Kembali ke butiran kerjaya"
-  ,"Recommendation {rank}":"Cadangan {rank}"
-  ,"How the existing engine ranked this role":"Cara enjin sedia ada menyusun peranan ini"
-  ,"These catalogue indices use the engine’s existing 0–100 scale. They are not percentages, employment probabilities, or evidence of occupational proficiency.":"Indeks katalog ini menggunakan skala 0–100 enjin sedia ada. Ini bukan peratusan, kebarangkalian pekerjaan atau bukti kemahiran pekerjaan."
-  ,"Engine order":"Susunan enjin"
-  ,"Interest index":"Indeks minat"
-  ,"Subject index":"Indeks mata pelajaran"
-  ,"Combined engine index":"Indeks gabungan enjin"
-  ,"No personalized recommendations are available here. Browse the catalogue to explore roles.":"Tiada cadangan peribadi tersedia di sini. Lihat katalog untuk meneroka peranan."
-  ,"Career detail is unavailable":"Butiran kerjaya tidak tersedia"
-  ,"Reported interest areas above your own average: {areas}. Title-based subject tags: {fields}. These tags are a title-matching heuristic, not verified occupational requirements.":"Bidang minat yang melebihi purata anda: {areas}. Label bidang berdasarkan tajuk: {fields}. Label ini menggunakan padanan tajuk sebagai heuristik, bukan keperluan pekerjaan yang disahkan."
-  ,"limited overlap":"pertindihan terhad"
-  ,"Information Technology":"Teknologi Maklumat"
-  ,"Mathematics":"Matematik"
-  ,"Health & Medicine":"Kesihatan & Perubatan"
-  ,"Education":"Pendidikan"
-  ,"Business":"Perniagaan"
-  ,"Engineering":"Kejuruteraan"
-  ,"Creative Arts":"Seni Kreatif"
-  ,"Natural Sciences":"Sains Semula Jadi"
-  ,"Public Service":"Perkhidmatan Awam"
-  ,"FutureSkill AI · Interview practice":"FutureSkill AI · Latihan temu duga"
-  ,"CAREER PREPARATION":"PERSEDIAAN KERJAYA"
-  ,"Interview practice":"Latihan temu duga"
-  ,"Saved target":"Sasaran tersimpan"
-  ,"Practise explaining your experience and learning projects.":"Berlatih menerangkan pengalaman dan projek pembelajaran anda."
-  ,"{score} / 100 · Practice estimate":"{score} / 100 · Anggaran latihan"
-  ,"{score} / 100 · Average practice estimate":"{score} / 100 · Purata anggaran latihan"
-  ,"Practice estimate: {score}/100":"Anggaran latihan: {score}/100"
-  ,"Choose a career and practise with five questions. You’ll receive coaching feedback after each answer.":"Pilih kerjaya dan berlatih dengan lima soalan. Anda akan menerima maklum balas bimbingan selepas setiap jawapan."
-  ,"Choose a career and practise with {questionCount} questions. You’ll receive coaching feedback after each answer.":"Pilih kerjaya dan berlatih dengan {questionCount} soalan. Anda akan menerima maklum balas bimbingan selepas setiap jawapan."
-  ,"A PRACTICE SESSION":"SESI LATIHAN"
-  ,"Choose what to practise":"Pilih perkara untuk dilatih"
-  ,"AI interview practice is temporarily unavailable.":"Latihan temu duga AI tidak tersedia buat sementara waktu."
-  ,"Target career":"Kerjaya sasaran"
-  ,"Search 923 occupations by title":"Cari 923 pekerjaan mengikut tajuk"
-  ,"Change career":"Tukar kerjaya"
-  ,"Loading the FutureSkill career catalogue…":"Memuatkan katalog kerjaya FutureSkill…"
-  ,"7 visible at a time":"7 dipaparkan pada satu masa"
-  ,"Up to 7 results visible at a time":"Sehingga 7 hasil kelihatan pada satu masa"
-  ,"Supported careers":"Kerjaya yang disokong"
-  ,"{matches} matching · {total} careers total":"{matches} padanan · {total} kerjaya keseluruhan"
-  ,"No careers match this search. Try a broader title.":"Tiada kerjaya sepadan dengan carian ini. Cuba tajuk yang lebih umum."
-  ,"The FutureSkill career catalogue is temporarily unavailable.":"Katalog kerjaya FutureSkill tidak tersedia buat sementara waktu."
-  ,"Interview type":"Jenis temu duga"
-  ,"Mixed":"Campuran"
-  ,"HR":"Sumber manusia"
-  ,"Technical":"Teknikal"
-  ,"Feedback language":"Bahasa maklum balas"
-  ,"Number of questions":"Bilangan soalan"
-  ,"Start practice":"Mulakan latihan"
-  ,"My interview history":"Sejarah latihan saya"
-  ,"Practice scores are AI coaching estimates, not hiring decisions or a proficiency assessment.":"Skor latihan ialah anggaran bimbingan AI, bukan keputusan pengambilan pekerja atau penilaian kecekapan."
-  ,"Answers, audio and history":"Jawapan, audio dan sejarah"
-  ,"Submitted answers are sent to the configured AI provider for feedback and held temporarily in server memory. The question-history database stores questions and career titles to reduce repeats, not answers or audio. Finished reports are saved in this browser.":"Jawapan yang dihantar diserahkan kepada penyedia AI untuk maklum balas dan disimpan sementara dalam memori pelayan. Pangkalan data sejarah soalan menyimpan soalan dan tajuk kerjaya untuk mengurangkan pengulangan, bukan jawapan atau audio. Laporan siap disimpan dalam pelayar ini."
-  ,"Microphone use is optional. A recording is sent to the AI provider for transcription only after you choose to record and stop. You can edit the transcript before submitting.":"Penggunaan mikrofon adalah pilihan. Rakaman dihantar kepada penyedia AI untuk transkripsi hanya selepas anda memilih untuk merakam dan berhenti. Anda boleh menyunting transkrip sebelum menghantarnya."
-  ,"Unfinished interviews cannot be resumed after leaving or reloading. Server-side answers are cleared on completion, on an expired-session request, or when the server restarts. Completed browser history remains separate.":"Temu duga yang belum selesai tidak boleh disambung selepas meninggalkan atau memuat semula halaman. Jawapan dalam memori pelayan dipadam apabila selesai, apabila permintaan sesi tamat tempoh diterima atau apabila pelayan dimulakan semula. Sejarah pelayar yang lengkap kekal berasingan."
-  ,"The catalogue supplies occupation titles, not a sourced skills profile for every role. For those roles, questions are general practice based on the selected title; they do not assert verified occupational requirements.":"Katalog menyediakan tajuk pekerjaan, bukan profil kemahiran bersumber bagi setiap peranan. Soalan untuk peranan tersebut ialah latihan umum berdasarkan tajuk pilihan; soalan itu tidak mendakwa sebagai keperluan pekerjaan yang disahkan."
-  ,"PRACTICE REFLECTION":"REFLEKSI LATIHAN"
-  ,"Question {questionNumber} of {questionCount}":"Soalan {questionNumber} daripada {questionCount}"
-  ,"Interview coach":"Jurulatih temu duga"
-  ,"Practice and reflect; not a hiring assessment":"Untuk latihan dan refleksi; bukan penilaian pengambilan pekerja"
-  ,"Read question aloud":"Bacakan soalan"
-  ,"Answer method":"Kaedah menjawab"
-  ,"Text answer":"Jawapan teks"
-  ,"Optional voice answer":"Jawapan suara pilihan"
-  ,"Write your answer and revise it before submitting.":"Tulis jawapan anda dan semaknya sebelum menghantar."
-  ,"Audio is sent to the configured provider only when you stop the recording to request transcription.":"Audio dihantar kepada penyedia yang dikonfigurasikan hanya apabila anda menghentikan rakaman untuk meminta transkripsi."
-  ,"Start recording":"Mula merakam"
-  ,"Stop recording":"Hentikan rakaman"
-  ,"Your answer":"Jawapan anda"
-  ,"Explain your approach and include an example if you have one.":"Terangkan pendekatan anda dan sertakan contoh jika ada."
-  ,"Your editable voice transcript will appear here after you stop recording.":"Transkrip suara yang boleh disunting akan dipaparkan di sini selepas anda menghentikan rakaman."
-  ,"{words} words · {characters}/3500 characters":"{words} perkataan · {characters}/3500 aksara"
-  ,"Your answer is sent for coaching after you submit.":"Jawapan anda dihantar untuk maklum balas bimbingan selepas anda menghantarnya."
-  ,"Submit answer for feedback":"Hantar jawapan untuk maklum balas"
-  ,"Feedback on this answer":"Maklum balas untuk jawapan ini"
-  ,"What went well":"Perkara yang dilakukan dengan baik"
-  ,"What to try next":"Perkara untuk dicuba seterusnya"
-  ,"Illustrative sample answer":"Contoh jawapan ilustrasi"
-  ,"The sample is fictional, not a claim about the learner.":"Contoh ini rekaan dan bukan dakwaan tentang pengalaman pelajar."
-  ,"Next question":"Soalan seterusnya"
-  ,"Finish and view report":"Selesai dan lihat laporan"
-  ,"View final report":"Lihat laporan akhir"
-  ,"Interview practice report":"Laporan latihan temu duga"
-  ,"Average practice estimate":"Purata anggaran latihan"
-  ,"Practice reflection":"Refleksi latihan"
-  ,"Coaching dimensions":"Dimensi bimbingan"
-  ,"Strengths to keep using":"Kekuatan untuk terus digunakan"
-  ,"Ideas to practise":"Cadangan untuk dilatih"
-  ,"Possible next practice areas":"Bidang latihan seterusnya"
-  ,"Question-by-question review":"Semakan mengikut soalan"
-  ,"Scores are subjective AI coaching estimates, not hiring predictions.":"Skor ialah anggaran bimbingan AI yang subjektif, bukan ramalan pengambilan pekerja."
-  ,"A brief practice snapshot":"Ringkasan latihan ringkas"
-  ,"This reflection is based on {count} answers. A short session may not show a broad pattern.":"Refleksi ini berdasarkan {count} jawapan. Sesi ringkas mungkin tidak menunjukkan corak yang menyeluruh."
-  ,"Higher coaching estimates this session":"Anggaran bimbingan lebih tinggi dalam sesi ini"
-  ,"Your answers received higher AI coaching estimates in this practice session. This does not measure job readiness or eligibility.":"Jawapan anda menerima anggaran bimbingan AI yang lebih tinggi dalam sesi latihan ini. Ini tidak mengukur kesediaan atau kelayakan kerja."
-  ,"Mixed practice feedback":"Maklum balas latihan bercampur"
-  ,"This practice session gave mixed coaching estimates. Choose a response suggestion to try; the result does not say whether you should apply.":"Sesi latihan ini memberikan anggaran bimbingan yang bercampur. Pilih satu cadangan jawapan untuk dicuba; keputusan ini tidak menentukan sama ada anda patut memohon."
-  ,"Ideas for another practice round":"Idea untuk pusingan latihan seterusnya"
-  ,"Some answers received lower coaching estimates this session. Try one suggestion; these estimates do not measure workplace performance.":"Sesetengah jawapan menerima anggaran bimbingan yang lebih rendah dalam sesi ini. Cuba satu cadangan; anggaran ini tidak mengukur prestasi kerja."
-  ,"Use these notes to reflect on this practice session, not to judge job readiness.":"Gunakan nota ini untuk menilai sesi latihan, bukan untuk menghakimi kesediaan kerja."
-  ,"Practice answers in this summary: {count}.":"Bilangan jawapan latihan dalam ringkasan ini: {count}."
-  ,"Start another practice session":"Mulakan sesi latihan lain"
-  ,"SAVED IN THIS BROWSER":"DISIMPAN DALAM PELAYAR INI"
-  ,"Your finished practice reports are stored locally in this browser. Clearing site data removes this history.":"Laporan latihan yang selesai disimpan secara setempat dalam pelayar ini. Mengosongkan data tapak akan memadam sejarah ini."
-  ,"Completed practice sessions saved in this browser: {count}":"Sesi latihan yang disimpan dalam pelayar ini: {count}"
-  ,"No completed sessions are saved in this browser yet.":"Tiada sesi selesai yang disimpan dalam pelayar ini."
-  ,"View saved questions and answers":"Lihat soalan dan jawapan yang disimpan"
-  ,"Back to setup":"Kembali ke tetapan"
-  ,"Delete browser history":"Padam sejarah pelayar"
-  ,"Delete all interview reports saved in this browser?":"Padam semua laporan temu duga yang disimpan dalam pelayar ini?"
-  ,"That career isn’t in the current interview catalogue. Select a supported title to continue; your learning pathway will not be changed.":"Kerjaya itu tiada dalam katalog temu duga semasa. Pilih tajuk yang disokong untuk meneruskan; laluan pembelajaran anda tidak akan diubah."
-  ,"General practice for this career title. A sourced skills profile or verified occupational requirements are not available in the current catalogue.":"Latihan umum berdasarkan tajuk kerjaya ini. Profil kemahiran bersumber atau keperluan pekerjaan yang disahkan tiada dalam katalog semasa."
-  ,"General practice based on the career title only; sourced occupational skills are not available for this role.":"Latihan umum berdasarkan tajuk kerjaya sahaja; kemahiran pekerjaan bersumber tidak tersedia untuk peranan ini."
-  ,"General interview practice informed by the catalogue entry. The supplied profile is not a verified occupational requirement.":"Latihan temu duga umum berdasarkan entri katalog. Profil yang disediakan bukan keperluan pekerjaan yang disahkan."
-  ,"A sourced skills profile is not available for this occupation in the current dataset.":"Profil kemahiran bersumber tidak tersedia untuk pekerjaan ini dalam data semasa."
-  ,"The selected career no longer matches the supported catalogue.":"Kerjaya yang dipilih tidak lagi sepadan dengan katalog yang disokong."
-  ,"Choose a supported career from the FutureSkill catalogue.":"Pilih kerjaya yang disokong daripada katalog FutureSkill."
-  ,"Choose a valid interview type, language and question count.":"Pilih jenis temu duga, bahasa dan bilangan soalan yang sah."
-  ,"Choose 3, 5 or 10 interview questions.":"Pilih 3, 5 atau 10 soalan temu duga."
-  ,"Interview session expired. Start a new practice session.":"Sesi temu duga telah tamat tempoh. Mulakan sesi latihan baharu."
-  ,"No recording was received.":"Rakaman tidak diterima."
-  ,"Audio transcription is temporarily unavailable. You can type your answer.":"Transkripsi audio tidak tersedia buat sementara waktu. Anda boleh menaip jawapan."
-  ,"Unsupported audio type. Use webm, mp4, ogg or wav.":"Jenis audio tidak disokong. Gunakan webm, mp4, ogg atau wav."
-  ,"Recording must be between 1 byte and 10 MB.":"Rakaman mestilah antara 1 bait dengan 10 MB."
-  ,"Maximum audio upload is 10 MB.":"Muat naik audio maksimum ialah 10 MB."
-  ,"Keep your answer between 3 and 3,500 characters.":"Pastikan jawapan anda antara 3 hingga 3,500 aksara."
-  ,"Submit your answer before moving to the next question.":"Hantar jawapan sebelum beralih ke soalan seterusnya."
-  ,"This answer has already been submitted.":"Jawapan ini telah dihantar."
-  ,"Answer a question before viewing the report.":"Jawab soalan sebelum melihat laporan."
-  ,"Question read-aloud is not available in this browser.":"Bacaan soalan tidak tersedia dalam pelayar ini."
-  ,"Microphone recording is not supported in this browser. You can type your answer.":"Rakaman mikrofon tidak disokong dalam pelayar ini. Anda boleh menaip jawapan."
-  ,"Stop recording before switching answer methods.":"Hentikan rakaman sebelum menukar kaedah menjawab."
-  ,"Stop recording before submitting your answer.":"Hentikan rakaman sebelum menghantar jawapan."
-  ,"No audio was captured.":"Tiada audio dirakam."
-  ,"Audio exceeds the 10 MB limit. Record a shorter answer.":"Audio melebihi had 10 MB. Rakam jawapan yang lebih pendek."
-  ,"Transcribing…":"Mentranskripsi…"
-  ,"Recording…":"Sedang merakam…"
-  ,"Enter an answer with at least 3 characters.":"Masukkan jawapan sekurang-kurangnya 3 aksara."
-  ,"Keep your answer under 3,500 characters.":"Pastikan jawapan anda kurang daripada 3,500 aksara."
-  ,"A fictional example, not a claim about the learner.":"Contoh rekaan, bukan dakwaan tentang pengalaman pelajar."
-  ,"Your report is ready, but browser storage is unavailable; it was not saved in history.":"Laporan anda tersedia, tetapi storan pelayar tidak tersedia; laporan tidak disimpan dalam sejarah."
-  ,"Your report is ready, but existing browser history could not be read or saved. Existing data was left unchanged.":"Laporan anda tersedia, tetapi sejarah pelayar sedia ada tidak dapat dibaca atau disimpan. Data sedia ada tidak diubah."
-  ,"Saved browser history could not be read.":"Sejarah pelayar yang disimpan tidak dapat dibaca."
-  ,"Existing history was left unchanged. You can delete browser history if you no longer want to keep it.":"Sejarah sedia ada tidak diubah. Anda boleh memadam sejarah pelayar jika tidak mahu menyimpannya."
-  ,"A new question is temporarily unavailable. Your current feedback is still here.":"Soalan baharu tidak tersedia buat sementara waktu. Maklum balas semasa anda masih ada."
-  ,"Feedback is temporarily unavailable. Your answer was not saved.":"Maklum balas tidak tersedia buat sementara waktu. Jawapan anda tidak disimpan."
-  ,"The interview service returned an unexpected response.":"Perkhidmatan temu duga memberikan respons yang tidak dijangka."
-  ,"This action is temporarily unavailable.":"Tindakan ini tidak tersedia buat sementara waktu."
-  ,"AI coaching estimate":"Anggaran bimbingan AI"
-  ,"Prepare responses and reflect on your examples.":"Sediakan jawapan dan fikirkan contoh pengalaman anda."
-  ,"OPTIONAL CAREER PRACTICE":"LATIHAN KERJAYA PILIHAN"
-  ,"Rehearse an interview for your saved target":"Berlatih temu duga untuk sasaran tersimpan anda"
-  ,"Practise for your saved career target. Questions are general title-based practice, not verified occupational requirements.":"Berlatih untuk sasaran kerjaya tersimpan anda. Soalan ialah latihan umum berdasarkan tajuk, bukan keperluan pekerjaan yang disahkan."
-  ,"View practice history":"Lihat sejarah latihan"
-  ,"Practise for this career":"Berlatih untuk kerjaya ini"
-  ,"Interview practice uses the career title for general questions; this catalogue does not provide verified role-specific requirements.":"Latihan temu duga menggunakan tajuk kerjaya untuk soalan umum; katalog ini tidak menyediakan keperluan khusus peranan yang disahkan."
-  ,"A brief session may not show a broad pattern. Responses included: {count}.":"Sesi ringkas mungkin tidak menunjukkan corak yang menyeluruh. Bilangan jawapan: {count}.",
+  "Career assessment": "Penilaian kerjaya",
+  "Reskilling": "Peningkatan kemahiran",
+  "AI trends": "Trend AI",
+  "Uncertainty Lab": "Makmal Ketidakpastian",
+  "SDG connections": "Hubungan SDG",
+  "Settings": "Tetapan",
+  "Language": "Bahasa",
+  "Close settings": "Tutup tetapan",
+  "Switch to light mode": "Tukar kepada mod cerah",
+  "Switch to dark mode": "Tukar kepada mod gelap",
+  "Light mode": "Mod cerah",
+  "Dark mode": "Mod gelap",
+  "Main navigation": "Navigasi utama",
+  "Occupational titles, imported career information, and external source titles may remain in English.": "Tajuk pekerjaan, maklumat kerjaya yang diimport dan tajuk sumber luaran mungkin kekal dalam bahasa Inggeris.",
+  "Discover Your Future Career": "Teroka Kerjaya Masa Depan Anda",
+  "Discover your interests, explore your strengths, and find career opportunities that align with your future.": "Kenali minat dan kekuatan anda, kemudian teroka pilihan kerjaya yang selari dengan hala tuju masa depan anda.",
+  "42 Questions | 3 Assessment Parts": "42 Soalan | 3 Bahagian Penilaian",
+  "Start Career Assessment": "Mulakan Penilaian Kerjaya",
+  "Already know your goal? Explore your reskilling pathway →": "Sudah tahu matlamat anda? Teroka laluan peningkatan kemahiran →",
+  "RIASEC Assessment": "Penilaian Minat RIASEC",
+  "Explore your six occupational interest dimensions.": "Teroka enam dimensi minat pekerjaan.",
+  "Subject Preferences": "Keutamaan Mata Pelajaran",
+  "Discover which academic fields interest you most.": "Kenal pasti bidang akademik yang paling menarik minat anda.",
+  "Career Recommendations": "Cadangan Penerokaan Kerjaya",
+  "Explore careers based on your interests and preferences.": "Teroka kerjaya berdasarkan minat dan keutamaan anda.",
+  "Your Career Assessment Results": "Keputusan Penilaian Kerjaya Anda",
+  "Top 10 Career Recommendations": "10 Cadangan Penerokaan Kerjaya Teratas",
+  "Build your personalised learning pathway": "Bina laluan pembelajaran peribadi anda",
+  "Retake Assessment": "Ulang Penilaian",
+  "Part A: RIASEC Interests": "Bahagian A: Minat RIASEC",
+  "Part B: Subject Preferences": "Bahagian B: Keutamaan Mata Pelajaran",
+  "Part C: Skills Self-Assessment": "Bahagian C: Penilaian Kendiri Kemahiran",
+  "How much would you enjoy doing these activities?": "Sejauh manakah anda gemar melakukan aktiviti berikut?",
+  "How interested are you in these subjects?": "Sejauh manakah anda berminat dengan mata pelajaran berikut?",
+  "How confident are you in your current abilities?": "Sejauh manakah keyakinan anda terhadap kebolehan semasa?",
+  "Build or repair a simple electronic device.": "Membina atau membaiki peranti elektronik ringkas.",
+  "Use tools to assemble a physical product.": "Menggunakan alatan untuk memasang produk fizikal.",
+  "Test or troubleshoot a piece of equipment.": "Menguji peralatan atau mencari punca kerosakan.",
+  "Work with machines or practical technology.": "Bekerja dengan mesin atau teknologi praktikal.",
+  "Solve challenging mathematical problems.": "Menyelesaikan masalah matematik yang mencabar.",
+  "Investigate why a scientific phenomenon happens.": "Menyiasat sebab sesuatu fenomena saintifik berlaku.",
+  "Analyse data to discover patterns.": "Menganalisis data untuk menemui corak.",
+  "Develop logical explanations for complex problems.": "Membina penjelasan logik bagi masalah yang rumit.",
+  "Create an original visual design.": "Menghasilkan reka bentuk visual yang asli.",
+  "Write creative stories or scripts.": "Menulis cerita kreatif atau skrip.",
+  "Develop new artistic concepts.": "Membangunkan konsep seni baharu.",
+  "Express ideas through art or creative media.": "Menyampaikan idea melalui seni atau media kreatif.",
+  "Explain difficult concepts to other people.": "Menerangkan konsep yang sukar kepada orang lain.",
+  "Help someone understand a new skill.": "Membantu seseorang memahami kemahiran baharu.",
+  "Support people facing a problem.": "Menyokong orang yang sedang menghadapi masalah.",
+  "Collaborate with others to help a community.": "Bekerjasama dengan orang lain untuk membantu komuniti.",
+  "Lead a team to complete a project.": "Memimpin pasukan untuk menyiapkan projek.",
+  "Persuade others to support an idea.": "Meyakinkan orang lain supaya menyokong sesuatu idea.",
+  "Start a business or new initiative.": "Memulakan perniagaan atau inisiatif baharu.",
+  "Organise people to achieve a goal.": "Menyelaraskan orang ramai untuk mencapai matlamat.",
+  "Organise information into clear records.": "Menyusun maklumat menjadi rekod yang jelas.",
+  "Check data carefully for errors.": "Memeriksa data dengan teliti untuk mencari kesilapan.",
+  "Follow detailed procedures accurately.": "Mengikuti prosedur terperinci dengan tepat.",
+  "Maintain an organised database or system.": "Menyelenggara pangkalan data atau sistem yang teratur.",
+  "Developing software or mobile applications.": "Membangunkan perisian atau aplikasi mudah alih.",
+  "Learning about artificial intelligence and cybersecurity.": "Mempelajari kecerdasan buatan dan keselamatan siber.",
+  "Studying advanced mathematics and statistics.": "Mempelajari matematik lanjutan dan statistik.",
+  "Using mathematical models to solve real problems.": "Menggunakan model matematik untuk menyelesaikan masalah sebenar.",
+  "Teaching students and explaining complex ideas.": "Mengajar pelajar dan menerangkan idea yang rumit.",
+  "Designing learning activities and educational materials.": "Mereka bentuk aktiviti pembelajaran dan bahan pendidikan.",
+  "Learning about medicine and human health.": "Mempelajari perubatan dan kesihatan manusia.",
+  "Working in healthcare or medical research.": "Bekerja dalam penjagaan kesihatan atau penyelidikan perubatan.",
+  "Studying entrepreneurship, finance and management.": "Mempelajari keusahawanan, kewangan dan pengurusan.",
+  "Developing business strategies and marketing plans.": "Membangunkan strategi perniagaan dan rancangan pemasaran.",
+  "Designing engineering systems and technology.": "Mereka bentuk sistem kejuruteraan dan teknologi.",
+  "Applying physics to practical engineering problems.": "Menggunakan fizik untuk masalah kejuruteraan praktikal.",
+  "Solving mathematical and logical problems.": "Menyelesaikan masalah matematik dan logik.",
+  "Writing and debugging computer programs.": "Menulis dan menyahpepijat program komputer.",
+  "Analysing data and interpreting results.": "Menganalisis data dan mentafsir hasil.",
+  "Explaining information clearly to others.": "Menerangkan maklumat dengan jelas kepada orang lain.",
+  "Planning projects and leading a team.": "Merancang projek dan memimpin pasukan.",
+  "Generating original solutions to problems.": "Menghasilkan penyelesaian asli bagi masalah.",
+  "Strongly dislike": "Sangat tidak suka",
+  "Dislike": "Tidak suka",
+  "Neutral": "Neutral",
+  "Like": "Suka",
+  "Strongly like": "Sangat suka",
+  "Not confident": "Tidak yakin",
+  "Slightly confident": "Sedikit yakin",
+  "Moderately confident": "Agak yakin",
+  "Very confident": "Yakin",
+  "Extremely confident": "Sangat yakin",
+  "Previous": "Sebelumnya",
+  "Next": "Seterusnya",
+  "Part {n} of 3": "Bahagian {n} daripada 3",
+  "Question {n}, {state}": "Soalan {n}, {state}",
+  "Answered": "Dijawab",
+  "Unanswered": "Belum dijawab",
+  "answer required": "jawapan diperlukan",
+  "Clear saved draft": "Padam draf tersimpan",
+  "Quiz navigation": "Navigasi soal selidik",
+  "Assessment sections": "Bahagian penilaian",
+  "Overall assessment completion": "Kemajuan keseluruhan penilaian",
+  "{n} of {total} answered": "{n} daripada {total} dijawab",
+  "{part}: {n} of {total} answered": "{part}: {n} daripada {total} dijawab",
+  "{n}. {question}": "{n}. {question}",
+  "A guide for reflection": "Panduan untuk refleksi",
+  "Your results at a glance": "Ringkasan keputusan anda",
+  "Three separate views of what you reported—not a verified competency test or a prediction of employment.": "Tiga sudut berasingan berdasarkan laporan anda—bukan ujian kecekapan yang disahkan atau ramalan pekerjaan.",
+  "Interests": "Minat",
+  "Subjects": "Mata pelajaran",
+  "Confidence": "Keyakinan",
+  "Careers": "Kerjaya",
+  "Your career interests — RIASEC": "Minat kerjaya anda — RIASEC",
+  "Calculated interest code": "Kod minat yang dikira",
+  "Why this code?": "Apakah maksud kod ini?",
+  "Your subject preferences": "Keutamaan mata pelajaran anda",
+  "Your self-reported skills": "Kemahiran yang anda laporkan sendiri",
+  "What to explore next": "Perkara seterusnya untuk diteroka",
+  "How to read this report": "Cara membaca laporan ini",
+  "Calculation, sources & limitations": "Pengiraan, sumber dan batasan",
+  "Review my answers": "Semak jawapan saya",
+  "Explore reskilling options": "Teroka pilihan peningkatan kemahiran",
+  "View career recommendations": "Lihat cadangan penerokaan kerjaya",
+  "Career pathway explorer": "Peneroka laluan kerjaya",
+  "Explore the work behind the goals.": "Teroka pekerjaan di sebalik matlamat.",
+  "Choose a career": "Pilih kerjaya",
+  "Search careers (e.g. Data Analyst)": "Cari kerjaya (cth. Data Analyst)",
+  "Explore career": "Teroka kerjaya",
+  "Browse the goals, or select a supported career to explore its reviewed connections.": "Lihat matlamat atau pilih kerjaya yang disokong untuk meneroka hubung kait yang telah disemak.",
+  "Career connections · 17 goals": "Hubungan kerjaya · 17 matlamat",
+  "Reviewed potential link": "Hubungan berpotensi yang disemak",
+  "Not assessed": "Belum dinilai",
+  "Learning pathway": "Laluan pembelajaran",
+  "Close": "Tutup",
+  "Explore the UN goal": "Teroka matlamat PBB",
+  "Potential relationship only. This prototype does not evaluate impact.": "Hubungan yang berpotensi sahaja. Prototaip ini tidak menilai impak.",
+  "Not at all": "Langsung tidak",
+  "Slightly": "Sedikit",
+  "Moderately": "Sederhana",
+  "Very much": "Sangat",
+  "Extremely": "Amat sangat",
+  "1 = Not confident": "1 = Tidak yakin",
+  "5 = Very confident": "5 = Sangat yakin",
+  "1 = Strongly dislike": "1 = Sangat tidak suka",
+  "5 = Strongly like": "5 = Sangat suka",
+  "Get Recommendations": "Lihat Cadangan",
+  "{n} / {total} questions answered": "{n} daripada {total} soalan dijawab",
+  "Preview only — sample answers are not saved.": "Pratonton sahaja — jawapan contoh tidak disimpan.",
+  "Saved on this device for 30 days. Not synced.": "Disimpan pada peranti ini selama 30 hari. Tidak disegerakkan.",
+  "Device storage is unavailable. Answers are kept only until this page closes.": "Storan peranti tidak tersedia. Jawapan disimpan sehingga halaman ini ditutup.",
+  "Draft restored. Stored on this device for 30 days; not synced.": "Draf dipulihkan. Disimpan pada peranti ini selama 30 hari; tidak disegerakkan.",
+  "This question needs an answer. Choose a rating from 1 to 5.": "Soalan ini memerlukan jawapan. Pilih penilaian daripada 1 hingga 5.",
+  "Clear all assessment answers saved on this device? Existing career results and learning plans will not be deleted.": "Padam semua jawapan penilaian yang disimpan pada peranti ini? Keputusan kerjaya dan pelan pembelajaran sedia ada tidak akan dipadam.",
+  "This report could not be prepared": "Laporan ini tidak dapat disediakan",
+  "Realistic": "Praktikal",
+  "Investigative": "Penyiasatan",
+  "Artistic": "Kreatif",
+  "Social": "Sosial",
+  "Enterprising": "Keusahawanan",
+  "Conventional": "Konvensional",
+  "Build or repair equipment; work physically or outdoors.": "Membina atau membaiki peralatan; melakukan kerja fizikal atau di luar.",
+  "Study or research objects, organisms, data, or human behavior.": "Mengkaji objek, organisma, data atau tingkah laku manusia.",
+  "Make original art, design, writing, or music.": "Menghasilkan seni, reka bentuk, penulisan atau muzik asli.",
+  "Help, teach, advise, or serve other people.": "Membantu, mengajar, menasihati atau berkhidmat kepada orang lain.",
+  "Manage, negotiate, market, sell, or lead.": "Mengurus, berunding, memasarkan, menjual atau memimpin.",
+  "Follow procedures to organize information or data.": "Mengikuti prosedur untuk menyusun maklumat atau data.",
+  "This area concerns practical, hands-on activities such as working with tools, equipment, materials, or the outdoors.": "Bidang ini meliputi aktiviti praktikal seperti menggunakan alatan, peralatan dan bahan, atau bekerja di luar.",
+  "This area concerns investigating questions, studying how things work, and researching evidence about the world or people.": "Bidang ini meliputi penyiasatan soalan, kajian tentang cara sesuatu berfungsi dan penyelidikan bukti tentang dunia atau manusia.",
+  "This area concerns creating original work and expressing ideas through visual art, design, writing, music, or other media.": "Bidang ini meliputi penciptaan karya asli dan penyampaian idea melalui seni visual, reka bentuk, penulisan, muzik atau media lain.",
+  "This area concerns activities centered on helping people, teaching, advising, supporting, or providing a service.": "Bidang ini meliputi aktiviti membantu, mengajar, menasihati, menyokong orang lain atau menyediakan perkhidmatan.",
+  "This area concerns persuading or coordinating with others, leading initiatives, and activities such as marketing, sales, negotiation, or management.": "Bidang ini meliputi usaha memujuk atau menyelaras orang lain, memimpin inisiatif serta aktiviti pemasaran, jualan, rundingan atau pengurusan.",
+  "This area concerns organizing information, maintaining records, and following established procedures to work with data.": "Bidang ini meliputi penyusunan maklumat, penyelenggaraan rekod dan pematuhan prosedur untuk mengendalikan data.",
+  "Would you like to try a small repair, build, or outdoor project?": "Adakah anda ingin mencuba projek pembaikan kecil, binaan atau aktiviti luar?",
+  "What question could you investigate using observation, reading, or a small experiment?": "Apakah soalan yang boleh anda kaji melalui pemerhatian, bacaan atau eksperimen kecil?",
+  "What would you enjoy making if you could choose the format and audience?": "Apakah yang anda suka hasilkan jika boleh memilih format dan khalayak?",
+  "Who might benefit from something you could explain, teach, or help with?": "Siapakah yang mungkin mendapat manfaat daripada penerangan, pengajaran atau bantuan anda?",
+  "What idea or small project would you like to organize people around?": "Apakah idea atau projek kecil yang ingin anda usahakan bersama orang lain?",
+  "What information could you organize into a clear, useful system?": "Maklumat apakah yang boleh anda susun menjadi sistem yang jelas dan berguna?",
+  "Scores use the existing 20–100 scale: four answers summed, divided by 20, then multiplied by 100.": "Skor menggunakan skala sedia ada 20–100: empat jawapan dijumlahkan, dibahagi 20, kemudian didarab 100.",
+  "Equal scores follow the fixed R–I–A–S–E–C ordering in the displayed three-letter code. A letter's position in a tie does not establish a primary, secondary, or tertiary strength.": "Skor seri mengikut susunan tetap R–I–A–S–E–C dalam kod tiga huruf. Kedudukan huruf dalam seri tidak menentukan kekuatan utama, kedua atau ketiga.",
+  "The code shows the three highest calculated interest scores. It is a shorthand for these responses, not a fixed personal identity.": "Kod ini menunjukkan tiga skor minat tertinggi yang dikira. Ia ringkasan jawapan ini, bukan identiti peribadi yang tetap.",
+  "Your subject ratings are equal, so none is distinguished.": "Penilaian mata pelajaran anda sama, jadi tiada yang menonjol.",
+  "These scores are not percentiles, probabilities of career success, or percentages of your personality. The bars share a 20–100 axis; 20 is the minimum possible response score, not an absence of interests.": "Skor ini bukan persentil, kebarangkalian kejayaan kerjaya atau peratusan personaliti anda. Bar menggunakan paksi 20–100; 20 ialah skor jawapan minimum, bukan ketiadaan minat.",
+  "General activity descriptions are adapted from O*NET. This custom questionnaire is not the official Interest Profiler and does not inherit its validation, norms, or reliability.": "Penerangan aktiviti umum diadaptasi daripada O*NET. Soal selidik tersuai ini bukan Interest Profiler rasmi dan tidak mewarisi kesahan, norma atau kebolehpercayaannya.",
+  "AI-written assessment review is unavailable: no AI provider or assessment-review service is configured. This deterministic report is available without AI, and does not send your answers to an AI service.": "Semakan penilaian oleh AI tidak tersedia: penyedia AI atau perkhidmatan semakan belum dikonfigurasikan. Laporan deterministik ini tidak menggunakan AI dan jawapan anda tidak dihantar kepada perkhidmatan AI.",
+  "Career exploration · prototype data": "Penerokaan kerjaya · data prototaip",
+  "AI Career Trend Explorer": "Peneroka Trend Kerjaya AI",
+  "Review broad skill and career-category directions from the imported project data.": "Lihat arah umum kemahiran dan kategori kerjaya daripada data projek yang diimport.",
+  "Not a validated forecast:": "Bukan ramalan yang disahkan:",
+  "the historical labels are qualitative and future labels are hand-built scenarios. This dataset contains no annual employment counts and should not be used to predict an individual’s job prospects.": "label sejarah bersifat kualitatif dan label masa depan ialah senario yang dibina secara manual. Data ini tiada bilangan pekerjaan tahunan dan tidak patut digunakan untuk meramal prospek kerja seseorang.",
+  "Geographic scope": "Skop geografi",
+  "Scenario period": "Tempoh senario",
+  "Model type": "Jenis model",
+  "Categories": "Kategori",
+  "Filter categories": "Tapis kategori",
+  "Loading imported category scenarios…": "Memuatkan senario kategori yang diimport…",
+  "Source and limitations": "Sumber dan batasan",
+  "Drivers": "Faktor pendorong",
+  "Skills mentioned": "Kemahiran yang disebut",
+  "No categories match that search.": "Tiada kategori sepadan dengan carian.",
+  "AI Uncertainty Lab": "Makmal Ketidakpastian AI",
+  "What-if scenarios · prototype model": "Senario andaian · model prototaip",
+  "Change assumptions and compare how this simple rule-based model responds.": "Ubah andaian dan bandingkan tindak balas model berasaskan peraturan yang ringkas ini.",
+  "These are not employment forecasts.": "Ini bukan ramalan pekerjaan.",
+  "The imported model uses hand-set coefficients and an illustrative 68.9% starting value. It has not been calibrated against labour-market data. Do not use the outputs as probabilities or career advice.": "Model yang diimport menggunakan pekali yang ditetapkan secara manual dan nilai permulaan ilustrasi 68.9%. Model ini tidak ditentukur menggunakan data pasaran buruh. Jangan gunakan hasil sebagai kebarangkalian atau nasihat kerjaya.",
+  "Scenario assumptions": "Andaian senario",
+  "Starting scenario": "Senario permulaan",
+  "Illustrative starting value (%)": "Nilai permulaan ilustrasi (%)",
+  "Run this scenario": "Jalankan senario ini",
+  "Compare all six scenarios": "Bandingkan kesemua enam senario",
+  "Loading the scenario set…": "Memuatkan set senario…",
+  "Employment-to-Population Ratio": "Nisbah pekerjaan kepada penduduk",
+  "2031 illustrative result:": "Hasil ilustrasi 2031:",
+  "Output from the scenario formula, not an observed or validated employment rate.": "Hasil formula senario, bukan kadar pekerjaan yang diperhatikan atau disahkan.",
+  "Loading the scenario chart…": "Memuatkan carta senario…",
+  "Illustrative model outputs only, not forecasts. The percentage axis is zoomed to the scenario values. No validated uncertainty interval is available.": "Hasil model ilustrasi sahaja, bukan ramalan. Paksi peratus dizum kepada nilai senario. Tiada julat ketidakpastian yang disahkan.",
+  "Year-by-year values": "Nilai mengikut tahun",
+  "Occupational growth assumptions": "Andaian pertumbuhan pekerjaan",
+  "These percentages are formula outputs from assumed sensitivity weights, not measured job growth.": "Peratus ini ialah hasil formula daripada wajaran sensitiviti andaian, bukan pertumbuhan pekerjaan yang diukur.",
+  "Preset comparison": "Perbandingan pratetap",
+  "AI development speed": "Kelajuan pembangunan AI",
+  "Automation intensity": "Tahap automasi",
+  "Worker transition capacity": "Keupayaan peralihan pekerja",
+  "Economic conditions": "Keadaan ekonomi",
+  "AI-goal misalignment severity": "Tahap ketidakselarasan matlamat AI",
+  "Other factors (policy, demographics)": "Faktor lain (dasar, demografi)",
+  "Profile": "Profil",
+  "Appearance": "Rupa paparan",
+  "Privacy and data": "Privasi dan data",
+  "Open learning profile": "Buka profil pembelajaran",
+  "Choose how the reskilling workspace looks on this browser.": "Pilih rupa ruang peningkatan kemahiran pada pelayar ini.",
+  "Light": "Cerah",
+  "Dark": "Gelap",
+  "System": "Sistem",
+  "More for your workspace": "Lagi untuk ruang kerja anda",
+  "These options are not available yet.": "Pilihan ini belum tersedia.",
+  "CV import": "Import CV",
+  "Notifications": "Pemberitahuan",
+  "Cross-device sync": "Penyegerakan antara peranti",
+  "Not available": "Tidak tersedia",
+  "This prototype does not offer account-level cross-device sync. Your appearance choice is saved in this browser; learning data uses the app’s existing session.": "Prototaip ini tidak menyediakan penyegerakan akaun merentas peranti. Pilihan rupa disimpan dalam pelayar ini; data pembelajaran menggunakan sesi aplikasi sedia ada.",
+  "Which best describes you?": "Yang manakah paling menggambarkan diri anda?",
+  "Student / fresh graduate": "Pelajar / graduan baharu",
+  "Currently employed": "Sedang bekerja",
+  "Planning a career change": "Merancang perubahan kerjaya",
+  "Returning to work or learning": "Kembali bekerja atau belajar",
+  "Your current industry or community": "Industri atau komuniti semasa anda",
+  "Your general experience": "Pengalaman umum anda",
+  "Your target career": "Kerjaya sasaran anda",
+  "What would you like to achieve?": "Apakah yang ingin anda capai?",
+  "How many hours can you study per week?": "Berapa jam anda boleh belajar setiap minggu?",
+  "How many weeks do you want to plan?": "Berapa minggu yang ingin anda rancangkan?",
+  "Which days work best for you?": "Hari manakah paling sesuai untuk anda?",
+  "How do you like to learn?": "Bagaimanakah anda suka belajar?",
+  "Hands-on projects": "Projek amali",
+  "Video tutorials + practice": "Tutorial video + latihan",
+  "Reading + practice": "Bacaan + latihan",
+  "Continue →": "Teruskan →",
+  "Generate my pathway": "Jana laluan saya",
+  "Return to dashboard": "Kembali ke papan pemuka",
+  "About you": "Tentang anda",
+  "Your skills": "Kemahiran anda",
+  "Your schedule": "Jadual anda",
+  "Build your learning profile": "Bina profil pembelajaran anda",
+  "About 2–3 minutes": "Kira-kira 2–3 minit",
+  "Monday": "Isnin",
+  "Tuesday": "Selasa",
+  "Wednesday": "Rabu",
+  "Thursday": "Khamis",
+  "Friday": "Jumaat",
+  "Saturday": "Sabtu",
+  "Sunday": "Ahad",
+  "Your highest subject ratings are tied across {subjects}.": "Penilaian mata pelajaran tertinggi anda seri: {subjects}.",
+  "Your highest subject rating is {subject}.": "Penilaian mata pelajaran tertinggi anda ialah {subject}.",
+  "Your highest confidence rating is {score} / 5 for {skills}; your lowest is {low} / 5 for {lowSkills}.": "Penilaian keyakinan tertinggi anda ialah {score} / 5 untuk {skills}; terendah ialah {low} / 5 untuk {lowSkills}.",
+  "Tied interest scores: {ties}. Ties are not ordered as primary, secondary, or tertiary strengths.": "Skor minat seri: {ties}. Seri tidak disusun sebagai kekuatan utama, kedua atau ketiga.",
+  "There is also a tie at the three-area profile-code cutoff: {areas} share a score of {score}. The code is not used in recommendation ranking.": "Terdapat juga seri pada had kod profil tiga bidang: {areas} berkongsi skor {score}. Kod ini tidak digunakan dalam pemeringkatan cadangan.",
+  "A possible combination to explore: {first} and {second}. Try these two reflection questions together: “{question1}” and “{question2}” This is an exploratory prompt, not a role recommendation.": "Gabungan yang boleh diteroka: {first} dan {second}. Cuba fikirkan dua soalan refleksi ini bersama-sama: “{question1}” dan “{question2}” Ini panduan penerokaan, bukan cadangan jawatan.",
+  "Language changed for this visit. Browser storage is blocked, so your preference could not be saved.": "Bahasa ditukar untuk lawatan ini. Storan pelayar disekat, jadi pilihan anda tidak dapat disimpan.",
+  "This language pack could not be loaded. Your previous language is still active.": "Pek bahasa ini tidak dapat dimuatkan. Bahasa sebelumnya masih digunakan.",
+  "Loading language pack…": "Memuatkan pek bahasa…",
+  "Saved language pack could not be loaded. English remains active.": "Pek bahasa tersimpan tidak dapat dimuatkan. Bahasa Inggeris masih digunakan.",
+  "The saved draft is expired or incompatible. Start fresh; new answers will save on this device.": "Draf tersimpan telah luput atau tidak serasi. Mulakan semula; jawapan baharu akan disimpan pada peranti ini.",
+  "Answers save on this device for 30 days. On a shared device, clear your draft when finished.": "Jawapan disimpan pada peranti ini selama 30 hari. Pada peranti kongsi, padam draf selepas selesai.",
+  "Browser storage is blocked. Your language choice will apply for this visit only.": "Storan pelayar disekat. Pilihan bahasa anda hanya digunakan untuk lawatan ini.",
+  "Close assessment": "Tutup penilaian",
+  "e.g. Education, Retail, Technology": "cth. Pendidikan, Peruncitan, Teknologi",
+  "e.g. Build my first data analysis portfolio project": "cth. Bina projek portfolio analisis data pertama saya",
+  "About this prototype and how to read it": "Tentang prototaip ini dan cara membacanya",
+  "Potential alignment is not impact.": "Potensi penjajaran bukan impak.",
+  "These are illustrative learning links, not proof of real-world change.": "Ini hubungan pembelajaran ilustrasi, bukan bukti perubahan sebenar.",
+  "Explore how a role’s skill requirements and learning pathway may relate to selected UN targets. Each reviewed mapping includes its reasoning, supporting evidence, suggested action and limits.": "Teroka kemungkinan hubungan keperluan kemahiran dan laluan pembelajaran sesuatu peranan dengan sasaran PBB terpilih. Setiap pemetaan yang disemak merangkumi alasan, bukti sokongan, tindakan dicadangkan dan batasannya.",
+  "Prototype mappings currently connect selected learning pathways to SDG 4.4 and SDG 8.5. Skill requirements are illustrative; other roles are not assigned targets.": "Pemetaan prototaip kini menghubungkan laluan pembelajaran terpilih kepada SDG 4.4 dan SDG 8.5. Keperluan kemahiran hanya ilustrasi; peranan lain tidak diberikan sasaran.",
+  "Evidence availability varies by role. Employment outcomes, equitable access and broader SDG-level contribution require separate evidence and follow-up data. A mapping does not show that a learner, career or product has caused measurable progress.": "Ketersediaan bukti berbeza mengikut peranan. Hasil pekerjaan, akses saksama dan sumbangan SDG yang lebih luas memerlukan bukti serta data susulan berasingan. Pemetaan tidak membuktikan bahawa pelajar, kerjaya atau produk menyebabkan kemajuan yang boleh diukur.",
+  "Official UN goal icons identify the goals; their use does not imply UN endorsement. Photographs are representative, not evidence of FutureSkill outcomes.": "Ikon matlamat rasmi PBB mengenal pasti matlamat; penggunaannya tidak bermaksud PBB mengendorsinya. Foto bersifat perwakilan, bukan bukti hasil FutureSkill.",
+  "Search and select a supported career or role": "Cari dan pilih kerjaya atau peranan yang disokong",
+  "Type a role and select a catalogue result. Suggestions do not assign an SDG mapping.": "Taip peranan dan pilih hasil katalog. Cadangan tidak menetapkan pemetaan SDG.",
+  "Select a supported career to explore its reviewed connections.": "Pilih kerjaya yang disokong untuk meneroka hubung kait yang disemak.",
+  "Select any goal to explore it. Only reviewed career links are connected; other goals are not assessed for this role.": "Pilih mana-mana matlamat untuk diteroka. Hanya hubungan kerjaya yang disemak disambungkan; matlamat lain belum dinilai untuk peranan ini.",
+  "You reported enjoyment of subject activities on a 1–5 scale. Interest does not demonstrate subject ability. The meanings and questions below are FutureSkill reflection prompts, not validated ability interpretations.": "Anda melaporkan minat terhadap aktiviti mata pelajaran menggunakan skala 1–5. Minat tidak membuktikan kebolehan dalam mata pelajaran. Maksud dan soalan di bawah ialah panduan refleksi FutureSkill, bukan tafsiran kebolehan yang disahkan.",
+  "These 1–5 ratings describe reported confidence, not independently assessed proficiency or occupational readiness. A lower rating alone is not a weakness. Practice can help you gather examples, but does not verify proficiency without an assessment and rubric. These broad ratings are separate from role-specific requirements and do not affect career rankings.": "Penilaian 1–5 ini menggambarkan keyakinan yang dilaporkan, bukan kecekapan atau kesediaan pekerjaan yang dinilai secara bebas. Penilaian rendah sahaja bukan kelemahan. Latihan boleh membantu mengumpulkan contoh, tetapi tidak mengesahkan kecekapan tanpa penilaian dan rubrik. Penilaian umum ini berasingan daripada keperluan peranan khusus dan tidak mempengaruhi kedudukan kerjaya.",
+  "FutureSkill’s recommendation engine uses a 65% interest index and 35% subject index. The interest index combines 85% scaled Pearson profile-shape similarity and 15% above-your-own-mean emphasis; a flat profile is neutral at 50. Subject fields use title-matching heuristics, with unclassified fields neutral, and diversity selection can change recommendation order. The three-letter profile code is not an input to ranking. Where there is a tie at the code cutoff, this report names every tied area.": "Enjin cadangan FutureSkill menggunakan indeks minat 65% dan indeks mata pelajaran 35%. Indeks minat menggabungkan 85% persamaan bentuk profil Pearson berskala dan 15% penekanan minat melebihi purata anda sendiri; profil rata dianggap neutral pada 50. Bidang mata pelajaran menggunakan heuristik padanan tajuk, bidang yang tidak dikelaskan dianggap neutral dan pemilihan kepelbagaian boleh mengubah susunan cadangan. Kod profil tiga huruf bukan input pemeringkatan. Jika terdapat seri pada had kod, laporan ini menyenaraikan setiap bidang yang seri.",
+  "This FutureSkill questionnaire is custom and is NOT the official O*NET Interest Profiler. It does not inherit the official instrument’s validation, norms, or reliability. The six interest areas are provided here for career exploration only.": "Soal selidik FutureSkill ini dibina khas dan BUKAN O*NET Interest Profiler rasmi. Ia tidak mewarisi kesahan, norma atau kebolehpercayaan instrumen rasmi. Enam bidang minat ini disediakan untuk penerokaan kerjaya sahaja.",
+  "The engine returned {count} careers, starting with {career}. Explore their work activities rather than treating the order as a verdict.": "Enjin memberikan {count} cadangan kerjaya, bermula dengan {career}. Teroka aktiviti kerja dan jangan anggap susunan ini sebagai keputusan muktamad.",
+  "No engine recommendations were returned. You can still review your answers or explore the explicitly labeled prototype learning templates.": "Tiada cadangan kerjaya daripada enjin. Anda masih boleh menyemak jawapan atau meneroka templat pembelajaran prototaip yang dilabel dengan jelas.",
+  "Computing & technology": "Pengkomputeran dan teknologi",
+  "Mathematics & statistics": "Matematik dan statistik",
+  "Teaching & learning": "Pengajaran dan pembelajaran",
+  "Health & medicine": "Kesihatan dan perubatan",
+  "Business & enterprise": "Perniagaan dan perusahaan",
+  "Engineering & design": "Kejuruteraan dan reka bentuk",
+  "Mathematical & logical problem-solving": "Penyelesaian masalah matematik dan logik",
+  "Coding & debugging": "Pengekodan dan penyahpepijatan",
+  "Data analysis": "Analisis data",
+  "Communication": "Komunikasi",
+  "Planning & team coordination": "Perancangan dan penyelarasan pasukan",
+  "Creative problem-solving": "Penyelesaian masalah kreatif",
+  "A results object is needed to prepare this report.": "Objek keputusan diperlukan untuk menyediakan laporan ini.",
+  "Career Assessment": "Penilaian Kerjaya",
+  "Career recommendation data is incomplete or in an unexpected format. Your profile scores are not being replaced.": "Data cadangan kerjaya tidak lengkap atau dalam format yang tidak dijangka. Skor profil anda tidak digantikan.",
+  "Confidence ratings are incomplete or outside the expected 1–5 range. No scores have been estimated.": "Penilaian keyakinan tidak lengkap atau di luar julat 1–5 yang dijangka. Tiada skor dianggarkan.",
+  "Explore a learning pathway": "Teroka laluan pembelajaran",
+  "FutureSkill’s recommendation engine uses a 65% interest index and 35% subject index.": "Enjin cadangan FutureSkill menggunakan indeks minat 65% dan indeks mata pelajaran 35%.",
+  "Interest results are incomplete or outside the expected 20–100 range. No scores have been estimated.": "Keputusan minat tidak lengkap atau di luar julat 20–100 yang dijangka. Tiada skor dianggarkan.",
+  "No close-score threshold or statistical significance is inferred.": "Tiada ambang skor hampir atau kepentingan statistik disimpulkan.",
+  "No close-score threshold or statistical significance is inferred. The report compares exact calculated values, discloses ties, and offers reflection questions rather than diagnoses.": "Laporan ini tidak menyimpulkan ambang skor hampir atau kepentingan statistik. Ia membandingkan nilai kiraan tepat, menyatakan seri dan menawarkan soalan refleksi, bukan diagnosis.",
+  "Results report sections": "Bahagian laporan keputusan",
+  "Review your answers": "Semak jawapan anda",
+  "Skills are not ranking inputs. Any “Shared interest strengths” shown on career cards means interests above your own profile mean; it does not verify a skill. Career recommendations are exploratory, not probabilities or evidence of occupational fit.": "Kemahiran bukan input pemeringkatan. “Kekuatan minat bersama” pada kad kerjaya merujuk minat melebihi purata profil anda, bukan pengesahan kemahiran. Cadangan kerjaya bersifat penerokaan, bukan kebarangkalian atau bukti kesesuaian pekerjaan.",
+  "Skills are separate from role-specific requirements and do not affect career rankings.": "Kemahiran dinilai berasingan daripada keperluan peranan khusus dan tidak mempengaruhi kedudukan kerjaya.",
+  "Subject results are incomplete or outside the expected 1–5 range. No scores have been estimated.": "Keputusan mata pelajaran tidak lengkap atau di luar julat 1–5 yang dijangka. Tiada skor dianggarkan.",
+  "The report container is unavailable.": "Ruang laporan tidak tersedia.",
+  "These 1–5 ratings describe reported confidence, not independently assessed proficiency or occupational readiness. A lower rating alone is not a weakness.": "Penilaian 1–5 ini menggambarkan keyakinan yang dilaporkan, bukan kecekapan atau kesediaan kerja yang dinilai secara bebas. Skor rendah sahaja bukan kelemahan.",
+  "Try one low-stakes activity": "Cuba aktiviti berisiko rendah",
+  "You rated every skill {score} / 5 for confidence.": "Anda menilai keyakinan bagi setiap kemahiran pada {score} / 5.",
+  "Your confidence ratings are equal": "Penilaian keyakinan anda sama",
+  "Your interests are equal": "Penilaian minat anda sama",
+  "Your recommendations are exploratory, not predictions.": "Cadangan ini untuk penerokaan, bukan ramalan.",
+  "Your subject ratings are equal at {score} / 5; none is distinguished.": "Penilaian mata pelajaran anda semuanya {score} / 5; tiada yang menonjol.",
+  "{subjects} has your highest subject rating.": "Penilaian mata pelajaran tertinggi anda ialah {subjects}.",
+  "{subject} has your highest subject rating.": "Penilaian mata pelajaran tertinggi anda ialah {subject}.",
+  "Your answers do not identify a clear leading interest area. All six interest scores are {score} / 100.": "Jawapan anda tidak menunjukkan bidang minat yang jelas mendahului yang lain. Kesemua enam skor minat ialah {score} / 100.",
+  "Your highest interest areas are tied: {areas}.": "Bidang minat tertinggi anda seri: {areas}.",
+  "Your highest interest area is {area}. This is a starting point for exploration, not a label.": "Bidang minat tertinggi anda ialah {area}. Ini titik permulaan penerokaan, bukan label tetap.",
+  "Review the details shaping your learning plan.": "Semak butiran yang membentuk pelan pembelajaran anda.",
+  "Choose how FutureSkill looks on this browser.": "Pilih rupa FutureSkill pada pelayar ini.",
+  "Unavailable; enter skills manually during setup": "Tidak tersedia; masukkan kemahiran secara manual semasa persediaan",
+  "Choose learning reminders": "Pilih peringatan pembelajaran",
+  "Continue your plan on another device": "Teruskan pelan anda pada peranti lain",
+  "Explore careers": "Teroka kerjaya",
+  "Explore careers with the assessment": "Teroka kerjaya dengan penilaian",
+  "Browse careers without the assessment": "Lihat katalog kerjaya tanpa penilaian",
+  "I KNOW MY TARGET ROLE": "SAYA SUDAH TAHU PERANAN SASARAN",
+  "Start with your interests": "Mulakan dengan minat anda",
+  "Take the assessment for exploratory recommendations, or browse the catalogue first.": "Lengkapkan penilaian untuk cadangan penerokaan, atau lihat katalog dahulu.",
+  "Choose a role directly. You can review available pathway support before starting.": "Pilih peranan secara terus. Anda boleh menyemak sokongan laluan yang tersedia sebelum bermula.",
+  "Find a career": "Cari kerjaya",
+  "YOUR WORKSPACE": "RUANG KERJA ANDA",
+  "Explore a direction at your pace.": "Teroka hala tuju mengikut rentak anda.",
+  "My career overview": "Ringkasan kerjaya saya",
+  "My profile & assessment": "Profil & penilaian saya",
+  "My learning pathway": "Laluan pembelajaran saya",
+  "Further exploration": "Penerokaan lanjut",
+  "Explore, don’t predict.": "Teroka, bukan meramal.",
+  "Career information and pathways vary in coverage.": "Liputan maklumat kerjaya dan laluan pembelajaran berbeza-beza.",
+  "Your career overview": "Ringkasan kerjaya anda",
+  "Use your questionnaire responses as a starting point, then inspect careers and decide what you want to explore.": "Gunakan jawapan soal selidik sebagai titik permulaan, kemudian lihat maklumat kerjaya dan tentukan perkara yang ingin diteroka.",
+  "A short reading of your answers": "Ringkasan jawapan anda",
+  "Three separate questionnaire views—not a competency test or an employment prediction.": "Tiga sudut berasingan daripada soal selidik—bukan ujian kecekapan atau ramalan pekerjaan.",
+  "Self-reported confidence": "Keyakinan yang dilaporkan sendiri",
+  "Three careers to explore first": "Tiga kerjaya untuk diteroka dahulu",
+  "These are the first three entries in the existing engine order, not statistically established best careers.": "Ini ialah tiga entri pertama mengikut susunan enjin sedia ada, bukan kerjaya terbaik yang ditentukan secara statistik.",
+  "Choose your next step": "Pilih langkah seterusnya",
+  "No assessment results in this browser session. Browse the catalogue or take the optional assessment; no personalized recommendation will be made without results.": "Tiada keputusan penilaian dalam sesi pelayar ini. Lihat katalog atau ambil penilaian pilihan; cadangan peribadi tidak akan dibuat tanpa keputusan.",
+  "Browse the career catalogue": "Lihat katalog kerjaya",
+  "Review the interests, subject preferences, and confidence ratings you reported. They are distinct from verified occupational requirements.": "Semak minat, keutamaan mata pelajaran dan penilaian keyakinan yang anda laporkan. Semua ini berbeza daripada keperluan pekerjaan yang disahkan.",
+  "No assessment report in this session": "Tiada laporan penilaian dalam sesi ini",
+  "Take the assessment to create a report. This page will not create estimated scores.": "Ambil penilaian untuk menghasilkan laporan. Halaman ini tidak akan menganggarkan skor.",
+  "Career details": "Butiran kerjaya",
+  "Explore catalogue evidence before deciding whether this role interests you.": "Lihat bukti dalam katalog sebelum menentukan sama ada peranan ini menarik minat anda.",
+  "Why this appeared": "Sebab kerjaya ini dipaparkan",
+  "About your selected career": "Tentang kerjaya yang dipilih",
+  "The local catalogue has no sourced duties for this role. Open the official occupation profile to inspect its details.": "Katalog tempatan tiada maklumat tugas bersumber bagi peranan ini. Buka profil pekerjaan rasmi untuk melihat butirannya.",
+  "Sourced work-duty details are not present in FutureSkill’s local catalogue. Review the official occupation profile before drawing conclusions about daily work or requirements.": "Katalog tempatan FutureSkill tidak menyediakan butiran tugas bersumber. Semak profil pekerjaan rasmi sebelum membuat kesimpulan tentang tugas harian atau keperluan.",
+  "Open O*NET OnLine occupation profile": "Buka profil pekerjaan O*NET OnLine",
+  "Catalogue interest profile": "Profil minat dalam katalog",
+  "The existing engine stores this occupation profile; these values are not personal results.": "Enjin sedia ada menyimpan profil pekerjaan ini; nilai ini bukan keputusan peribadi anda.",
+  "These are the career dataset’s existing values on a 0–7 scale. Their provenance and validation are not independently established here. They are not learner scores or measures of career success.": "Ini ialah nilai sedia ada dalam set data kerjaya pada skala 0–7. Sumber dan pengesahannya belum disahkan secara bebas di sini. Nilai ini bukan skor pelajar atau ukuran kejayaan kerjaya.",
+  "Your starting point": "Titik permulaan anda",
+  "This assessment does not measure role-specific proficiency or occupational readiness. Broad confidence ratings are self-reported and cannot be converted into role requirements.": "Penilaian ini tidak mengukur kemahiran khusus peranan atau kesediaan pekerjaan. Penilaian keyakinan umum dilaporkan sendiri dan tidak boleh dianggap sebagai keperluan peranan.",
+  "A supported learning template is available: {template}. Its skills and requirements are illustrative, not independently validated occupational benchmarks.": "Templat pembelajaran yang disokong tersedia: {template}. Kemahiran dan keperluannya ialah contoh, bukan penanda aras pekerjaan yang disahkan secara bebas.",
+  "No supported role-specific pathway template is available for this catalogue entry. The reskilling studio will explain its available templates; do not treat another template as a verified match.": "Tiada templat laluan khusus peranan yang disokong untuk entri katalog ini. Ruang peningkatan kemahiran akan menerangkan templat yang tersedia; jangan anggap templat lain sebagai padanan yang disahkan.",
+  "Your saved learning pathway is {career}. Browsing this career does not change it.": "Laluan pembelajaran yang disimpan menggunakan sasaran {career}. Melihat kerjaya ini tidak mengubahnya.",
+  "Choose this target and review pathway options": "Pilih sasaran ini dan semak pilihan laluan",
+  "Try it before choosing": "Cuba sebelum memilih",
+  "Open the official profile, choose one listed work activity to investigate, and write down a question about what it involves. This is an exploration exercise, not a proficiency test.": "Buka profil rasmi, pilih satu aktiviti kerja untuk disiasat dan tulis soalan tentang perkara yang terlibat. Ini latihan penerokaan, bukan ujian kecekapan.",
+  "Explore sourced work information": "Teroka maklumat kerja bersumber",
+  "Potential SDG connections": "Hubungan SDG yang berpotensi",
+  "No reviewed role-to-target mapping is available. No connection is inferred.": "Tiada pemetaan peranan kepada sasaran yang telah disemak. Tiada hubungan dibuat andaian.",
+  "Open the SDG evidence view": "Buka paparan bukti SDG",
+  "AI and work-trend context": "Konteks AI dan trend pekerjaan",
+  "The current trend prototype has no career-specific mapping for this occupation. No trend is inferred from its title.": "Prototaip trend semasa tiada pemetaan khusus kerjaya ini. Trend tidak dibuat andaian berdasarkan tajuknya.",
+  "This is a qualitative, rule-based category scenario—not a validated occupation-specific forecast.": "Ini senario kategori kualitatif berasaskan peraturan, bukan ramalan khusus pekerjaan yang disahkan.",
+  "Trend source and limitations": "Sumber dan batasan trend",
+  "Open AI trends": "Buka trend AI",
+  "Assessment engine indices": "Indeks enjin penilaian",
+  "This role was returned at position {rank} of {total}. Existing indices: interest {interest}, subject {subject}, combined {combined} on their engine scales. These values do not indicate employment outcomes.": "Peranan ini berada pada kedudukan {rank} daripada {total}. Indeks enjin sedia ada: minat {interest}, mata pelajaran {subject}, gabungan {combined} mengikut skala enjin. Nilai ini tidak menunjukkan hasil pekerjaan.",
+  "Compare career options": "Bandingkan pilihan kerjaya",
+  "Review differences using available catalogue and assessment evidence. A comparison is not a prediction of job outcomes.": "Semak perbezaan berdasarkan bukti katalog dan penilaian yang tersedia. Perbandingan ini bukan ramalan hasil pekerjaan.",
+  "Choose a second role to compare.": "Pilih peranan kedua untuk dibandingkan.",
+  "Search and explicitly select a second catalogue role. Comparisons are limited to two.": "Cari dan pilih peranan kedua daripada katalog secara jelas. Perbandingan dihadkan kepada dua peranan.",
+  "Search a second career": "Cari kerjaya kedua",
+  "Choose a role to compare.": "Pilih peranan untuk dibandingkan.",
+  "Choose your first career": "Pilih kerjaya pertama",
+  "Side-by-side evidence": "Bukti sebelah-menyebelah",
+  "Evidence": "Bukti",
+  "Occupation profile": "Profil pekerjaan",
+  "Open official O*NET profile for work details": "Buka profil rasmi O*NET untuk butiran kerja",
+  "Assessment engine order": "Susunan enjin penilaian",
+  "No personalized assessment result in this session": "Tiada keputusan penilaian peribadi dalam sesi ini",
+  "Skill readiness": "Kesediaan kemahiran",
+  "Not assessed by broad confidence ratings": "Tidak dinilai melalui penilaian keyakinan umum",
+  "Only an exact existing prototype mapping is shown on detail": "Butiran hanya memaparkan pemetaan tepat dalam prototaip sedia ada",
+  "Reviewed mappings only; see detail view": "Pemetaan yang telah disemak sahaja; lihat butiran",
+  "Catalogue interest profiles": "Profil minat dalam katalog",
+  "Continue exploring": "Teruskan penerokaan",
+  "Return to career search": "Kembali ke carian kerjaya",
+  "Search the catalogue": "Cari dalam katalog",
+  "Search is limited to the career exploration catalogue; it does not search learner data.": "Carian terhad kepada katalog penerokaan kerjaya dan tidak mencari data pelajar.",
+  "Search careers by title": "Cari kerjaya mengikut tajuk",
+  "Search the existing occupation catalogue by title. Search results are catalogue entries, not personalized recommendations or verified pathway requirements.": "Cari katalog pekerjaan sedia ada mengikut tajuk. Hasil carian ialah entri katalog, bukan cadangan peribadi atau keperluan laluan yang disahkan.",
+  "Loading catalogue entries…": "Memuatkan entri katalog…",
+  "Show more careers": "Tunjukkan lebih banyak kerjaya",
+  "No catalogue entries matched that title. Try a broader search.": "Tiada entri katalog sepadan dengan tajuk itu. Cuba carian yang lebih umum.",
+  "{shown} of {total} catalogue entries shown.": "Memaparkan {shown} daripada {total} entri katalog.",
+  "Explore this career": "Teroka kerjaya ini",
+  "Compare": "Bandingkan",
+  "O*NET profile": "Profil O*NET",
+  "See all {total} engine recommendations": "Lihat semua {total} cadangan enjin",
+  "The initial three recommendations are a presentation choice, not statistically established best careers.": "Tiga cadangan awal dipilih untuk paparan, bukan kerjaya terbaik yang ditentukan secara statistik.",
+  "Career workspace": "Ruang kerja kerjaya",
+  "Any new plan requires explicit review.": "Sebarang pelan baharu memerlukan semakan yang jelas.",
+  "CAREER CONTEXT": "KONTEKS KERJAYA",
+  "You are exploring this career. It is separate from your saved learning target.": "Anda sedang meneroka kerjaya ini. Ia berasingan daripada sasaran pembelajaran yang disimpan.",
+  "Career-specific trend mappings are shown only when the existing prototype includes this exact occupation.": "Pemetaan trend khusus kerjaya hanya dipaparkan jika prototaip sedia ada merangkumi pekerjaan yang tepat ini.",
+  "Return to career details": "Kembali ke butiran kerjaya",
+  "Recommendation {rank}": "Cadangan {rank}",
+  "How the existing engine ranked this role": "Cara enjin sedia ada menyusun peranan ini",
+  "These catalogue indices use the engine’s existing 0–100 scale. They are not percentages, employment probabilities, or evidence of occupational proficiency.": "Indeks katalog ini menggunakan skala 0–100 enjin sedia ada. Ini bukan peratusan, kebarangkalian pekerjaan atau bukti kemahiran pekerjaan.",
+  "Engine order": "Susunan enjin",
+  "Interest index": "Indeks minat",
+  "Subject index": "Indeks mata pelajaran",
+  "Combined engine index": "Indeks gabungan enjin",
+  "No personalized recommendations are available here. Browse the catalogue to explore roles.": "Tiada cadangan peribadi tersedia di sini. Lihat katalog untuk meneroka peranan.",
+  "Career detail is unavailable": "Butiran kerjaya tidak tersedia",
+  "Reported interest areas above your own average: {areas}. Title-based subject tags: {fields}. These tags are a title-matching heuristic, not verified occupational requirements.": "Bidang minat yang melebihi purata anda: {areas}. Label bidang berdasarkan tajuk: {fields}. Label ini menggunakan padanan tajuk sebagai heuristik, bukan keperluan pekerjaan yang disahkan.",
+  "limited overlap": "pertindihan terhad",
+  "Information Technology": "Teknologi Maklumat",
+  "Mathematics": "Matematik",
+  "Health & Medicine": "Kesihatan & Perubatan",
+  "Education": "Pendidikan",
+  "Business": "Perniagaan",
+  "Engineering": "Kejuruteraan",
+  "Creative Arts": "Seni Kreatif",
+  "Natural Sciences": "Sains Semula Jadi",
+  "Public Service": "Perkhidmatan Awam",
+  "FutureSkill AI · Interview practice": "FutureSkill AI · Latihan temu duga",
+  "CAREER PREPARATION": "PERSEDIAAN KERJAYA",
+  "Interview practice": "Latihan temu duga",
+  "Saved target": "Sasaran tersimpan",
+  "Practise explaining your experience and learning projects.": "Berlatih menerangkan pengalaman dan projek pembelajaran anda.",
+  "{score} / 100 · Practice estimate": "{score} / 100 · Anggaran latihan",
+  "{score} / 100 · Average practice estimate": "{score} / 100 · Purata anggaran latihan",
+  "Practice estimate: {score}/100": "Anggaran latihan: {score}/100",
+  "Choose a career and practise with five questions. You’ll receive coaching feedback after each answer.": "Pilih kerjaya dan berlatih dengan lima soalan. Anda akan menerima maklum balas bimbingan selepas setiap jawapan.",
+  "Choose a career and practise with {questionCount} questions. You’ll receive coaching feedback after each answer.": "Pilih kerjaya dan berlatih dengan {questionCount} soalan. Anda akan menerima maklum balas bimbingan selepas setiap jawapan.",
+  "A PRACTICE SESSION": "SESI LATIHAN",
+  "Choose what to practise": "Pilih perkara untuk dilatih",
+  "AI interview practice is temporarily unavailable.": "Latihan temu duga AI tidak tersedia buat sementara waktu.",
+  "Target career": "Kerjaya sasaran",
+  "Search 923 occupations by title": "Cari 923 pekerjaan mengikut tajuk",
+  "Change career": "Tukar kerjaya",
+  "Loading the FutureSkill career catalogue…": "Memuatkan katalog kerjaya FutureSkill…",
+  "7 visible at a time": "7 dipaparkan pada satu masa",
+  "Up to 7 results visible at a time": "Sehingga 7 hasil kelihatan pada satu masa",
+  "Supported careers": "Kerjaya yang disokong",
+  "{matches} matching · {total} careers total": "{matches} padanan · {total} kerjaya keseluruhan",
+  "No careers match this search. Try a broader title.": "Tiada kerjaya sepadan dengan carian ini. Cuba tajuk yang lebih umum.",
+  "The FutureSkill career catalogue is temporarily unavailable.": "Katalog kerjaya FutureSkill tidak tersedia buat sementara waktu.",
+  "Interview type": "Jenis temu duga",
+  "Mixed": "Campuran",
+  "HR": "Sumber manusia",
+  "Technical": "Teknikal",
+  "Feedback language": "Bahasa maklum balas",
+  "Number of questions": "Bilangan soalan",
+  "Start practice": "Mulakan latihan",
+  "My interview history": "Sejarah latihan saya",
+  "Practice scores are AI coaching estimates, not hiring decisions or a proficiency assessment.": "Skor latihan ialah anggaran bimbingan AI, bukan keputusan pengambilan pekerja atau penilaian kecekapan.",
+  "Answers, audio and history": "Jawapan, audio dan sejarah",
+  "Submitted answers are sent to the configured AI provider for feedback and held temporarily in server memory. The question-history database stores questions and career titles to reduce repeats, not answers or audio. Finished reports are saved in this browser.": "Jawapan yang dihantar diserahkan kepada penyedia AI untuk maklum balas dan disimpan sementara dalam memori pelayan. Pangkalan data sejarah soalan menyimpan soalan dan tajuk kerjaya untuk mengurangkan pengulangan, bukan jawapan atau audio. Laporan siap disimpan dalam pelayar ini.",
+  "Microphone use is optional. A recording is sent to the AI provider for transcription only after you choose to record and stop. You can edit the transcript before submitting.": "Penggunaan mikrofon adalah pilihan. Rakaman dihantar kepada penyedia AI untuk transkripsi hanya selepas anda memilih untuk merakam dan berhenti. Anda boleh menyunting transkrip sebelum menghantarnya.",
+  "Unfinished interviews cannot be resumed after leaving or reloading. Server-side answers are cleared on completion, on an expired-session request, or when the server restarts. Completed browser history remains separate.": "Temu duga yang belum selesai tidak boleh disambung selepas meninggalkan atau memuat semula halaman. Jawapan dalam memori pelayan dipadam apabila selesai, apabila permintaan sesi tamat tempoh diterima atau apabila pelayan dimulakan semula. Sejarah pelayar yang lengkap kekal berasingan.",
+  "The catalogue supplies occupation titles, not a sourced skills profile for every role. For those roles, questions are general practice based on the selected title; they do not assert verified occupational requirements.": "Katalog menyediakan tajuk pekerjaan, bukan profil kemahiran bersumber bagi setiap peranan. Soalan untuk peranan tersebut ialah latihan umum berdasarkan tajuk pilihan; soalan itu tidak mendakwa sebagai keperluan pekerjaan yang disahkan.",
+  "PRACTICE REFLECTION": "REFLEKSI LATIHAN",
+  "Question {questionNumber} of {questionCount}": "Soalan {questionNumber} daripada {questionCount}",
+  "Interview coach": "Jurulatih temu duga",
+  "Practice and reflect; not a hiring assessment": "Untuk latihan dan refleksi; bukan penilaian pengambilan pekerja",
+  "Read question aloud": "Bacakan soalan",
+  "Answer method": "Kaedah menjawab",
+  "Text answer": "Jawapan teks",
+  "Optional voice answer": "Jawapan suara pilihan",
+  "Write your answer and revise it before submitting.": "Tulis jawapan anda dan semaknya sebelum menghantar.",
+  "Audio is sent to the configured provider only when you stop the recording to request transcription.": "Audio dihantar kepada penyedia yang dikonfigurasikan hanya apabila anda menghentikan rakaman untuk meminta transkripsi.",
+  "Start recording": "Mula merakam",
+  "Stop recording": "Hentikan rakaman",
+  "Your answer": "Jawapan anda",
+  "Explain your approach and include an example if you have one.": "Terangkan pendekatan anda dan sertakan contoh jika ada.",
+  "Your editable voice transcript will appear here after you stop recording.": "Transkrip suara yang boleh disunting akan dipaparkan di sini selepas anda menghentikan rakaman.",
+  "{words} words · {characters}/3500 characters": "{words} perkataan · {characters}/3500 aksara",
+  "Your answer is sent for coaching after you submit.": "Jawapan anda dihantar untuk maklum balas bimbingan selepas anda menghantarnya.",
+  "Submit answer for feedback": "Hantar jawapan untuk maklum balas",
+  "Feedback on this answer": "Maklum balas untuk jawapan ini",
+  "What went well": "Perkara yang dilakukan dengan baik",
+  "What to try next": "Perkara untuk dicuba seterusnya",
+  "Illustrative sample answer": "Contoh jawapan ilustrasi",
+  "The sample is fictional, not a claim about the learner.": "Contoh ini rekaan dan bukan dakwaan tentang pengalaman pelajar.",
+  "Next question": "Soalan seterusnya",
+  "Finish and view report": "Selesai dan lihat laporan",
+  "View final report": "Lihat laporan akhir",
+  "Interview practice report": "Laporan latihan temu duga",
+  "Average practice estimate": "Purata anggaran latihan",
+  "Practice reflection": "Refleksi latihan",
+  "Coaching dimensions": "Dimensi bimbingan",
+  "Strengths to keep using": "Kekuatan untuk terus digunakan",
+  "Ideas to practise": "Cadangan untuk dilatih",
+  "Possible next practice areas": "Bidang latihan seterusnya",
+  "Question-by-question review": "Semakan mengikut soalan",
+  "Scores are subjective AI coaching estimates, not hiring predictions.": "Skor ialah anggaran bimbingan AI yang subjektif, bukan ramalan pengambilan pekerja.",
+  "A brief practice snapshot": "Ringkasan latihan ringkas",
+  "This reflection is based on {count} answers. A short session may not show a broad pattern.": "Refleksi ini berdasarkan {count} jawapan. Sesi ringkas mungkin tidak menunjukkan corak yang menyeluruh.",
+  "Higher coaching estimates this session": "Anggaran bimbingan lebih tinggi dalam sesi ini",
+  "Your answers received higher AI coaching estimates in this practice session. This does not measure job readiness or eligibility.": "Jawapan anda menerima anggaran bimbingan AI yang lebih tinggi dalam sesi latihan ini. Ini tidak mengukur kesediaan atau kelayakan kerja.",
+  "Mixed practice feedback": "Maklum balas latihan bercampur",
+  "This practice session gave mixed coaching estimates. Choose a response suggestion to try; the result does not say whether you should apply.": "Sesi latihan ini memberikan anggaran bimbingan yang bercampur. Pilih satu cadangan jawapan untuk dicuba; keputusan ini tidak menentukan sama ada anda patut memohon.",
+  "Ideas for another practice round": "Idea untuk pusingan latihan seterusnya",
+  "Some answers received lower coaching estimates this session. Try one suggestion; these estimates do not measure workplace performance.": "Sesetengah jawapan menerima anggaran bimbingan yang lebih rendah dalam sesi ini. Cuba satu cadangan; anggaran ini tidak mengukur prestasi kerja.",
+  "Use these notes to reflect on this practice session, not to judge job readiness.": "Gunakan nota ini untuk menilai sesi latihan, bukan untuk menghakimi kesediaan kerja.",
+  "Practice answers in this summary: {count}.": "Bilangan jawapan latihan dalam ringkasan ini: {count}.",
+  "Start another practice session": "Mulakan sesi latihan lain",
+  "SAVED IN THIS BROWSER": "DISIMPAN DALAM PELAYAR INI",
+  "Your finished practice reports are stored locally in this browser. Clearing site data removes this history.": "Laporan latihan yang selesai disimpan secara setempat dalam pelayar ini. Mengosongkan data tapak akan memadam sejarah ini.",
+  "Completed practice sessions saved in this browser: {count}": "Sesi latihan yang disimpan dalam pelayar ini: {count}",
+  "No completed sessions are saved in this browser yet.": "Tiada sesi selesai yang disimpan dalam pelayar ini.",
+  "View saved questions and answers": "Lihat soalan dan jawapan yang disimpan",
+  "Back to setup": "Kembali ke tetapan",
+  "Delete browser history": "Padam sejarah pelayar",
+  "Delete all interview reports saved in this browser?": "Padam semua laporan temu duga yang disimpan dalam pelayar ini?",
+  "That career isn’t in the current interview catalogue. Select a supported title to continue; your learning pathway will not be changed.": "Kerjaya itu tiada dalam katalog temu duga semasa. Pilih tajuk yang disokong untuk meneruskan; laluan pembelajaran anda tidak akan diubah.",
+  "General practice for this career title. A sourced skills profile or verified occupational requirements are not available in the current catalogue.": "Latihan umum berdasarkan tajuk kerjaya ini. Profil kemahiran bersumber atau keperluan pekerjaan yang disahkan tiada dalam katalog semasa.",
+  "General practice based on the career title only; sourced occupational skills are not available for this role.": "Latihan umum berdasarkan tajuk kerjaya sahaja; kemahiran pekerjaan bersumber tidak tersedia untuk peranan ini.",
+  "General interview practice informed by the catalogue entry. The supplied profile is not a verified occupational requirement.": "Latihan temu duga umum berdasarkan entri katalog. Profil yang disediakan bukan keperluan pekerjaan yang disahkan.",
+  "A sourced skills profile is not available for this occupation in the current dataset.": "Profil kemahiran bersumber tidak tersedia untuk pekerjaan ini dalam data semasa.",
+  "The selected career no longer matches the supported catalogue.": "Kerjaya yang dipilih tidak lagi sepadan dengan katalog yang disokong.",
+  "Choose a supported career from the FutureSkill catalogue.": "Pilih kerjaya yang disokong daripada katalog FutureSkill.",
+  "Choose a valid interview type, language and question count.": "Pilih jenis temu duga, bahasa dan bilangan soalan yang sah.",
+  "Choose 3, 5 or 10 interview questions.": "Pilih 3, 5 atau 10 soalan temu duga.",
+  "Interview session expired. Start a new practice session.": "Sesi temu duga telah tamat tempoh. Mulakan sesi latihan baharu.",
+  "No recording was received.": "Rakaman tidak diterima.",
+  "Audio transcription is temporarily unavailable. You can type your answer.": "Transkripsi audio tidak tersedia buat sementara waktu. Anda boleh menaip jawapan.",
+  "Unsupported audio type. Use webm, mp4, ogg or wav.": "Jenis audio tidak disokong. Gunakan webm, mp4, ogg atau wav.",
+  "Recording must be between 1 byte and 10 MB.": "Rakaman mestilah antara 1 bait dengan 10 MB.",
+  "Maximum audio upload is 10 MB.": "Muat naik audio maksimum ialah 10 MB.",
+  "Keep your answer between 3 and 3,500 characters.": "Pastikan jawapan anda antara 3 hingga 3,500 aksara.",
+  "Submit your answer before moving to the next question.": "Hantar jawapan sebelum beralih ke soalan seterusnya.",
+  "This answer has already been submitted.": "Jawapan ini telah dihantar.",
+  "Answer a question before viewing the report.": "Jawab soalan sebelum melihat laporan.",
+  "Question read-aloud is not available in this browser.": "Bacaan soalan tidak tersedia dalam pelayar ini.",
+  "Microphone recording is not supported in this browser. You can type your answer.": "Rakaman mikrofon tidak disokong dalam pelayar ini. Anda boleh menaip jawapan.",
+  "Stop recording before switching answer methods.": "Hentikan rakaman sebelum menukar kaedah menjawab.",
+  "Stop recording before submitting your answer.": "Hentikan rakaman sebelum menghantar jawapan.",
+  "No audio was captured.": "Tiada audio dirakam.",
+  "Audio exceeds the 10 MB limit. Record a shorter answer.": "Audio melebihi had 10 MB. Rakam jawapan yang lebih pendek.",
+  "Transcribing…": "Mentranskripsi…",
+  "Recording…": "Sedang merakam…",
+  "Enter an answer with at least 3 characters.": "Masukkan jawapan sekurang-kurangnya 3 aksara.",
+  "Keep your answer under 3,500 characters.": "Pastikan jawapan anda kurang daripada 3,500 aksara.",
+  "A fictional example, not a claim about the learner.": "Contoh rekaan, bukan dakwaan tentang pengalaman pelajar.",
+  "Your report is ready, but browser storage is unavailable; it was not saved in history.": "Laporan anda tersedia, tetapi storan pelayar tidak tersedia; laporan tidak disimpan dalam sejarah.",
+  "Your report is ready, but existing browser history could not be read or saved. Existing data was left unchanged.": "Laporan anda tersedia, tetapi sejarah pelayar sedia ada tidak dapat dibaca atau disimpan. Data sedia ada tidak diubah.",
+  "Saved browser history could not be read.": "Sejarah pelayar yang disimpan tidak dapat dibaca.",
+  "Existing history was left unchanged. You can delete browser history if you no longer want to keep it.": "Sejarah sedia ada tidak diubah. Anda boleh memadam sejarah pelayar jika tidak mahu menyimpannya.",
+  "A new question is temporarily unavailable. Your current feedback is still here.": "Soalan baharu tidak tersedia buat sementara waktu. Maklum balas semasa anda masih ada.",
+  "Feedback is temporarily unavailable. Your answer was not saved.": "Maklum balas tidak tersedia buat sementara waktu. Jawapan anda tidak disimpan.",
+  "The interview service returned an unexpected response.": "Perkhidmatan temu duga memberikan respons yang tidak dijangka.",
+  "This action is temporarily unavailable.": "Tindakan ini tidak tersedia buat sementara waktu.",
+  "AI coaching estimate": "Anggaran bimbingan AI",
+  "Prepare responses and reflect on your examples.": "Sediakan jawapan dan fikirkan contoh pengalaman anda.",
+  "OPTIONAL CAREER PRACTICE": "LATIHAN KERJAYA PILIHAN",
+  "Rehearse an interview for your saved target": "Berlatih temu duga untuk sasaran tersimpan anda",
+  "Practise for your saved career target. Questions are general title-based practice, not verified occupational requirements.": "Berlatih untuk sasaran kerjaya tersimpan anda. Soalan ialah latihan umum berdasarkan tajuk, bukan keperluan pekerjaan yang disahkan.",
+  "View practice history": "Lihat sejarah latihan",
+  "Practise for this career": "Berlatih untuk kerjaya ini",
+  "Interview practice uses the career title for general questions; this catalogue does not provide verified role-specific requirements.": "Latihan temu duga menggunakan tajuk kerjaya untuk soalan umum; katalog ini tidak menyediakan keperluan khusus peranan yang disahkan.",
+  "A brief session may not show a broad pattern. Responses included: {count}.": "Sesi ringkas mungkin tidak menunjukkan corak yang menyeluruh. Bilangan jawapan: {count}.",
   "HUMAN POTENTIAL. FUTURE POSSIBILITIES.": "POTENSI INSAN. KEMUNGKINAN MASA DEPAN.",
   "A clearer way forward": "Hala tuju yang lebih jelas",
   "YOUR POTENTIAL, IN A NEW LIGHT": "POTENSI ANDA, DALAM CAHAYA BAHARU",
@@ -421,5 +716,9 @@
   "FutureSkill": "FutureSkill",
   "AI": "AI",
   "Your potential. Your direction. Your next chapter.": "Potensi anda. Hala tuju anda. Bab seterusnya.",
-  "MADE FOR WHAT’S NEXT.": "DIBINA UNTUK LANGKAH SETERUSNYA."
+  "MADE FOR WHAT’S NEXT.": "DIBINA UNTUK LANGKAH SETERUSNYA.",
+  "Future Job Trend": "Trend Pekerjaan Masa Depan",
+  "Employability Predictor": "Peramal Kebolehpasaran Kerja",
+  "Discover Your": "Terokai",
+  "Future Career": "Kerjaya Masa Depan"
 }
