@@ -178,6 +178,42 @@ class SDGTargetPrecisionTests(unittest.TestCase):
             "Coordinate recycling collection for reusable materials."
         ))
 
+    def test_embalmer_containment_is_not_waste_reduction(self):
+        # O*NET task 4504 is about professional containment, not SDG 12.5.
+        self.assertFalse(matches(
+            "12.5", "39-4011.00",
+            "Pack body orifices to prevent escape of waste matter."
+        ))
+
+    def test_boiler_internal_water_is_not_water_pollution_control(self):
+        # O*NET task 10470 protects boiler machinery from corrosion.
+        self.assertFalse(matches(
+            "6.3", "51-8021.00",
+            "Test boiler water quality and take corrective action to prevent corrosion."
+        ))
+        self.assertTrue(matches(
+            "6.3", "51-8031.00",
+            "Monitor wastewater treatment to improve water quality."
+        ))
+
+    def test_recyclable_adjective_not_actual_recycling(self):
+        # O*NET task 20313 sends materials to disposal sites, not an
+        # explicitly recycling or waste-prevention operation.
+        self.assertFalse(matches(
+            "12.5", "53-7081.00",
+            "Dump refuse or recyclable materials at disposal sites."
+        ))
+        # These original O*NET task themes DO refer to using recycled
+        # materials and collecting metal scrap for actual recycling.
+        self.assertTrue(matches(
+            "12.5", "27-1025.00",
+            "Design spaces using sustainable, recycled materials when feasible."
+        ))
+        self.assertTrue(matches(
+            "12.5", "51-4052.00",
+            "Skim slag and collect scrap for recycling."
+        ))
+
     def test_core_scope_no_automatic_13_2_from_emissions(self):
         self.assertFalse(matches(
             "13.2", "49-9021.00",
@@ -256,6 +292,9 @@ class SDGTargetPrecisionTests(unittest.TestCase):
             ("53-3032.00", "19923", "13.2"),  # Lower-carbon route planning
             ("29-1229.05", "17219", "6.3"),  # Public health education
             ("29-1229.05", "17219", "12.3"), # Food sanitation lectures
+            ("39-4011.00", "4504", "12.5"),    # Containing bodily waste matter
+            ("51-8021.00", "10470", "6.3"),    # Internal boiler water testing
+            ("53-7081.00", "20313", "12.5"),  # Disposal site != recycling
         )
         for career_id, task_id, target in suspicious:
             with self.subTest(task_id=task_id, target=target):
