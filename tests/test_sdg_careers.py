@@ -171,6 +171,26 @@ class SDGCareerTests(unittest.TestCase):
                 goal_ids, _ = suggested_goal_ids(code, title)
                 self.assertNotIn(8, goal_ids)
 
+    def test_mixed_soc_groups_do_not_create_unrelated_default_sdgs(self):
+        from reskilling.sdg_occupation_rules import suggested_goal_ids
+        cases = (
+            ("27-1025.00", "Interior Designers"),
+            ("51-8021.00", "Stationary Engineers and Boiler Operators"),
+            ("53-7081.00", "Refuse and Recyclable Material Collectors"),
+            ("49-9021.00", "Heating, Air Conditioning, and Refrigeration Mechanics and Installers"),
+        )
+        for code, title in cases:
+            with self.subTest(code=code):
+                goals, basis = suggested_goal_ids(code, title)
+                self.assertEqual(tuple(goals), (), (code, basis))
+                data = self.sdg(code)
+                self.assertFalse(any(
+                    item["candidate_tier"] == "classification_only"
+                    for item in data["candidate_mappings"]
+                ))
+                self.assertEqual(data["task_data_status"], "not_installed")
+                self.assertIsNotNone(data["task_profile"])
+
     def test_unknown_and_malformed_career_ids(self):
         self.assertEqual(self.search("the invalid"), [])
         self.assertEqual(get_sdg_alignment("the invalid")["status"], "unknown")
