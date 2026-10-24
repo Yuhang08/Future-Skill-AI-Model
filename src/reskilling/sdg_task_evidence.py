@@ -24,14 +24,14 @@ TARGET_RULES = (
     {
         "target": "12.3", "goal": 12,
         "topic": r"\b(?:food|ingredients?|meals?|perishable)\b",
-        "action": r"\b(?:reduc\w*|prevent\w*|minimi[sz]\w*|avoid\w*|divert\w*|donat\w*|reus\w*|recycl\w*|monitor\w*|track\w*)\b",
+        "action": r"\b(?:reduc\w*|prevent\w*|minimi[sz]\w*|avoid\w*|divert\w*|donat\w*|reus\w*|recycl\w*)\b",
         "object": r"\b(?:wast\w*|spoil\w*|discard\w*|leftovers?|surplus)\b",
         "note": "Food-waste prevention may relate to Target 12.3; measured food waste reduction is not established.",
     },
     {
         "target": "12.5", "goal": 12,
         "topic": r"\b(?:material|solid waste|recycl\w*|plastic|scrap|industrial waste)\b",
-        "action": r"\b(?:reduc\w*|recycl\w*|reus\w*|recover\w*|prevent\w*|sort\w*|process\w*)\b",
+        "action": r"\b(?:reduc\w*|recycl\w*|reus\w*|recover\w*|prevent\w*)\b",
         "object": r"\b(?:wast\w*|recycl\w*|scrap|refuse|dispos\w*)\b",
         "note": "Waste prevention/recycling tasks may connect to Target 12.5.",
     },
