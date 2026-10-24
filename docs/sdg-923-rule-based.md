@@ -1,3 +1,92 @@
+# SDG Mapping v4 — O*NET Task Importance + Detailed Work Activities (24 Oct 2026)
+
+## What the new version actually improves
+
+FutureSkill matches careers by exact 10-character O*NET-SOC code, and task
+ratings/activities by the pair **(O*NET-SOC Code, Task ID)**. This prevents
+one occupation's task score or detailed activity being attached to a different
+occupation that happens to reuse an ID.
+
+Two **optional genuine O*NET 31.0 supplements** are supported:
+- `tasks_to_dwas.csv`: **24,087** links between Task IDs and Detailed Work
+  Activities (DWAs), with DWA Element IDs/names.
+  https://www.onetcenter.org/dictionary/31.0/csv/tasks_to_dwas.html
+- `task_ratings.csv`: **165,780** records with task importance (IM, 1..5),
+  relevance (RT, 0..100), and frequency categories (FT). Ratings are available
+  for **911** occupations, NOT all 923 catalogue roles.
+  https://www.onetcenter.org/dictionary/31.0/csv/task_ratings.html
+
+FutureSkill uses **only IM/RT** to order evidence from tasks belonging to
+the same occupation, and reports the *observed* ratings next to Task IDs.
+`Recommend Suppress=Y` entries are not used, and missing ratings remain
+absent. It never converts task importance into an SDG probability.
+
+The algorithm now has **four, separately labelled tiers**:
+1. **Narrow task-to-UN-target rule** (solid connection). This is an unreviewed
+   research hypothesis supported by official Task text and Task ID, NOT impact.
+2. **Task-topic match** (dashed). True occupational task text contains a
+   distinctive goal-level subject, without verified UN target alignment.
+3. **DWA-topic match** (dashed). An officially linked Detailed Work Activity
+   contains a distinctive theme; this is explicitly weaker than a task phrase
+   and has NO asserted target-level evidence.
+4. **Classification only** (dashed). A job title/SOC family gives a broad
+   unverified idea when nothing more specific was found. Original real
+   occupational tasks remain visible, but are **not cited as proof** that
+   this mapping is correct.
+
+**All four are unverified occupational hypotheses**; no causal SDG outcomes,
+confidence percentages or UN/O*NET endorsement are claimed. A larger number
+of matches is NOT evidence of improved precision.
+
+## Install official datasets in your PyCharm terminal
+
+```powershell
+git switch feature/all-923-career-sdg-mapping
+git pull --ff-only origin feature/all-923-career-sdg-mapping
+python scripts/import_onet_sdg_context.py
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests -p "test_sdg_onet_context.py" -v
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python scripts/audit_sdg_task_evidence.py
+python scripts/export_923_sdg_review.py
+python -m uvicorn main:app --app-dir src --reload --port 5000
+```
+
+Downloaded source paths:
+`src/data/onet_tasks_to_dwas.csv` and
+`src/data/onet_task_ratings.csv`.
+
+The export `reports/sdg_mapping_923_review.csv` now includes DWA-only
+suggestions, raw IM relevance metadata, source completeness, and sample
+Task/DWA IDs for all 923 occupations.
+
+To deploy the extra O*NET data to Render, after validating provenance/license
+and running tests, explicitly commit those two genuine downloaded CSV files:
+
+```powershell
+git add src/data/onet_tasks_to_dwas.csv src/data/onet_task_ratings.csv
+git commit -m "data: add O*NET 31.0 DWA links and task ratings"
+git push origin feature/all-923-career-sdg-mapping
+```
+
+Do not remove the existing `src/data/onet_task_statements.csv` or
+overwrite other career/reskilling data.
+
+## Why this is more defensible, but not proven accurate
+
+O*NET Task Statements are job descriptions, Tasks-to-DWAs maps real occupational
+activities, and Task Ratings describe how important those tasks are to the
+occupation. **None of these sources contains a United Nations-approved
+occupation-to-SDG crosswalk**. Linking a job duty to the specific SDG target
+and claiming impact still needs expert review or outcome evidence.
+
+For example, a Chef ordering ingredients is NOT evidence that food waste has
+been reduced (UN 12.3). The task must explicitly discuss waste prevention
+before the narrow 12.3 rule proposes a task-to-target link. Without evidence,
+the system preserves a clearly unverified hypothesis.
+
+---
+
 ## Upgrade: 923 role-specific analyses (not 923 verified impacts)
 
 The prior strict task rules matched 280 of 923 careers in the first local
