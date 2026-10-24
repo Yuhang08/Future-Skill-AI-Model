@@ -30,7 +30,7 @@
       input.value = item.title;
       input.removeAttribute("aria-invalid");
       submit.disabled = false;
-      status.textContent = `${item.title} · ${item.kind === "occupation" ? `O*NET ${item.id}` : "FutureSkill prototype role"} · ${item.mapping_availability === "curated" ? "Curated mapping + role suggestions" : "Rule-based SDG suggestions"}.`;
+      status.textContent = `${item.title} · ${item.kind === "occupation" ? `O*NET ${item.id}` : "FutureSkill prototype role"} · ${"Occupation SDG suggestions (unverified)"}.`;
       onSelect?.(item);
       input.focus();
     }
@@ -57,7 +57,7 @@
         title.textContent = item.title;
         const label = document.createElement("span");
         label.className = "career-option-status";
-        label.textContent = item.mapping_availability === "curated" ? "Curated + suggested" : "SDG suggestions";
+        label.textContent = "Unverified career themes";
         option.append(title, label);
         option.addEventListener("pointerdown", event => event.preventDefault());
         option.addEventListener("click", () => choose(item));
