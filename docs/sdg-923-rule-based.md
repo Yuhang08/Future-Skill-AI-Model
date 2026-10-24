@@ -1,3 +1,52 @@
+# Follow-up review of the 83 task-target candidates
+
+Review of the user's latest list uncovered overbroad UN target interpretations.
+The latest rules now require stronger and correctly scoped evidence:
+
+- **10.2**: special assistance to an individual airline passenger is not by
+  itself evidence of a program promoting social/economic inclusion.
+- **13.2**: fuel-saving route optimization (O*NET Task ID 19923) is an
+  environmental activity, but not the integration of climate measures into
+  *national policies, strategies and planning*.
+- **6.3**: public-health lectures listing sewage/water safety (Task ID
+  17219) are not direct wastewater treatment / water-quality management.
+- **12.3**: *preventing/reducing* food loss and waste is different from merely
+  collecting or recycling food waste after it occurs.
+- **12.5**: direct waste prevention, material recycling/reuse operations;
+  ordinary disposal and teaching about recycling do not establish this Target.
+- **4.1 / 4.2**: UN 4.1 applies to primary and secondary schooling;
+  UN 4.2 covers preschool and early-childhood education. Kindergarten and
+  preschool teaching are explicitly handled under 4.2. Substitute teachers
+  without a specific grade level no longer automatically imply 4.1.
+
+**O*NET occupation duties are real; their association with a UN Target is a
+separate, human-unreviewed hypothesis.** Some narrower classifications may
+produce fewer solid map connections and more dashed goal-level suggestions.
+This is not a scientific precision score.
+
+Official UN definitions:
+https://sdgs.un.org/goals/goal4
+https://sdgs.un.org/goals/goal6
+https://sdgs.un.org/goals/goal10
+https://sdgs.un.org/goals/goal12
+https://sdgs.un.org/goals/goal13
+
+Run the regression suite after pulling:
+
+```powershell
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests -p "test_sdg_target_precision.py" -v
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python scripts/audit_sdg_task_evidence.py
+python scripts/export_923_sdg_review.py
+```
+
+The targeted suite includes assertions against genuine O*NET Task IDs
+9643, 19923, and 17219 when the official 31.0 CSV is installed.
+The original source CSVs must not be modified by code changes.
+
+---
+
 # SDG Target precision correction — 24 October 2026
 
 **Purpose:** reduce false positives found during review of the 923-career CSV.
