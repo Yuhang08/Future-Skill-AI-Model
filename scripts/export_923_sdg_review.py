@@ -54,7 +54,8 @@ def main():
     output = []
     classified = {
         "task_supported": 0, "task_topic_only": 0,
-        "dwa_topic_only": 0, "classification_only": 0
+        "dwa_topic_only": 0, "classification_only": 0,
+        "no_sdg_suggestion": 0
     }
     for role in occupations:
         code = role["O*NET-SOC Code"]
@@ -68,12 +69,14 @@ def main():
         dwa_topics = [x for x in candidates if x.get("candidate_tier") == "dwa_topic"]
         fallback = [x for x in candidates
                     if x.get("candidate_tier") == "classification_only"]
-        if not (strict or candidates):
-            raise SystemExit(f"No results, including review-needed suggestions, for {code}")
+        # No specific SDG suggestion is an honest possible outcome.
+        # The task_profile still provides an independently auditable
+        # occupational analysis; never fabricate a Goal 8 fallback.
         tier = (
             "task_supported" if strict else
             "task_topic_only" if topics else
-            "dwa_topic_only" if dwa_topics else "classification_only"
+            "dwa_topic_only" if dwa_topics else
+            "classification_only" if fallback else "no_sdg_suggestion"
         )
         classified[tier] += 1
         strict_tasks = [
