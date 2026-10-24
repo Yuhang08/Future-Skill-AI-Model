@@ -36,6 +36,7 @@ def main():
     task_topic_count = 0
     dwa_topic_count = 0
     weak_only_count = 0
+    no_sdg_suggestion_count = 0
     missing_task_profiles = 0
     print("Examples of task-derived candidates (not measured SDG impact):")
     for career in occupations:
@@ -51,8 +52,10 @@ def main():
                 task_topic_count += 1
             elif "dwa_topic" in tiers:
                 dwa_topic_count += 1
-            else:
+            elif "classification_only" in tiers:
                 weak_only_count += 1
+            else:
+                no_sdg_suggestion_count += 1
         if matches:
             supported += 1
             counts.update(str(m["target_id"]) for m in matches)
@@ -69,8 +72,9 @@ def main():
     print(f"Additional occupations with task-text topic suggestions: {task_topic_count}")
     print(f"Additional occupations with DWA-topic-only suggestions: {dwa_topic_count}")
     print(f"Occupations with classification-only (weakest) suggestions: {weak_only_count}")
+    print(f"Occupations with no justified SDG candidate: {no_sdg_suggestion_count}")
     print(f"Occupations with no O*NET Task Statements: {missing_task_profiles}")
-    print(f"Total occupations with some analysis: {supported + task_topic_count + dwa_topic_count + weak_only_count}")
+    print(f"Total occupations with individual analysis: {supported + task_topic_count + dwa_topic_count + weak_only_count + no_sdg_suggestion_count}")
     print("Supporting O*NET datasets installed:", sources_available())
     print("Classification-only is NOT SDG evidence; each suggestion still needs expert review.")
     print("By proposed UN target (counts of occupational candidates):")
