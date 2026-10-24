@@ -862,6 +862,8 @@
           ? "Task wording matches this Goal theme. Exploratory relevance only."
           : entry.evidence_basis === "linked_dwa_topic"
             ? "Linked detailed work activities suggest this Goal."
+            : entry.evidence_basis === "no_detected_overlap"
+            ? "No detectable SDG phrase overlap. Ranking is a weak exploratory comparison, not evidence."
             : "Weak lexical resemblance only; human review required.");
         (entry.task_evidence || []).slice(0,3).forEach(task => {
           const evidence = node(card,"div","","task-score-evidence");
