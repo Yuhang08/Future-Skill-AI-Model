@@ -7,6 +7,9 @@ from functools import lru_cache
 from .catalog import CAREERS
 from .sdg_candidate_ranker import candidate_mappings_for_occupation, occupation_task_profile
 from .sdg_task_evidence import task_supported_mappings
+from . import sdg_task_evidence as task_source
+from .sdg_onet_context import DWA_CSV, RATINGS_CSV
+from .sdg_task_goal_model import score_career_goals
 from career_engine import load_careers
 
 
@@ -246,6 +249,9 @@ def _unknown_alignment(title):
         "status": "unknown",
         "task_data_status": "unknown",
         "task_profile": None,
+        "goal_scores": [],
+        "top_goal_scores": [],
+        "goal_scoring_method": None,
         "mappings": [],
         "candidate_mappings": [],
         "learning_pathway_mappings": [],
@@ -254,7 +260,7 @@ def _unknown_alignment(title):
     }
 
 
-def _build_alignment(career_id, current_skills=None):
+def _build_alignment(career_id, current_skills=None, include_goal_scores=False):
     career = get_sdg_careers().get(career_id)
     if career is None:
         return _unknown_alignment("")
@@ -264,6 +270,15 @@ def _build_alignment(career_id, current_skills=None):
     # Each role has an independently inspectable O*NET task profile and up to
     # three ranked candidate goals. Never confuse them with verified impacts.
     task_profile = occupation_task_profile(career_id)
+    # Ranking is an on-demand feature: the 923-row legacy audit/tests remain
+    # fast and stable, while the website can show 17 scored goals per role.
+    scored = {}
+    if include_goal_scores and career["kind"] == "occupation":
+        stamp = tuple(
+            (str(p), p.stat().st_mtime_ns if p.is_file() else None)
+            for p in (task_source.TASK_DATA, DWA_CSV, RATINGS_CSV)
+        )
+        scored = score_career_goals(career_id, stamp)
     candidate_mappings = candidate_mappings_for_occupation(
         career_id, career["title"], {m["sdg_id"] for m in task_mappings}
     )
@@ -275,6 +290,9 @@ def _build_alignment(career_id, current_skills=None):
             "status": "task_supported" if task_mappings else "no_task_evidence",
             "task_data_status": task_data_status,
             "task_profile": task_profile,
+            "goal_scores": scored.get("goal_scores", []),
+            "top_goal_scores": scored.get("top_goal_scores", []),
+            "goal_scoring_method": scored.get("method"),
             "mappings": task_mappings,
             "candidate_mappings": candidate_mappings,
             "learning_pathway_mappings": [],
@@ -354,6 +372,9 @@ def _build_alignment(career_id, current_skills=None):
         "status": "task_supported" if task_mappings else "no_task_evidence",
         "task_data_status": task_data_status,
         "task_profile": task_profile,
+        "goal_scores": scored.get("goal_scores", []),
+        "top_goal_scores": scored.get("top_goal_scores", []),
+        "goal_scoring_method": scored.get("method"),
         "mappings": task_mappings,
         "candidate_mappings": candidate_mappings,
         "learning_pathway_mappings": learning_mappings,
@@ -366,9 +387,11 @@ def _build_alignment(career_id, current_skills=None):
     }
 
 
-def get_sdg_alignment_by_id(career_id, current_skills=None):
-    """Resolve only canonical catalogue IDs; unreviewed IDs never get guessed links."""
-    return _build_alignment(str(career_id or "").strip(), current_skills)
+def get_sdg_alignment_by_id(career_id, current_skills=None, include_goal_scores=False):
+    """Return a verified catalogue identity and optional task-derived ranking."""
+    return _build_alignment(
+        str(career_id or "").strip(), current_skills, include_goal_scores
+    )
 
 
 def get_sdg_alignment(career_title, current_skills=None):
