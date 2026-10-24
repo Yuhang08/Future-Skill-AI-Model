@@ -272,16 +272,18 @@ class IntegratedWebTests(unittest.TestCase):
             for item in body['recommendations']
         ))
         self.assertTrue(all(
-            item['sdg_alignment']['status'] in ('curated', 'suggested')
+            item['sdg_alignment']['status'] in ('task_supported', 'no_task_evidence')
             for item in body['recommendations']
         ))
 
     def test_reskilling_full_journey(self):
         state = self.client.get('/api/state').json()
         csrf = state['csrf']
-        skills = {name: 0 for name in state['catalog']['Data Analyst']['skills']}
+        career = 'Software Developers'  # real Career Test CSV occupation
+        self.assertIn(career, state['catalog'])
+        skills = {name: 0 for name in state['catalog'][career]['skills']}
         profile = {
-            'target_career': 'Data Analyst', 'skills': skills,
+            'target_career': career, 'skills': skills,
             'user_type': 'student', 'current_industry': 'education',
             'experience': 'beginner', 'personal_goal': 'Data portfolio',
             'weekly_hours': 6, 'target_weeks': 8,
@@ -294,7 +296,7 @@ class IntegratedWebTests(unittest.TestCase):
         result = self.client.post('/api/plan', json=profile, headers=headers)
         self.assertEqual(result.status_code, 200, result.text)
         body = result.json()['state']
-        self.assertIn('SQL', body['gaps'])
+        self.assertIn('Programming Foundations', body['gaps'])
         self.assertGreater(len(body['tasks']), 0)
         task = body['tasks'][0]
         completed = self.client.post(f"/api/tasks/{task['id']}/status", json={'completed': True}, headers=headers)
