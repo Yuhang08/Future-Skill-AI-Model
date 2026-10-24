@@ -82,7 +82,7 @@ TITLE_THEMES = (
      (4,), "teaching and learning"),
     (r"\b(?:cybersecurity|cyber security|information security)\b",
      (9, 16), "digital security and resilient information systems"),
-    (r"\b(?:software develop|computer programm|data analyst|data scientist|database|artificial intelligence|machine learning)\b",
+    (r"\b(?:software develop\w*|computer programm\w*|data analysts?|data scientists?|database|artificial intelligence|machine learning)\b",
      (9,), "software, data and technological innovation"),
     (r"\b(?:user experience|ui/ux|web and digital interface)\b",
      (9,), "digital interface development"),
