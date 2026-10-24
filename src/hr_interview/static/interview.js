@@ -131,6 +131,7 @@ function chooseCareer(option) {
   $("role").value = option.title;
   $("careerId").value = option.id || "";
   $("careerSearch").value = option.title;
+  renderCareers(option.title);
   $("careerOptions").classList.add("collapsed");
   $("careerSearch").setAttribute("aria-expanded", "false");
   $("changeCareer").hidden = false;
@@ -223,6 +224,12 @@ $("careerSearch").addEventListener("keydown", event => {
   }
 });
 $("careerOptions").addEventListener("keydown", event => {
+  if ((event.key === "Enter" || event.key === " ") &&
+      document.activeElement.matches(".interview-career-option")) {
+    event.preventDefault();
+    document.activeElement.click();
+    return;
+  }
   if (event.key === "Escape") {
     event.preventDefault();
     $("careerOptions").classList.add("collapsed");

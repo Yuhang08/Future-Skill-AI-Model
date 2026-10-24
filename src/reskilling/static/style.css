@@ -127,16 +127,17 @@ body.has-dashboard .hero-start{display:none}
 :root[data-theme="dark"] .availability-status{background:#2c3a30;color:#a9b9ac}
 
 /* Optional interview practice is a contextual route, not part of the saved plan. */
-.interview-practice-card{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:18px;margin:0 0 24px;padding:21px 24px;border:1px solid var(--fs-line);border-radius:17px;background:linear-gradient(112deg,var(--fs-accent-soft),var(--fs-raised) 58%);box-shadow:var(--fs-shadow-small)}
+.interview-practice-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:0;padding:20px;border:1px solid var(--fs-line);border-radius:17px;background:linear-gradient(112deg,var(--fs-accent-soft),var(--fs-raised) 58%);box-shadow:var(--fs-shadow-small)}
 .interview-practice-mark{display:grid;place-items:center;width:48px;height:48px;border:1px solid var(--fs-line-strong);border-radius:14px;background:var(--fs-raised);color:var(--fs-accent)}
 .interview-practice-mark svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .interview-practice-copy .section-eyebrow{color:var(--fs-accent)}
 .interview-practice-copy h2{margin:5px 0 3px;font-size:17px;letter-spacing:-.35px}
 .interview-practice-copy p{max-width:610px;margin:0;color:var(--fs-muted);font-size:12px;line-height:1.55}
-.interview-practice-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px;white-space:nowrap}
+.interview-practice-actions{display:flex;flex-direction:column;align-items:flex-start;gap:8px;white-space:normal}
 .interview-practice-actions .btn{gap:10px;padding:11px 15px}
 .interview-history-link{min-height:30px;display:inline-flex;align-items:center;color:var(--fs-accent-ink);font-size:11px;font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .workspace-nav-item[href="/interview-practice/"]{text-decoration:none}
+.workspace-preparation-label{display:block;padding:15px 12px 5px;font-size:10px;font-weight:750;letter-spacing:.08em;color:var(--fs-muted)}
 .workspace-nav-item[href="/interview-practice/"]:focus-visible{outline:3px solid var(--fs-accent);outline-offset:3px}
 :root[data-theme="dark"] .interview-practice-card{background:linear-gradient(112deg,#203c48,var(--fs-raised) 64%);border-color:var(--fs-line)}
 :root[data-theme="dark"] .interview-history-link{color:var(--fs-accent)}

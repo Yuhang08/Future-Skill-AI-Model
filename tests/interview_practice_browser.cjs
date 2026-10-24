@@ -119,6 +119,10 @@ async function checkTheme(theme) {
     assert.equal(await evaluate("document.querySelector('#careerId').value"), "");
     assert.equal(await evaluate("document.querySelector('#start').disabled"), true,
       "practice cannot start without provider configuration");
+    assert.equal(await evaluate("getComputedStyle(document.querySelector('#interview')).display"), "none",
+      "question UI is not shown before a session starts");
+    assert.equal(await evaluate("getComputedStyle(document.querySelector('#report')).display"), "none");
+    assert.equal(await evaluate("getComputedStyle(document.querySelector('#historyPage')).display"), "none");
     assert.equal(await evaluate("document.querySelector('#availabilityNotice').hidden"), false);
     assert.equal(await evaluate("document.querySelector('#availabilityNotice').textContent.trim()"),
       "AI interview practice is temporarily unavailable.");
@@ -138,10 +142,22 @@ async function checkTheme(theme) {
     await wait("document.querySelector('#careerCount').textContent.startsWith('1 matching')");
     assert.equal(await evaluate("document.querySelector('#careerOptions button').textContent"),
       "Software Developers", "search is backed by the canonical catalogue");
+    await evaluate("document.querySelector('#careerSearch').focus()");
+    await send("Input.dispatchKeyEvent", { type: "keyDown", key: "ArrowDown", code: "ArrowDown" });
+    assert.equal(await evaluate("document.activeElement.getAttribute('role')"), "option",
+      "keyboard moves from career search into an option");
+    await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter" });
+    await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter" });
+    assert.equal(await evaluate("document.querySelector('#role').value"), "Software Developers",
+      "keyboard selection carries the canonical title");
+    assert.equal(await evaluate("document.activeElement.id"), "changeCareer",
+      "focus remains visible after the options close");
 
     await go("/interview-practice/?career_id=15-1252.00&career=Software%20Developers", "interview");
     await wait("document.querySelector('#careerId').value === '15-1252.00'");
     assert.equal(await evaluate("document.querySelector('#role').value"), "Software Developers");
+    assert.equal(await evaluate("document.querySelector('#careerCount').textContent.startsWith('1 matching')"), true,
+      "prefilled career count reflects the visible search value");
     assert.equal(await evaluate("document.querySelector('#start').disabled"), true);
     await noOverflow("interview desktop");
 
@@ -192,6 +208,18 @@ async function checkTheme(theme) {
     await noOverflow("interview mobile");
     assert.equal(await evaluate("getComputedStyle(document.querySelector('.interview-fields')).gridTemplateColumns.split(' ').length"), 1,
       "mobile form fields stack into one column");
+    await evaluate(`(() => {
+      const title=[...document.querySelectorAll('#careerOptions button')]
+        .map(button=>button.textContent).sort((a,b)=>b.length-a.length)[0];
+      const input=document.querySelector('#careerSearch');
+      input.value=title;
+      input.dispatchEvent(new Event('input',{bubbles:true}));
+      document.querySelector('#careerOptions button').click();
+    })()`);
+    await noOverflow("selected long occupation title on mobile");
+    await checkTheme("dark");
+    await noOverflow("dark mobile");
+    await checkTheme("light");
 
     await go("/career/15-1252.00", "career-workspace");
     await wait("[...document.querySelectorAll('a')].some(link => link.textContent.includes('Practise for this career'))");
@@ -203,29 +231,51 @@ async function checkTheme(theme) {
         url.searchParams.get('career') === 'Software Developers';
     })()`), true, "career detail opens practice for the explicit career without altering a pathway");
 
-    await go("/reskilling?demo=1&demo_scenario=dashboard", "reskilling");
+    await go("/__dev/demo/open?demo=1&demo_scenario=dashboard&scenario=dashboard&screen=S10", "reskilling");
     await wait("!!document.querySelector('#interviewPracticeLink') && !document.querySelector('#interviewPracticeCard').hidden",
       "saved-target practice card in isolated demo");
     assert.equal(await evaluate(`(() => {
-      const target=appState.profile.target_career;
+      const target=document.querySelector('#interviewPracticeTarget').textContent;
       const link=new URL(document.querySelector('#interviewPracticeLink').href);
       return target && link.searchParams.get('career') === target;
     })()`), true, "dashboard practice link uses only the saved target");
     assert.equal(await evaluate(`new URL(document.querySelector('.interview-history-link').href).searchParams.get('view')`),
       "history", "history link opens existing browser reports");
+    assert.equal(await evaluate(`document.querySelector('.dashboard-side').contains(document.querySelector('#interviewPracticeCard'))`),
+      true, "practice is secondary to the learning activities");
+    assert.equal(await evaluate(`document.querySelector('#interviewPracticeCard').getBoundingClientRect().top >
+      document.querySelector('#pathwaySection').getBoundingClientRect().bottom`),
+      true, "on mobile practice follows the current learning activities");
+    const savedTarget = await evaluate("document.querySelector('#interviewPracticeTarget').textContent");
+    await go("/career/15-1252.00?demo=1&demo_scenario=dashboard", "career-workspace");
+    await wait("[...document.querySelectorAll('a')].some(link => link.textContent.includes('Practise for this career'))");
+    const unchangedTarget = await evaluate(`fetch('/api/state?demo=1&demo_scenario=dashboard')
+      .then(response=>response.json()).then(data=>data.profile.target_career)`);
+    assert.equal(unchangedTarget, savedTarget,
+      "exploring another career while a pathway exists does not replace the saved target");
 
     await go("/reskilling?demo=1&demo_scenario=fresh", "reskilling");
-    await wait("appState !== null");
+    await wait("!!document.querySelector('#targetCareer option')");
     assert.equal(await evaluate("document.querySelector('#interviewPracticeCard').hidden"), true,
       "no saved learner pathway means no target-specific dashboard card");
 
     assert.deepEqual(errors, [], "no browser JavaScript exceptions");
     assert.deepEqual(failedLocalRequests, [], "no failed local app requests");
-    console.log("PASS: interview route, canonical selection, local history, unavailable provider state, bilingual settings, both themes, mobile layout, career-detail entry, and isolated reskilling navigation");
+    console.log("PASS: interview route, canonical selection, local history, unavailable provider state, three-language settings, both themes, mobile layout, career-detail entry, and isolated reskilling navigation");
   } finally {
     if (socket?.readyState === WebSocket.OPEN) socket.close();
-    browser.kill("SIGTERM");
-    fs.rmSync(profile, { recursive: true, force: true });
+    if (browser.exitCode === null) {
+      await new Promise(resolve => {
+        const timer = setTimeout(resolve, 5000);
+        browser.once("exit", () => { clearTimeout(timer); resolve(); });
+        browser.kill("SIGTERM");
+      });
+    }
+    try {
+      fs.rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    } catch (cleanupError) {
+      console.warn(`Temporary browser cleanup: ${cleanupError.code}`);
+    }
   }
 })().catch(error => {
   console.error(error);

@@ -102,6 +102,7 @@ node tests/language_packs.test.cjs
 node tests/pathway_confirmation.test.cjs
 # Requires a running app, Chromium and Node with built-in WebSocket support.
 node --experimental-websocket tests/assessment_report_browser.cjs
+node --experimental-websocket tests/interview_practice_browser.cjs
 ```
 
 On PowerShell, set `$env:PYTHONPATH = "src"` before running the Python checks.

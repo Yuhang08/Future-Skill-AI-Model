@@ -106,6 +106,7 @@ function updateInterviewPracticeEntry() {
   if (!card) return;
   card.hidden = !savedTarget;
   if (!savedTarget) return;
+  $('interviewPracticeTarget').textContent = savedTarget;
   $('interviewPracticeLink').href = `/interview-practice/?career=${encodeURIComponent(savedTarget)}`;
 }
 function updateWorkspaceSummary() {

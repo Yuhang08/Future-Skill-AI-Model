@@ -49,11 +49,12 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5h16"/><path d="M6.5 16V11m5 5V5m5 11v-7"/></svg>
             <span>Progress Tracking</span>
           </button>
+          <button type="button" class="workspace-nav-item" data-workspace-action="edit-profile"><span>Edit learning profile</span></button>
+          <span class="workspace-preparation-label">CAREER PREPARATION</span>
           <a class="workspace-nav-item" href="/interview-practice/">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10h8M8 13.5h5"/></svg>
             <span>Interview practice</span>
           </a>
-          <button type="button" class="workspace-nav-item" data-workspace-action="edit-profile"><span>Edit learning profile</span></button>
         </nav>
         <div id="workspaceSetupSteps" class="workspace-setup-steps" hidden>
           <p id="workspaceSetupStatus" role="status">Step 1 of 3 · not saved</p>
@@ -130,20 +131,6 @@
           <div><h2>Next unfinished learning activity</h2><p id="nextActivityDetail" data-i18n-ignore></p></div>
           <button type="button" class="btn btn-primary" data-workspace-action="plan">Open my plan</button>
         </section>
-        <section id="interviewPracticeCard" class="interview-practice-card" aria-labelledby="interviewPracticeTitle" hidden>
-          <div class="interview-practice-mark" aria-hidden="true">
-            <svg viewBox="0 0 32 32"><path d="M5 6.5h22v15H14l-7 4v-19Z"/><path d="M11 12h10M11 16h7"/></svg>
-          </div>
-          <div class="interview-practice-copy">
-            <span class="section-eyebrow">OPTIONAL CAREER PRACTICE</span>
-            <h2 id="interviewPracticeTitle">Rehearse an interview for your saved target</h2>
-            <p>Practise for your saved career target. Questions are general title-based practice, not verified occupational requirements.</p>
-          </div>
-          <div class="interview-practice-actions">
-            <a id="interviewPracticeLink" class="btn btn-primary" href="/interview-practice/">Start practice <span aria-hidden="true">→</span></a>
-            <a class="interview-history-link" href="/interview-practice/?view=history">View practice history</a>
-          </div>
-        </section>
         <div class="stats-grid">
           <div class="stat-card"><span class="stat-icon">◎</span><span class="stat-label">Study hours completed</span><strong id="hoursStat">0 / 0 h</strong><span class="stat-note">Estimated practice hours</span></div>
           <div class="stat-card"><span class="stat-icon">☑</span><span class="stat-label">Tasks completed</span><strong id="tasksStat">0 / 0</strong><span class="stat-note">Your active pathway</span></div>
@@ -182,6 +169,21 @@
             <section class="panel replan-card">
               <span class="section-eyebrow">FLEXIBLE BY DESIGN</span><h3>Adjust your schedule</h3><p class="muted tiny">Busy week? Shift your unfinished tasks without losing completed work or your learning tree.</p>
               <form id="replanForm"><div class="field"><label for="replanHours">Hours per week</label><input id="replanHours" type="number" min="1" max="40" step="0.5" required></div><div class="field"><label for="replanWeeks">Weeks to schedule from today</label><input id="replanWeeks" type="number" min="1" max="52" required></div><div class="field"><span class="field-label">Study days</span><div id="replanDays" class="day-selector compact"></div></div><button class="btn btn-primary full" type="submit">↻ Rebuild my timetable</button></form>
+            </section>
+            <section id="interviewPracticeCard" class="panel interview-practice-card" aria-labelledby="interviewPracticeTitle" hidden>
+              <div class="interview-practice-mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32"><path d="M5 6.5h22v15H14l-7 4v-19Z"/><path d="M11 12h10M11 16h7"/></svg>
+              </div>
+              <div class="interview-practice-copy">
+                <span class="section-eyebrow">CAREER PREPARATION</span>
+                <h2 id="interviewPracticeTitle">Interview practice</h2>
+                <p><span>Saved target</span>: <strong id="interviewPracticeTarget" data-i18n-ignore></strong></p>
+                <p>Practise explaining your experience and learning projects.</p>
+              </div>
+              <div class="interview-practice-actions">
+                <a id="interviewPracticeLink" class="btn btn-outline" href="/interview-practice/">Start practice <span aria-hidden="true">→</span></a>
+                <a class="interview-history-link" href="/interview-practice/?view=history">View practice history</a>
+              </div>
             </section>
             <section class="panel clarity-card"><span class="section-eyebrow">HOW IT WORKS</span><h3>Why these tasks?</h3><p>Your plan prioritises larger and more important skill gaps, then respects foundational prerequisites. It leaves room for review and can adapt when your availability changes.</p><p class="tiny muted">Career requirements and learning-time estimates in this demo are illustrative. Photos are evidence uploads, not automatically verified skill assessments.</p></section>
           </aside>

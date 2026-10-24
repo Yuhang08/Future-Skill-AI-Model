@@ -1,3 +1,8 @@
+html[data-futureskill-page="interview"] .hidden,
+html[data-futureskill-page="interview"] [hidden] {
+  display: none !important;
+}
+
 html[data-futureskill-page="interview"] body {
   min-height: 100dvh;
   background:
