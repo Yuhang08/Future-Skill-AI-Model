@@ -61,6 +61,7 @@
     .mapping-list{display:grid;gap:9px}
     .mapping{--sdg-color:#176a61;background:var(--paper);border:1px solid #e0e7dd;border-radius:12px;overflow:hidden;box-shadow:0 5px 16px #21433d08}
     .mapping-head{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:13px;min-height:76px;padding:12px 15px 12px 17px;background:linear-gradient(100deg,color-mix(in srgb,var(--sdg-color) 7%,#fffefa),#fffefa 67%)}
+    .goal-node.linked.broad-suggestion{border-style:dashed}
     .mapping-head::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--sdg-color)}
     .goal-number{width:46px;height:46px;display:grid;place-items:center;border-radius:9px;overflow:hidden;background:var(--sdg-color);flex:none}
     .goal-number img{width:100%;height:100%;object-fit:cover}
@@ -198,7 +199,7 @@
     <section class="intro">
       <div>
         <h1>Explore the work<br>behind the goals.</h1>
-        <p>See where career preparation may connect to the UN Sustainable Development Goals.</p>
+        <p>Explore potential links between occupation specialties and the UN Sustainable Development Goals.</p>
       </div>
       <aside class="distinction"><strong>Potential alignment is not impact.</strong>Occupation-to-goal suggestions are rule-based. They do not prove real-world impact.</aside>
     </section>
@@ -206,7 +207,7 @@
       <summary>About this prototype and how to read it</summary>
       <div class="about-copy">
         <p>Search all 923 O*NET occupations. Career-specific SDG suggestions come from occupation titles and SOC groups. View each rule, its sources and its limitations.</p>
-        <p>Five earlier learning-pathway mappings to Targets 4.4 and 8.5 remain curated illustrations. Additional occupational-theme suggestions do not claim any specific target or validated impact.</p>
+        <p>Occupation suggestions are separate from FutureSkill learning pathways. The learning product may support SDG 4.4 and 8.5; those are NOT automatically career goals.</p>
         <p>Evidence availability varies by role. Employment outcomes, equitable access and broader SDG-level contribution require separate evidence and follow-up data. A mapping does not show that a learner, career or product has caused measurable progress.</p>
         <p>Official UN goal icons identify the goals; their use does not imply UN endorsement. Photographs are representative, not evidence of FutureSkill outcomes.</p>
       </div>
@@ -220,7 +221,7 @@
         </div>
         <button id="submitButton" type="submit" disabled>Explore career</button>
       </form>
-      <p id="careerChoiceStatus" class="career-choice-status" role="status" aria-live="polite">Select a career from the catalogue to view its SDG suggestions and any curated learning-pathway links.</p>
+      <p id="careerChoiceStatus" class="career-choice-status" role="status" aria-live="polite">Select a career for occupation-based SDG suggestions; any learning-pathway links appear in a separate section.</p>
     </section>
     <p id="message" class="state-message" role="status" aria-live="polite">Browse all 17 goals, or select a career for its possible SDG connections.</p>
     <div id="loading" hidden aria-label="Loading career evidence"><div class="skeleton"></div><div class="loading-line"><span></span></div></div>
@@ -243,8 +244,13 @@
           <div id="careerCenter" class="career-center"><small>Exploring</small><strong id="mapCareerName">Career</strong></div>
           <div id="goalGrid" class="goal-grid" aria-label="United Nations Sustainable Development Goals"></div>
         </div>
-        <p class="map-caption">Select any goal to explore it. Highlighted links include rule-based suggestions. Other goals have not been mapped for this occupation.</p>
+        <p class="map-caption">Occupation-specific title matches are hypotheses; dashed goal outlines indicate broader SOC-group guesses. Neither is a verified UN-target contribution. Education and job-readiness training links appear separately below.</p>
       </section>
+      <details id="learningContribution" class="pathway" hidden>
+        <summary class="pathway-toggle"><span><h2>FutureSkill learning contribution (separate)</h2><span class="pathway-intro">Learning and job-readiness links are NOT direct career-to-SDG mappings.</span></span></summary>
+        <p class="pathway-intro">Goal 4 / Goal 8 here describes the FutureSkill learning programme only. It does not mean the selected job directly improves education or guarantees decent work.</p>
+        <div id="learningContributionList" class="skills-list"></div>
+      </details>
       <details id="pathway" class="pathway" hidden>
         <summary class="pathway-toggle"><span><h2>Learning pathway</h2><span class="pathway-intro">Skills and practice connected to preparation for this role.</span></span></summary>
         <p class="pathway-intro">These skills and learning actions describe preparation for the selected role. Completion does not guarantee employment or SDG outcomes.</p>
@@ -387,9 +393,11 @@
       icon.loading = "lazy";
       const headCopy = node(head, "div");
       node(headCopy, "h3", mapping.sdg_name || (goalInfo && goalInfo[0]) || "Sustainable Development Goal");
-      node(headCopy, "p", mapping.target_id ? `Illustrative learning pathway · Target ${mapping.target_id}.` : "Occupation-based thematic suggestion · not a verified SDG target.");
+      node(headCopy, "p", mapping.specificity === "title_rule"
+        ? "Occupation-title suggestion · verify job tasks and target evidence."
+        : "Broad occupational-group suggestion · lower specificity; requires review.");
       const headActions = node(head, "div", "", "mapping-head-actions");
-      node(headActions, "span", mapping.target_id ? `TARGET ${mapping.target_id}` : `GOAL ${mapping.sdg_id} · SUGGESTED`, "target-tag");
+      node(headActions, "span", mapping.specificity === "title_rule" ? "TITLE-BASED" : "BROAD SOC RULE", "target-tag");
       const drawerId = `mapping-drawer-${index}`;
       const titleId = `mapping-drawer-title-${index}`;
       const openButton = node(headActions, "button", "Show more", "mapping-details-trigger");
@@ -434,7 +442,7 @@
       const evidence = Array.isArray(mapping.supporting_evidence) ? mapping.supporting_evidence : [];
       const sources = Array.isArray(mapping.evidence_source) ? mapping.evidence_source : [];
       const overview = node(drawerPanel, "div", "", "evidence-overview");
-      [[evidence.length,"Evidence statements"],[sources.length,"Reference links"],[mapping.user_action ? 1 : 0,"Suggested next step"]].forEach(([value,label]) => {
+      [[evidence.length,"Mapping rationale notes"],[sources.length,"Reference links"],[mapping.user_action ? 1 : 0,"Verification step"]].forEach(([value,label]) => {
         const stat = node(overview,"div","","evidence-stat");
         node(stat,"strong",value);
         node(stat,"span",label);
@@ -532,7 +540,10 @@
         button.dataset.gridColumn = String(desktopSlots[index][1]);
         button.style.gridArea = `${desktopSlots[index][0]} / ${desktopSlots[index][1]}`;
         button.style.setProperty("--goal-color",goal[1]);
-        if (mapping) button.classList.add("linked");
+        if (mapping) {
+          button.classList.add("linked");
+          if (mapping.specificity === "soc_group") button.classList.add("broad-suggestion");
+        }
         button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${mapping ? "Potential career connection. Open details." : "Not assessed for this career. Open goal information."}`);
         const icon = node(button,"img");
         icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
@@ -541,7 +552,7 @@
         const copy = node(button,"span","","goal-node-copy");
         node(copy,"span",`GOAL ${String(id).padStart(2,"0")}`,"goal-index");
         node(copy,"span",goal[0],"goal-name");
-        node(copy,"span",mapping ? "Potential link" : "Not assessed","goal-node-status");
+        node(copy,"span",mapping ? (mapping.specificity === "soc_group" ? "Broad suggestion" : "Title suggestion") : "Not assessed","goal-node-status");
         button.addEventListener("click",() => {
           lastFocusedGoal = button;
           if (mapping) {
@@ -672,12 +683,40 @@
       }
     }
 
+    function renderLearningContribution(data) {
+      const section = document.getElementById("learningContribution");
+      const list = document.getElementById("learningContributionList");
+      list.replaceChildren();
+      section.open = false;
+      const links = Array.isArray(data.learning_pathway_mappings)
+        ? data.learning_pathway_mappings : [];
+      section.hidden = links.length === 0;
+      links.forEach(item => {
+        const row = node(list, "div", "", "skill-row");
+        const copy = node(row, "div");
+        node(copy, "div", `FutureSkill learning link: SDG ${item.sdg_id} · Target ${item.target_id}`, "skill-name");
+        node(copy, "p", item.relevance_reason || "Illustrative learning preparation only.");
+        const details = node(row, "div", "", "skill-description");
+        node(details, "p", item.impact_limitations || "Not an occupational SDG impact claim.");
+        const official = (item.evidence_source || []).find(source =>
+          typeof source.url === "string" && source.url.startsWith("https://sdgs.un.org/goals/"));
+        if (official) {
+          const link = node(details, "a", "Read official UN target");
+          link.href = official.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+        }
+      });
+    }
+
     function browseIndependentGoals() {
       activeCareer = "";
       activeMappings = [];
       mappingList.replaceChildren();
       pathway.hidden = true;
       pathway.open = false;
+      document.getElementById("learningContribution").hidden = true;
+      document.getElementById("learningContribution").open = false;
       document.getElementById("roleTitle").textContent = "Explore all 17 goals";
       document.getElementById("reviewStatus").textContent = "NO CAREER SELECTED";
       mapCareerName.textContent = "Choose a supported career";
@@ -708,6 +747,8 @@
       mapLines.replaceChildren();
       pathway.hidden = true;
       pathway.open = false;
+      document.getElementById("learningContribution").hidden = true;
+      document.getElementById("learningContribution").open = false;
       activeMappings = [];
       try {
         const response = await fetch("/api/sdg/mindmap",{
@@ -722,18 +763,21 @@
         activeCareer = data.career;
         document.getElementById("roleTitle").textContent = activeCareer;
         mapCareerName.textContent = activeCareer;
-        document.getElementById("reviewStatus").textContent = data.status === "curated" ? "CURATED + SUGGESTED" : data.status === "suggested" ? "RULE-BASED SUGGESTIONS" : "NOT MAPPED";
+        document.getElementById("reviewStatus").textContent = activeMappings.some(m => m.specificity === "title_rule")
+          ? "TITLE-BASED · UNVERIFIED"
+          : activeMappings.length ? "BROAD SOC SUGGESTIONS" : "NOT MAPPED";
         results.hidden = false;
+        renderLearningContribution(data);
         if (activeMappings.length) {
           activeMappings.forEach(renderMapping);
-          message.textContent = `${activeMappings.length} possible career connections. Rule-based suggestions are not validated SDG impacts. Select a goal to explore.`;
+          message.textContent = `${activeMappings.length} thematic SDG suggestion(s). These are not verified impact claims; click any highlighted goal for its rule and limitations.`;
           await renderPathway(data,activeCareer,sequence);
         } else {
           const empty = node(mappingList,"div","","empty-card");
           node(empty,"strong","No career SDG suggestions available");
           node(empty,"span","This occupation currently has no thematic suggestion. This does not mean it cannot contribute to an SDG.");
           pathway.hidden = true;
-          message.textContent = "No SDG theme is assigned; browse the goals independently.";
+          message.textContent = "No occupational SDG suggested; this is not evidence of no contribution.";
         }
         if (sequence !== reviewSequence) return;
         renderGoals();
