@@ -1,3 +1,26 @@
+## Correction: no automatic Goal 8 for management or commercial occupations
+
+Earlier versions classified all SOC 11 Management Occupations, and several
+other business/service SOC groups, as SDG 8 solely because they are jobs.
+This was **not valid occupational evidence**. Broad default Goal 8
+assignments have now been removed for SOC major groups 11, 13, 39, 41 and 43.
+
+Clearly described specialist roles can still receive a **classification-only**
+suggestion (e.g. Legislators → potential Goal 16, Hydroelectric Production
+Managers → potential Goal 7, IT Systems Managers → potential Goal 9).
+These are unverified **title-topic** directions, not demonstrated impacts.
+
+An occupation with no narrow Task-to-Target rule, no distinctive Task/DWA
+theme, and no sufficiently specific title is now **UNASSIGNED** as an SDG
+candidate, while keeping its actual O*NET task profile and source IDs.
+This is scientifically preferable to inventing a Goal 8 connection.
+
+Export and audit preserve all **923 distinct occupational analyses** while
+counting such cases in `no_sdg_suggestion`. A 923-row analysis file does
+not require 923 assigned goals or imply accuracy.
+
+---
+
 # SDG Mapping v4 — O*NET Task Importance + Detailed Work Activities (24 Oct 2026)
 
 ## What the new version actually improves
