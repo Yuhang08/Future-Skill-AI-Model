@@ -40,7 +40,7 @@ files out of Git. Use a separate writable data directory for testing.
 
 - `/ai-trend` displays ten qualitative category scenarios. The upstream data cites the World Economic Forum Future of Jobs Report 2025 without page-level citations; the page labels the scenario data as unvalidated.
 - `/uncertainty` runs the upstream hand-set scenario formula. Its starting value and coefficients are illustrative assumptions, not labor-market forecasts.
-- `/sdg-impact` shows limited potential alignments to UN SDG targets 4.4 and 8.5 for five explicitly mapped reskilling pathways. The role skills and practice activities come from FutureSkill's illustrative catalogue; unsupported roles remain unreviewed, and no employment or measured SDG impact is claimed.
+- `/sdg-impact` searches all 923 O*NET data-level occupations (plus separate prototype role IDs) and shows explicit **rule-based occupation-to-goal suggestions**. Specialty title rules take priority; otherwise each SOC major group has a broad thematic goal. Five earlier curated *learning-pathway* links to Targets 4.4 and 8.5 remain, and any extra occupational suggestions are separately labeled. The O*NET file supplies occupation identities, **not verified SDG impact evidence**; no specific UN target is inferred for rule-based suggestions. See `docs/sdg-923-rule-based.md`.
 - All three are linked from the homepage under **Explore More Features**. No RunPod model or external API key is required for these prototype pages.
 
 ## Technical layout
