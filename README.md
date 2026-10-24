@@ -21,9 +21,9 @@
 | ----------------- | ---------------------------------------------- |
 | GitHub Repository | [https://github.com/your-username/your-project](https://github.com/Yuhang08/Future-Skill-AI-Model)  |
 | Replit Project    | [https://replit.com/@your-username/your-project](https://replit.com/@tehyy623/Future-Skill-AI-Model) |
-| Live Demo         | https://your-project.replit.app                |
+| Live Demo         | [https://your-project.replit.app  ](https://future-skill-ai-model.onrender.com/)              |
 | RunPod Endpoint   | None                                           |
-| Slide Deck        | https://example.com/slides                     |
+| Slide Deck        | [https://example.com/slides ](https://www.canva.com/design/DAHY8lPJIu0/R1r_axxx3azZZKLuGaVGMw/edit)                    |
 | Demo Video        | https://example.com/demo-video                 |
 
 ---
