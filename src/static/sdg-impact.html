@@ -245,7 +245,6 @@
       <section id="taskGoalRankings" class="task-goal-rankings" aria-label="O*NET task-based SDG relevance ranking" hidden>
         <h2>Task-based SDG relevance · Top 3</h2>
         <p class="score-disclaimer">O*NET 31.0 supplies the occupational task statements; FutureSkill's own rule-based model compares their wording with all 17 Goals. Indices (0–100) are not probabilities, achieved impact, or UN-certified connections. Some roles receive only weak exploratory rankings; O*NET and the UN do not validate this model.</p>
-        <p id="rankingReferenceNote" class="score-disclaimer" hidden></p>
         <div id="topGoalCards" class="goal-rank-cards"></div>
         <details class="all-goal-scores">
           <summary>View scores for all 17 SDGs</summary>
@@ -636,14 +635,9 @@
         const statusText = !activeCareer
           ? "Explore goal"
           : mapping ? (mapping.target_id ? `Target ${mapping.target_id} · candidate` : "Task-to-Target candidate")
-          : ranked && score
-            ? `Top 3 model ranking · ${score.review_status === "task_text_candidate" ? "task theme" : score.review_status === "dwa_candidate" ? "work activity" : "weak evidence"}`
-          : score ? (score.review_status === "task_text_candidate" ? "Task-theme · not reviewed" : "Weak exploratory ranking")
           : candidate ? (candidate.candidate_tier === "classification_only" ? "Classification-only" : "Needs review")
-          : activeTaskDataStatus === "not_installed" ? "Task source unavailable"
-          : activeTaskDataStatus === "invalid_file" ? "Task source invalid"
-          : activeTaskDataStatus === "occupation_tasks_missing" ? "Occupation tasks missing"
-          : "No target evidence";
+          : score ? (score.review_status === "task_text_candidate" ? "Task-theme · not reviewed" : "Weak exploratory ranking")
+          : activeTaskDataStatus === "not_installed" ? "Task source unavailable" : "No target evidence";
         button.setAttribute("aria-label",`SDG ${id}: ${goal[0]}. ${statusText}. Open evidence details.`);
         const icon = node(button,"img");
         icon.src = `/static/assets/sdg/sdg-${id}-icon.png`;
@@ -652,7 +646,7 @@
         const copy = node(button,"span","","goal-node-copy");
         node(copy,"span",`GOAL ${String(id).padStart(2,"0")}`,"goal-index");
         node(copy,"span",goal[0],"goal-name");
-        node(copy,"span",score ? `${ranked ? "TOP 3 · " : ""}#${score.rank} · ${score.relevance_index}/100 · ${statusText}` : statusText,"goal-node-status");
+        node(copy,"span",score ? `#${score.rank} · ${score.relevance_index}/100 · ${statusText}` : statusText,"goal-node-status");
         button.addEventListener("click",() => {
           showGoalInfo(id,goal,button,mapping,candidate,score);
         });
@@ -903,9 +897,7 @@
       const header = node(list,"div","","skill-row");
       const copy = node(header,"div");
       node(copy,"div",`${profile.occupation_task_count || 0} tasks · ${profile.core_task_count || 0} Core`,"skill-name");
-      node(copy,"p",data.ranking_reference
-        ? `Comparable occupation: ${data.ranking_reference.career} (${data.ranking_reference.career_id}). These are NOT verified tasks of ${data.career}; use as an illustrative comparison only.`
-        : "Representative O*NET 31.0 occupation tasks (verbatim). These describe duties, not SDG contributions.");
+      node(copy,"p","Representative O*NET 31.0 occupation tasks (verbatim). These describe duties, not SDG contributions.");
       const source = node(header,"div","","skill-description");
       if (profile.source_url) {
         const anchor = node(source,"a","Open official O*NET occupation");
@@ -978,12 +970,6 @@
       const scores = Array.isArray(data.goal_scores) ? data.goal_scores : [];
       const top = Array.isArray(data.top_goal_scores) ? data.top_goal_scores : [];
       section.hidden = scores.length !== 17;
-      const referenceNote = document.getElementById("rankingReferenceNote");
-      const comparable = data.ranking_reference || null;
-      referenceNote.hidden = !comparable;
-      referenceNote.textContent = comparable
-        ? `Comparable O*NET occupation: ${comparable.career} (${comparable.career_id}). These Top 3 scores are reference comparisons, NOT direct evidence for ${data.career} or verified SDG Target links.`
-        : "";
       if (section.hidden) return;
       top.forEach((entry,index) => {
         const card = node(cards,"article","","goal-rank-card");
@@ -1172,7 +1158,7 @@
         activeCareerId = data.career_id || career.id;
         document.getElementById("roleTitle").textContent = activeCareer;
         document.getElementById("reviewStatus").textContent = activeGoalScores.length === 17
-          ? `${data.ranking_reference ? "Comparable O*NET reference · " : ""}17 goals scored · Top 3 task-ranked · ${activeMappings.length} strict target hypotheses`
+          ? `17 goals scored · Top 3 task-ranked · ${activeMappings.length} strict target hypotheses`
           : `${activeMappings.length} task-target · ${activeCandidateMappings.length} need review`;
         results.hidden = false;
         renderLearningContribution(data);
@@ -1198,10 +1184,6 @@
               : "No supported SDG connection identified; this is preferable to assigning an arbitrary SDG 8. Review the original O*NET tasks below.");
           message.textContent = activeGoalScores.length === 17
             ? "Task-derived Top 3 suggestions are shown, even without strict Target matches. Low relevance scores indicate weak thematic evidence."
-            : data.task_data_status === "invalid_file"
-            ? "O*NET Task Statements CSV is invalid or empty on this deployment. Restore the official task data to enable Top 3 ranking."
-            : data.task_data_status === "occupation_tasks_missing"
-            ? "This occupation has no matching O*NET Task Statements in the deployed dataset. No task-based ranking can be calculated."
             : data.task_data_status === "not_installed"
             ? "Official task CSV missing. No task-based ranking is available."
             : activeCandidateMappings.length

@@ -42,7 +42,6 @@ TARGETS = {
 ROLE_CONFIG = {
     "Data Analyst": {
         "career_id": "prototype:data-analyst",
-        "ranking_reference": ("15-2051.00", "Data Scientists"),
         "aliases": ("Data Analyst", "Data Analysts"),
         "evidence_skills": ("SQL", "Pandas", "Data Visualisation"),
         "user_action": (
@@ -61,7 +60,6 @@ ROLE_CONFIG = {
     },
     "Cybersecurity Analyst": {
         "career_id": "prototype:cybersecurity-analyst",
-        "ranking_reference": ("15-1212.00", "Information Security Analysts"),
         "aliases": ("Cybersecurity Analyst", "Cyber Security Analyst"),
         "occupational_aliases": {"15-1212.00": ("Information Security Analyst",)},
         "evidence_skills": ("Networking", "Security Fundamentals", "Log Analysis"),
@@ -72,7 +70,6 @@ ROLE_CONFIG = {
     },
     "UI/UX Designer": {
         "career_id": "prototype:ui-ux-designer",
-        "ranking_reference": ("15-1255.00", "Web and Digital Interface Designers"),
         "aliases": ("UI/UX Designer", "UI UX Designer"),
         "occupational_aliases": {"15-1255.00": ()},
         "evidence_skills": ("Wireframing", "Accessibility", "Usability Testing"),
@@ -83,7 +80,6 @@ ROLE_CONFIG = {
     },
     "Digital Marketing Specialist": {
         "career_id": "prototype:digital-marketing-specialist",
-        "ranking_reference": ("13-1161.00", "Market Research Analysts and Marketing Specialists"),
         "aliases": ("Digital Marketing Specialist",),
         "evidence_skills": ("Analytics", "Content Strategy", "Reporting"),
         "user_action": (
@@ -277,34 +273,12 @@ def _build_alignment(career_id, current_skills=None, include_goal_scores=False):
     # Ranking is an on-demand feature: the 923-row legacy audit/tests remain
     # fast and stable, while the website can show 17 scored goals per role.
     scored = {}
-    ranking_reference = None
-    if include_goal_scores:
-        scoring_id = career_id
-        if career["kind"] == "prototype" and career_name in ROLE_CONFIG:
-            reference = ROLE_CONFIG[career_name].get("ranking_reference")
-            if reference:
-                # Related O*NET occupation, not an identity match or verified
-                # SDG Target link for the prototype title.
-                scoring_id = reference[0]
-                ranking_reference = {
-                    "career_id": reference[0],
-                    "career": reference[1],
-                    "type": "comparable_occupation",
-                    "disclaimer": (
-                        "These are exploratory rankings for a comparable O*NET "
-                        "occupation, not occupation-specific evidence or verified "
-                        "SDG Target mappings for the selected prototype career."
-                    ),
-                }
-        if career["kind"] == "occupation" or ranking_reference:
-            stamp = tuple(
-                (str(p), p.stat().st_mtime_ns if p.is_file() else None)
-                for p in (task_source.TASK_DATA, DWA_CSV, RATINGS_CSV)
-            )
-            scored = score_career_goals(scoring_id, stamp)
-            if ranking_reference and len(scored.get("goal_scores", [])) == 17:
-                task_profile = occupation_task_profile(scoring_id)
-                task_data_status = "reference_comparison"
+    if include_goal_scores and career["kind"] == "occupation":
+        stamp = tuple(
+            (str(p), p.stat().st_mtime_ns if p.is_file() else None)
+            for p in (task_source.TASK_DATA, DWA_CSV, RATINGS_CSV)
+        )
+        scored = score_career_goals(career_id, stamp)
     candidate_mappings = candidate_mappings_for_occupation(
         career_id, career["title"], {m["sdg_id"] for m in task_mappings}
     )
@@ -319,7 +293,6 @@ def _build_alignment(career_id, current_skills=None, include_goal_scores=False):
             "goal_scores": scored.get("goal_scores", []),
             "top_goal_scores": scored.get("top_goal_scores", []),
             "goal_scoring_method": scored.get("method"),
-            "ranking_reference": ranking_reference,
             "mappings": task_mappings,
             "candidate_mappings": candidate_mappings,
             "learning_pathway_mappings": [],
@@ -402,7 +375,6 @@ def _build_alignment(career_id, current_skills=None, include_goal_scores=False):
         "goal_scores": scored.get("goal_scores", []),
         "top_goal_scores": scored.get("top_goal_scores", []),
         "goal_scoring_method": scored.get("method"),
-            "ranking_reference": ranking_reference,
         "mappings": task_mappings,
         "candidate_mappings": candidate_mappings,
         "learning_pathway_mappings": learning_mappings,
