@@ -1,0 +1,13 @@
+{
+  "source_commit": "48339bc91102cb178b3555d35eb4cbbae9db52b1",
+  "catalogue_rows": 923,
+  "task_statement_rows": 18838,
+  "capture_kind": "Local browser capture using isolated development/sample data. Not a verified capture of the public Render deployment.",
+  "prepared_date": "2026-10-25",
+  "timezone": "Asia/Kuala_Lumpur",
+  "tool_versions": {
+    "python-pptx": "1.0.2",
+    "pillow": "12.3.0",
+    "reportlab": "4.4.9"
+  }
+}
