@@ -699,6 +699,34 @@
       }
     }
 
+    function renderTaskProfile(data) {
+      const section = document.getElementById("taskProfile");
+      const list = document.getElementById("taskProfileList");
+      list.replaceChildren();
+      section.open = false;
+      const profile = data.task_profile || {};
+      const tasks = Array.isArray(profile.representative_tasks) ? profile.representative_tasks : [];
+      section.hidden = tasks.length === 0;
+      if (!tasks.length) return;
+      const header = node(list,"div","","skill-row");
+      const copy = node(header,"div");
+      node(copy,"div",`${profile.occupation_task_count || 0} tasks · ${profile.core_task_count || 0} Core`,"skill-name");
+      node(copy,"p","Representative O*NET occupation tasks (verbatim). These describe duties, not SDG contributions.");
+      const source = node(header,"div","","skill-description");
+      if (profile.source_url) {
+        const anchor = node(source,"a","Open official O*NET occupation");
+        anchor.href = profile.source_url;
+        anchor.target = "_blank";
+        anchor.rel = "noopener noreferrer";
+      }
+      tasks.forEach(task => {
+        const row = node(list,"div","","skill-row");
+        const label = node(row,"div");
+        node(label,"div",`Task ID ${task.task_id} · ${task.task_type || "not classified"}`,"skill-name");
+        node(label,"p",task.task);
+      });
+    }
+
     function renderCandidateSuggestions(data) {
       const section = document.getElementById("candidateSuggestions");
       const list = document.getElementById("candidateList");
@@ -709,10 +737,22 @@
       suggestions.forEach(item => {
         const entry = node(list, "div", "", "skill-row");
         const primary = node(entry, "div");
-        node(primary, "div", `Goal ${item.sdg_id} · ${item.sdg_name}`, "skill-name");
-        node(primary, "p", item.relevance_reason || "Broad title/SOC guess.");
-        const note = node(entry, "div", "", "skill-description");
-        node(note, "p", "UNVERIFIED · No task evidence for this specific goal is claimed.");
+        node(primary,"div",`Goal ${item.sdg_id} · ${item.sdg_name}`,"skill-name");
+        node(primary,"p",item.relevance_reason || "Preliminary SDG suggestion.");
+        const note = node(entry,"div","","skill-description");
+        const isTaskContext = item.candidate_tier === "task_topic";
+        node(note,"div",isTaskContext
+          ? "TASK-TOPIC CANDIDATE · a real O*NET task mentions this topic, but no UN target is verified."
+          : "CLASSIFICATION-ONLY GUESS · no occupation-to-target task evidence.","skill-name");
+        (Array.isArray(item.task_evidence) ? item.task_evidence : []).forEach(task =>
+          node(note,"p",`O*NET Task ID ${task.task_id}: ${task.task}`));
+        const url = "https://www.onetonline.org/link/details/" + encodeURIComponent(data.career_id || "");
+        if (data.task_profile && data.task_profile.occupation_task_count) {
+          const link = node(note,"a","Read source tasks");
+          link.href = url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+        }
       });
     }
 
@@ -745,6 +785,7 @@
     function browseIndependentGoals() {
       activeCareer = "";
       activeMappings = [];
+      activeCandidateMappings = [];
       mappingList.replaceChildren();
       pathway.hidden = true;
       pathway.open = false;
@@ -752,6 +793,8 @@
       document.getElementById("learningContribution").open = false;
       document.getElementById("candidateSuggestions").hidden = true;
       document.getElementById("candidateSuggestions").open = false;
+      document.getElementById("taskProfile").hidden = true;
+      document.getElementById("taskProfile").open = false;
       document.getElementById("roleTitle").textContent = "Explore all 17 goals";
       document.getElementById("reviewStatus").textContent = "NO CAREER SELECTED";
       mapCareerName.textContent = "Choose a supported career";
@@ -786,7 +829,10 @@
       document.getElementById("learningContribution").open = false;
       document.getElementById("candidateSuggestions").hidden = true;
       document.getElementById("candidateSuggestions").open = false;
+      document.getElementById("taskProfile").hidden = true;
+      document.getElementById("taskProfile").open = false;
       activeMappings = [];
+      activeCandidateMappings = [];
       try {
         const response = await fetch("/api/sdg/mindmap",{
           method:"POST",
@@ -797,17 +843,21 @@
         if (sequence !== reviewSequence) return;
         if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Could not load role evidence.");
         activeMappings = Array.isArray(data.mappings) ? data.mappings : [];
+        const stronglyLinked = new Set(activeMappings.map(item => Number(item.sdg_id)));
+        activeCandidateMappings = (Array.isArray(data.candidate_mappings) ? data.candidate_mappings : [])
+          .filter(item => !stronglyLinked.has(Number(item.sdg_id)));
         activeCareer = data.career;
         document.getElementById("roleTitle").textContent = activeCareer;
         mapCareerName.textContent = activeCareer;
-        document.getElementById("reviewStatus").textContent = activeMappings.length
-          ? "O*NET TASK-BASED · UNVERIFIED" : "NO TASK-BACKED MATCH";
+        document.getElementById("reviewStatus").textContent =
+          `${activeMappings.length} task-target · ${activeCandidateMappings.length} need review`;
         results.hidden = false;
         renderLearningContribution(data);
+        renderTaskProfile(data);
         renderCandidateSuggestions(data);
         if (activeMappings.length) {
           activeMappings.forEach(renderMapping);
-          message.textContent = `${activeMappings.length} candidate UN target(s) match real O*NET task text. Task evidence does not prove SDG impact.`;
+          message.textContent = `${activeMappings.length} task-to-target hypotheses and ${activeCandidateMappings.length} weaker suggestions. Dotted lines NEED REVIEW; no SDG effect is proven.`;
           await renderPathway(data,activeCareer,sequence);
         } else {
           const empty = node(mappingList,"div","","empty-card");
@@ -817,8 +867,8 @@
             : "No sufficiently explicit official O*NET task matched the target rules. Broader title/SOC guesses below are separate and unverified.");
           pathway.hidden = true;
           message.textContent = data.task_data_status === "not_installed"
-            ? "O*NET 31.0 task statements not installed. No occupation target evidence can be claimed."
-            : "No task-backed SDG match. This does not rule out other possible contributions.";
+            ? "Official task CSV missing. Dashed goals are broad unverified guesses, NOT data-validated."
+            : `No strict task-target match; ${activeCandidateMappings.length} unverified goal ideas are displayed with dashed links.`;
         }
         if (sequence !== reviewSequence) return;
         renderGoals();
