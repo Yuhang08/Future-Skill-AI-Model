@@ -107,11 +107,11 @@ TARGET_RULES = (
         # Target 4.1 refers specifically to PRIMARY and SECONDARY
         # education, not postsecondary, preschool or adult classes.
         "codes": (
-            "25-2012.00",  # Kindergarten teachers
+            # Kindergarten/pre-primary education is target 4.2, not 4.1.
             "25-2021.00", "25-2022.00", "25-2023.00",
             "25-2031.00", "25-2032.00",
-            "25-2055.00", "25-2056.00", "25-2057.00", "25-2058.00",
-            "25-3031.00",  # Substitute teachers
+            "25-2056.00", "25-2057.00", "25-2058.00",
+            # Grade-unspecified substitute teaching cannot establish 4.1.
         ),
         "topic": r"\b(?:students?|pupils?|kindergartners?|"
                  r"classrooms?|school children|school students)\b",
@@ -120,6 +120,26 @@ TARGET_RULES = (
         "core_only": True,
         "note": "Core teaching duties in K-12 schooling may relate to "
                 "Target 4.1; preschool, university and adult instruction are different targets.",
+    },
+    {
+        "target": "4.2", "goal": 4,
+        # Target 4.2 is early childhood care and pre-primary education.
+        # Only explicit preschool/kindergarten educator occupation codes,
+        # not all other teaching positions.
+        "codes": (
+            "25-2011.00",  # Preschool Teachers, Except Special Education
+            "25-2012.00",  # Kindergarten Teachers, Except Special Education
+            "25-2051.00",  # Special Education Teachers, Preschool
+            "25-2055.00",  # Special Education Teachers, Kindergarten
+        ),
+        "topic": r"\b(?:preschool|pre-school|kindergarten|"
+                 r"children|young learners?|students?|pupils?)\b",
+        "action": r"\b(?:teach|instruct|tutor|educat|"
+                  r"assess|develop lesson|prepar\w* lessons?)\w*\b",
+        "core_only": True,
+        "note": "A Core preschool/kindergarten educational duty may "
+                "relate to Target 4.2, not Target 4.1. Pre-primary access "
+                "and early childhood outcomes are not measured.",
     },
     {
         "target": "6.3", "goal": 6,
