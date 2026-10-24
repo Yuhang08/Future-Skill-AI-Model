@@ -19,7 +19,7 @@ class TaskGoalAPITests(unittest.TestCase):
         samples = {
             "17-2199.11": "Solar Energy Systems Engineers",
             "51-8031.00": "Water and Wastewater Treatment Plant and System Operators",
-            "25-2021.00": "Elementary School Teachers",
+            "25-2021.00": "Elementary School Teachers, Except Special Education",
             "11-1011.00": "Chief Executives",
         }
         for code, title in samples.items():
