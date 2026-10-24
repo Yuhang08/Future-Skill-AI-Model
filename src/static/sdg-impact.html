@@ -406,9 +406,9 @@
       icon.loading = "lazy";
       const headCopy = node(head, "div");
       node(headCopy, "h3", mapping.sdg_name || (goalInfo && goalInfo[0]) || "Sustainable Development Goal");
-      node(headCopy, "p", mapping.specificity === "title_rule"
-        ? "Occupation-title suggestion · verify job tasks and target evidence."
-        : "Broad occupational-group suggestion · lower specificity; requires review.");
+      node(headCopy, "p", mapping.specificity === "onet_task"
+        ? `O*NET Task ID-backed Target ${mapping.target_id} candidate · human review needed; not proven impact.`
+        : "Unverified occupational-theme suggestion.");
       const headActions = node(head, "div", "", "mapping-head-actions");
       node(headActions, "span", mapping.specificity === "onet_task" ? `O*NET TASK · TARGET ${mapping.target_id}` : "UNVERIFIED", "target-tag");
       const drawerId = `mapping-drawer-${index}`;
@@ -481,11 +481,11 @@
           pairs.push({
             skill: first,
             practice: second,
-            skillLabel: requirement ? `Skill · ${requirement[1]}` : "Classification note",
-            practiceLabel: second ? (mapping.mapping_kind === "occupation_theme" ? "Rule note" : "Practice activity") : null
+            skillLabel: requirement ? `Skill · ${requirement[1]}` : "Occupation task",
+            practiceLabel: second ? (mapping.mapping_kind === "occupation_theme" ? "Rule note" : "Occupation task") : null
           });
         }
-        const sharedDetail = node(evidenceBox,"div","Select a note to view the full classification rationale.","evidence-detail");
+        const sharedDetail = node(evidenceBox,"div","Select a task to read the full O*NET evidence wording.","evidence-detail");
         sharedDetail.id = `evidence-detail-${index}`;
         sharedDetail.setAttribute("role", "status");
         sharedDetail.setAttribute("aria-live", "polite");
@@ -506,9 +506,29 @@
           });
         });
         const full = node(evidenceBox,"details","","evidence-full");
-        node(full,"summary","Read full classification notes");
+        node(full,"summary","Read all occupation task statements");
         const ul = node(full,"ul");
         evidence.forEach(item => node(ul,"li",item));
+      }
+      const originalTasks = Array.isArray(mapping.task_evidence) ? mapping.task_evidence : [];
+      if (originalTasks.length) {
+        const details = node(evidenceColumn,"details","","evidence-full");
+        node(details,"summary","View original O*NET Task IDs, DWAs and task ratings");
+        originalTasks.forEach(task => {
+          const wrap = node(details,"div","","evidence-box");
+          node(wrap,"div",`Task ID ${task.task_id} · ${task.task_type || "Unclassified"}`,"field-label");
+          node(wrap,"p",task.task);
+          const ratings = task.task_ratings || {};
+          const values = [];
+          if (ratings.importance_1_to_5 != null)
+            values.push(`Task importance: ${ratings.importance_1_to_5}/5`);
+          if (ratings.relevance_pct != null)
+            values.push(`Task relevance: ${ratings.relevance_pct}%`);
+          if (values.length)
+            node(wrap,"p",values.join(" · ") + " · occupational statistics, NOT SDG confidence");
+          (Array.isArray(task.dwa_activities) ? task.dwa_activities : []).forEach(dwa =>
+            node(wrap,"p",`Official DWA ${dwa.id} · ${dwa.name}`));
+        });
       }
       renderSources(evidenceColumn, mapping.evidence_source);
       if (visual.iconUrl) {
