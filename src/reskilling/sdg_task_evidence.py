@@ -12,6 +12,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from .sdg_occupation_rules import GOAL_NAMES
+from .sdg_onet_context import get_context, importance_sort_key, DWA_DOC, RATINGS_DOC
 
 TASK_DATA = Path(__file__).resolve().parent.parent / "data" / "onet_task_statements.csv"
 ONET_DOWNLOAD = "https://www.onetcenter.org/dl_files/database/db_31_0_csv/task_statements.csv"
@@ -188,7 +189,10 @@ def task_supported_mappings(career_id, title):
     mappings = []
     for target, found in sorted(matched.items()):
         core = [(task, rule) for task, rule in found if task["type"].lower() == "core"]
-        selected = (core or found)[:3]
+        # Relative role-task importance affects the order of displayed
+        # evidence only. It is NOT an SDG impact probability.
+        selected = sorted(core or found,
+                          key=lambda item: importance_sort_key(career_id, item[0]))[:3]
         task, rule = selected[0]
         goal = rule["goal"]
         evidence = [
@@ -198,6 +202,8 @@ def task_supported_mappings(career_id, title):
                 "task_type": item["type"],
                 "date": item["date"],
                 "source_url": f"https://www.onetonline.org/link/details/{career_id}",
+                "dwa_activities": get_context(career_id, item["id"])["dwas"],
+                "task_ratings": get_context(career_id, item["id"])["task_ratings"],
             }
             for item, _ in selected
         ]
@@ -230,8 +236,19 @@ def task_supported_mappings(career_id, title):
                  "label": f"United Nations · SDG Target {target}",
                  "url": f"https://sdgs.un.org/goals/goal{goal}",
                  "scope": "Target definition only; relationship is a project-authored heuristic."},
+                {"id": "onet-task-ratings",
+                 "label": "O*NET 31.0 Task Ratings (where available)",
+                 "url": RATINGS_DOC,
+                 "scope": "Occupational task importance/relevance, not SDG confidence."},
+                {"id": "onet-task-dwa",
+                 "label": "O*NET 31.0 Tasks to DWAs (where available)",
+                 "url": DWA_DOC,
+                 "scope": "Detailed work activities joined by occupation and Task ID."},
             ],
-            "supporting_source_ids": ["onet-task-statements", f"un-sdg-target-{target}"],
+            "supporting_source_ids": [
+                "onet-task-statements", f"un-sdg-target-{target}",
+                "onet-task-ratings", "onet-task-dwa"
+            ],
             "user_action": (
                 "Check the O*NET Task ID and UN target. Human review and evidence "
                 "of actual outcomes are required before claiming SDG impact."
