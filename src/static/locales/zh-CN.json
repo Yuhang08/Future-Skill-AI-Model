@@ -1,0 +1,355 @@
+{
+  "DEVELOPMENT DEMO — isolated sample answers. Your saved assessment and learning plan are unchanged.": "开发演示——独立示例回答。已保存的评估和学习计划保持不变。",
+  "Done": "已完成",
+  "Next unfinished learning activity": "下一项未完成的学习活动",
+  "Open my plan": "打开我的计划",
+  "Demonstration: pathway actions use an isolated sample session.": "演示：学习路径操作使用独立的示例会话。",
+  "(tied)": "（并列）",
+  "Highest reported confidence": "最高自报信心",
+  "Role details: O*NET": "职业详情：O*NET",
+  "Why this match?": "为什么推荐这项？",
+  "Limitations": "局限性",
+  "Sources": "来源",
+  "Interest overlap: {areas}": "兴趣交集：{areas}",
+  "No distinct above-average interest overlap": "未发现明显高于个人平均值的兴趣交集",
+  "Subject tags from title: {fields}": "从职业名称识别的学科标签：{fields}",
+  "No subject tags detected from title": "未从职业名称识别到学科标签",
+  "Personalized matching evidence unavailable": "暂无个性化匹配依据",
+  "Example pathway: {career}. Illustrative requirements; readiness not assessed.": "示例学习路径：{career}。要求仅作示例，尚未评估职业准备程度。",
+  "No linked pathway template. Role-specific readiness not assessed.": "暂无关联学习路径模板。尚未评估该职业的准备程度。",
+  "Interests are not verified ability. Self-reported confidence is not proficiency and does not affect this ranking. Title-derived subject tags are a heuristic, not occupational requirements. Local sourced duties are unavailable.": "兴趣不等于经验证的能力。自报信心不等于熟练程度，也不影响此排名。名称推导的学科标签是启发式判断，并非职业要求。本地暂无有来源支持的工作职责。",
+  "FutureSkill’s custom questionnaire and deterministic engine support these response observations and ranking indices. They are not validated occupational requirements.": "这些回答观察和排名指数来自 FutureSkill 的自定义问卷与确定性引擎，并非经验证的职业要求。",
+  "Official occupation profile — work details for further research": "官方职业档案——供进一步研究的工作详情",
+  "O*NET interest types — general RIASEC descriptions only": "O*NET 兴趣类型——仅支持一般 RIASEC 描述",
+  "Suggestions to explore, in engine order—not predictions of career success.": "按引擎顺序排列的探索建议，并非职业成功预测。",
+  "Your first three recommendations, in engine order. Suggestions to explore—not predictions of career success.": "按引擎顺序展示前三项建议。这些是探索建议，并非职业成功预测。",
+  "Review your responses": "查看你的回答",
+  "Review answers before changing them. Scores update only when you submit the assessment again.": "修改前先查看回答。只有再次提交评估后，分数才会更新。",
+  "Catalogue information": "职业目录信息",
+  "Example pathway available · readiness not assessed": "有示例学习路径 · 尚未评估准备程度",
+  "No linked pathway · readiness not assessed": "无关联学习路径 · 尚未评估准备程度",
+  "Browse occupations, not personalized recommendations. Role details are linked to O*NET; learning pathway coverage varies.": "浏览职业目录，不是个性化推荐。职业详情链接至 O*NET；不同职业的学习路径覆盖程度不同。",
+  "Find a role to explore": "寻找想探索的职业",
+  "Software": "软件",
+  "Nurse": "护理",
+  "Teacher": "教师",
+  "Edit learning profile": "编辑学习资料",
+  "Choose a target": "选择目标",
+  "Step {step} of 3 · not saved": "第 {step} 步，共 3 步 · 尚未保存",
+  "1 · About you": "1 · 关于你",
+  "2 · Your skills": "2 · 你的技能",
+  "3 · Your schedule": "3 · 你的时间安排",
+  "{completed} of {total} tasks completed.": "已完成 {completed} 项任务，共 {total} 项。",
+  "Set up your learning profile to create a plan.": "设置学习资料以创建计划。",
+  "← Explore careers": "← 探索职业",
+  "MY LEARNING PATHWAY": "我的学习路径",
+  "Make room for your next skill.": "为下一项技能安排时间。",
+  "Choose a target, reflect on your skills and set a realistic study schedule.": "选择目标、回顾技能，并制定切实可行的学习时间表。",
+  "Local sourced duties are unavailable. Inspect the official profile for work activities and requirements.": "本地暂无有来源支持的职责详情。请查看官方职业档案中的工作活动与要求。",
+  "Catalogue evidence": "目录依据",
+  "Interest profile & catalogue metadata": "兴趣档案与目录元数据",
+  "These imported interest values are not personal results. Local dataset provenance and validation have not been independently established.": "这些导入的兴趣数值并非你的个人结果。本地数据集的来源和有效性尚未得到独立确认。",
+  "Role-specific readiness is not assessed. Self-reported confidence is not proficiency.": "尚未评估职业特定的准备程度。自报信心不等于熟练程度。",
+  "Appearance preference": "外观偏好",
+  "Explore More Features": "探索更多功能",
+  "AI Trend Explorer": "人工智能趋势探索",
+  "Explore qualitative career and skill scenarios; not validated demand forecasts.": "探索定性的职业与技能情景；这些并非经过验证的需求预测。",
+  "Prototype data": "原型示例数据",
+  "Change assumptions and compare illustrative model outputs.": "调整假设，比较模型的示例结果。",
+  "Rule-based simulation": "基于规则的模拟",
+  "SDG alignment evidence": "可持续发展目标关联证据",
+  "Review role-to-target reasoning, sources and what the evidence cannot establish.": "查看职业与目标之间的关联理由、来源，以及证据无法证明的事项。",
+  "Curated targets only": "仅涵盖精选目标",
+  "Career assessment":"职业兴趣评估","Reskilling":"技能提升","AI trends":"人工智能趋势","Uncertainty Lab":"不确定性实验室","SDG connections":"可持续发展目标关联","Settings":"设置","Language":"语言","Close settings":"关闭设置","Switch to light mode":"切换至浅色模式","Switch to dark mode":"切换至深色模式","Light mode":"浅色模式","Dark mode":"深色模式","Main navigation":"主导航",
+  "Occupational titles, imported career information, and external source titles may remain in English.":"职业名称、导入的职业信息和外部来源标题可能仍为英文。",
+  "Discover Your Future Career":"探索未来职业方向","Discover your interests, explore your strengths, and find career opportunities that align with your future.":"了解自己的兴趣与优势，探索与你未来方向相符的职业选择。","42 Questions | 3 Assessment Parts":"42 道题 | 3 个评估部分","Start Career Assessment":"开始职业兴趣评估","Already know your goal? Explore your reskilling pathway →":"已经有目标？探索技能提升路径 →","RIASEC Assessment":"RIASEC 兴趣评估","Explore your six occupational interest dimensions.":"探索六个职业兴趣维度。","Subject Preferences":"学科偏好","Discover which academic fields interest you most.":"了解你最感兴趣的学科领域。","Career Recommendations":"职业探索建议","Explore careers based on your interests and preferences.":"根据你的兴趣与偏好探索职业。","Your Career Assessment Results":"职业兴趣评估结果","Top 10 Career Recommendations":"前 10 项职业探索建议","Build your personalised learning pathway":"制定个性化学习路径","Retake Assessment":"重新评估",
+  "Part A: RIASEC Interests":"A 部分：RIASEC 兴趣","Part B: Subject Preferences":"B 部分：学科偏好","Part C: Skills Self-Assessment":"C 部分：技能自评","How much would you enjoy doing these activities?":"你会有多喜欢从事以下活动？","How interested are you in these subjects?":"你对以下学科有多感兴趣？","How confident are you in your current abilities?":"你对自己目前的能力有多大信心？",
+  "Build or repair a simple electronic device.":"组装或维修简单的电子设备。","Use tools to assemble a physical product.":"使用工具组装实体产品。","Test or troubleshoot a piece of equipment.":"测试设备或排查故障。","Work with machines or practical technology.":"操作机器或实用技术设备。","Solve challenging mathematical problems.":"解决有挑战性的数学问题。","Investigate why a scientific phenomenon happens.":"探究某种科学现象发生的原因。","Analyse data to discover patterns.":"分析数据以发现规律。","Develop logical explanations for complex problems.":"为复杂问题提出逻辑解释。","Create an original visual design.":"创作原创视觉设计。","Write creative stories or scripts.":"创作故事或剧本。","Develop new artistic concepts.":"构思新的艺术创意。","Express ideas through art or creative media.":"通过艺术或创意媒介表达想法。","Explain difficult concepts to other people.":"向他人解释较难理解的概念。","Help someone understand a new skill.":"帮助他人理解一项新技能。","Support people facing a problem.":"支持正面临困难的人。","Collaborate with others to help a community.":"与他人合作，为社区提供帮助。","Lead a team to complete a project.":"带领团队完成项目。","Persuade others to support an idea.":"说服他人支持某个想法。","Start a business or new initiative.":"创办企业或发起新项目。","Organise people to achieve a goal.":"组织大家共同实现目标。","Organise information into clear records.":"将信息整理成清晰的记录。","Check data carefully for errors.":"仔细检查数据中的错误。","Follow detailed procedures accurately.":"准确遵循详细流程。","Maintain an organised database or system.":"维护有序的数据库或系统。",
+  "Developing software or mobile applications.":"开发软件或移动应用。","Learning about artificial intelligence and cybersecurity.":"学习人工智能与网络安全。","Studying advanced mathematics and statistics.":"学习高等数学与统计学。","Using mathematical models to solve real problems.":"运用数学模型解决现实问题。","Teaching students and explaining complex ideas.":"教导学生并讲解复杂概念。","Designing learning activities and educational materials.":"设计学习活动与教育材料。","Learning about medicine and human health.":"学习医学与人体健康知识。","Working in healthcare or medical research.":"从事医疗保健或医学研究。","Studying entrepreneurship, finance and management.":"学习创业、金融与管理。","Developing business strategies and marketing plans.":"制定商业策略与营销计划。","Designing engineering systems and technology.":"设计工程系统与技术。","Applying physics to practical engineering problems.":"运用物理知识解决实际工程问题。",
+  "Solving mathematical and logical problems.":"解决数学与逻辑问题。","Writing and debugging computer programs.":"编写并调试计算机程序。","Analysing data and interpreting results.":"分析数据并解读结果。","Explaining information clearly to others.":"向他人清楚地解释信息。","Planning projects and leading a team.":"规划项目并带领团队。","Generating original solutions to problems.":"为问题提出原创解决方案。",
+  "Strongly dislike":"非常不喜欢","Dislike":"不喜欢","Neutral":"一般","Like":"喜欢","Strongly like":"非常喜欢","Not confident":"没有信心","Slightly confident":"有一点信心","Moderately confident":"有一定信心","Very confident":"很有信心","Extremely confident":"非常有信心","Previous":"上一步","Next":"下一步","Part {n} of 3":"第 {n} 部分，共 3 部分","Question {n}, {state}":"第 {n} 题，{state}","Answered":"已回答","Unanswered":"未回答","answer required":"需要回答","Clear saved draft":"清除已保存的草稿","Quiz navigation":"问卷导航","Assessment sections":"评估部分","Overall assessment completion":"评估总体完成度","{n} of {total} answered":"已回答 {n} / {total} 题","{part}: {n} of {total} answered":"{part}：已回答 {n} / {total} 题","{n}. {question}":"{n}. {question}",
+  "A guide for reflection":"用于自我反思的参考","Your results at a glance":"快速查看结果","Three separate views of what you reported—not a verified competency test or a prediction of employment.":"以下是你自我报告内容的三个不同视角，并非经过验证的能力测试，也不预测就业结果。","Interests":"兴趣","Subjects":"学科","Confidence":"信心","Careers":"职业","Your career interests — RIASEC":"你的职业兴趣 — RIASEC","Calculated interest code":"计算得出的兴趣代码","Why this code?":"这个代码代表什么？","Your subject preferences":"你的学科偏好","Your self-reported skills":"你自我报告的技能","What to explore next":"接下来可以探索什么","How to read this report":"如何阅读这份报告","Calculation, sources & limitations":"计算方法、来源与局限","Review my answers":"查看我的回答","Explore reskilling options":"探索技能提升选项","View career recommendations":"查看职业探索建议",
+  "Career pathway explorer":"职业路径探索","Explore the work behind the goals.":"探索目标背后的工作。","Choose a career":"选择职业","Search careers (e.g. Data Analyst)":"搜索职业（例如：数据分析师）","Explore career":"探索职业","Browse the goals, or select a supported career to explore its reviewed connections.":"浏览目标，或选择有支持的职业，查看已审阅的关联。","Career connections · 17 goals":"职业关联 · 17 项目标","Reviewed potential link":"已审阅的潜在关联","Not assessed":"未评估","Learning pathway":"学习路径","Close":"关闭","Explore the UN goal":"查看联合国目标","Potential relationship only. This prototype does not evaluate impact.":"仅表示潜在关联。本原型不评估实际影响。",
+  "Not at all":"完全不喜欢","Slightly":"有一点","Moderately":"一般","Very much":"很喜欢","Extremely":"非常喜欢","1 = Not confident":"1 = 没有信心","5 = Very confident":"5 = 非常有信心","1 = Strongly dislike":"1 = 非常不喜欢","5 = Strongly like":"5 = 非常喜欢","Get Recommendations":"查看建议","{n} / {total} questions answered":"已回答 {n} / {total} 道题","{part}: {n} of {total} answered":"{part}：已回答 {n} / {total} 题","Part {n} of 3":"第 {n} 部分，共 3 部分","Preview only — sample answers are not saved.":"仅供预览 — 示例回答不会保存。","Saved on this device for 30 days. Not synced.":"已保存在此设备 30 天。不会同步。","Device storage is unavailable. Answers are kept only until this page closes.":"设备存储不可用。回答仅保留至关闭此页面。","Draft restored. Stored on this device for 30 days; not synced.":"已恢复草稿。保存在此设备 30 天，不会同步。","This question needs an answer. Choose a rating from 1 to 5.":"此题尚未回答。请选择 1 至 5 的评分。","Clear all assessment answers saved on this device? Existing career results and learning plans will not be deleted.":"要清除此设备上保存的所有评估回答吗？现有职业结果和学习计划不会删除。","A results object is needed to prepare this report.":"需要结果数据才能生成此报告。","Interest results are incomplete or outside the expected 20–100 range. No scores have been estimated.":"兴趣结果不完整或超出预期的 20–100 范围。未估算任何分数。","Subject results are incomplete or outside the expected 1–5 range. No scores have been estimated.":"学科结果不完整或超出预期的 1–5 范围。未估算任何分数。","Confidence ratings are incomplete or outside the expected 1–5 range. No scores have been estimated.":"信心评分不完整或超出预期的 1–5 范围。未估算任何分数。","Career recommendation data is incomplete or in an unexpected format. Your profile scores are not being replaced.":"职业建议数据不完整或格式异常。你的档案分数不会被替换。","This report could not be prepared":"无法生成此报告","The report container is unavailable.":"报告区域不可用。","Realistic":"实践型","Investigative":"研究型","Artistic":"艺术型","Social":"社交型","Enterprising":"进取型","Conventional":"常规型","Build or repair equipment; work physically or outdoors.":"组装或维修设备；从事体力或户外工作。","Study or research objects, organisms, data, or human behavior.":"研究物体、生物、数据或人类行为。","Make original art, design, writing, or music.":"创作原创艺术、设计、文字或音乐。","Help, teach, advise, or serve other people.":"帮助、教导、建议或服务他人。","Manage, negotiate, market, sell, or lead.":"管理、谈判、营销、销售或领导。","Follow procedures to organize information or data.":"遵循流程整理信息或数据。","This area concerns practical, hands-on activities such as working with tools, equipment, materials, or the outdoors.":"此领域涉及实践操作，例如使用工具、设备、材料或在户外工作。","This area concerns investigating questions, studying how things work, and researching evidence about the world or people.":"此领域涉及提出问题、研究事物如何运作，以及寻找关于世界或人的证据。","This area concerns creating original work and expressing ideas through visual art, design, writing, music, or other media.":"此领域涉及创作原创作品，并通过视觉艺术、设计、写作、音乐或其他媒介表达想法。","This area concerns activities centered on helping people, teaching, advising, supporting, or providing a service.":"此领域涉及帮助、教学、建议、支持他人或提供服务。","This area concerns persuading or coordinating with others, leading initiatives, and activities such as marketing, sales, negotiation, or management.":"此领域涉及说服或协调他人、带领行动，以及营销、销售、谈判或管理等活动。","This area concerns organizing information, maintaining records, and following established procedures to work with data.":"此领域涉及整理信息、维护记录并遵循既定流程处理数据。","Would you like to try a small repair, build, or outdoor project?":"你愿意尝试小型维修、制作或户外项目吗？","What question could you investigate using observation, reading, or a small experiment?":"你可以通过观察、阅读或小实验探究什么问题？","What would you enjoy making if you could choose the format and audience?":"如果可以选择形式和受众，你喜欢创作什么？","Who might benefit from something you could explain, teach, or help with?":"谁可能从你的讲解、教学或帮助中受益？","What idea or small project would you like to organize people around?":"你想围绕什么想法或小项目组织大家？","What information could you organize into a clear, useful system?":"你可以把哪些信息整理成清晰实用的系统？","Your career interests — RIASEC":"你的职业兴趣 — RIASEC","Scores use the existing 20–100 scale: four answers summed, divided by 20, then multiplied by 100.":"分数沿用现有的 20–100 量表：将四个回答相加，除以 20，再乘以 100。","Equal scores follow the fixed R–I–A–S–E–C ordering in the displayed three-letter code. A letter's position in a tie does not establish a primary, secondary, or tertiary strength.":"显示的三字母代码在分数相同时遵循固定的 R–I–A–S–E–C 顺序。并列时字母的位置不代表第一、第二或第三优势。","The code shows the three highest calculated interest scores. It is a shorthand for these responses, not a fixed personal identity.":"此代码显示计算得分最高的三个兴趣领域，仅概括这些回答，并非固定的个人身份。","Your subject ratings are equal, so none is distinguished.":"你的学科评分相同，因此没有突出项。","These 1–5 ratings describe reported confidence, not independently assessed proficiency or occupational readiness. A lower rating alone is not a weakness.":"这些 1–5 评分表示自我报告的信心，并非独立评估的熟练程度或职业准备度。单独较低的评分不代表弱点。","Skills are separate from role-specific requirements and do not affect career rankings.":"技能评分与特定岗位要求分开，也不会影响职业排名。","No close-score threshold or statistical significance is inferred.":"本报告不会推断接近分数的阈值或统计显著性。","AI-written assessment review is unavailable: no AI provider or assessment-review service is configured. This deterministic report is available without AI, and does not send your answers to an AI service.":"AI 评估分析不可用：尚未配置 AI 提供方或评估分析服务。本确定性报告无需 AI 即可生成，也不会将你的回答发送给 AI 服务。",
+  "Career exploration · prototype data":"职业探索 · 原型数据","AI Career Trend Explorer":"AI 职业趋势探索","Review broad skill and career-category directions from the imported project data.":"查看项目导入数据中的技能与职业类别总体趋势。","Not a validated forecast:":"非经验证的预测：","the historical labels are qualitative and future labels are hand-built scenarios. This dataset contains no annual employment counts and should not be used to predict an individual’s job prospects.":"历史标签为定性描述，未来标签为人工构建的情景。本数据集不含年度就业人数，不应用于预测个人就业前景。","Geographic scope":"地理范围","Scenario period":"情景时期","Model type":"模型类型","Categories":"类别","Filter categories":"筛选类别","Loading imported category scenarios…":"正在加载导入的类别情景…","Source and limitations":"来源与局限","Drivers":"驱动因素","Skills mentioned":"提及的技能","No categories match that search.":"没有类别符合该搜索。","AI Uncertainty Lab":"AI 不确定性实验室","What-if scenarios · prototype model":"假设情景 · 原型模型","Change assumptions and compare how this simple rule-based model responds.":"更改假设并比较此简单规则模型的响应。","These are not employment forecasts.":"这些不是就业预测。","The imported model uses hand-set coefficients and an illustrative 68.9% starting value. It has not been calibrated against labour-market data. Do not use the outputs as probabilities or career advice.":"导入的模型使用人工设定的系数和示例起始值 68.9%。它未经劳动力市场数据校准。请勿将输出用作概率或职业建议。","Scenario assumptions":"情景假设","Starting scenario":"起始情景","Illustrative starting value (%)":"示例起始值 (%)","Run this scenario":"运行此情景","Compare all six scenarios":"比较全部六种情景","Loading the scenario set…":"正在加载情景集…","Employment-to-Population Ratio":"就业人口比率","2031 illustrative result:":"2031 年示例结果：","Output from the scenario formula, not an observed or validated employment rate.":"此结果来自情景公式，并非观测或验证过的就业率。","Loading the scenario chart…":"正在加载情景图表…","Illustrative model outputs only, not forecasts. The percentage axis is zoomed to the scenario values. No validated uncertainty interval is available.":"仅为模型示例输出，并非预测。百分比坐标轴已缩放至情景值范围。目前没有经过验证的不确定性区间。","Year-by-year values":"逐年数值","Occupational growth assumptions":"职业增长假设","These percentages are formula outputs from assumed sensitivity weights, not measured job growth.":"这些百分比是基于假设敏感度权重的公式输出，并非测得的职位增长。","Preset comparison":"预设比较","AI development speed":"AI 开发速度","Automation intensity":"自动化强度","Worker transition capacity":"劳动者转型能力","Economic conditions":"经济状况","AI-goal misalignment severity":"AI 目标偏离程度","Other factors (policy, demographics)":"其他因素（政策、人口结构）","Profile":"档案","Appearance":"外观","Privacy and data":"隐私与数据","Open learning profile":"打开学习档案","Choose how the reskilling workspace looks on this browser.":"选择此浏览器中技能提升工作区的外观。","Light":"浅色","Dark":"深色","System":"跟随系统","More for your workspace":"工作区更多选项","These options are not available yet.":"这些选项尚未开放。","CV import":"导入简历","Notifications":"通知","Cross-device sync":"跨设备同步","Not available":"暂不可用","This prototype does not offer account-level cross-device sync. Your appearance choice is saved in this browser; learning data uses the app’s existing session.":"此原型不提供账户级跨设备同步。外观偏好保存在此浏览器中；学习数据使用应用现有会话。",
+  "Which best describes you?":"以下哪项最符合你的情况？","Student / fresh graduate":"学生 / 应届毕业生","Currently employed":"目前在职","Planning a career change":"计划转换职业","Returning to work or learning":"重返工作或学习","Your current industry or community":"你目前的行业或社区","Your general experience":"你的总体经验","Your target career":"你的目标职业","What would you like to achieve?":"你希望实现什么？","How many hours can you study per week?":"你每周可以学习多少小时？","How many weeks do you want to plan?":"你想规划多少周？","Which days work best for you?":"哪些日期最适合你学习？","How do you like to learn?":"你喜欢怎样学习？","Hands-on projects":"动手项目","Video tutorials + practice":"视频教程 + 练习","Reading + practice":"阅读 + 练习","Continue →":"继续 →","Generate my pathway":"生成我的学习路径","Return to dashboard":"返回概览","About you":"关于你","Your skills":"你的技能","Your schedule":"你的安排","Build your learning profile":"建立学习档案","About 2–3 minutes":"约需 2–3 分钟","Monday":"星期一","Tuesday":"星期二","Wednesday":"星期三","Thursday":"星期四","Friday":"星期五","Saturday":"星期六","Sunday":"星期日",
+  "Browser storage is blocked. Your language choice will apply for this visit only.":"浏览器存储受阻。语言选择仅在本次访问中生效。","Your highest subject ratings are tied across {subjects}.":"你的最高学科评分并列：{subjects}。","Your highest subject rating is {subject}.":"你的最高学科评分为{subject}。","Your highest confidence rating is {score} / 5 for {skills}; your lowest is {low} / 5 for {lowSkills}.":"你的最高信心评分为 {score} / 5（{skills}）；最低为 {low} / 5（{lowSkills}）。","Tied interest scores: {ties}. Ties are not ordered as primary, secondary, or tertiary strengths.":"兴趣分数并列：{ties}。并列不会排序为第一、第二或第三优势。","There is also a tie at the three-area profile-code cutoff: {areas} share a score of {score}. The code is not used in recommendation ranking.":"三领域档案代码的截断位置也出现并列：{areas} 的得分均为 {score}。该代码不用于建议排序。","A possible combination to explore: {first} and {second}. Try these two reflection questions together: “{question1}” and “{question2}” This is an exploratory prompt, not a role recommendation.":"可以探索的组合：{first} 和 {second}。试着一起思考这两个问题：“{question1}”和“{question2}”这只是探索提示，并非岗位建议。","Language changed for this visit. Browser storage is blocked, so your preference could not be saved.":"语言已在本次访问中更改。浏览器存储受阻，无法保存偏好。","This language pack could not be loaded. Your previous language is still active.":"无法加载此语言包，仍使用之前的语言。","Loading language pack…":"正在加载语言包…","Saved language pack could not be loaded. English remains active.":"无法加载已保存的语言包，当前使用英语。","The saved draft is expired or incompatible. Start fresh; new answers will save on this device.":"已保存的草稿已过期或不兼容。请重新开始；新回答将保存在此设备上。","Answers save on this device for 30 days. On a shared device, clear your draft when finished.":"回答会在此设备上保存 30 天。若使用共享设备，请在完成后清除草稿。",
+  "You reported enjoyment of subject activities on a 1–5 scale. Interest does not demonstrate subject ability. The meanings and questions below are FutureSkill reflection prompts, not validated ability interpretations.":"你以 1–5 量表报告了对学科活动的兴趣。兴趣并不能证明学科能力。以下含义和问题是 FutureSkill 的反思提示，并非经过验证的能力解读。","These 1–5 ratings describe reported confidence, not independently assessed proficiency or occupational readiness. A lower rating alone is not a weakness. Practice can help you gather examples, but does not verify proficiency without an assessment and rubric. These broad ratings are separate from role-specific requirements and do not affect career rankings.":"这些 1–5 评分表示自我报告的信心，而非经独立评估的熟练程度或职业准备度。评分较低本身不代表弱点。练习有助于收集实例，但若没有评估和评分标准，并不能验证熟练程度。这些宽泛评分与岗位要求分开，也不会影响职业排名。","FutureSkill’s recommendation engine uses a 65% interest index and 35% subject index. The interest index combines 85% scaled Pearson profile-shape similarity and 15% above-your-own-mean emphasis; a flat profile is neutral at 50. Subject fields use title-matching heuristics, with unclassified fields neutral, and diversity selection can change recommendation order. The three-letter profile code is not an input to ranking. Where there is a tie at the code cutoff, this report names every tied area.":"FutureSkill 的建议引擎使用 65% 兴趣指数和 35% 学科指数。兴趣指数结合 85% 缩放后的 Pearson 档案形状相似度，以及 15% 高于个人均值的强调；平坦档案的中性值为 50。学科领域采用标题匹配启发式，未分类领域按中性处理，多样性选择也可能改变建议顺序。三字母档案代码不作为排名输入。若代码截断位置出现并列，本报告会列出所有并列领域。","This FutureSkill questionnaire is custom and is NOT the official O*NET Interest Profiler. It does not inherit the official instrument’s validation, norms, or reliability. The six interest areas are provided here for career exploration only.":"此 FutureSkill 问卷为自编问卷，并非 O*NET 官方兴趣测评工具。它不具备官方工具的效度、常模或信度。这里的六个兴趣领域仅用于职业探索。","The engine returned {count} careers, starting with {career}. Explore their work activities rather than treating the order as a verdict.":"引擎返回了 {count} 个职业建议，首项为 {career}。请探索其工作活动，不要将排序视为定论。","No engine recommendations were returned. You can still review your answers or explore the explicitly labeled prototype learning templates.":"引擎未返回职业建议。你仍可查看回答，或探索明确标注为原型的学习模板。","Your highest subject ratings are tied across {subjects}.":"你的最高学科评分并列：{subjects}。","Computing & technology":"计算与技术","Mathematics & statistics":"数学与统计","Teaching & learning":"教学与学习","Health & medicine":"健康与医学","Business & enterprise":"商业与企业","Engineering & design":"工程与设计","Mathematical & logical problem-solving":"数学与逻辑问题解决","Coding & debugging":"编程与调试","Data analysis":"数据分析","Communication":"沟通","Planning & team coordination":"规划与团队协调","Creative problem-solving":"创造性解决问题",
+  "Close assessment":"关闭评估","e.g. Education, Retail, Technology":"例如：教育、零售、科技","e.g. Build my first data analysis portfolio project":"例如：完成我的第一个数据分析作品集项目","Overall assessment completion":"评估总体完成度","Results report sections":"结果报告部分","Career Assessment":"职业兴趣评估","Review your answers":"查看你的回答","Try one low-stakes activity":"尝试一项低压力活动","Explore a learning pathway":"探索学习路径","No close-score threshold or statistical significance is inferred. The report compares exact calculated values, discloses ties, and offers reflection questions rather than diagnoses.":"本报告不会推断接近分数的阈值或统计显著性。报告比较精确计算值、说明并列情况，并提供反思问题而非诊断。","FutureSkill’s recommendation engine uses a 65% interest index and 35% subject index.":"FutureSkill 的建议引擎使用 65% 兴趣指数和 35% 学科指数。","Skills are not ranking inputs. Any “Shared interest strengths” shown on career cards means interests above your own profile mean; it does not verify a skill. Career recommendations are exploratory, not probabilities or evidence of occupational fit.":"技能不参与排名。职业卡片中的“共同兴趣优势”表示高于你个人档案均值的兴趣，并非技能验证。职业建议用于探索，不代表概率或职业匹配证据。","Your subject ratings are equal at {score} / 5; none is distinguished.":"你的学科评分均为 {score} / 5，没有突出项。","{subjects} has your highest subject rating.":"你的最高学科评分为{subjects}。","{subject} has your highest subject rating.":"你的最高学科评分为{subject}。","You rated every skill {score} / 5 for confidence.":"你对所有技能的信心评分均为 {score} / 5。","Your highest confidence rating is {score} / 5 for {skills}; your lowest is {low} / 5 for {lowSkills}.":"你的最高信心评分为 {score} / 5（{skills}）；最低为 {low} / 5（{lowSkills}）。","Your confidence ratings are equal":"你的信心评分相同","Your interests are equal":"你的兴趣评分相同","Your recommendations are exploratory, not predictions.":"建议仅供探索，并非预测。"
+  ,"Evidence availability varies by role. Employment outcomes, equitable access and broader SDG-level contribution require separate evidence and follow-up data. A mapping does not show that a learner, career or product has caused measurable progress.":"不同职业的证据可用性各异。就业结果、平等获取机会及更广泛的可持续发展目标贡献，需要独立证据和后续数据。映射并不表示学习者、职业或产品已造成可衡量的进展。"
+  ,"Explore how a role’s skill requirements and learning pathway may relate to selected UN targets. Each reviewed mapping includes its reasoning, supporting evidence, suggested action and limits.":"探索某个角色的技能要求和学习路径可能如何关联所选联合国目标。每项经审阅的映射均说明其理由、支持证据、建议行动及局限。"
+  ,"General activity descriptions are adapted from O*NET. This custom questionnaire is not the official Interest Profiler and does not inherit its validation, norms, or reliability.":"一般活动描述改编自 O*NET。本自编问卷并非官方兴趣测评工具，不具备其效度、常模或信度。"
+  ,"Official UN goal icons identify the goals; their use does not imply UN endorsement. Photographs are representative, not evidence of FutureSkill outcomes.":"联合国官方目标图标用于识别目标；使用这些图标并不代表联合国认可。照片仅作示意，并非 FutureSkill 成效的证据。"
+  ,"Potential alignment is not impact.":"潜在关联不等于实际影响。"
+  ,"Prototype mappings currently connect selected learning pathways to SDG 4.4 and SDG 8.5. Skill requirements are illustrative; other roles are not assigned targets.":"目前，原型映射将部分学习路径与可持续发展目标 4.4 和 8.5 联系起来。技能要求仅作示例；其他角色未指定目标。"
+  ,"Search and select a supported career or role":"搜索并选择受支持的职业或角色"
+  ,"Select a supported career to explore its reviewed connections.":"选择受支持的职业，探索经审阅的关联。"
+  ,"Select any goal to explore it. Only reviewed career links are connected; other goals are not assessed for this role.":"选择任一目标以了解详情。仅已审阅的职业关联会连接显示；此角色的其他目标尚未评估。"
+  ,"These are illustrative learning links, not proof of real-world change.":"这些是示例性学习关联，并非现实变化的证明。"
+  ,"These scores are not percentiles, probabilities of career success, or percentages of your personality. The bars share a 20–100 axis; 20 is the minimum possible response score, not an absence of interests.":"这些分数不是百分位数、职业成功概率或人格比例。所有条形共用 20–100 的坐标轴；20 是回答分数的最低值，并不表示缺乏兴趣。"
+  ,"Type a role and select a catalogue result. Suggestions do not assign an SDG mapping.":"输入角色名称并选择目录结果。搜索建议不会指定可持续发展目标映射。"
+  ,"About this prototype and how to read it":"关于此原型及其阅读方式"
+  ,"Your answers do not identify a clear leading interest area. All six interest scores are {score} / 100.":"你的回答没有显示明显领先的兴趣领域。六项兴趣分数均为 {score} / 100。"
+  ,"Your highest interest areas are tied: {areas}.":"你的最高兴趣领域并列：{areas}。"
+  ,"Your highest interest area is {area}. This is a starting point for exploration, not a label.":"你的最高兴趣领域是 {area}。这只是探索的起点，并非固定标签。"
+  ,"Review the details shaping your learning plan.":"查看影响你学习计划的个人信息。"
+  ,"Choose how FutureSkill looks on this browser.":"选择此浏览器中 FutureSkill 的外观。"
+  ,"Unavailable; enter skills manually during setup":"暂不可用；请在设置过程中手动输入技能"
+  ,"Choose learning reminders":"选择学习提醒"
+  ,"Continue your plan on another device":"在另一台设备上继续学习计划"
+  ,"Explore careers":"探索职业"
+  ,"Explore careers with the assessment":"通过测评探索职业"
+  ,"Browse careers without the assessment":"不参加测评，浏览职业目录"
+  ,"I KNOW MY TARGET ROLE":"我已确定目标职业"
+  ,"Start with your interests":"从兴趣开始"
+  ,"Take the assessment for exploratory recommendations, or browse the catalogue first.":"完成测评获取探索建议，或先浏览职业目录。"
+  ,"Choose a role directly. You can review available pathway support before starting.":"直接选择职业，并在开始前查看可用的学习路径支持。"
+  ,"Find a career":"查找职业"
+  ,"YOUR WORKSPACE":"你的工作区"
+  ,"Explore a direction at your pace.":"按自己的节奏探索方向。"
+  ,"My career overview":"我的职业概览"
+  ,"My profile & assessment":"我的档案与测评"
+  ,"My learning pathway":"我的学习路径"
+  ,"Further exploration":"进一步探索"
+  ,"Explore, don’t predict.":"用于探索，而非预测。"
+  ,"Career information and pathways vary in coverage.":"职业信息与学习路径的覆盖范围各不相同。"
+  ,"Your career overview":"你的职业概览"
+  ,"Use your questionnaire responses as a starting point, then inspect careers and decide what you want to explore.":"将问卷回答作为起点，再查看职业信息并决定想进一步探索的方向。"
+  ,"A short reading of your answers":"回答摘要"
+  ,"Three separate questionnaire views—not a competency test or an employment prediction.":"问卷的三个独立视角；这不是能力测试，也不预测就业结果。"
+  ,"Self-reported confidence":"自我报告的信心"
+  ,"Three careers to explore first":"优先探索的三个职业"
+  ,"These are the first three entries in the existing engine order, not statistically established best careers.":"这只是现有引擎排序中的前三项，并非经统计验证的最佳职业。"
+  ,"Choose your next step":"选择下一步"
+  ,"No assessment results in this browser session. Browse the catalogue or take the optional assessment; no personalized recommendation will be made without results.":"此浏览器会话中没有测评结果。你可以浏览职业目录或参加可选测评；没有结果时不会生成个性化建议。"
+  ,"Browse the career catalogue":"浏览职业目录"
+  ,"Review the interests, subject preferences, and confidence ratings you reported. They are distinct from verified occupational requirements.":"查看你报告的兴趣、学科偏好和信心评分。这些内容与经过验证的职业要求不同。"
+  ,"No assessment report in this session":"此会话中没有测评报告"
+  ,"Take the assessment to create a report. This page will not create estimated scores.":"完成测评以生成报告。本页面不会估算分数。"
+  ,"Career details":"职业详情"
+  ,"Explore catalogue evidence before deciding whether this role interests you.":"查看目录中的证据，再决定是否对该职业感兴趣。"
+  ,"Why this appeared":"此职业为何出现"
+  ,"About your selected career":"关于你选择的职业"
+  ,"The local catalogue has no sourced duties for this role. Open the official occupation profile to inspect its details.":"本地目录没有此职业的来源明确的工作职责。请打开官方职业档案查看详情。"
+  ,"Sourced work-duty details are not present in FutureSkill’s local catalogue. Review the official occupation profile before drawing conclusions about daily work or requirements.":"FutureSkill 本地目录没有附有来源的工作职责详情。请先查看官方职业档案，再判断日常工作或职业要求。"
+  ,"Open O*NET OnLine occupation profile":"打开 O*NET OnLine 职业档案"
+  ,"Catalogue interest profile":"目录中的兴趣档案"
+  ,"The existing engine stores this occupation profile; these values are not personal results.":"现有引擎保存了此职业档案；这些数值不是你的个人测评结果。"
+  ,"These are the career dataset’s existing values on a 0–7 scale. Their provenance and validation are not independently established here. They are not learner scores or measures of career success.":"这些是职业数据集中现有的 0–7 量表数值。其来源与验证情况尚未在此独立确认。它们不是学习者分数，也不衡量职业成功。"
+  ,"Your starting point":"你的起点"
+  ,"This assessment does not measure role-specific proficiency or occupational readiness. Broad confidence ratings are self-reported and cannot be converted into role requirements.":"此测评不衡量岗位专属技能水平或职业准备度。总体信心评分是自我报告，不能转换为岗位要求。"
+  ,"A supported learning template is available: {template}. Its skills and requirements are illustrative, not independently validated occupational benchmarks.":"有可用的学习模板：{template}。其中的技能和要求仅供示例，并非经过独立验证的职业基准。"
+  ,"No supported role-specific pathway template is available for this catalogue entry. The reskilling studio will explain its available templates; do not treat another template as a verified match.":"此职业目录条目没有受支持的岗位专属路径模板。技能提升工作区会说明可用模板；请勿将其他模板视为已验证的匹配项。"
+  ,"Your saved learning pathway is {career}. Browsing this career does not change it.":"你已保存的学习路径目标是 {career}。浏览此职业不会更改它。"
+  ,"Choose this target and review pathway options":"选择此目标并查看路径选项"
+  ,"Try it before choosing":"选择前先体验"
+  ,"Open the official profile, choose one listed work activity to investigate, and write down a question about what it involves. This is an exploration exercise, not a proficiency test.":"打开官方档案，选择一项列出的工作活动进行了解，并写下一个关于其内容的问题。这是探索练习，不是熟练度测试。"
+  ,"Explore sourced work information":"查看有来源的工作信息"
+  ,"Potential SDG connections":"潜在的可持续发展目标关联"
+  ,"No reviewed role-to-target mapping is available. No connection is inferred.":"没有可用的已审阅职业与目标映射，因此不会推断关联。"
+  ,"Open the SDG evidence view":"打开 SDG 证据页面"
+  ,"AI and work-trend context":"AI 与工作趋势背景"
+  ,"The current trend prototype has no career-specific mapping for this occupation. No trend is inferred from its title.":"当前趋势原型没有映射到此职业的专属数据，不会根据职业名称推断趋势。"
+  ,"This is a qualitative, rule-based category scenario—not a validated occupation-specific forecast.":"这是定性的规则分类情景，并非经过验证的职业专属预测。"
+  ,"Trend source and limitations":"趋势来源与局限"
+  ,"Open AI trends":"查看 AI 趋势"
+  ,"Assessment engine indices":"测评引擎指数"
+  ,"This role was returned at position {rank} of {total}. Existing indices: interest {interest}, subject {subject}, combined {combined} on their engine scales. These values do not indicate employment outcomes.":"此职业在 {total} 项结果中位列第 {rank}。现有引擎量表指数：兴趣 {interest}、学科 {subject}、综合 {combined}。这些数值不表示就业结果。"
+  ,"Compare career options":"比较职业选项"
+  ,"Review differences using available catalogue and assessment evidence. A comparison is not a prediction of job outcomes.":"根据现有目录和测评证据查看差异。比较结果不预测就业情况。"
+  ,"Choose a second role to compare.":"选择第二个职业进行比较。"
+  ,"Search and explicitly select a second catalogue role. Comparisons are limited to two.":"搜索并明确选择第二个目录职业。每次最多比较两个职业。"
+  ,"Search a second career":"搜索第二个职业"
+  ,"Choose a role to compare.":"选择一个职业进行比较。"
+  ,"Choose your first career":"选择第一个职业"
+  ,"Side-by-side evidence":"并排查看证据"
+  ,"Evidence":"证据"
+  ,"Occupation profile":"职业档案"
+  ,"Open official O*NET profile for work details":"打开 O*NET 官方档案查看工作详情"
+  ,"Assessment engine order":"测评引擎排序"
+  ,"No personalized assessment result in this session":"此会话中没有个性化测评结果"
+  ,"Skill readiness":"技能准备度"
+  ,"Not assessed by broad confidence ratings":"总体信心评分无法评估"
+  ,"Only an exact existing prototype mapping is shown on detail":"详情页仅显示现有原型中的精确匹配"
+  ,"Reviewed mappings only; see detail view":"仅使用已审阅的映射；请查看详情"
+  ,"Catalogue interest profiles":"目录中的兴趣档案"
+  ,"Continue exploring":"继续探索"
+  ,"Return to career search":"返回职业搜索"
+  ,"Search the catalogue":"搜索职业目录"
+  ,"Search is limited to the career exploration catalogue; it does not search learner data.":"搜索范围仅限职业探索目录，不会搜索学习者数据。"
+  ,"Search careers by title":"按职业名称搜索"
+  ,"Search the existing occupation catalogue by title. Search results are catalogue entries, not personalized recommendations or verified pathway requirements.":"按名称搜索现有职业目录。搜索结果是目录条目，不是个性化建议或已验证的路径要求。"
+  ,"Loading catalogue entries…":"正在加载目录条目…"
+  ,"Show more careers":"显示更多职业"
+  ,"No catalogue entries matched that title. Try a broader search.":"没有找到匹配的职业条目。请尝试更宽泛的搜索。"
+  ,"{shown} of {total} catalogue entries shown.":"正在显示 {shown} / {total} 个目录条目。"
+  ,"Explore this career":"探索此职业"
+  ,"Compare":"比较"
+  ,"O*NET profile":"O*NET 职业档案"
+  ,"See all {total} engine recommendations":"查看全部 {total} 项引擎建议"
+  ,"The initial three recommendations are a presentation choice, not statistically established best careers.":"最初展示的三项建议仅为呈现方式，并非经统计验证的最佳职业。"
+  ,"Career workspace":"职业工作区"
+  ,"Any new plan requires explicit review.":"任何新计划都需要明确审阅。"
+  ,"CAREER CONTEXT":"职业背景"
+  ,"You are exploring this career. It is separate from your saved learning target.":"你正在探索此职业。它与已保存的学习目标相互独立。"
+  ,"Career-specific trend mappings are shown only when the existing prototype includes this exact occupation.":"只有现有原型包含此确切职业时，才会显示职业专属趋势映射。"
+  ,"Return to career details":"返回职业详情"
+  ,"Recommendation {rank}":"建议 {rank}"
+  ,"How the existing engine ranked this role":"现有引擎如何排列此职业"
+  ,"These catalogue indices use the engine’s existing 0–100 scale. They are not percentages, employment probabilities, or evidence of occupational proficiency.":"这些目录指数使用引擎现有的 0–100 量表。它们不是百分比、就业概率或职业熟练度证据。"
+  ,"Engine order":"引擎排序"
+  ,"Interest index":"兴趣指数"
+  ,"Subject index":"学科指数"
+  ,"Combined engine index":"引擎综合指数"
+  ,"No personalized recommendations are available here. Browse the catalogue to explore roles.":"此处没有个性化建议。请浏览职业目录探索不同岗位。"
+  ,"Career detail is unavailable":"职业详情不可用"
+  ,"Reported interest areas above your own average: {areas}. Title-based subject tags: {fields}. These tags are a title-matching heuristic, not verified occupational requirements.":"高于你个人平均值的兴趣领域：{areas}。根据名称推断的学科标签：{fields}。这些标签来自名称匹配启发式规则，并非经过验证的职业要求。"
+  ,"limited overlap":"重合较少"
+  ,"Information Technology":"信息技术"
+  ,"Mathematics":"数学"
+  ,"Health & Medicine":"健康与医学"
+  ,"Education":"教育"
+  ,"Business":"商业"
+  ,"Engineering":"工程"
+  ,"Creative Arts":"创意艺术"
+  ,"Natural Sciences":"自然科学"
+  ,"Public Service":"公共服务"
+  ,"FutureSkill AI · Interview practice":"FutureSkill AI · 面试练习"
+  ,"CAREER PREPARATION":"职业准备"
+  ,"Interview practice":"面试练习"
+  ,"Saved target":"已保存的目标"
+  ,"Practise explaining your experience and learning projects.":"练习说明你的经历与学习项目。"
+  ,"{score} / 100 · Practice estimate":"{score} / 100 · 练习估算"
+  ,"{score} / 100 · Average practice estimate":"{score} / 100 · 平均练习估算"
+  ,"Practice estimate: {score}/100":"练习估算：{score}/100"
+  ,"Choose a career and practise with five questions. You’ll receive coaching feedback after each answer.":"选择一个职业，通过五道题练习面试。每次回答后都会收到指导反馈。"
+  ,"Choose a career and practise with {questionCount} questions. You’ll receive coaching feedback after each answer.":"选择一个职业，通过 {questionCount} 道题练习面试。每次回答后都会收到指导反馈。"
+  ,"A PRACTICE SESSION":"练习环节"
+  ,"Choose what to practise":"选择练习内容"
+  ,"AI interview practice is temporarily unavailable.":"AI 面试练习暂时不可用。"
+  ,"Target career":"目标职业"
+  ,"Search 923 occupations by title":"按名称搜索 923 个职业"
+  ,"Change career":"更换职业"
+  ,"Loading the FutureSkill career catalogue…":"正在加载 FutureSkill 职业目录…"
+  ,"7 visible at a time":"每次显示 7 个"
+  ,"Up to 7 results visible at a time":"每次最多显示 7 项结果"
+  ,"Supported careers":"支持的职业"
+  ,"{matches} matching · {total} careers total":"匹配 {matches} 个 · 共 {total} 个职业"
+  ,"No careers match this search. Try a broader title.":"没有符合条件的职业。请尝试更宽泛的名称。"
+  ,"The FutureSkill career catalogue is temporarily unavailable.":"FutureSkill 职业目录暂时不可用。"
+  ,"Interview type":"面试类型"
+  ,"Mixed":"混合"
+  ,"HR":"人力资源"
+  ,"Technical":"技术"
+  ,"Feedback language":"反馈语言"
+  ,"Number of questions":"题目数量"
+  ,"Start practice":"开始练习"
+  ,"My interview history":"我的面试记录"
+  ,"Practice scores are AI coaching estimates, not hiring decisions or a proficiency assessment.":"练习分数是 AI 指导估算，不是招聘决定或能力测评。"
+  ,"Answers, audio and history":"回答、音频与记录"
+  ,"Submitted answers are sent to the configured AI provider for feedback and held temporarily in server memory. The question-history database stores questions and career titles to reduce repeats, not answers or audio. Finished reports are saved in this browser.":"提交的回答会发送给已配置的 AI 服务以生成反馈，并暂存在服务器内存中。题目记录数据库仅保存问题和职业名称以减少重复，不保存回答或音频。完成的报告保存在此浏览器中。"
+  ,"Microphone use is optional. A recording is sent to the AI provider for transcription only after you choose to record and stop. You can edit the transcript before submitting.":"麦克风为可选功能。只有在你选择录音并停止后，录音才会发送给 AI 服务进行转写。提交前可以编辑转写文本。"
+  ,"Unfinished interviews cannot be resumed after leaving or reloading. Server-side answers are cleared on completion, on an expired-session request, or when the server restarts. Completed browser history remains separate.":"离开或重新加载后无法继续未完成的练习。服务器内存中的回答会在完成练习、收到过期会话请求或服务器重启时清除。已完成的浏览器记录会单独保留。"
+  ,"The catalogue supplies occupation titles, not a sourced skills profile for every role. For those roles, questions are general practice based on the selected title; they do not assert verified occupational requirements.":"目录提供职业名称，但并非每个职业都有来源明确的技能资料。对于这些职业，题目仅依据所选名称进行一般练习，不代表经过验证的职业要求。"
+  ,"PRACTICE REFLECTION":"练习回顾"
+  ,"Question {questionNumber} of {questionCount}":"第 {questionNumber}/{questionCount} 题"
+  ,"Interview coach":"面试指导"
+  ,"Practice and reflect; not a hiring assessment":"用于练习与反思；不是招聘评估"
+  ,"Read question aloud":"朗读题目"
+  ,"Answer method":"回答方式"
+  ,"Text answer":"文字回答"
+  ,"Optional voice answer":"可选语音回答"
+  ,"Write your answer and revise it before submitting.":"请先填写回答，并在提交前检查修改。"
+  ,"Audio is sent to the configured provider only when you stop the recording to request transcription.":"只有在停止录音并请求转写时，音频才会发送给已配置的服务。"
+  ,"Start recording":"开始录音"
+  ,"Stop recording":"停止录音"
+  ,"Your answer":"你的回答"
+  ,"Explain your approach and include an example if you have one.":"说明你的做法；如有相关经历，请举例说明。"
+  ,"Your editable voice transcript will appear here after you stop recording.":"停止录音后，可编辑的转写文本会显示在这里。"
+  ,"{words} words · {characters}/3500 characters":"{words} 个词 · {characters}/3500 个字符"
+  ,"Your answer is sent for coaching after you submit.":"提交后，你的回答会发送给 AI 生成指导反馈。"
+  ,"Submit answer for feedback":"提交回答并获取反馈"
+  ,"Feedback on this answer":"本次回答的反馈"
+  ,"What went well":"做得好的地方"
+  ,"What to try next":"接下来可以尝试"
+  ,"Illustrative sample answer":"示例回答"
+  ,"The sample is fictional, not a claim about the learner.":"示例内容为虚构情景，不代表你的经历。"
+  ,"Next question":"下一题"
+  ,"Finish and view report":"结束并查看报告"
+  ,"View final report":"查看最终报告"
+  ,"Interview practice report":"面试练习报告"
+  ,"Average practice estimate":"平均练习估算"
+  ,"Practice reflection":"练习回顾"
+  ,"Coaching dimensions":"指导维度"
+  ,"Strengths to keep using":"可以继续发挥的优势"
+  ,"Ideas to practise":"可以练习的方向"
+  ,"Possible next practice areas":"后续练习建议"
+  ,"Question-by-question review":"逐题回顾"
+  ,"Scores are subjective AI coaching estimates, not hiring predictions.":"分数是 AI 的主观指导估算，不预测招聘结果。"
+  ,"A brief practice snapshot":"本次练习概览"
+  ,"This reflection is based on {count} answers. A short session may not show a broad pattern.":"本次回顾基于 {count} 个回答。较短的练习未必能反映广泛的表现模式。"
+  ,"Higher coaching estimates this session":"本次练习的指导估算较高"
+  ,"Your answers received higher AI coaching estimates in this practice session. This does not measure job readiness or eligibility.":"本次练习中的 AI 指导估算较高，但这不衡量工作准备程度或求职资格。"
+  ,"Mixed practice feedback":"练习反馈不一"
+  ,"This practice session gave mixed coaching estimates. Choose a response suggestion to try; the result does not say whether you should apply.":"本次练习的指导估算不一。可选择一项建议进行尝试；结果并不表示你是否应该申请职位。"
+  ,"Ideas for another practice round":"下一轮练习建议"
+  ,"Some answers received lower coaching estimates this session. Try one suggestion; these estimates do not measure workplace performance.":"本次练习中部分回答的指导估算较低。可以尝试一项建议；这些估算不衡量工作表现。"
+  ,"Use these notes to reflect on this practice session, not to judge job readiness.":"请用这些记录回顾练习，而不是判断工作准备程度。"
+  ,"Practice answers in this summary: {count}.":"本次摘要中的练习回答数：{count}。"
+  ,"Start another practice session":"开始另一轮练习"
+  ,"SAVED IN THIS BROWSER":"保存在此浏览器"
+  ,"Your finished practice reports are stored locally in this browser. Clearing site data removes this history.":"已完成的练习报告保存在此浏览器本地。清除网站数据会删除这些记录。"
+  ,"Completed practice sessions saved in this browser: {count}":"此浏览器中已保存的练习次数：{count}"
+  ,"No completed sessions are saved in this browser yet.":"此浏览器中还没有已完成的练习记录。"
+  ,"View saved questions and answers":"查看已保存的问题与回答"
+  ,"Back to setup":"返回设置"
+  ,"Delete browser history":"删除浏览器记录"
+  ,"Delete all interview reports saved in this browser?":"要删除此浏览器中保存的所有面试报告吗？"
+  ,"That career isn’t in the current interview catalogue. Select a supported title to continue; your learning pathway will not be changed.":"当前面试目录中没有该职业。请选择目录中的职业继续；你的学习路径不会因此改变。"
+  ,"General practice for this career title. A sourced skills profile or verified occupational requirements are not available in the current catalogue.":"针对该职业名称的一般练习。当前目录没有附带来源的技能资料或经过验证的职业要求。"
+  ,"General practice based on the career title only; sourced occupational skills are not available for this role.":"仅依据职业名称进行的一般练习；此职业没有来源明确的职业技能资料。"
+  ,"General interview practice informed by the catalogue entry. The supplied profile is not a verified occupational requirement.":"根据目录条目开展的一般面试练习。所提供的资料并非经过验证的职业要求。"
+  ,"A sourced skills profile is not available for this occupation in the current dataset.":"当前数据集中没有该职业的来源明确技能资料。"
+  ,"The selected career no longer matches the supported catalogue.":"所选职业与当前支持的目录不再匹配。"
+  ,"Choose a supported career from the FutureSkill catalogue.":"请从 FutureSkill 职业目录中选择一个职业。"
+  ,"Choose a valid interview type, language and question count.":"请选择有效的面试类型、语言和题目数量。"
+  ,"Choose 3, 5 or 10 interview questions.":"请选择 3、5 或 10 道面试题。"
+  ,"Interview session expired. Start a new practice session.":"面试练习已过期。请开始新一轮练习。"
+  ,"No recording was received.":"没有收到录音。"
+  ,"Audio transcription is temporarily unavailable. You can type your answer.":"音频转写暂时不可用。你可以改为输入回答。"
+  ,"Unsupported audio type. Use webm, mp4, ogg or wav.":"不支持此音频格式。请使用 webm、mp4、ogg 或 wav。"
+  ,"Recording must be between 1 byte and 10 MB.":"录音大小必须在 1 字节至 10 MB 之间。"
+  ,"Maximum audio upload is 10 MB.":"音频上传上限为 10 MB。"
+  ,"Keep your answer between 3 and 3,500 characters.":"回答长度应为 3 至 3,500 个字符。"
+  ,"Submit your answer before moving to the next question.":"请先提交回答，再进入下一题。"
+  ,"This answer has already been submitted.":"此回答已提交。"
+  ,"Answer a question before viewing the report.":"请先回答一道题，再查看报告。"
+  ,"Question read-aloud is not available in this browser.":"此浏览器不支持朗读题目。"
+  ,"Microphone recording is not supported in this browser. You can type your answer.":"此浏览器不支持麦克风录音。你可以输入回答。"
+  ,"Stop recording before switching answer methods.":"切换回答方式前，请先停止录音。"
+  ,"Stop recording before submitting your answer.":"提交回答前，请先停止录音。"
+  ,"No audio was captured.":"没有录到音频。"
+  ,"Audio exceeds the 10 MB limit. Record a shorter answer.":"音频超过 10 MB 限制。请缩短录音。"
+  ,"Transcribing…":"正在转写…"
+  ,"Recording…":"正在录音…"
+  ,"Enter an answer with at least 3 characters.":"请输入至少 3 个字符的回答。"
+  ,"Keep your answer under 3,500 characters.":"回答不得超过 3,500 个字符。"
+  ,"A fictional example, not a claim about the learner.":"虚构示例，不代表学习者的实际经历。"
+  ,"Your report is ready, but browser storage is unavailable; it was not saved in history.":"报告已生成，但浏览器存储不可用，因此未保存到记录中。"
+  ,"Your report is ready, but existing browser history could not be read or saved. Existing data was left unchanged.":"报告已生成，但无法读取或保存现有浏览器记录。已有数据未被更改。"
+  ,"Saved browser history could not be read.":"无法读取已保存的浏览器记录。"
+  ,"Existing history was left unchanged. You can delete browser history if you no longer want to keep it.":"已保留现有记录。若不想继续保留，可以删除浏览器记录。"
+  ,"A new question is temporarily unavailable. Your current feedback is still here.":"暂时无法生成新问题。当前反馈仍然保留。"
+  ,"Feedback is temporarily unavailable. Your answer was not saved.":"反馈暂时不可用。你的回答未被保存。"
+  ,"The interview service returned an unexpected response.":"面试服务返回了意外响应。"
+  ,"This action is temporarily unavailable.":"此操作暂时不可用。"
+  ,"AI coaching estimate":"AI 指导估算"
+  ,"Prepare responses and reflect on your examples.":"准备回答并回顾你的示例。"
+  ,"OPTIONAL CAREER PRACTICE":"可选职业练习"
+  ,"Rehearse an interview for your saved target":"为已保存的目标职业练习面试"
+  ,"Practise for your saved career target. Questions are general title-based practice, not verified occupational requirements.":"为已保存的目标职业进行练习。问题仅依据职业名称生成，不是经过验证的职业要求。"
+  ,"View practice history":"查看练习记录"
+  ,"Practise for this career":"为此职业练习"
+  ,"Interview practice uses the career title for general questions; this catalogue does not provide verified role-specific requirements.":"面试练习仅根据职业名称提供一般问题；此目录不提供经过验证的职业要求。"
+  ,"A brief session may not show a broad pattern. Responses included: {count}.":"练习时间较短时，未必能反映广泛的表现模式。回答数：{count}。"
+  }

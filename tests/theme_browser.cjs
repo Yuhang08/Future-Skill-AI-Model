@@ -56,16 +56,16 @@ async function capture(name) {
   fs.writeFileSync(`/tmp/future-live-${name}.png`, Buffer.from(image.data, "base64"));
 }
 async function checkLayout() {
-  assert.equal(await evaluate("!!document.querySelector('.fs-site-brand img[src^=\"/static/futureskill-atom.svg\"]').naturalWidth"), true, "shared atom logo loads");
-  assert.equal(await evaluate("[...document.querySelectorAll('.brand-icon img, .brand-mark img, .footer-brand img')].every(img => img.complete && img.naturalWidth > 0 && new URL(img.src).pathname === '/static/futureskill-atom.svg')"), true, "page logos use loaded shared asset");
+  assert.equal(await evaluate("!!document.querySelector('.fs-site-brand img').naturalWidth"), true, "shared logo loads");
+  assert.equal(await evaluate("[...document.querySelectorAll('.brand-icon img, .brand-mark img, .footer-brand img')].every(img => img.complete && img.naturalWidth > 0 && /^\\/static\\/brand-forward(-dark)?\\.svg$/.test(new URL(img.src).pathname))"), true, "page logos use loaded shared asset");
   assert.equal(await evaluate("document.documentElement.scrollWidth <= innerWidth + 2"), true, "no document overflow");
   assert.equal(await evaluate("document.querySelectorAll('.fs-site-nav').length"), 1);
   assert.equal(await evaluate("document.querySelectorAll('.fs-site-links a[aria-current=page]').length"), 1);
-  assert.equal(await evaluate("document.querySelectorAll('.fs-theme-toggle svg:not([hidden])').length"), 1);
+  assert.equal(await evaluate("document.querySelectorAll('.fs-settings-button svg').length"), 1);
   assert.equal(await evaluate("!document.querySelector('.dev-demo-banner') || document.querySelector('.dev-demo-banner').getBoundingClientRect().top >= document.querySelector('.fs-site-nav').getBoundingClientRect().bottom - 1"), true, "development warning must not obscure navigation");
 }
 async function toggle(expected) {
-  await evaluate("document.querySelector('[data-theme-toggle]').click()");
+  await evaluate(`document.querySelector('.fs-settings-button').click();document.querySelector('#fsSettingsDialog #themePreference input[value=${expected}]').click();document.getElementById('fsSettingsDialog').close()`);
   await wait(`document.documentElement.dataset.futureTheme===${JSON.stringify(expected)}`);
   assert.equal(await evaluate("localStorage.getItem('futureskill-theme-preference')"), expected);
 }
@@ -81,6 +81,8 @@ async function toggle(expected) {
     const target = await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: "PUT" })).json();
     socket = await connect(target.webSocketDebuggerUrl);
     await send("Page.enable"); await send("Runtime.enable");
+    await send("Page.bringToFront");
+    await send("Emulation.setFocusEmulationEnabled", { enabled: true });
     await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 1100, deviceScaleFactor: 1, mobile: false });
     await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: "dark" }] });
     await go("/", "home");
@@ -106,17 +108,17 @@ async function toggle(expected) {
     }
     await go("/reskilling?demo=1&demo_scenario=dashboard", "reskilling");
     await wait("!document.getElementById('dashboard').hidden");
-    await evaluate("document.querySelector('[data-workspace-action=settings]').click();document.querySelector('#themePreference input[value=light]').click()");
+    await evaluate("document.querySelector('.fs-settings-button').click();document.querySelector('#themePreference input[value=light]').click()");
     assert.equal(await evaluate("document.documentElement.dataset.futureTheme"), "light");
     assert.equal(await evaluate("localStorage.getItem('futureskill-theme-preference')"), "light");
-    assert.equal(await evaluate("document.getElementById('settingsDialog').open"), true);
+    assert.equal(await evaluate("document.getElementById('fsSettingsDialog').open"), true);
     await evaluate("document.querySelector('#themePreference input[value=system]').click()");
     assert.equal(await evaluate("document.documentElement.dataset.futureTheme"), "dark");
     await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: "light" }] });
     await wait("document.documentElement.dataset.futureTheme==='light'");
     assert.equal(await evaluate("localStorage.getItem('futureskill-theme-preference')"), "system");
     assert.equal(await evaluate("document.querySelector('#themePreference input[value=system]').checked"), true);
-    await evaluate("document.getElementById('settingsDialog').close();FutureSkillTheme.setPreference('dark')");
+    await evaluate("document.getElementById('fsSettingsDialog').close();FutureSkillTheme.setPreference('dark')");
     console.log("PASS: existing appearance settings, system theme changes, dialog state");
 
     // A real second tab must update the first through the browser storage event.
@@ -154,15 +156,15 @@ async function toggle(expected) {
     await evaluate("document.getElementById('compare').click()");
     await wait("document.querySelectorAll('#compareTable tbody tr').length===6");
     console.log("PASS: chart uses real six-year C series, 72.39%, theme updates, custom inputs and original tables");
-    await go("/sdg-impact?career=Data%20Analyst", "sdg");
-    await wait("!!document.querySelector('#careerOptions [data-career-id=\"prototype:data-analyst\"]')");
-    await evaluate("document.querySelector('#careerOptions [data-career-id=\"prototype:data-analyst\"]').click();document.getElementById('careerForm').requestSubmit()");
-    await wait("document.querySelectorAll('.mapping').length===2");
+    await go("/sdg-impact?career=Solar%20Energy%20Systems%20Engineers", "sdg");
+    await wait("!!document.querySelector('#careerOptions [data-career-id=\"17-2199.11\"]')");
+    await evaluate("document.querySelector('#careerOptions [data-career-id=\"17-2199.11\"]').click();document.getElementById('careerForm').requestSubmit()");
+    await wait("document.querySelectorAll('.mapping').length>0");
     await evaluate("document.querySelector('.mapping-details-trigger').click();FutureSkillTheme.setPreference('dark')");
     assert.equal(await evaluate("!!document.querySelector('.mapping-drawer[open]')"), true);
     assert.equal(await evaluate("document.querySelector('.mapping-drawer[open] details.evidence-full').open"), false);
     await evaluate("document.querySelector('.mapping-drawer[open] .evidence-node').click()");
-    assert.match(await evaluate("document.querySelector('.mapping-drawer[open] .evidence-detail').textContent"), /Illustrative pathway requirement/);
+    assert.match(await evaluate("document.querySelector('.mapping-drawer[open] .evidence-detail').textContent"), /O\*NET 31\.0 Task ID/);
     await capture("sdg-drawer");
     await evaluate("document.querySelector('.mapping-drawer[open]').close()");
     console.log("PASS: real scenario requests, comparisons, SDG drawer and evidence preserved");
@@ -197,15 +199,21 @@ async function toggle(expected) {
     const override = await send("Page.addScriptToEvaluateOnNewDocument", { source:
       "Object.defineProperty(window,'localStorage',{get(){throw new DOMException('Blocked','SecurityError')}})" });
     await go("/", "home");
-    await evaluate("document.querySelector('[data-theme-toggle]').click()");
+    await evaluate("document.querySelector('.fs-settings-button').click();document.querySelector('#fsSettingsDialog #themePreference input[value=light]').click();document.getElementById('fsSettingsDialog').close()");
     assert.equal(await evaluate("['light','dark'].includes(document.documentElement.dataset.futureTheme)"), true);
     await send("Page.removeScriptToEvaluateOnNewDocument", { identifier: override.identifier });
     assert.deepEqual(exceptions, [], "no uncaught browser errors");
     console.log("PASS: storage-blocked browser remains usable");
     console.log("All real-app theme browser checks passed. Screenshots: /tmp/future-live-*.png");
   } finally {
-    socket?.close(); browser.kill("SIGTERM");
+    socket?.close();
     for (const item of pending.values()) clearTimeout(item.timer);
-    await sleep(100); fs.rmSync(profile, { recursive: true, force: true, maxRetries: 3 });
+    if (browser.exitCode === null && browser.signalCode === null) {
+      const exited = new Promise(resolve => browser.once("exit", resolve));
+      browser.kill("SIGTERM");
+      await Promise.race([exited, sleep(2000)]);
+    }
+    try { await fs.promises.rm(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); }
+    catch (error) { console.warn("Temporary Chromium profile cleanup:", error.code); }
   }
 })().catch(error => { console.error(error.stack || error); process.exitCode = 1; });

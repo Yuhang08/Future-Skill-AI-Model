@@ -30,10 +30,13 @@ const cases = [
   [[done(5,'Python','learning',false)], 0, 'not checked off does not count'],
   [[done(4),done(4,'Python','learning',false)], 1, 'reopened task no longer counts'],
   [[done(1.5),done(2.5)], 1, 'multiple completed tasks add together'],
+  [[null,done(NaN),done(Infinity),done(-2)], 0, 'invalid and non-positive task hours are ignored'],
 ];
 for (const [tasks, expected, explanation] of cases) {
   assert.equal(progress('Python',g,tasks).completed, expected, explanation);
 }
 assert.equal(progress('Python',{...g,gap:0,estimated_hours:0},[]).completed,0);
+assert.equal(progress('Python',null,undefined).planned,0, 'missing gap data is safe');
+assert.equal(progress('Python',undefined,undefined).completed,0, 'missing task data is safe');
 assert.match(source, /renderGaps\(state\.gaps,\s*state\.tasks\)/);
-console.log('OK: ' + (cases.length + 2) + ' learning progress assertions');
+console.log('OK: ' + (cases.length + 4) + ' learning progress assertions');

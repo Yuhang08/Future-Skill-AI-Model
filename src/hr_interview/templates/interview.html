@@ -1,47 +1,174 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-futureskill-page="interview">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FutureSkill AI | HR Interview</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='interview.css') }}">
-<script defer src="{{ url_for('static', filename='interview.js') }}"></script>
+  <script src="/static/future-theme.js?v=5"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf3f5">
+  <meta name="description" content="Practice explaining your experience and learning projects.">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/future-theme.css?v=4">
+  <link rel="stylesheet" href="/static/future-pages.css?v=career-workspace-1">
+  <link rel="stylesheet" href="/interview-practice/static/interview.css?v=1">
+  <title>FutureSkill AI · Interview practice</title>
+  <script defer src="/interview-practice/static/interview.js?v=1"></script>
 </head>
 <body>
-<main class="layout">
-<header><span class="logo">✦ FutureSkill AI</span><span class="tag">AI Mock Interview</span></header>
-<section class="panel" id="setup">
-<h1>Practice your next interview</h1><p>Select a career and interview style. Your AI coach will ask five questions, review each answer, and suggest improvements.</p>
-<div class="fields"><div class="careerfield"><label for="careerSearch">Target career · A–Z</label>
-<input id="careerSearch" autocomplete="off" placeholder="Type to search occupations..." aria-controls="careerOptions" aria-expanded="true" />
-<div class="career-meta"><span id="careerCount">Loading career database...</span><span>7 visible · scroll for more</span></div>
-<div id="careerOptions" class="career-options" role="listbox" aria-label="Available careers"></div>
-<input id="role" type="hidden" /></div>
-<label>Interview type<select id="mode"><option>Mixed</option><option>HR</option><option>Technical</option></select></label>
-<label>Language<select id="language"><option>English</option><option>中文</option><option>Bahasa Melayu</option></select></label>
-<label>Number of questions<select id="questionCount"><option>3</option><option selected>5</option><option>10</option></select></label></div>
-<button id="start">Start Interview →</button>
-<button class="secondary" id="openHistory" type="button">📚 My Interview History</button><p class="note">Practice scores are AI estimates, not hiring decisions. Audio is sent for transcription when you choose to upload it.</p>
-</section>
-<section class="panel hidden" id="interview">
-<div class="topline"><strong id="counter">Question 1 of 5</strong><span id="careerLabel"></span></div>
-<div class="interviewer"><div class="avatar">HR</div><div><strong>Alex — AI Interviewer</strong><small>Mock HR / practice session</small></div></div>
-<div class="question"><h2 id="questionText"></h2><p id="focusText"></p></div>
-<div class="controls"><button class="secondary" id="speak">🔊 Read question aloud</button></div>
-<div class="answerModes" role="group" aria-label="Answer method">
-  <button type="button" class="secondary" id="textMode" aria-pressed="true">⌨️ Text Answer</button>
-  <button type="button" class="secondary" id="voiceMode" aria-pressed="false">🎙 Voice Answer</button>
-</div>
-<div id="textPanel"><p class="answerHelp">Write your full answer below. You can revise it before submitting.</p></div>
-<div id="voicePanel" class="hidden"><p class="answerHelp">Record your answer. Its transcript will appear in the editable space below.</p><button type="button" class="secondary" id="record">🎙 Start Recording</button><span id="recordStatus" aria-live="polite"></span></div>
-<label class="answerLabel" for="answer">Your answer (editable in both modes)</label>
-<textarea id="answer" rows="9" maxlength="7000" placeholder="Type your answer here. Describe your reasoning and include relevant examples..."></textarea>
-<div class="answerToolbar"><span id="answerCount">0 words · 0/7000 characters</span><span>Answers are evaluated after you submit.</span></div>
-<button id="submit">Submit answer for AI feedback</button>
-<section id="feedbackBox" class="feedback hidden" aria-live="polite"><h2>Feedback on this question</h2><div class="score" id="totalScore"></div><p id="summary"></p><div id="dimensions"></div><div class="twoCols"><div><h3>What went well</h3><ul id="strengths"></ul></div><div><h3>What to improve</h3><ul id="improvements"></ul></div></div><h3>Illustrative improved answer</h3><p id="example"></p><button id="next">Next question →</button><button class="secondary" id="finishEarly">Finish & see report</button></section>
-</section>
-<section class="panel hidden" id="report"><h1>Interview Practice Report</h1><p id="reportIntro"></p><div class="score" id="finalScore"></div><section class="readinessCard"><h2>Interview practice readiness</h2><strong id="readinessTitle"></strong><p id="readinessMessage"></p><small id="evidenceInfo"></small></section><h3>Skill proficiency</h3><div id="proficiency"></div><div class="twoCols"><div><h3>Your strengths</h3><ul id="reportStrengths"></ul></div><div><h3>Areas to improve</h3><ul id="reportWeaknesses"></ul></div></div><h3>Priority areas to practice</h3><ul id="priorities"></ul><h3>Question-by-question review</h3><div id="history"></div><p class="note" id="reportDisclaimer">Scores are AI coaching estimates, not validated hiring predictions.</p><button id="restart">Start another interview</button></section>
-<section class="panel hidden" id="historyPage"><h1>My Interview History</h1><p>Saved in this browser. Clear site data will remove this local history.</p><p id="historyCount"></p><div id="savedInterviews"></div><button class="secondary" id="backHome">Back</button> <button class="secondary" id="deleteHistory">Delete my local history</button></section>
-<p class="error" id="error" role="alert" aria-live="polite"></p>
-<footer>FutureSkill AI · Practice, reflect, improve</footer>
-</main>
-</body></html>
+  <main class="interview-layout">
+    <header class="interview-page-heading">
+      <p class="interview-eyebrow">CAREER PREPARATION</p>
+      <h1>Interview practice</h1>
+      <p id="setupIntro">Choose a career and practice with five questions. You’ll receive coaching feedback after each answer.</p>
+    </header>
+
+    <section class="interview-panel" id="setup" aria-labelledby="setupTitle">
+      <div class="interview-section-heading">
+        <div>
+          <p class="interview-eyebrow">A PRACTICE SESSION</p>
+          <h2 id="setupTitle">Choose what to practise</h2>
+        </div>
+      </div>
+      <p id="availabilityNotice" class="interview-availability" role="status" aria-live="polite" hidden>
+        AI interview practice is temporarily unavailable.
+      </p>
+      <div class="interview-fields">
+        <div class="interview-career-field">
+          <label for="careerSearch">Target career</label>
+          <div class="interview-search-row">
+            <input id="careerSearch" role="combobox" aria-autocomplete="list" aria-haspopup="listbox"
+                   autocomplete="off" placeholder="Search 923 occupations by title"
+                   aria-controls="careerOptions" aria-expanded="false">
+            <button class="interview-button secondary" id="changeCareer" type="button" hidden>Change career</button>
+          </div>
+          <div class="interview-career-meta">
+            <span id="careerCount" role="status">Loading the FutureSkill career catalogue…</span>
+            <span>Up to 7 results visible at a time</span>
+          </div>
+          <div id="careerOptions" class="interview-career-options collapsed"
+               role="listbox" aria-label="Supported careers"></div>
+          <input id="role" type="hidden">
+          <input id="careerId" type="hidden">
+          <p id="careerScopeNote" class="interview-context-note" hidden></p>
+          <p id="careerContextWarning" class="interview-context-warning" role="status" hidden></p>
+        </div>
+        <label>Interview type
+          <select id="mode"><option>Mixed</option><option>HR</option><option>Technical</option></select>
+        </label>
+        <label>Feedback language
+          <select id="language"><option>English</option><option>中文</option><option>Bahasa Melayu</option></select>
+        </label>
+        <label>Number of questions
+          <select id="questionCount"><option>3</option><option selected>5</option><option>10</option></select>
+        </label>
+      </div>
+      <div class="interview-actions">
+        <button class="interview-button primary" id="start" type="button" disabled>Start practice</button>
+        <button class="interview-button secondary" id="openHistory" type="button">My interview history</button>
+      </div>
+      <p class="interview-disclaimer">Practice scores are AI coaching estimates, not hiring decisions or a proficiency assessment.</p>
+      <details class="interview-privacy">
+        <summary>Answers, audio and history</summary>
+        <p>Submitted answers are sent to the configured AI provider for feedback and held temporarily in server memory. The question-history database stores questions and career titles to reduce repeats, not answers or audio. Finished reports are saved in this browser.</p>
+        <p>Microphone use is optional. A recording is sent to the AI provider for transcription only after you choose to record and stop. You can edit the transcript before submitting.</p>
+        <p>Unfinished interviews cannot be resumed after leaving or reloading. Server-side answers are cleared on completion, on an expired-session request, or when the server restarts. Completed browser history remains separate.</p>
+        <p id="generalPracticeNote">The catalogue supplies occupation titles, not a sourced skills profile for every role. For those roles, questions are general practice based on the selected title; they do not assert verified occupational requirements.</p>
+      </details>
+    </section>
+
+    <section class="interview-panel interview-session hidden" id="interview" aria-labelledby="questionText">
+      <div class="interview-topline">
+        <strong id="counter">Question 1 of 5</strong>
+      <span id="careerLabel" data-i18n-ignore></span>
+      </div>
+      <div class="interview-coach">
+        <span class="interview-avatar" aria-hidden="true">FS</span>
+        <div><strong>Interview coach</strong><small>Practice and reflect; not a hiring assessment</small></div>
+      </div>
+      <div class="interview-question">
+        <h2 id="questionText" data-i18n-ignore></h2>
+        <p id="focusText" data-i18n-ignore></p>
+      </div>
+      <div class="interview-actions">
+        <button class="interview-button secondary" id="speak" type="button">Read question aloud</button>
+      </div>
+      <div class="interview-answer-modes" role="group" aria-label="Answer method">
+        <button class="interview-button secondary" type="button" id="textMode" aria-pressed="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 9h8M8 13h5"/></svg>
+          Text answer
+        </button>
+        <button class="interview-button secondary" type="button" id="voiceMode" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M6 11.5a6 6 0 0 0 12 0M12 17.5v3m-4 0h8"/></svg>
+          Optional voice answer
+        </button>
+      </div>
+      <div id="textPanel"><p class="interview-help">Write your answer and revise it before submitting.</p></div>
+      <div id="voicePanel" class="hidden">
+        <p class="interview-help">Audio is sent to the configured provider only when you stop the recording to request transcription.</p>
+        <button class="interview-button secondary" id="record" type="button">Start recording</button>
+        <span id="recordStatus" aria-live="polite"></span>
+      </div>
+      <label class="interview-answer-label" for="answer">Your answer</label>
+      <textarea id="answer" rows="8" maxlength="3500"
+                placeholder="Explain your approach and include an example if you have one."></textarea>
+      <div class="interview-answer-toolbar">
+        <span id="answerCount">0 words · 0/3500 characters</span>
+        <span>Your answer is sent for coaching after you submit.</span>
+      </div>
+      <button class="interview-button primary" id="submit" type="button">Submit answer for feedback</button>
+
+      <section id="feedbackBox" class="interview-feedback hidden" aria-live="polite" aria-labelledby="feedbackTitle">
+        <h2 id="feedbackTitle">Feedback on this answer</h2>
+        <div class="interview-score" id="totalScore"></div>
+        <p id="summary" data-i18n-ignore></p>
+        <div id="dimensions"></div>
+        <div class="interview-two-columns">
+          <div><h3>What went well</h3><ul id="strengths"></ul></div>
+          <div><h3>What to try next</h3><ul id="improvements"></ul></div>
+        </div>
+        <h3>Illustrative sample answer</h3>
+        <p id="example" data-i18n-ignore></p>
+        <p class="interview-disclaimer">The sample is fictional, not a description of your experience.</p>
+        <div class="interview-actions">
+          <button class="interview-button primary" id="next" type="button">Next question</button>
+          <button class="interview-button secondary" id="finishEarly" type="button">Finish and view report</button>
+        </div>
+      </section>
+    </section>
+
+    <section class="interview-panel hidden" id="report" aria-labelledby="reportTitle">
+      <p class="interview-eyebrow">PRACTICE REFLECTION</p>
+      <h2 id="reportTitle">Interview practice report</h2>
+      <p id="reportIntro"></p>
+      <div class="interview-score" id="finalScore"></div>
+      <section class="interview-readiness">
+        <h3>Practice reflection</h3>
+        <strong id="readinessTitle"></strong>
+        <p id="readinessMessage"></p>
+        <small id="evidenceInfo"></small>
+      </section>
+      <h3>Coaching dimensions</h3><div id="proficiency"></div>
+      <div class="interview-two-columns">
+        <div><h3>Strengths to keep using</h3><ul id="reportStrengths"></ul></div>
+        <div><h3>Ideas to practise</h3><ul id="reportWeaknesses"></ul></div>
+      </div>
+      <h3>Possible next practice areas</h3><ul id="priorities"></ul>
+      <h3>Question-by-question review</h3><div id="history"></div>
+      <p class="interview-disclaimer" id="reportDisclaimer">Scores are subjective AI coaching estimates, not hiring predictions.</p>
+      <button class="interview-button primary" id="restart" type="button">Start another practice session</button>
+    </section>
+
+    <section class="interview-panel hidden" id="historyPage" aria-labelledby="historyTitle">
+      <p class="interview-eyebrow">SAVED IN THIS BROWSER</p>
+      <h2 id="historyTitle">My interview history</h2>
+      <p>Your finished practice reports are stored locally in this browser. Clearing site data removes this history.</p>
+      <p id="historyCount" role="status"></p>
+      <div id="savedInterviews"></div>
+      <div class="interview-actions">
+        <button class="interview-button secondary" id="backHome" type="button">Back to setup</button>
+        <button class="interview-button secondary" id="deleteHistory" type="button">Delete browser history</button>
+      </div>
+    </section>
+    <p class="interview-error" id="error" role="alert" aria-live="polite"></p>
+  </main>
+</body>
+</html>

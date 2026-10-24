@@ -169,7 +169,7 @@ html[data-futureskill-page] .fs-site-nav {
   top: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 18px;
   min-height: 70px;
@@ -243,12 +243,67 @@ html[data-futureskill-page] .dev-loading-panel {
   background: var(--fs-raised); color: var(--fs-ink);
 }
 @media (max-width: 1000px) {
-  html[data-futureskill-page] .fs-site-nav { grid-template-columns: 1fr auto; gap: 5px 12px; padding: 9px 16px; }
+  html[data-futureskill-page] .fs-site-nav { grid-template-columns: minmax(0,1fr) auto; gap: 5px 12px; padding: 9px 16px; }
   html[data-futureskill-page] .fs-site-links { grid-row: 2; grid-column: 1 / -1; justify-content: flex-start; }
-  html[data-futureskill-page] .fs-theme-toggle { grid-row: 1; grid-column: 2; }
+  html[data-futureskill-page] .fs-settings-button { grid-row: 1; grid-column: 2; }
 }
 @media (max-width: 520px) {
   html[data-futureskill-page] .fs-site-nav { padding: 7px 12px 4px; }
   html[data-futureskill-page] .fs-site-links a { padding: 8px 10px; font-size: 11px; }
   html[data-futureskill-page] .fs-site-brand { gap: 7px; font-size: 13px; }
+}
+
+/* One shared settings surface on every route. */
+html[data-futureskill-page] .fs-settings-button {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  min-height: 44px; padding: 9px 13px; border: 1px solid var(--fs-line-strong);
+  border-radius: 10px; color: var(--fs-ink); background: var(--fs-raised);
+  font: 700 12px "DM Sans", sans-serif; white-space: nowrap; box-shadow: none;
+}
+html[data-futureskill-page] .fs-settings-button:hover { background: var(--fs-accent-soft); }
+html[data-futureskill-page] .fs-settings-button svg { width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none; }
+html[data-futureskill-page] .fs-settings-dialog {
+  width: min(520px, calc(100vw - 28px)); max-height: min(86dvh, 760px);
+  overflow-y:auto;
+  padding: 0; border: 1px solid var(--fs-line); border-radius: 18px;
+  color: var(--fs-ink); background: var(--fs-surface); box-shadow: var(--fs-shadow);
+}
+html[data-futureskill-page] .fs-settings-dialog::backdrop { background: rgba(11, 28, 39, .56); }
+html[data-futureskill-page] .fs-settings-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding:22px 24px 16px; border-bottom:1px solid var(--fs-line); }
+html[data-futureskill-page] .fs-settings-heading h2 { margin:2px 0 0; font-size:23px; letter-spacing:-.03em; }
+html[data-futureskill-page] .fs-settings-kicker { margin:0; color:var(--fs-muted); font:700 10px "Space Mono",monospace; letter-spacing:.08em; }
+html[data-futureskill-page] .fs-settings-dialog .fs-settings-close { width:38px; min-height:38px; padding:0; border:1px solid var(--fs-line); border-radius:9px; background:var(--fs-raised); color:var(--fs-ink); font-size:22px; }
+html[data-futureskill-page] .fs-settings-body { padding:0 24px 18px; }
+html[data-futureskill-page] .fs-settings-section { padding:17px 0; border-bottom:1px solid var(--fs-line); }
+html[data-futureskill-page] .fs-settings-section:last-child { border:0; }
+html[data-futureskill-page] .fs-settings-section h3 { margin:0 0 4px; font-size:14px; }
+html[data-futureskill-page] .fs-settings-section > p { margin:4px 0 12px; font-size:12px; line-height:1.5; }
+html[data-futureskill-page] .fs-settings-section > a { display:inline-flex; align-items:center; gap:10px; min-height:40px; padding:8px 12px; border:1px solid var(--fs-line-strong); border-radius:9px; background:var(--fs-raised); color:var(--fs-accent); font-size:12px; font-weight:700; text-decoration:none; }
+html[data-futureskill-page] .fs-settings-section > a:hover { background:var(--fs-accent-soft); }
+html[data-futureskill-page] .fs-settings-label { display:block; margin-bottom:8px; color:var(--fs-ink); font-size:13px; font-weight:700; }
+html[data-futureskill-page] #fsLanguageSelect { width:100%; min-height:48px; padding:10px 12px; }
+html[data-futureskill-page] .fs-language-status { min-height:22px; margin:9px 0 0; font-size:12px; color:var(--fs-danger); }
+html[data-futureskill-page] .fs-translation-note { margin:10px 0 0; padding:11px 12px; border-left:3px solid var(--fs-amber); border-radius:0 8px 8px 0; background:var(--fs-amber-soft); color:var(--fs-ink-soft); font-size:12px; line-height:1.5; }
+html[data-futureskill-page] .fs-theme-options { display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 0;padding:0;border:0; }
+html[data-futureskill-page] .fs-theme-options label { position:relative;cursor:pointer; }
+html[data-futureskill-page] .fs-theme-options input { position:absolute;width:1px;height:1px;opacity:0; }
+html[data-futureskill-page] .fs-theme-options label span { display:block;padding:10px 8px;border:1px solid var(--fs-line);border-radius:9px;background:var(--fs-raised);color:var(--fs-muted);text-align:center;font-size:12px;font-weight:700; }
+html[data-futureskill-page] .fs-theme-options input:checked+span { border-color:var(--fs-accent);background:var(--fs-accent-soft);color:var(--fs-accent-ink); }
+html[data-futureskill-page] .fs-theme-options input:focus-visible+span { outline:3px solid var(--fs-accent);outline-offset:2px; }
+html[data-futureskill-page] .fs-availability { list-style:none;margin:8px 0 0;padding:0; }
+html[data-futureskill-page] .fs-availability li { display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--fs-line); }
+html[data-futureskill-page] .fs-availability strong,html[data-futureskill-page] .fs-availability small { display:block; }
+html[data-futureskill-page] .fs-availability strong { font-size:12px; }
+html[data-futureskill-page] .fs-availability small { margin-top:3px;color:var(--fs-muted);font-size:11px; }
+html[data-futureskill-page] .fs-availability li > span:last-child { flex:none;padding:5px 8px;border-radius:20px;background:var(--fs-raised-alt);color:var(--fs-muted);font-size:10px;font-weight:700; }
+@media(max-width:1000px) {
+  html[data-futureskill-page] .fs-site-nav { grid-template-columns:minmax(0,1fr) auto; }
+  html[data-futureskill-page] .fs-settings-button { grid-row:1; grid-column:2; }
+}
+@media(max-width:520px) {
+  html[data-futureskill-page] .fs-site-nav { grid-template-columns:minmax(0,1fr) auto; }
+  html[data-futureskill-page] .fs-settings-button { grid-row:1; grid-column:2; padding:8px 10px; font-size:11px; }
+  html[data-futureskill-page] .fs-settings-body { padding:0 17px 14px; }
+  html[data-futureskill-page] .fs-settings-heading { padding:18px 17px 14px; }
+  html[data-futureskill-page] .fs-settings-dialog { width:calc(100vw - 20px);max-height:calc(100dvh - 20px); }
 }

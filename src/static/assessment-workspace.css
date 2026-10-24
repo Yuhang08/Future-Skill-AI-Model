@@ -1,0 +1,296 @@
+html[data-futureskill-page="home"] #results {
+  width: min(1480px, 100%);
+  max-width: none;
+  margin: 0 auto;
+  padding: clamp(14px, 2.5vw, 34px);
+  color: var(--fs-ink);
+}
+
+html[data-futureskill-page="home"] .career-results-layout {
+  display: grid;
+  grid-template-columns: minmax(205px, 238px) minmax(0, 1fr);
+  gap: clamp(18px, 2.6vw, 34px);
+  align-items: start;
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar {
+  position: sticky;
+  top: calc(var(--fs-navigation-height, 60px) + 20px);
+  display: flex;
+  max-height: calc(100vh - var(--fs-navigation-height, 60px) - 36px);
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 17px 12px;
+  border: 1px solid var(--fs-line);
+  border-radius: 16px;
+  background: var(--fs-raised);
+  box-shadow: var(--fs-shadow-small);
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar-heading {
+  padding: 0 8px 13px;
+  border-bottom: 1px solid var(--fs-line);
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar-heading span {
+  color: var(--fs-accent);
+  font: 700 11px/1.5 "Space Mono", monospace;
+  letter-spacing: .07em;
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar-heading p {
+  margin: 5px 0 0;
+  color: var(--fs-ink-soft);
+  font-size: 13px;
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar nav {
+  display: grid;
+  gap: 4px;
+  padding-top: 12px;
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar nav > a,
+html[data-futureskill-page="home"] .career-results-sidebar details > a {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: var(--fs-ink);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar nav > a:hover,
+html[data-futureskill-page="home"] .career-results-sidebar details > a:hover,
+html[data-futureskill-page="home"] .career-results-sidebar a[aria-current="location"] {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar details {
+  margin-top: 6px;
+  padding: 8px 9px 3px;
+  border-top: 1px solid var(--fs-line);
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar details summary {
+  min-height: 38px;
+  padding: 8px 0;
+  color: var(--fs-ink-soft);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar details > a { padding-left: 12px; }
+
+html[data-futureskill-page="home"] .career-results-retake {
+  display: block;
+  margin: auto 6px 0;
+  padding: 12px 8px 0;
+  color: var(--fs-accent);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+html[data-futureskill-page="home"] .career-results-main { min-width: 0; }
+html[data-futureskill-page="home"] .career-results-page-title {
+  margin: 0 0 16px;
+  color: var(--fs-ink);
+  font-size: clamp(29px, 4vw, 42px);
+  letter-spacing: -.05em;
+  line-height: 1.08;
+}
+
+html[data-futureskill-page="home"] .career-result-card {
+  min-width: 0;
+  margin: 12px 0;
+  padding: clamp(16px, 2.4vw, 23px);
+  border: 1px solid var(--fs-line);
+  border-radius: 14px;
+  background: var(--fs-surface);
+}
+
+html[data-futureskill-page="home"] .career-result-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+html[data-futureskill-page="home"] .career-result-card h3 {
+  margin: 0 0 8px;
+  color: var(--fs-ink);
+  font-size: 19px;
+}
+
+html[data-futureskill-page="home"] .career-rank {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 5px 8px;
+  border-radius: 99px;
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+html[data-futureskill-page="home"] .career-evidence-note,
+html[data-futureskill-page="home"] .career-pathway-status,
+html[data-futureskill-page="home"] .career-skill-boundary {
+  color: var(--fs-ink-soft);
+  font-size: 14px;
+}
+
+html[data-futureskill-page="home"] .career-why summary,
+html[data-futureskill-page="home"] .career-engine-details summary,
+html[data-futureskill-page="home"] .career-more-results summary {
+  min-height: 40px;
+  padding: 8px 0;
+  color: var(--fs-accent);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+html[data-futureskill-page="home"] .career-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 14px;
+}
+
+html[data-futureskill-page="home"] .career-card-actions a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+html[data-futureskill-page="home"] .career-action-primary {
+  padding: 8px 13px;
+  border-radius: 9px;
+  background: var(--fs-accent);
+  color: var(--fs-on-accent) !important;
+  text-decoration: none;
+}
+
+html[data-futureskill-page="home"] .career-action-secondary,
+html[data-futureskill-page="home"] .career-action-text { color: var(--fs-accent); }
+
+html[data-futureskill-page="home"] .career-index-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 14px;
+  max-width: 520px;
+}
+
+html[data-futureskill-page="home"] .career-index-list dt { color: var(--fs-ink-soft); }
+html[data-futureskill-page="home"] .career-index-list dd {
+  margin: 0;
+  color: var(--fs-ink);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+html[data-futureskill-page="home"] .entry-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+  margin-top: 26px;
+}
+
+html[data-futureskill-page="home"] .entry-choice {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 9px;
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid var(--fs-line);
+  border-radius: 15px;
+  background: var(--fs-raised);
+  color: var(--fs-ink);
+  text-align: left;
+  box-shadow: var(--fs-shadow-small);
+}
+
+html[data-futureskill-page="home"] .entry-choice-kicker {
+  color: var(--fs-accent);
+  font: 700 11px/1.5 "Space Mono", monospace;
+  letter-spacing: .06em;
+}
+
+html[data-futureskill-page="home"] .entry-choice h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+html[data-futureskill-page="home"] .entry-choice p {
+  margin: 0 0 5px;
+  color: var(--fs-ink-soft);
+  line-height: 1.5;
+}
+
+html[data-futureskill-page="home"] .entry-choice button,
+html[data-futureskill-page="home"] .entry-choice-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  border: 1px solid var(--fs-accent);
+  border-radius: 9px;
+  background: var(--fs-accent);
+  color: var(--fs-on-accent);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+html[data-futureskill-page="home"] .entry-choice-link {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  color: var(--fs-accent);
+  font-weight: 700;
+}
+
+html[data-futureskill-page="home"] .career-results-sidebar a:focus-visible,
+html[data-futureskill-page="home"] .career-results-sidebar summary:focus-visible,
+html[data-futureskill-page="home"] .career-results-main a:focus-visible,
+html[data-futureskill-page="home"] .career-results-main button:focus-visible,
+html[data-futureskill-page="home"] .entry-choice a:focus-visible,
+html[data-futureskill-page="home"] .entry-choice button:focus-visible {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 850px) {
+  html[data-futureskill-page="home"] .career-results-layout { grid-template-columns: 1fr; }
+  html[data-futureskill-page="home"] .career-results-sidebar {
+    position: static;
+    max-height: none;
+    padding: 12px;
+  }
+  html[data-futureskill-page="home"] .career-results-sidebar nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  html[data-futureskill-page="home"] .career-results-sidebar details {
+    grid-column: 1 / -1;
+  }
+  html[data-futureskill-page="home"] .career-results-retake { margin-top: 8px; }
+}
+
+@media (max-width: 560px) {
+  html[data-futureskill-page="home"] .career-results-sidebar nav,
+  html[data-futureskill-page="home"] .entry-choices { grid-template-columns: 1fr; }
+  html[data-futureskill-page="home"] .career-result-heading { display: block; }
+  html[data-futureskill-page="home"] .career-card-actions { display: grid; }
+  html[data-futureskill-page="home"] .career-card-actions a { width: fit-content; }
+}

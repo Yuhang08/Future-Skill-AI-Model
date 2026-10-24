@@ -7,6 +7,7 @@ const demoMode = pageParams.get('demo') === '1';
 let appState = null;
 let csrf = '';
 let step = 0;
+const completedSetupSteps = new Set();
 let selectedWeek = 'auto';
 let toastTimer;
 const THEME_STORAGE_KEY = 'futureskill-theme-preference';
@@ -90,7 +91,7 @@ function setWorkspaceNotice(message) {
   notice.hidden = !message;
 }
 function setWorkspaceActive(action) {
-  if (action === 'settings' || action === 'edit-profile') return;
+  if (action === 'edit-profile') return;
   const items = document.querySelectorAll('#workspaceNav [data-workspace-action]');
   items.forEach(item => {
     const active = item.dataset.workspaceAction === action;
@@ -99,11 +100,46 @@ function setWorkspaceActive(action) {
     else item.removeAttribute('aria-current');
   });
 }
-function updateSdgNavLink() {
-  const link = $('sdgNavLink');
-  if (!link) return;
-  const career = appState?.profile?.target_career || $('targetCareer')?.value;
-  link.href = career ? `/sdg-impact?career=${encodeURIComponent(career)}` : '/sdg-impact';
+function updateInterviewPracticeEntry() {
+  const savedTarget = appState?.profile?.target_career;
+  const card = $('interviewPracticeCard');
+  if (!card) return;
+  card.hidden = !savedTarget;
+  if (!savedTarget) return;
+  $('interviewPracticeTarget').textContent = savedTarget;
+  $('interviewPracticeLink').href = `/interview-practice/?career=${encodeURIComponent(savedTarget)}`;
+}
+function updateWorkspaceSummary() {
+  if (!appState) return;
+  updateInterviewPracticeEntry();
+  const hasPlan = Boolean(appState.profile);
+  const editing = !$('questionnaire').hidden;
+  const target = hasPlan ? appState.profile.target_career : $('targetCareer').value;
+  $('workspaceTarget').textContent = target || 'Choose a target';
+  $('workspaceTarget').toggleAttribute('data-i18n-ignore', Boolean(target));
+  $('workspaceSetupSteps').hidden = !editing;
+  $('hero').hidden = hasPlan && !editing;
+  document.querySelectorAll('#workspaceNav [data-workspace-action]').forEach(button => {
+    const action = button.dataset.workspaceAction;
+    button.disabled = !hasPlan && ['plan','progress'].includes(action);
+  });
+  if (hasPlan) {
+    const stats = appState.stats;
+    $('workspaceSummary').textContent = `${stats.completed_tasks} of ${stats.total_tasks} tasks completed.`;
+    const nextTask = appState.tasks.filter(task => !task.completed && task.kind === 'learning')
+      .slice().sort((a,b) => String(a.due_date).localeCompare(String(b.due_date)))[0];
+    $('nextActivityCard').hidden = !nextTask;
+    if (nextTask) {
+      const next = document.createElement('span');
+      next.setAttribute('data-i18n-ignore', '');
+      next.textContent = ` ${nextTask.skill} · ${nextTask.hours} h`;
+      $('workspaceSummary').appendChild(next);
+      $('nextActivityDetail').textContent = `${nextTask.skill} · ${dateHuman(nextTask.due_date)} · ${nextTask.hours} h`;
+    }
+  } else {
+    $('workspaceSummary').textContent = 'Set up your learning profile to create a plan.';
+    $('nextActivityCard').hidden = true;
+  }
 }
 function closeWorkspaceSidebar() {
   const toggle = $('workspaceToggle');
@@ -113,33 +149,24 @@ function closeWorkspaceSidebar() {
   toggle?.setAttribute('aria-expanded', 'false');
   toggle?.setAttribute('aria-label', 'Open workspace navigation');
 }
-function openWorkspaceSettings() {
-  const dialog = $('settingsDialog');
-  if (!dialog) return;
-  if (typeof dialog.showModal === 'function') dialog.showModal();
-  else dialog.setAttribute('open', '');
-}
 function closeWorkspaceSettings() {
-  const dialog = $('settingsDialog');
+  const dialog = $('fsSettingsDialog');
   if (!dialog) return;
   if (typeof dialog.close === 'function' && dialog.open) dialog.close();
   else dialog.removeAttribute('open');
 }
-function handleWorkspaceAction(action) {
-  closeWorkspaceSidebar();
-  if (action === 'settings') {
-    openWorkspaceSettings();
+function openLearningProfile() {
+  closeWorkspaceSettings();
+  if (appState?.profile) {
+    $('editProfile').click();
     return;
   }
+  handleWorkspaceAction('begin-setup');
+}
+function handleWorkspaceAction(action) {
+  closeWorkspaceSidebar();
   if (action === 'edit-profile') {
-    closeWorkspaceSettings();
-    if (appState?.profile) {
-      $('editProfile').click();
-    } else {
-      setWorkspaceActive('plan');
-      setWorkspaceNotice('Create your learning profile to begin. You can enter your skills manually in setup.');
-      $('workspaceNotice')?.scrollIntoView({behavior:'smooth', block:'start'});
-    }
+    openLearningProfile();
     return;
   }
   if (action === 'overview') {
@@ -172,7 +199,7 @@ function handleWorkspaceAction(action) {
     setWorkspaceActive('progress');
     if (appState?.profile) {
       setWorkspaceNotice('');
-      $('gapsSection')?.scrollIntoView({behavior:'smooth', block:'start'});
+      $('progressHistory')?.scrollIntoView({behavior:'smooth', block:'start'});
     } else {
       setWorkspaceNotice('Progress tracking will be available after you create a learning profile and plan.');
       $('workspaceNotice')?.scrollIntoView({behavior:'smooth', block:'start'});
@@ -202,20 +229,13 @@ function initWorkspaceNavigation() {
   document.querySelectorAll('[data-workspace-action]').forEach(item => {
     item.addEventListener('click', () => handleWorkspaceAction(item.dataset.workspaceAction));
   });
-  $('workspaceNav')?.addEventListener('click', event => {
-    if (event.target.closest('a.workspace-nav-item')) closeWorkspaceSidebar();
-  });
-  $('settingsClose')?.addEventListener('click', closeWorkspaceSettings);
-  $('settingsDialog')?.addEventListener('click', event => {
-    if (event.target === $('settingsDialog')) closeWorkspaceSettings();
-  });
-  $('themePreference')?.addEventListener('change', event => {
-    if (event.target.matches('input[name="themePreference"]')) {
-      applyThemePreference(event.target.value);
-    }
+  document.addEventListener('click', event => {
+    const profileLink = event.target.closest('#editProfileFromSettings');
+    if (!profileLink) return;
+    event.preventDefault();
+    openLearningProfile();
   });
   setWorkspaceActive('overview');
-  updateSdgNavLink();
 }
 function showDemoBanner() {
   if (!demoMode) return;
@@ -240,14 +260,32 @@ function dayPills(container, name, checked=['Tuesday','Thursday','Saturday']) {
 function selectedDays(container) {
   return [...$(container).querySelectorAll('input:checked')].map(node => node.value);
 }
+function updateSetupIndicators() {
+  document.querySelectorAll('#workspaceSetupSteps [data-go-step]').forEach(button => {
+    const current = Number(button.dataset.goStep) === step;
+    if (current) button.setAttribute('aria-current', 'step');
+    else button.removeAttribute('aria-current');
+    let badge = button.querySelector('.setup-step-complete');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'setup-step-complete';
+      badge.textContent = 'Done';
+      button.appendChild(badge);
+    }
+    badge.hidden = !completedSetupSteps.has(Number(button.dataset.goStep));
+  });
+  if ($('workspaceSetupStatus')) $('workspaceSetupStatus').textContent = `Step ${step + 1} of 3 · not saved`;
+}
 function setSteps(next) {
   step = Math.max(0, Math.min(next, 2));
   document.querySelectorAll('.step-panel').forEach(p => { p.hidden = Number(p.dataset.step) !== step; });
   document.querySelectorAll('[data-go-step]').forEach(b => b.classList.toggle('active', Number(b.dataset.goStep) === step));
+  updateSetupIndicators();
   $('prevStep').hidden = step === 0;
   $('nextStep').hidden = step === 2;
   $('submitPlan').hidden = step !== 2;
   $('formError').textContent = '';
+  updateWorkspaceSummary();
 }
 function drawSkillInputs(saved={}) {
   const career = $('targetCareer').value;
@@ -315,45 +353,44 @@ function renderTree(tree, animate=false) {
   }
 }
 function completedPracticeLevels(name, gap, tasks) {
-  // Baseline self-ratings must not be displayed as earned progress.
-  // Only fully completed learning-task practice milestones fill the bar.
-  // The milestones are estimates, never automatic proof of mastery.
-  const plannedLevels = Math.max(0, Number(gap.gap) || 0);
-  const estimatedHours = Number(gap.estimated_hours) || 0;
-  if (!plannedLevels || !estimatedHours) return {completed:0, planned:plannedLevels};
+  // Count completed learning practice only. This is not a proficiency assessment.
+  const planned = Math.max(0, Number(gap?.gap) || 0);
+  const estimatedHours = Math.max(0, Number(gap?.estimated_hours) || 0);
+  if (!planned || !estimatedHours) return {completed:0, planned};
   const completedHours = (Array.isArray(tasks) ? tasks : [])
-    .filter(task => task.skill === name && task.kind === 'learning' && task.completed)
-    .reduce((total, task) => total + (Number(task.hours) || 0), 0);
-  const hoursPerLevel = estimatedHours / plannedLevels;
-  const completed = Math.min(plannedLevels,
+    .filter(task => task && task.skill === name && task.kind === 'learning'
+      && task.completed === true && Number.isFinite(Number(task.hours))
+      && Number(task.hours) > 0)
+    .reduce((total, task) => total + Number(task.hours), 0);
+  const hoursPerLevel = estimatedHours / planned;
+  const completed = Math.min(planned,
     Math.floor((completedHours + 0.001) / hoursPerLevel));
-  return {completed, planned:plannedLevels};
+  return {completed, planned};
 }
 function renderGaps(gaps, tasks=[]) {
   const sorted = Object.entries(gaps).sort((a,b) => b[1].priority-a[1].priority);
   $('gapList').innerHTML = sorted.map(([name, g]) => {
-    const hasGap = Number(g.gap) > 0;
     const progress = completedPracticeLevels(name, g, tasks);
     const percent = progress.planned
       ? Math.max(0, Math.min(100, progress.completed / progress.planned * 100))
       : 0;
-    const milestoneText = progress.planned
-      ? progress.completed + ' of ' + progress.planned + ' practice levels completed'
-      : 'No additional practice levels scheduled';
-    return '<div class="gap-item">' +
-      '<div class="gap-top"><strong>' + escapeHtml(name) + '</strong><span>Starting self-rating: ' +
-      g.current + '/5 · target: ' + g.required + '/5</span></div>' +
-      '<div class="gap-bar" role="progressbar" aria-label="' + escapeHtml(name) +
-      ' completed practice milestones" aria-valuemin="0" aria-valuemax="' +
-      progress.planned + '" aria-valuenow="' + progress.completed + '">' +
-      '<div class="gap-current" style="width:' + percent + '%"></div></div>' +
-      '<div class="gap-footer"><span>' + milestoneText +
-      (hasGap ? ' · Gap: ' + g.gap + ' level(s)' : ' · Self-rating meets example target') +
-      '</span><b>' + g.remaining_hours + ' h estimated practice left</b></div>' +
-      '</div>';
+    const milestone = progress.planned
+      ? `${progress.completed} of ${progress.planned} estimated practice levels completed`
+      : 'No additional practice levels planned';
+    const bar = progress.planned
+      ? `<div class="gap-bar" role="progressbar" aria-label="${escapeHtml(name)} completed practice levels"
+          aria-valuemin="0" aria-valuemax="${progress.planned}" aria-valuenow="${progress.completed}"
+          aria-valuetext="${milestone}; not an assessed proficiency level">
+          <div class="gap-current" style="width:${percent}%"></div>
+        </div>`
+      : '';
+    return `<div class="gap-item">
+      <div class="gap-top"><strong>${escapeHtml(name)}</strong><span>Self-rating ${g.current}/5 · Example target ${g.required}/5</span></div>
+      ${bar}
+      <div class="gap-footer"><span>${milestone}${progress.planned ? ` · Example gap: ${g.gap} level${g.gap===1?'':'s'}` : ' · Self-rating meets example target'}</span><b>${g.remaining_hours} h estimated practice left</b></div>
+    </div>`;
   }).join('');
 }
-
 function dateHuman(iso) {
   // Parse in local time (avoid UTC midnight changing a display date).
   const [y,m,d] = iso.split('-').map(Number);
@@ -421,10 +458,10 @@ function renderDashboard(state, animateTree=false) {
   $('replanHours').value = p.weekly_hours;
   $('replanWeeks').value = p.target_weeks;
   dayPills('replanDays','replanDays',p.preferred_days);
+  updateWorkspaceSummary();
 }
 function showApp(state) {
   appState = state;
-  updateSdgNavLink();
   if (state.profile) {
     $('questionnaire').hidden = true;
     $('cancelEdit').hidden = true;
@@ -438,6 +475,7 @@ function showApp(state) {
     fillForm(null);
     setSteps(0);
   }
+  updateWorkspaceSummary();
 }
 async function submitPlan(event) {
   event.preventDefault();
@@ -445,6 +483,23 @@ async function submitPlan(event) {
   try {
     submit.disabled = true;
     const payload = readForm();
+    const savedTarget = appState.profile?.target_career || null;
+    const targetChanged = Boolean(savedTarget && savedTarget !== payload.target_career);
+    const unfinished = Array.isArray(appState.tasks)
+      ? appState.tasks.filter(task => !task.completed)
+      : [];
+    if (targetChanged || unfinished.length) {
+      const lines = [
+        targetChanged
+          ? `Your saved target will change from “${savedTarget}” to “${payload.target_career}”.`
+          : `Your saved target remains “${payload.target_career}”.`,
+        unfinished.length
+          ? `${unfinished.length} unfinished task${unfinished.length === 1 ? "" : "s"} across your learning plan will be replaced. Photos attached to unfinished tasks will also be removed.`
+          : "There are no unfinished tasks to replace.",
+        "Completed tasks, their uploaded evidence, and learning-tree points will remain."
+      ];
+      if (!window.confirm(`${lines.join("\n\n")}\n\nContinue and generate this learning pathway?`)) return;
+    }
     const result = await api('/api/plan', 'POST', payload);
     showApp(result.state);
     window.scrollTo({top:0,behavior:'smooth'});
@@ -509,18 +564,44 @@ async function submitReplan(event) {
 function initListeners() {
   initWorkspaceNavigation();
   $('weeklyHours').addEventListener('input',()=>{$('weeklyHoursOutput').textContent=`${$('weeklyHours').value} hours`;});
-  $('targetCareer').addEventListener('change',()=>{drawSkillInputs();updateSdgNavLink();});
-  $('nextStep').addEventListener('click',()=>setSteps(step+1));
+  $('targetCareer').addEventListener('change',()=>{
+    completedSetupSteps.delete(1);
+    drawSkillInputs();
+    updateSetupIndicators();
+    updateWorkspaceSummary();
+  });
+  $('nextStep').addEventListener('click',()=>{
+    const fields = [...document.querySelectorAll(`.step-panel[data-step="${step}"] input,.step-panel[data-step="${step}"] select,.step-panel[data-step="${step}"] textarea`)];
+    const invalid = fields.find(field => !field.checkValidity());
+    if (invalid) { invalid.reportValidity(); return; }
+    completedSetupSteps.add(step);
+    setSteps(step+1);
+  });
+  $('assessmentForm').addEventListener('input', event => {
+    const panel = event.target.closest('.step-panel');
+    if (!panel) return;
+    completedSetupSteps.delete(Number(panel.dataset.step));
+    updateSetupIndicators();
+  });
   $('prevStep').addEventListener('click',()=>setSteps(step-1));
-  document.querySelectorAll('[data-go-step]').forEach(b=>b.addEventListener('click',()=>setSteps(Number(b.dataset.goStep))));
+  document.querySelectorAll('[data-go-step]').forEach(b=>b.addEventListener('click',()=>{
+    setSteps(Number(b.dataset.goStep));
+    if(b.closest('#workspaceSetupSteps')) {
+      closeWorkspaceSidebar();
+      $('questionnaire').scrollIntoView({behavior:'smooth',block:'start'});
+      document.querySelector('.step-panel:not([hidden]) input,.step-panel:not([hidden]) select')?.focus({preventScroll:true});
+    }
+  }));
   $('assessmentForm').addEventListener('submit',submitPlan);
   $('editProfile').addEventListener('click',()=>{
+    completedSetupSteps.clear();
     fillForm(appState.profile);
     setSteps(0);
     $('dashboard').hidden=true;
     document.body.classList.remove('has-dashboard');
     $('questionnaire').hidden=false;
     $('cancelEdit').hidden=false;
+    updateWorkspaceSummary();
     $('questionnaire').scrollIntoView({behavior:'smooth'});
   });
   $('cancelEdit').addEventListener('click',()=>showApp(appState));
@@ -585,6 +666,7 @@ function showCareerBridge(response, requestedCareer) {
       $('editProfile').click();
       $('targetCareer').value = selected;
       drawSkillInputs();
+      updateWorkspaceSummary();
       $('questionnaire').scrollIntoView({behavior:'smooth'});
       note.hidden = true;
     });
@@ -595,6 +677,7 @@ function showCareerBridge(response, requestedCareer) {
 
   $('targetCareer').value = selected;
   drawSkillInputs();
+  updateWorkspaceSummary();
   note.textContent = `Career selected from your assessment: ${requestedCareer}. Skills use the illustrative ${selected} template; assess your own skills before generating a plan.`;
 }
 
@@ -658,106 +741,13 @@ async function init() {
   try {
     const response=await api('/api/state');
     csrf = response.csrf;
-
-
-    const targetSelect = $('targetCareer');
-    const searchInput = $('careerSearch');
-    const careerCount = $('careerCount');
-
-    // Load and sort all careers A-Z
-    const allCareers = Object.keys(response.catalog).sort(
-        (a, b) => a.localeCompare(b, 'en', {
-            sensitivity: 'base'
-        })
-    );
-
-    let selectedCareer = "";
-
-    // Render matching career options
-    function renderCareerOptions(keyword = "") {
-        const matches = allCareers.filter(name =>
-            name.toLowerCase().includes(
-                keyword.trim().toLowerCase()
-            )
-        );
-
-        targetSelect.replaceChildren();
-
-        matches.forEach(name => {
-            const option = document.createElement('option');
-            option.value = name;
-            option.textContent = name;
-            targetSelect.appendChild(option);
-        });
-
-        // Keep existing selection if it is still visible
-        if (selectedCareer && matches.includes(selectedCareer)) {
-            targetSelect.value = selectedCareer;
-        } else {
-            targetSelect.selectedIndex = -1;
-        }
-
-        targetSelect.style.display =
-            matches.length > 0 ? 'block' : 'none';
-
-        careerCount.textContent =
-            `${matches.length} matching / ${allCareers.length} careers`;
-    }
-
-    // Confirm the selected career
-    function confirmCareer() {
-        const career = targetSelect.value;
-
-        if (!career) return;
-
-        selectedCareer = career;
-        searchInput.value = career;
-
-        // Restore all options so saved profiles still work
-        renderCareerOptions("");
-        targetSelect.value = career;
-
-        // Hide the list after selection
-        targetSelect.style.display = 'none';
-
-        careerCount.textContent =
-            `Selected: ${career} · ${allCareers.length} careers`;
-    }
-
-    // Populate options, but hide initially
-    renderCareerOptions("");
-    targetSelect.style.display = 'none';
-
-    // Show options when user focuses the search field
-    searchInput.addEventListener('focus', () => {
-        const keyword =
-            searchInput.value === selectedCareer
-                ? ""
-                : searchInput.value;
-
-        renderCareerOptions(keyword);
-        searchInput.select();
-    });
-
-    // Filter while typing
-    searchInput.addEventListener('input', () => {
-        renderCareerOptions(searchInput.value);
-    });
-
-    // Confirm using mouse or keyboard selection
-    targetSelect.addEventListener('change', confirmCareer);
-
+    const targetSelect=$('targetCareer');
+    targetSelect.innerHTML = Object.entries(response.catalog).map(([name,career])=>
+      `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
     showApp(response);
     showCareerBridge(response, pageParams.get('career'));
-
-    // Synchronize the selected career
-    selectedCareer = targetSelect.value;
-    searchInput.value = selectedCareer;
-    targetSelect.style.display = 'none';
-
-    updateSdgNavLink();
     openInventoryScreen(pageParams.get('screen'));
-
+    if (pageParams.get('editProfile') === '1') openLearningProfile();
   } catch(error) {
     $('questionnaire').hidden=false;
     toast(`Cannot reach the Python server: ${error.message}`,true);

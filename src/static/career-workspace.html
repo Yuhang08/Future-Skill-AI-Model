@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-futureskill-page="career-workspace">
+<head>
+  <script src="/static/future-theme.js?v=5"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf3f5">
+  <meta name="description" content="Explore career catalogue roles and compare available evidence.">
+  <link rel="icon" href="/favicon.ico" type="image/svg+xml">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/static/future-theme.css?v=4">
+  <link rel="stylesheet" href="/static/future-pages.css?v=career-workspace-1">
+  <link rel="stylesheet" href="/static/assessment-report.css?v=2">
+  <link rel="stylesheet" href="/static/career-workspace.css?v=2">
+  <title>FutureSkill AI · Career workspace</title>
+</head>
+<body>
+  <div class="career-workspace-shell">
+    <button type="button" class="career-workspace-toggle" id="careerWorkspaceToggle"
+            aria-expanded="false" aria-controls="careerWorkspaceSidebar">
+      <span aria-hidden="true">☰</span><span>YOUR WORKSPACE</span>
+    </button>
+    <aside class="career-workspace-sidebar" id="careerWorkspaceSidebar" aria-label="Your workspace">
+      <div class="career-workspace-sidebar-title">
+        <span class="career-workspace-overline">YOUR WORKSPACE</span>
+        <p>Explore a direction at your pace.</p>
+      </div>
+      <nav class="career-workspace-nav" aria-label="Career workspace navigation">
+        <a href="/career-overview" data-workspace-nav="overview">My career overview</a>
+        <a href="/careers" data-workspace-nav="explore">Explore careers</a>
+        <a href="/my-profile" data-workspace-nav="profile">My profile &amp; assessment</a>
+        <a href="/reskilling" data-workspace-nav="pathway">My learning pathway</a>
+        <details class="career-workspace-extra" open>
+          <summary>Further exploration</summary>
+          <a href="/ai-trend" data-context-page="trends">AI trends</a>
+          <a href="/sdg-impact" data-context-page="sdg">SDG connections</a>
+        </details>
+      </nav>
+      <div class="career-workspace-sidebar-note">
+        <strong>Explore, don’t predict.</strong>
+        <span>Career information and pathways vary in coverage.</span>
+      </div>
+    </aside>
+    <main class="career-workspace-main" id="careerWorkspaceMain" tabindex="-1">
+      <div class="career-workspace-content" id="careerWorkspaceContent">
+        <p class="career-loading" role="status">Loading career workspace…</p>
+      </div>
+    </main>
+  </div>
+  <script src="/static/assessment-report.js?v=2" defer></script>
+  <script src="/static/career-ui.js?v=2" defer></script>
+  <script src="/static/career-workspace.js?v=2" defer></script>
+</body>
+</html>

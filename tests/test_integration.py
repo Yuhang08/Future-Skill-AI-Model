@@ -21,12 +21,15 @@ class IntegratedWebTests(unittest.TestCase):
         self.client = TestClient(app)
 
     def test_shared_brand_asset(self):
-        asset = self.client.get('/static/futureskill-atom.svg')
+        asset = self.client.get('/static/brand-forward.svg')
         self.assertEqual(asset.status_code, 200)
         self.assertIn('image/svg+xml', asset.headers['content-type'])
-        self.assertIn('<ellipse', asset.text)
+        self.assertIn('<path', asset.text)
         shell = self.client.get('/static/future-theme.js').text
-        self.assertIn('/static/futureskill-atom.svg?v=1', shell)
+        self.assertIn('/static/brand-forward.svg', shell)
+        self.assertIn('/static/brand-forward-dark.svg', shell)
+        self.assertEqual(self.client.get('/__dev/brand').status_code, 200)
+        self.assertEqual(self.client.get('/static/brand-preview.html').status_code, 404)
         for route, selector in (
             ('/reskilling', 'class="brand-icon"'),
             ('/sdg-impact', 'class="brand-mark"'),
@@ -34,7 +37,7 @@ class IntegratedWebTests(unittest.TestCase):
             page = self.client.get(route)
             self.assertEqual(page.status_code, 200)
             self.assertIn(selector, page.text)
-            self.assertIn('/static/futureskill-atom.svg?v=1', page.text)
+            self.assertIn('/static/brand-forward.svg', page.text)
             self.assertNotIn('>✳</span>', page.text)
             self.assertNotIn('>FS</span>', page.text)
 
@@ -61,25 +64,43 @@ class IntegratedWebTests(unittest.TestCase):
         old = self.client.get('/')
         self.assertEqual(old.status_code, 200)
         self.assertIn('Start Career Assessment', old.text)
-        self.assertIn('reskilling?career=', old.text)
+        self.assertIn('/static/career-ui.js?v=2', old.text)
+        career_ui = self.client.get('/static/career-ui.js')
+        self.assertEqual(career_ui.status_code, 200)
+        self.assertIn('demo_scenario=fresh', career_ui.text)
+        self.assertIn('Why this match?', career_ui.text)
+        self.assertIn('career-card-controls', career_ui.text)
         new = self.client.get('/reskilling')
         self.assertEqual(new.status_code, 200)
         self.assertIn('Generate my pathway', new.text)
         self.assertIn('careerBridgeNote', new.text)
         for label in (
             'Overview', 'My Reskilling Plan', 'Progress Tracking',
-            'AI &amp; Career Trends', 'Explore Careers', 'SDG Alignment', 'Settings',
         ):
             self.assertIn(label, new.text)
         for element_id in (
             'workspaceSidebar', 'workspaceToggle', 'workspaceNav',
-            'settingsDialog', 'themePreference', 'beginSetup', 'sdgNavLink',
+            'beginSetup',
         ):
             self.assertIn(f'id="{element_id}"', new.text)
-        self.assertIn('href="/ai-trend"', new.text)
-        self.assertIn('id="sdgNavLink" data-nav-sdg href="/sdg-impact"', new.text)
-        self.assertIn('CV import', new.text)
-        self.assertIn('Cross-device sync', new.text)
+        sidebar = re.search(
+            r'<aside\b[^>]*id="workspaceSidebar"[\s\S]*?</aside>', new.text
+        ).group(0)
+        self.assertIn('href="/careers"', sidebar)
+        for offsite_navigation in ('/ai-trend', '/sdg-impact', '/uncertainty'):
+            self.assertNotIn(f'href="{offsite_navigation}"', sidebar)
+        self.assertNotIn('data-workspace-action="settings"', sidebar)
+        self.assertEqual(sidebar.count('data-workspace-action='), 4)
+        self.assertNotIn('id="settingsDialog"', new.text)
+        shared_settings = self.client.get('/static/future-theme.js').text
+        for feature in (
+            'fsSettingsDialog', 'fsSettingsButton', 'editProfileFromSettings',
+            'themePreference', 'fsLanguageSelect', 'Privacy and data',
+            'CV import', 'Notifications', 'Cross-device sync',
+        ):
+            self.assertIn(feature, shared_settings)
+        for route in ('/', '/reskilling', '/ai-trend', '/uncertainty', '/sdg-impact'):
+            self.assertIn(f'["{route}",', shared_settings)
         self.assertEqual(self.client.get('/reskill-static/app.js').status_code, 200)
         self.assertEqual(self.client.get('/reskill-static/style.css').status_code, 200)
 
@@ -102,12 +123,14 @@ class IntegratedWebTests(unittest.TestCase):
         sdg_page = self.client.get('/sdg-impact').text
         self.assertIn('Potential alignment is not impact', sdg_page)
         self.assertIn('Show more', sdg_page)
-        self.assertIn('node(article, "dialog"', sdg_page)
+        self.assertIn('class="mapping-drawer goal-evidence-drawer"', sdg_page)
         self.assertIn('mapping-drawer-panel', sdg_page)
         self.assertIn('Official SDG icon from the United Nations', sdg_page)
-        for element_id in ('goalGrid', 'mapLines', 'goalInfoDialog', 'careerCenter'):
+        for element_id in ('goalGrid', 'allGoals', 'goalInfoDialog', 'goalInfoContent'):
             self.assertIn(f'id="{element_id}"', sdg_page)
-        self.assertIn('Read all occupation task statements', sdg_page)
+        for removed_id in ('mapLines', 'careerCenter', 'mindmapStage'):
+            self.assertNotIn(f'id="{removed_id}"', sdg_page)
+        self.assertIn('Read full wording for all displayed evidence statements', sdg_page)
         self.assertIn('evidence-map', sdg_page)
         self.assertIn('/static/assets/sdg/sdg-4-education.jpg', sdg_page)
         self.assertIn('/static/assets/sdg/sdg-8-work.jpg', sdg_page)
@@ -279,7 +302,7 @@ class IntegratedWebTests(unittest.TestCase):
     def test_reskilling_full_journey(self):
         state = self.client.get('/api/state').json()
         csrf = state['csrf']
-        career = 'Software Developers'  # real Career Test CSV occupation
+        career = 'Software Developer'  # Preserve the approved illustrative pathway catalogue.
         self.assertIn(career, state['catalog'])
         skills = {name: 0 for name in state['catalog'][career]['skills']}
         profile = {
@@ -296,12 +319,18 @@ class IntegratedWebTests(unittest.TestCase):
         result = self.client.post('/api/plan', json=profile, headers=headers)
         self.assertEqual(result.status_code, 200, result.text)
         body = result.json()['state']
-        self.assertIn('Programming Foundations', body['gaps'])
+        self.assertIn('Python Basics', body['gaps'])
         self.assertGreater(len(body['tasks']), 0)
+        def gap_contract(state):
+            # Completed hours reduce remaining practice, not the self-rating gap.
+            return {name: {key: value for key, value in gap.items() if key != 'remaining_hours'}
+                    for name, gap in state['gaps'].items()}
+        original_gaps = gap_contract(body)
         task = body['tasks'][0]
         completed = self.client.post(f"/api/tasks/{task['id']}/status", json={'completed': True}, headers=headers)
         self.assertEqual(completed.status_code, 200)
         self.assertGreater(completed.json()['state']['tree']['points'], 0)
+        self.assertEqual(gap_contract(completed.json()['state']), original_gaps)
 
         # Valid tiny PNG fixture: no Pillow or third-party image package required.
         tiny_png = base64.b64decode(
@@ -320,6 +349,14 @@ class IntegratedWebTests(unittest.TestCase):
         new_state = replan.json()['state']
         self.assertTrue(any(t['id'] == task['id'] and t['completed'] for t in new_state['tasks']))
         self.assertEqual(new_state['tree']['points'], completed.json()['state']['tree']['points'])
+        self.assertEqual(gap_contract(new_state), original_gaps)
+
+        reopened = self.client.post(f"/api/tasks/{task['id']}/status", json={'completed': False}, headers=headers)
+        self.assertEqual(reopened.status_code, 200, reopened.text)
+        reopened_state = reopened.json()['state']
+        self.assertTrue(any(t['id'] == task['id'] and not t['completed'] for t in reopened_state['tasks']))
+        self.assertEqual(reopened_state['tree']['points'], 0)
+        self.assertEqual(gap_contract(reopened_state), original_gaps)
 
         second = TestClient(app)
         other_state = second.get('/api/state').json()

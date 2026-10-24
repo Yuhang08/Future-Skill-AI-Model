@@ -1,14 +1,19 @@
 
 from pathlib import Path
 from functools import lru_cache
+import math
+import re
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
 
 from assessment_scoring import calculate_assessment
 from career_engine import load_careers, match_careers
-from reskilling.sdg_alignment import get_sdg_alignment
+from reskilling.sdg_alignment import (
+    get_sdg_alignment,
+    get_sdg_alignment_by_id,
+)
 
 
 # ======================================
@@ -78,10 +83,120 @@ def home():
     return HTMLResponse(html)
 
 
+CAREER_WORKSPACE_ROUTES = (
+    "/career-overview",
+    "/careers",
+    "/my-profile",
+    "/compare",
+)
+CAREER_ID_PATTERN = re.compile(r"^\d{2}-\d{4}\.\d{2}$")
+
+
+def career_workspace_page():
+    return FileResponse(BASE_DIR / "static" / "career-workspace.html")
+
+
+for _route in CAREER_WORKSPACE_ROUTES:
+    app.add_api_route(
+        _route,
+        career_workspace_page,
+        methods=["GET"],
+        include_in_schema=False,
+    )
+
+
+@app.get("/career/{career_id}", include_in_schema=False)
+def career_detail_page(career_id: str):
+    return career_workspace_page()
+
+
+def _career_catalog_item(row):
+    raw_id = row.get("O*NET-SOC Code")
+    career_id = "" if raw_id is None else str(raw_id).strip()
+    raw_top3 = row.get("RIASEC_Top3")
+    scores = {}
+    for dimension in ("R", "I", "A", "S", "E", "C"):
+        try:
+            value = float(row[dimension])
+        except (TypeError, ValueError, KeyError):
+            value = None
+        scores[dimension] = value if value is not None and math.isfinite(value) else None
+    return {
+        "id": career_id,
+        "title": str(row["Title"]).strip(),
+        "riasec": scores,
+        "riasec_top3": "" if raw_top3 is None else str(raw_top3).strip(),
+    }
+
+
+@app.get("/api/careers")
+def career_catalog(
+    q: str = Query(default="", max_length=100),
+    limit: int = Query(default=24, ge=1, le=50),
+    offset: int = Query(default=0, ge=0),
+):
+    """Search/browse canonical occupation records without making a selection."""
+    careers = get_careers()
+    records = [
+        _career_catalog_item(row)
+        for _, row in careers.iterrows()
+        if CAREER_ID_PATTERN.fullmatch(
+            "" if row.get("O*NET-SOC Code") is None else str(row.get("O*NET-SOC Code")).strip()
+        )
+    ]
+    query = q.strip().casefold()
+    if query:
+        records = [item for item in records if query in item["title"].casefold()]
+    records.sort(key=lambda item: item["title"].casefold())
+    page = records[offset:offset + limit]
+    for item in page:
+        alignment = get_sdg_alignment_by_id(item["id"])
+        template = alignment.get("pathway_career")
+        item["pathway"] = {
+            "available": bool(template),
+            "template": template,
+            "status": "illustrative_template" if template else "not_available",
+        }
+    return {
+        "results": page,
+        "total": len(records),
+        "limit": limit,
+        "offset": offset,
+        "search_basis": "canonical occupation title",
+    }
+
+
+@app.get("/api/careers/{career_id}")
+def career_detail(career_id: str):
+    """Return only validated catalogue facts and explicit evidence availability."""
+    if not CAREER_ID_PATTERN.fullmatch(career_id):
+        raise HTTPException(status_code=404, detail="Career not found in the catalogue.")
+    careers = get_careers()
+    matching = careers.loc[
+        careers["O*NET-SOC Code"].astype(str).str.strip() == career_id
+    ]
+    if matching.empty:
+        raise HTTPException(status_code=404, detail="Career not found in the catalogue.")
+    row = matching.iloc[0]
+    item = _career_catalog_item(row)
+    alignment = get_sdg_alignment_by_id(career_id)
+    return {
+        **item,
+        "profile_url": f"https://www.onetonline.org/link/summary/{career_id}",
+        "profile_source": "O*NET OnLine occupation profile",
+        "pathway": {
+            "available": bool(alignment.get("pathway_career")),
+            "template": alignment.get("pathway_career"),
+            "status": "illustrative_template" if alignment.get("pathway_career") else "not_available",
+        },
+        "sdg_status": alignment.get("status", "unknown"),
+    }
+
+
 @app.get("/favicon.ico", include_in_schema=False)
 def favicon():
     return FileResponse(
-        BASE_DIR / "static" / "favicon.svg",
+        BASE_DIR / "static" / "brand-forward.svg",
         media_type="image/svg+xml",
     )
 
@@ -129,8 +244,11 @@ def recommend(request: AssessmentRequest):
         career_results = []
 
         for _, career in recommendations.iterrows():
+            sdg_alignment = get_sdg_alignment(str(career["Title"]))
 
             career_results.append({
+                "id": str(career.get("O*NET-SOC Code", "")).strip(),
+
                 "title": str(career["Title"]),
 
                 "riasec": str(
@@ -157,9 +275,13 @@ def recommend(request: AssessmentRequest):
                     career["Explanation"]
                 ),
 
-                "sdg_alignment": get_sdg_alignment(
-                    str(career["Title"])
+                "pathway_career": sdg_alignment.get("pathway_career"),
+                "pathway_status": (
+                    "illustrative_template"
+                    if sdg_alignment.get("pathway_career")
+                    else "not_available"
                 ),
+                "sdg_alignment": sdg_alignment,
             })
 
         # F. Return results to website
@@ -202,8 +324,13 @@ app.include_router(reskilling_router)
 app.include_router(exploration_router)
 app.include_router(explanation_router)
 
-# HR Interview: standalone Flask application hosted under the same FastAPI site.
-# Flask routes /api/interview/* become /hr-interview/api/interview/*.
-from starlette.middleware.wsgi import WSGIMiddleware
-from hr_interview.app import app as hr_flask_app
-app.mount("/hr-interview", WSGIMiddleware(hr_flask_app))
+# Keep the upstream Flask feature intact and mount it under its own route prefix;
+# its root and career API therefore cannot replace FutureSkill's existing routes.
+from a2wsgi import WSGIMiddleware
+from hr_interview.app import app as interview_practice_app
+
+app.mount(
+    "/interview-practice",
+    WSGIMiddleware(interview_practice_app),
+    name="interview-practice",
+)

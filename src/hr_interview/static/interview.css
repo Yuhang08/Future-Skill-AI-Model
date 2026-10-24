@@ -1,22 +1,467 @@
-:root{font-family:Inter,ui-sans-serif,system-ui,Arial,sans-serif;color:#e9eef9;background:#0b1020}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 30% 0%,#1a2f57 0,#0b1020 45%)}.layout{max-width:940px;margin:auto;padding:28px 20px}header{display:flex;justify-content:space-between;align-items:center;margin:12px 0 30px}.logo{font-weight:800;font-size:21px;color:#83bdff}.tag{font-size:12px;padding:9px 14px;background:#203355;border:1px solid #3f5883;border-radius:30px}.panel{border:1px solid #314461;background:#111c31;padding:28px;border-radius:20px;margin-bottom:20px;box-shadow:0 14px 44px #03071140}.hidden{display:none!important}h1{font-size:32px;margin:0 0 14px}h2{font-size:20px}h3{font-size:16px;margin-bottom:6px}p{line-height:1.6;color:#becae0}.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}label,.answerLabel{display:block;font-size:14px;color:#dbe7fa;font-weight:650}select,textarea{width:100%;margin-top:9px;padding:13px;background:#0b1425;border:1px solid #456181;color:#eef4ff;border-radius:10px;font:inherit}textarea{resize:vertical;line-height:1.5}button{background:#3477ff;color:white;border:0;border-radius:10px;padding:12px 17px;margin:12px 9px 3px 0;font:inherit;font-weight:650;cursor:pointer}button:hover{filter:brightness(1.13)}button:disabled{opacity:.45;cursor:wait}.secondary{background:#263a5a;border:1px solid #567097}.note{font-size:12px;color:#91a4c2}.topline{display:flex;justify-content:space-between;color:#9abcf1}.interviewer{display:flex;align-items:center;gap:12px;margin:25px 0}.interviewer small{display:block;color:#9fafc7;margin-top:5px}.avatar{border-radius:50%;width:55px;height:55px;background:#344d84;display:grid;place-items:center;font-weight:900}.question{background:#1c2d49;border-radius:13px;padding:20px;margin-bottom:18px}.question p{margin:5px 0 0;font-size:13px}.question h2{margin:0}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:18px}#recordStatus{font-size:12px;color:#8fcbff}.feedback{border-top:1px solid #385171;margin-top:24px;padding-top:8px}.score{font-size:30px;font-weight:900;color:#6dbbff;margin:8px 0}.twoCols{display:grid;grid-template-columns:1fr 1fr;gap:20px}.barrow{display:grid;grid-template-columns:115px 1fr 47px;align-items:center;gap:12px;margin:11px 0;font-size:13px}.bar{background:#2c3c55;height:9px;border-radius:20px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#3587f8,#5ad5c0);border-radius:20px}.historyItem{border:1px solid #354d68;border-radius:10px;padding:14px;margin-bottom:12px}.historyItem p{white-space:pre-wrap}.error{color:#ffc0c0;font-weight:600;min-height:24px}footer{color:#7891b6;font-size:12px;text-align:center;margin-top:30px}@media(max-width:650px){.fields,.twoCols{grid-template-columns:1fr}.panel{padding:18px}.barrow{grid-template-columns:90px 1fr 35px}h1{font-size:26px}}
+html[data-futureskill-page="interview"] .hidden,
+html[data-futureskill-page="interview"] [hidden] {
+  display: none !important;
+}
 
-.readinessCard{background:#1a2d49;border:1px solid #44658b;border-radius:14px;padding:18px;margin:18px 0}.readinessCard strong{font-size:20px;color:#99d0ff}.readinessCard small{color:#95a9c8}.proficiencyItem{margin:18px 0}.proficiencyHeading{display:flex;justify-content:space-between;gap:12px;margin-bottom:9px;flex-wrap:wrap;font-size:13px}.proficiencyHeading span{color:#9ac4eb}
+html[data-futureskill-page="interview"] body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse at 88% 0%, var(--fs-canvas-glow), transparent 34rem),
+    var(--fs-canvas);
+  color: var(--fs-ink);
+}
 
-.careerfield{min-width:240px;grid-column:1/-1}
-.careerfield>label{display:block;margin-bottom:6px;font-weight:600}
-#careerSearch{width:100%;box-sizing:border-box;padding:12px 14px;background:#121e30;color:#f2f6fa;border:1px solid #51627a;border-radius:10px}
-.career-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;opacity:.85;margin:8px 0}
-.career-options{max-height:308px;overflow-y:auto;border:1px solid #51627a;border-radius:10px;background:#16263a}
-.career-options.collapsed{display:none}
-.career-option{display:block;width:100%;height:44px;min-height:44px;text-align:left;background:transparent;border:0;border-bottom:1px solid #2a3d51;color:#e8edf4;padding:0 14px;cursor:pointer;font-size:14px}
-.career-option:hover,.career-option:focus{background:#2a4a61}
-.career-option[aria-selected="true"]{background:#205047}
+html[data-futureskill-page="interview"] .interview-layout {
+  width: min(100% - 32px, 1000px);
+  margin: 34px auto 72px;
+}
 
-/* Section 6: explicit voice/text answer modes */
-.answerModes{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 10px}
-.answerModes button{flex:1;min-width:150px}
-.answerModes button[aria-pressed="true"]{border:2px solid #56d1b1;background:rgba(86,209,177,.15)}
-.answerHelp{font-size:.9rem;opacity:.8;margin:8px 0 12px}
-.answerToolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:8px 0 16px;flex-wrap:wrap;font-size:.85rem;opacity:.85}
-#answer{width:100%;min-height:230px;resize:vertical;box-sizing:border-box;line-height:1.65;padding:16px;font-size:1rem}
-#voicePanel.hidden,#textPanel.hidden{display:none}
+html[data-futureskill-page="interview"] .interview-page-heading {
+  margin: 0 0 22px;
+}
+
+html[data-futureskill-page="interview"] .interview-page-heading h1 {
+  margin: 4px 0 6px;
+  font-size: clamp(34px, 4vw, 44px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+
+html[data-futureskill-page="interview"] .interview-page-heading > p:last-child {
+  max-width: 700px;
+  margin: 0;
+  color: var(--fs-ink-soft);
+}
+
+html[data-futureskill-page="interview"] .interview-eyebrow {
+  color: var(--fs-accent-ink);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: .08em;
+}
+
+html[data-futureskill-page="interview"] .interview-panel {
+  margin: 18px 0;
+  padding: clamp(20px, 4vw, 32px);
+  border: 1px solid var(--fs-line);
+  border-radius: 18px;
+  background: var(--fs-raised);
+  box-shadow: var(--fs-shadow-small);
+  color: var(--fs-ink);
+}
+
+html[data-futureskill-page="interview"] .interview-panel h2,
+html[data-futureskill-page="interview"] .interview-panel h3 {
+  color: var(--fs-ink);
+}
+
+html[data-futureskill-page="interview"] .interview-section-heading h2,
+html[data-futureskill-page="interview"] #report > h2,
+html[data-futureskill-page="interview"] #historyPage > h2 {
+  margin: 0;
+  font-size: 25px;
+}
+
+html[data-futureskill-page="interview"] .interview-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 22px 0 16px;
+}
+
+html[data-futureskill-page="interview"] .interview-fields label,
+html[data-futureskill-page="interview"] .interview-career-field > label,
+html[data-futureskill-page="interview"] .interview-answer-label {
+  display: block;
+  min-width: 0;
+  color: var(--fs-ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+html[data-futureskill-page="interview"] .interview-career-field {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+html[data-futureskill-page="interview"] .interview-search-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 7px;
+}
+
+html[data-futureskill-page="interview"] .interview-search-row input,
+html[data-futureskill-page="interview"] .interview-fields select,
+html[data-futureskill-page="interview"] .interview-panel textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--fs-line-strong);
+  border-radius: 10px;
+  background: var(--fs-raised);
+  color: var(--fs-ink);
+}
+
+html[data-futureskill-page="interview"] .interview-search-row input,
+html[data-futureskill-page="interview"] .interview-fields select {
+  min-height: 48px;
+  padding: 10px 13px;
+}
+
+html[data-futureskill-page="interview"] .interview-search-row input {
+  flex: 1 1 320px;
+}
+
+html[data-futureskill-page="interview"] .interview-fields select {
+  display: block;
+  margin-top: 7px;
+}
+
+html[data-futureskill-page="interview"] .interview-search-row input:focus-visible,
+html[data-futureskill-page="interview"] .interview-fields select:focus-visible,
+html[data-futureskill-page="interview"] .interview-panel textarea:focus-visible,
+html[data-futureskill-page="interview"] .interview-button:focus-visible,
+html[data-futureskill-page="interview"] .interview-career-option:focus-visible,
+html[data-futureskill-page="interview"] .interview-privacy summary:focus-visible {
+  outline: 3px solid var(--fs-mint);
+  outline-offset: 3px;
+}
+
+html[data-futureskill-page="interview"] .interview-career-meta,
+html[data-futureskill-page="interview"] .interview-topline,
+html[data-futureskill-page="interview"] .interview-answer-toolbar,
+html[data-futureskill-page="interview"] .interview-proficiency-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  color: var(--fs-muted);
+  font-size: 14px;
+}
+
+html[data-futureskill-page="interview"] .interview-career-meta {
+  margin: 8px 0;
+}
+
+html[data-futureskill-page="interview"] .interview-career-options {
+  max-height: 308px;
+  overflow-y: auto;
+  border: 1px solid var(--fs-line);
+  border-radius: 10px;
+  background: var(--fs-raised);
+}
+
+html[data-futureskill-page="interview"] .interview-career-options.collapsed {
+  display: none;
+}
+
+html[data-futureskill-page="interview"] .interview-career-option {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 0;
+  border-bottom: 1px solid var(--fs-line);
+  background: transparent;
+  color: var(--fs-ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+html[data-futureskill-page="interview"] .interview-career-option:hover,
+html[data-futureskill-page="interview"] .interview-career-option[aria-selected="true"] {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+
+html[data-futureskill-page="interview"] .interview-context-note,
+html[data-futureskill-page="interview"] .interview-context-warning,
+html[data-futureskill-page="interview"] .interview-availability,
+html[data-futureskill-page="interview"] .interview-readiness {
+  padding: 13px 15px;
+  border: 1px solid var(--fs-line);
+  border-radius: 12px;
+  background: var(--fs-raised-alt);
+  color: var(--fs-ink-soft);
+}
+
+html[data-futureskill-page="interview"] .interview-availability {
+  border-color: var(--fs-danger);
+  background: var(--fs-danger-soft);
+  color: var(--fs-ink);
+  font-weight: 700;
+}
+
+html[data-futureskill-page="interview"] .interview-context-warning {
+  border-color: var(--fs-amber);
+  background: var(--fs-amber-soft);
+  color: var(--fs-ink);
+}
+
+html[data-futureskill-page="interview"] .interview-actions,
+html[data-futureskill-page="interview"] .interview-answer-modes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+html[data-futureskill-page="interview"] .interview-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+html[data-futureskill-page="interview"] .interview-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+html[data-futureskill-page="interview"] .interview-button:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+html[data-futureskill-page="interview"] .interview-button.primary {
+  background: var(--fs-accent);
+  color: var(--fs-on-accent);
+}
+
+html[data-futureskill-page="interview"] .interview-button.primary:hover:not(:disabled) {
+  background: var(--fs-accent-hover);
+}
+
+html[data-futureskill-page="interview"] .interview-button.secondary {
+  border-color: var(--fs-line-strong);
+  background: var(--fs-raised-alt);
+  color: var(--fs-ink);
+}
+
+html[data-futureskill-page="interview"] .interview-answer-modes .interview-button {
+  min-width: 172px;
+}
+
+html[data-futureskill-page="interview"] .interview-button[aria-pressed="true"] {
+  border-color: var(--fs-mint);
+  background: var(--fs-mint-soft);
+  color: var(--fs-ink);
+}
+
+html[data-futureskill-page="interview"] .interview-button svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+html[data-futureskill-page="interview"] .interview-disclaimer,
+html[data-futureskill-page="interview"] .interview-help,
+html[data-futureskill-page="interview"] .interview-privacy p,
+html[data-futureskill-page="interview"] .interview-readiness p {
+  color: var(--fs-ink-soft);
+}
+
+html[data-futureskill-page="interview"] .interview-disclaimer,
+html[data-futureskill-page="interview"] .interview-help {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+html[data-futureskill-page="interview"] .interview-privacy {
+  margin-top: 19px;
+  padding-top: 15px;
+  border-top: 1px solid var(--fs-line);
+}
+
+html[data-futureskill-page="interview"] .interview-privacy summary {
+  width: fit-content;
+  color: var(--fs-accent-ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+html[data-futureskill-page="interview"] .interview-privacy p {
+  max-width: 820px;
+  margin: 10px 0 0;
+}
+
+html[data-futureskill-page="interview"] .interview-topline {
+  border-bottom: 1px solid var(--fs-line);
+  padding-bottom: 12px;
+}
+
+html[data-futureskill-page="interview"] .interview-coach {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+html[data-futureskill-page="interview"] .interview-coach small {
+  display: block;
+  margin-top: 3px;
+  color: var(--fs-muted);
+}
+
+html[data-futureskill-page="interview"] .interview-avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+  font-weight: 800;
+}
+
+html[data-futureskill-page="interview"] .interview-question {
+  padding: 19px;
+  border: 1px solid var(--fs-line);
+  border-radius: 14px;
+  background: var(--fs-raised-alt);
+}
+
+html[data-futureskill-page="interview"] .interview-question h2 {
+  margin: 0;
+  font-size: 23px;
+}
+
+html[data-futureskill-page="interview"] .interview-question p {
+  margin: 9px 0 0;
+  color: var(--fs-muted);
+}
+
+html[data-futureskill-page="interview"] .interview-panel textarea {
+  display: block;
+  min-height: 190px;
+  margin: 8px 0;
+  padding: 13px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+html[data-futureskill-page="interview"] .interview-answer-toolbar {
+  margin: 9px 0 15px;
+}
+
+html[data-futureskill-page="interview"] .interview-feedback {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--fs-line);
+}
+
+html[data-futureskill-page="interview"] .interview-score {
+  margin: 12px 0;
+  color: var(--fs-accent-ink);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+html[data-futureskill-page="interview"] .interview-two-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+html[data-futureskill-page="interview"] .interview-barrow {
+  display: grid;
+  grid-template-columns: minmax(130px, 190px) minmax(50px, 1fr) 48px;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  color: var(--fs-ink);
+}
+
+html[data-futureskill-page="interview"] .interview-bar {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: var(--fs-line);
+}
+
+html[data-futureskill-page="interview"] .interview-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--fs-mint);
+}
+
+html[data-futureskill-page="interview"] .interview-readiness {
+  margin: 18px 0;
+}
+
+html[data-futureskill-page="interview"] .interview-readiness strong {
+  color: var(--fs-accent-ink);
+  font-size: 18px;
+}
+
+html[data-futureskill-page="interview"] .interview-readiness small {
+  color: var(--fs-muted);
+}
+
+html[data-futureskill-page="interview"] .interview-history-item {
+  margin: 12px 0;
+  padding: 16px;
+  border: 1px solid var(--fs-line);
+  border-radius: 12px;
+}
+
+html[data-futureskill-page="interview"] .interview-history-item p {
+  white-space: pre-wrap;
+}
+
+html[data-futureskill-page="interview"] .interview-error {
+  min-height: 1.5em;
+  color: var(--fs-danger);
+  font-weight: 700;
+}
+
+html[data-futureskill-page="interview"] #recordStatus {
+  margin-left: 10px;
+  color: var(--fs-accent-ink);
+}
+
+@media (max-width: 720px) {
+  html[data-futureskill-page="interview"] .interview-layout {
+    width: min(100% - 24px, 1000px);
+    margin-top: 24px;
+  }
+
+  html[data-futureskill-page="interview"] .interview-fields,
+  html[data-futureskill-page="interview"] .interview-two-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html[data-futureskill-page="interview"] .interview-button {
+    max-width: 100%;
+  }
+
+  html[data-futureskill-page="interview"] .interview-barrow {
+    grid-template-columns: minmax(96px, 125px) minmax(35px, 1fr) 42px;
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-futureskill-page="interview"] *,
+  html[data-futureskill-page="interview"] *::before,
+  html[data-futureskill-page="interview"] *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}

@@ -1,8 +1,15 @@
-"""Transcribe browser audio with OpenAI; audio is not saved to disk."""
+"""Transcribe optional, user-initiated browser audio without storing the recording."""
 from io import BytesIO
-from openai import OpenAI
+import os
 
-ALLOWED = {"audio/webm": "webm", "audio/mp4": "mp4", "audio/ogg": "ogg", "audio/wav": "wav"}
+from .interview_engine import client
+
+ALLOWED = {
+    "audio/webm": "webm",
+    "audio/mp4": "mp4",
+    "audio/ogg": "ogg",
+    "audio/wav": "wav",
+}
 
 
 def transcribe(upload):
@@ -14,7 +21,8 @@ def transcribe(upload):
         raise ValueError("Recording must be between 1 byte and 10 MB.")
     stream = BytesIO(data)
     stream.name = "answer." + ALLOWED[mime]
-    result = OpenAI(timeout=45.0, max_retries=1).audio.transcriptions.create(
-        model="gpt-4o-mini-transcribe", file=stream,
+    result = client().audio.transcriptions.create(
+        model=os.getenv("TRANSCRIPTION_MODEL", "gpt-4o-mini-transcribe"),
+        file=stream,
     )
     return result.text

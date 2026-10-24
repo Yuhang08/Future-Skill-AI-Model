@@ -1,157 +1,300 @@
-"""Standalone Flask HR Interview; add these /api/interview routes to your existing app if merging."""
-import os, time, uuid, threading
-from flask import Flask, request, jsonify, render_template, make_response
-from dotenv import load_dotenv
-from .career_data import get_careers, find_career
-from .history_store import init, all_text, insert, global_count
-from .interview_engine import initial_question, generate_question, feedback_for, report, adaptive_plan
-from .semantic_validator import check_question, embed
-from .question_policy import exact_duplicate,word_duplicate
-from .speech_service import transcribe
-load_dotenv()
-app=Flask(__name__)
-app.config['MAX_CONTENT_LENGTH']=11*1024*1024
-init()
-sessions={}; lock=threading.RLock(); TTL=3600
-MODES={'HR','Technical','Mixed'}
-LANGUAGES={'English','中文','Bahasa Melayu'}
+"""Flask interview module mounted inside FutureSkill's FastAPI application."""
+import threading
+import time
+import uuid
 
-def fail(message,code=400):return jsonify(error=message),code
+from flask import Flask, jsonify, make_response, render_template, request
+
+from reskilling.explanation_provider import ProviderSettings
+
+from .career_data import find_career, find_career_id, get_careers
+from .history_store import all_text, global_count, init, insert
+from .interview_engine import adaptive_plan, feedback_for, generate_question, report
+from .semantic_validator import check_question, embed
+from .speech_service import transcribe
+
+app = Flask(__name__, template_folder="templates", static_folder="static")
+app.config["MAX_CONTENT_LENGTH"] = 11 * 1024 * 1024
+
+sessions = {}
+lock = threading.RLock()
+TTL = 3600
+MODES = {"HR", "Technical", "Mixed"}
+LANGUAGES = {"English", "中文", "Bahasa Melayu"}
+
+
+def fail(message, code=400):
+    return jsonify(error=message), code
+
+
+def provider_available():
+    # Presence/configuration check only; it never contacts the provider.
+    try:
+        ProviderSettings.from_environment()
+    except Exception:
+        return False
+    return True
+
 
 def guest_id():
-    """Cookie ID is random/opaque, never supplied by user request body."""
-    val=request.cookies.get('fs_guest')
-    if val and len(val)==64 and all(c in '0123456789abcdef' for c in val):return val
+    value = request.cookies.get("fs_guest", "")
+    if len(value) == 64 and all(character in "0123456789abcdef" for character in value):
+        return value
     return None
 
-def ensure_guest(resp,gid):
-    if not guest_id():
-        resp.set_cookie('fs_guest',gid,httponly=True,secure=request.is_secure,
-                        samesite='Lax',max_age=365*24*3600)
-    return resp
 
-def session(data):
-    sid=str(data.get('session_id',''))
+def ensure_guest(response, guest):
+    if not guest_id():
+        response.set_cookie(
+            "fs_guest", guest, httponly=True, secure=request.is_secure,
+            samesite="Lax", max_age=365 * 24 * 3600, path="/",
+        )
+    return response
+
+
+def current_session(data):
+    session_id = str(data.get("session_id", ""))
+    if len(session_id) != 32 or not all(character in "0123456789abcdef" for character in session_id):
+        return None
     with lock:
-        s=sessions.get(sid)
-        if s and (time.time()-s['created']>TTL or s['guest']!=guest_id()):return None
-        return s
+        entry = sessions.get(session_id)
+        if not entry:
+            return None
+        if time.time() - entry["created"] > TTL or entry["guest"] != guest_id():
+            sessions.pop(session_id, None)
+            return None
+        return entry
+
 
 def cache_embedding(question):
-    # Persisted DB embedding cache can replace this simple request/session cache.
     return embed(question)
 
-@app.get('/')
-def home():return render_template('interview.html')
 
-@app.get('/api/careers')
+@app.get("/")
+def home():
+    return render_template("interview.html")
+
+
+@app.get("/api/careers")
 def careers():
-    items=get_careers()
-    return jsonify(careers=[x['title'] for x in items],count=len(items),
-                   source='career_profiles_clean.csv' if os.path.exists('career_profiles_clean.csv') else 'careers_demo.csv')
+    try:
+        items = get_careers()
+    except (OSError, ValueError):
+        return fail("The career catalogue is temporarily unavailable.", 503)
+    options = [
+        {
+            "id": item["id"],
+            "title": item["title"],
+            "supported_context": bool(item["skills"] or item["description"]),
+        }
+        for item in items
+    ]
+    return jsonify(
+        careers=[item["title"] for item in items],
+        career_options=options,
+        count=len(items),
+        source="FutureSkill canonical career catalogue",
+    )
 
-@app.get('/api/interview/history-count')
+
+@app.get("/api/interview/availability")
+def availability():
+    return jsonify(available=provider_available())
+
+
+@app.get("/api/interview/history-count")
 def count_history():
-    return jsonify(personal_count=len(all_text(guest_id())) if guest_id() else 0,global_count=global_count())
+    guest = guest_id()
+    return jsonify(
+        personal_count=len(all_text(guest)) if guest else 0,
+        global_count=global_count(),
+    )
 
-@app.post('/api/interview/start')
+
+@app.post("/api/interview/start")
 def start():
-    data=request.get_json(silent=True) or {}
-    role=str(data.get('role',''))
-    mode=str(data.get('mode','Mixed'))
-    language=str(data.get('language','English'))
-    try:nq=int(data.get('question_count',5))
-    except (ValueError,TypeError):return fail('Invalid question count')
-    if not find_career(role):return fail('Choose a career in the database')
-    if mode not in MODES or language not in LANGUAGES or nq not in (3,5,10):return fail('Invalid configuration')
-    if not os.getenv('OPENAI_API_KEY'):return fail('Configure OPENAI_API_KEY',503)
-    gid=guest_id() or uuid.uuid4().hex+uuid.uuid4().hex
-    sid=uuid.uuid4().hex; previous=all_text(gid)
-    facts=find_career(role)
+    data = request.get_json(silent=True) or {}
+    role = str(data.get("role", ""))
+    mode = str(data.get("mode", "Mixed"))
+    language = str(data.get("language", "English"))
     try:
-        q=pick(role,mode,language,facts,previous,[],None)
-    except Exception:
-        app.logger.exception('Question generation failed');return fail('Could not generate a verified question',503)
-    with lock:
-        sessions[sid]={'created':time.time(),'guest':gid,'role':role,'mode':mode,'language':language,
-                       'question':q,'history':[],'awaiting_next':False,'max_questions':nq,'previous':previous,'facts':facts}
-    resp=make_response(jsonify(session_id=sid,question_number=1,max_questions=nq,**q))
-    return ensure_guest(resp,gid)
+        question_count = int(data.get("question_count", 5))
+    except (ValueError, TypeError):
+        return fail("Choose 3, 5 or 10 interview questions.")
+    if mode not in MODES or language not in LANGUAGES or question_count not in (3, 5, 10):
+        return fail("Choose a valid interview type, language and question count.")
+    if not provider_available():
+        return fail("AI interview practice is temporarily unavailable.", 503)
+    try:
+        facts = find_career(role)
+    except (OSError, ValueError):
+        return fail("The career catalogue is temporarily unavailable.", 503)
+    if not facts:
+        return fail("Choose a career from the supported FutureSkill catalogue.")
+    career_id = str(data.get("career_id", ""))
+    id_facts = find_career_id(career_id) if career_id else facts
+    if career_id and (not id_facts or id_facts["title"] != facts["title"]):
+        return fail("The selected career no longer matches the supported catalogue.")
 
-def pick(role,mode,language,facts,previous,current,adaptive):
-    # Full semantic checks only on previous 100 (or all if under 150) and current session.
-    # All older questions still checked for exact duplicate.
-    recent_answer=adaptive.get('last_answer','') if adaptive else ''
-    difficulty=adaptive.get('difficulty','standard') if adaptive else 'standard'
-    focus_history=previous[-20:]+current
-    for attempt in range(3):
-        q=generate_question(role,mode,language,focus_history,facts,difficulty,recent_answer)
-        text=q['question']
-        approved,reason=check_question(text,previous,current,cache_embedding)
+    guest = guest_id() or uuid.uuid4().hex + uuid.uuid4().hex
+    session_id = uuid.uuid4().hex
+    try:
+        previous = all_text(guest)
+        question = pick(role, mode, language, facts, previous, [], None)
+    except Exception:
+        # Keep provider and credential details out of logs and learner-facing errors.
+        app.logger.warning("Interview question generation failed; provider details redacted.")
+        return fail("AI interview practice is temporarily unavailable.", 503)
+
+    with lock:
+        sessions[session_id] = {
+            "created": time.time(),
+            "guest": guest,
+            "role": role,
+            "mode": mode,
+            "language": language,
+            "question": question,
+            "history": [],
+            "awaiting_next": False,
+            "max_questions": question_count,
+            "previous": previous,
+            "facts": facts,
+        }
+    response = make_response(jsonify(
+        session_id=session_id,
+        question_number=1,
+        max_questions=question_count,
+        practice_scope="general" if not facts.get("skills") and not facts.get("description") else "catalogue_context",
+        **question,
+    ))
+    return ensure_guest(response, guest)
+
+
+def pick(role, mode, language, facts, previous, current, adaptive):
+    recent_answer = adaptive.get("last_answer", "") if adaptive else ""
+    difficulty = adaptive.get("difficulty", "standard") if adaptive else "standard"
+    focus_history = previous[-20:] + current
+    for _attempt in range(3):
+        question = generate_question(
+            role, mode, language, focus_history, facts, difficulty, recent_answer
+        )
+        approved, _reason = check_question(
+            question["question"], previous, current, cache_embedding
+        )
         if approved:
-            # In production also add a distinct fact-check of user claims + sources.
-            return q
-        focus_history.append(text)
-    raise ValueError('All generated questions were too similar; add curated fallback questions')
+            return question
+        focus_history.append(question["question"])
+    raise ValueError("Could not generate a sufficiently distinct interview question")
 
-@app.post('/api/interview/transcribe')
+
+@app.post("/api/interview/transcribe")
 def transcript():
-    s=session(request.form)
-    if not s:return fail('Session expired',404)
-    audio=request.files.get('audio')
-    if not audio:return fail('Audio missing')
-    try:return jsonify(transcript=transcribe(audio))
+    session = current_session(request.form)
+    if not session:
+        return fail("Interview session expired. Start a new practice session.", 404)
+    audio = request.files.get("audio")
+    if not audio:
+        return fail("No recording was received.")
+    try:
+        return jsonify(transcript=transcribe(audio))
+    except ValueError as error:
+        return fail(str(error))
     except Exception:
-        app.logger.exception('Transcription failed');return fail('Cannot transcribe audio',503)
+        app.logger.warning("Optional interview transcription failed; provider details redacted.")
+        return fail("Audio transcription is temporarily unavailable. You can type your answer.", 503)
 
-@app.post('/api/interview/feedback')
+
+@app.post("/api/interview/feedback")
 def feedback():
-    data=request.get_json(silent=True) or {}; s=session(data)
-    if not s:return fail('Session expired',404)
-    answer=str(data.get('answer','')).strip()
-    if not 3<=len(answer)<=3500:return fail('Answer must be 3–3500 characters')
+    data = request.get_json(silent=True) or {}
+    session = current_session(data)
+    if not session:
+        return fail("Interview session expired. Start a new practice session.", 404)
+    answer = str(data.get("answer", "")).strip()
+    if not 3 <= len(answer) <= 3500:
+        return fail("Keep your answer between 3 and 3,500 characters.")
     with lock:
-        if s['awaiting_next']:return fail('Already answered',409)
-        s['awaiting_next']=True
+        if session["awaiting_next"]:
+            return fail("This answer has already been submitted.", 409)
+        session["awaiting_next"] = True
     try:
-        fb=feedback_for(s['question']['question'],answer,s['role'],s['mode'],s['language'])
+        result = feedback_for(
+            session["question"]["question"], answer,
+            session["role"], session["mode"], session["language"],
+        )
+        # The persistent index stores question text and career only, never answers.
+        insert(session["guest"], str(data["session_id"]),
+               session["question"]["question"], session["role"])
         with lock:
-            s['history'].append({'question':s['question']['question'],'answer':answer,'feedback':fb})
-            # No answers, transcript, or audio stored on server database.
-            insert(s['guest'],str(data['session_id']),s['question']['question'],s['role'])
-        return jsonify(feedback=fb,finished=len(s['history'])>=s['max_questions'])
+            session["history"].append({
+                "question": session["question"]["question"],
+                "answer": answer,
+                "feedback": result,
+            })
+        return jsonify(
+            feedback=result,
+            finished=len(session["history"]) >= session["max_questions"],
+        )
     except Exception:
-        with lock:s['awaiting_next']=False
-        app.logger.exception('Feedback failed');return fail('Feedback generation failed',503)
+        with lock:
+            session["awaiting_next"] = False
+        app.logger.warning("Interview feedback failed; provider details redacted.")
+        return fail("Feedback is temporarily unavailable. Your answer was not saved.", 503)
 
-@app.post('/api/interview/next')
+
+@app.post("/api/interview/next")
 def next_question():
-    data=request.get_json(silent=True) or {};s=session(data)
-    if not s:return fail('Session expired',404)
-    if not s['awaiting_next']:return fail('Submit your answer first',409)
-    if len(s['history'])>=s['max_questions']:
-        rep=report(s['history'],s['role'],s['language'])
-        return jsonify(finished=True,report=rep)
-    past=list(s['history']); adaptive=adaptive_plan(past)
-    adaptive['last_answer']=past[-1]['answer']
+    data = request.get_json(silent=True) or {}
+    session = current_session(data)
+    if not session:
+        return fail("Interview session expired. Start a new practice session.", 404)
+    if not session["awaiting_next"]:
+        return fail("Submit your answer before moving to the next question.", 409)
+    if len(session["history"]) >= session["max_questions"]:
+        result = report(session["history"], session["role"], session["language"])
+        with lock:
+            sessions.pop(str(data["session_id"]), None)
+        return jsonify(finished=True, report=result)
+    past = list(session["history"])
+    adaptive = adaptive_plan(past)
+    adaptive["last_answer"] = past[-1]["answer"]
     try:
-        question=pick(s['role'],s['mode'],s['language'],s['facts'],s['previous'],
-                      [i['question'] for i in past],adaptive)
+        question = pick(
+            session["role"], session["mode"], session["language"],
+            session["facts"], session["previous"],
+            [item["question"] for item in past], adaptive,
+        )
     except Exception:
-        app.logger.exception('Next question failed');return fail('No non-repeating question was found',503)
-    s['question']=question;s['awaiting_next']=False
-    return jsonify(finished=False,question_number=len(past)+1,max_questions=s['max_questions'],**question)
+        app.logger.warning("Next interview question failed; provider details redacted.")
+        return fail("A new question is temporarily unavailable. Your current feedback is still here.", 503)
+    with lock:
+        session["question"] = question
+        session["awaiting_next"] = False
+    return jsonify(
+        finished=False,
+        question_number=len(past) + 1,
+        max_questions=session["max_questions"],
+        **question,
+    )
 
-@app.post('/api/interview/end')
+
+@app.post("/api/interview/end")
 def end():
-    data=request.get_json(silent=True) or {};s=session(data)
-    if not s:return fail('Session expired',404)
-    if not s['history']:return fail('Answer a question first')
-    rep=report(s['history'],s['role'],s['language'])
-    with lock:sessions.pop(str(data['session_id']),None)
-    return jsonify(report=rep)
+    data = request.get_json(silent=True) or {}
+    session = current_session(data)
+    if not session:
+        return fail("Interview session expired. Start a new practice session.", 404)
+    if not session["history"]:
+        return fail("Answer a question before viewing the report.")
+    result = report(session["history"], session["role"], session["language"])
+    with lock:
+        sessions.pop(str(data["session_id"]), None)
+    return jsonify(report=result)
+
 
 @app.errorhandler(413)
-def large(_):return fail('Maximum upload 10MB',413)
+def large_upload(_error):
+    return fail("Maximum audio upload is 10 MB.", 413)
 
-if __name__=='__main__':app.run(port=5000,debug=False)
+
+init()
