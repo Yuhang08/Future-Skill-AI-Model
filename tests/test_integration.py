@@ -107,7 +107,7 @@ class IntegratedWebTests(unittest.TestCase):
         self.assertIn('Official SDG icon from the United Nations', sdg_page)
         for element_id in ('goalGrid', 'mapLines', 'goalInfoDialog', 'careerCenter'):
             self.assertIn(f'id="{element_id}"', sdg_page)
-        self.assertIn('Read all full evidence wording', sdg_page)
+        self.assertIn('Read full classification notes', sdg_page)
         self.assertIn('evidence-map', sdg_page)
         self.assertIn('/static/assets/sdg/sdg-4-education.jpg', sdg_page)
         self.assertIn('/static/assets/sdg/sdg-8-work.jpg', sdg_page)
