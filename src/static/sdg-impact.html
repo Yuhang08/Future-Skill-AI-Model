@@ -903,11 +903,15 @@
           node(empty,"strong","No O*NET task-backed SDG connection available");
           node(empty,"span", data.task_data_status === "not_installed"
             ? "Official O*NET Task Statements CSV is not installed. Run scripts/import_onet_sdg_tasks.py to obtain genuine data."
-            : "No sufficiently explicit official O*NET task matched the target rules. Broader title/SOC guesses below are separate and unverified.");
+            : activeCandidateMappings.length
+              ? "No sufficiently explicit task-to-target match. Dashed links are tentative only; inspect the original O*NET tasks below."
+              : "No supported SDG connection identified; this is preferable to assigning an arbitrary SDG 8. Review the original O*NET tasks below.");
           pathway.hidden = true;
           message.textContent = data.task_data_status === "not_installed"
             ? "Official task CSV missing. Dashed goals are broad unverified guesses, NOT data-validated."
-            : `No strict task-target match; ${activeCandidateMappings.length} unverified goal ideas are displayed with dashed links.`;
+            : activeCandidateMappings.length
+              ? `No strict task-target match; ${activeCandidateMappings.length} tentative ideas are displayed as dashed links.`
+              : "No sufficient SDG association found. Official occupation tasks are available below for manual review.";
         }
         if (sequence !== reviewSequence) return;
         renderGoals();
