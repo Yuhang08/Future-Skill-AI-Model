@@ -176,7 +176,7 @@ def infer_occupation_sdg_mappings(career_id, career_title):
                     "id": "onet-tasks-documentation",
                     "label": "O*NET · Task Statements (recommended verification data)",
                     "url": "https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html",
-                    "scope": "Documentation only. Task statements are NOT loaded in this prototype.",
+                    "scope": "Official Task Statements documentation; task evidence is separately matched by exact O*NET code and Task ID.",
                 },
             ],
             "supporting_source_ids": [
