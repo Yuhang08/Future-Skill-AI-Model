@@ -1,0 +1,1675 @@
+
+<!DOCTYPE html>
+<html lang="en" data-futureskill-page="home">
+
+<head>
+<script src="/static/future-theme.js?v=cyber-6"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.ico" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<title>FutureSkill AI | Discover Your Future Career</title>
+
+<style>
+
+/* =====================================
+   1. GENERAL WEBSITE DESIGN
+===================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f7fb;
+    color: #203647;
+}
+
+header {
+    background: #123447;
+    color: white;
+    padding: 20px 7%;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+main {
+    max-width: 1050px;
+    margin: auto;
+    padding: 45px 20px;
+}
+
+h1 {
+    color: #123447;
+}
+
+p {
+    line-height: 1.7;
+    color: #64748b;
+}
+
+button {
+    background: #109b80;
+    color: white;
+    border: none;
+    padding: 13px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    background: #e6eef3;
+    color: #294354;
+}
+
+
+/* =====================================
+   2. HOME PAGE
+===================================== */
+
+.hero {
+    background: white;
+    border-radius: 22px;
+    text-align: center;
+    padding: 65px 25px;
+    box-shadow: 0 8px 30px #102a430a;
+}
+
+.hero h1 {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 17px;
+}
+
+.hero button {
+    margin-top: 20px;
+    padding: 16px 32px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.feature-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.feature-card h3 {
+    color: #123447;
+}
+
+
+/* =====================================
+   3. ASSESSMENT POPUP
+===================================== */
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 30, 45, 0.75);
+    z-index: 100;
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 780px;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn {
+    background: transparent;
+    color: #64748b;
+    font-size: 25px;
+    padding: 5px 10px;
+}
+
+.part-label {
+    color: #109b80;
+    font-weight: bold;
+}
+
+.progress-background {
+    height: 10px;
+    background: #e4edf1;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    background: #109b80;
+    height: 100%;
+    width: 0%;
+    transition: width 0.2s;
+}
+
+.question {
+    border-bottom: 1px solid #e5ebef;
+    padding: 20px 0;
+}
+
+.question-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.answer-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #d4e0e7;
+    border-radius: 9px;
+    padding: 11px 16px;
+    cursor: pointer;
+}
+
+.answer-option:has(input:checked) {
+    background: #e0f6ed;
+    border-color: #109b80;
+}
+
+.answer-option input {
+    accent-color: #109b80;
+}
+
+.scale-guide {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 12px;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.error {
+    color: #ca3030;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+
+/* =====================================
+   4. CAREER RESULTS
+===================================== */
+
+#results {
+    display: none;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    margin: 20px 0;
+}
+
+.profile-title {
+    color: #109b80;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.profile-item {
+    padding: 15px;
+    border-radius: 10px;
+    background: #f2f7fa;
+    text-align: center;
+}
+
+.profile-item strong {
+    font-size: 24px;
+    color: #109b80;
+}
+
+.career-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin: 16px 0;
+    border: 1px solid #e0e9ef;
+}
+
+.career-card h3 {
+    margin-top: 0;
+}
+
+.match-score {
+    font-size: 25px;
+    font-weight: bold;
+    color: #109b80;
+}
+
+.score-bar-background {
+    background: #e6edf1;
+    height: 9px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.score-bar {
+    background: #109b80;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.disclaimer {
+    font-size: 13px;
+    color: #718096;
+}
+
+
+/* =====================================
+   5. MOBILE RESPONSIVENESS
+===================================== */
+
+@media (max-width: 650px) {
+
+    .hero h1 {
+        font-size: 29px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .modal {
+        padding: 20px;
+    }
+
+    .profile-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .answer-option {
+        padding: 9px 12px;
+    }
+
+}
+
+.dev-inventory-banner {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: #153f34;
+    color: #fff;
+    font: 13px/1.4 Arial, sans-serif;
+}
+.dev-inventory-banner a {
+    color: #d3f2df;
+    font-weight: 700;
+}
+
+/* Skill intelligence: calm dashboard surfaces, clear evidence hierarchy. */
+body { font-family: "DM Sans", sans-serif; background: #f1f0fa; color: #202442; }
+header { background: #171a43; padding: 18px max(20px, calc((100vw - 1120px)/2)); color: #fff; letter-spacing: -.03em; }
+main { max-width: 1120px; padding-top: 36px; }
+h1, h2, h3 { color: #202442; letter-spacing: -.035em; }
+p { color: #666b83; }
+button { background: #5542d8; border-radius: 9px; }
+button:hover { background: #4432c0; opacity: 1; }
+.secondary-btn { background: #ecebf5; color: #353858; }
+.hero, .profile-card, .career-card, .feature-card { border: 1px solid #e5e3f0; box-shadow: 0 10px 26px #24234c0b; }
+.hero { background: linear-gradient(135deg,#fff 0%,#f8f7ff 100%); border-radius: 18px; text-align: left; padding: clamp(34px,6vw,72px); position: relative; overflow: hidden; }
+.hero:after { content:"";position:absolute;width:250px;height:250px;right:6%;top:-90px;border:1px solid #ddd9ff;border-radius:50%;box-shadow:0 0 0 28px #f4f2ff,0 0 0 56px #f8f7ff;pointer-events:none; }
+.hero h1 { max-width:600px; font-size:clamp(36px,5vw,58px); line-height:1.03; margin:0 0 18px; position:relative;z-index:1; }
+.hero p { max-width:560px; position:relative;z-index:1; }
+.hero button { position:relative;z-index:1; }
+.features { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.feature-card { text-align:left; border-radius:13px; background:#fff; }
+.feature-card h3 { margin-top:0; }
+.profile-title, .profile-item strong, .match-score { color:#5542d8; }
+.profile-grid { grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); }
+.profile-item { background:#f5f4fb; }
+.career-card { border-radius:14px; padding:24px; }
+.score-bar-background { background:#edecf5; }
+.score-bar { background:#7665e9; }
+.assessment-link { display:inline-flex; margin-top:14px; color:#4c3cc4; font-weight:700; text-decoration:none; }
+.assessment-link:hover { text-decoration:underline; }
+.sdg-alignment { margin-top:22px; border:1px solid #e4e1f1; border-radius:12px; overflow:hidden; background:#faf9fe; }
+.sdg-alignment-head { display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:15px 17px;border-bottom:1px solid #ebe9f4; }
+.sdg-kicker,.mono { font-family:"Space Mono",monospace; letter-spacing:.02em; }
+.sdg-kicker { color:#5948cb;font-size:11px;font-weight:700;text-transform:uppercase; }
+.sdg-status { flex:0 0 auto;border-radius:20px;padding:5px 9px;background:#eeeafa;color:#4a3ab3;font-size:11px;font-weight:700; }
+.sdg-status.unreviewed { background:#f3efe5;color:#79623c; }
+.sdg-alignment-body { padding:14px 17px 16px; }
+.sdg-alignment-body p { margin:5px 0;line-height:1.5;font-size:14px; }
+.sdg-target-list { display:flex;flex-wrap:wrap;gap:7px;margin:10px 0; }
+.sdg-chip { display:inline-flex;padding:6px 9px;border-radius:6px;background:#eeecfb;color:#4336a0;font-size:12px;font-weight:700; }
+.sdg-note { font-size:12px!important;color:#767990!important; }
+.sdg-more { display:inline-flex;margin-top:9px;color:#4f40c6;font-weight:700;text-decoration:none;font-size:13px; }
+.sdg-more:hover { text-decoration:underline; }
+.sdg-wait { padding:16px;color:#6e7187;font-size:13px; }
+.feature-hub-card { background:#353090!important; border-radius:14px; box-shadow:none; }
+.feature-hub-card:nth-child(1) { background:#4b56a6!important; }
+.feature-hub-card:nth-child(2) { background:#575080!important; }
+.feature-hub-card:nth-child(3) { background:#38326e!important; }
+.feature-hub-card small { background:#ffffff20; }
+.dev-inventory-banner { font-family:"DM Sans",sans-serif; }
+@media(max-width:650px) {
+ .features { grid-template-columns:1fr; }
+ .hero:after { right:-130px; }
+ .sdg-alignment-head { flex-direction:column;gap:8px; }
+}
+
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="/static/future-theme.css?v=3">
+<link rel="stylesheet" href="/static/future-pages.css?v=assessment-navigation-3">
+<link rel="stylesheet" href="/static/assessment-report.css?v=2">
+<link rel="stylesheet" href="/static/assessment-workspace.css?v=1">
+<link rel="stylesheet" href="/static/future-landing.css?v=4">
+<script src="/static/future-landing.js?v=3" defer></script>
+<link rel="stylesheet" href="/static/future-cyber.css?v=3">
+</head>
+
+<body>
+
+<!-- =====================================
+     WEBSITE HEADER
+===================================== -->
+
+<header class="future-context">
+    <span>HUMAN POTENTIAL. FUTURE POSSIBILITIES.</span>
+    <span class="future-context-right"><span class="future-status-dot"></span> A clearer way forward</span>
+    <div class="future-language-control">
+        <label for="language-select" data-i18n="language">Language</label>
+        <select id="language-select" aria-label="Website language" aria-describedby="headerLanguageStatus">
+            <option value="en">English</option>
+            <option value="zh">简体中文</option>
+            <option value="ms">Bahasa Melayu</option>
+        </select>
+        <span id="headerLanguageStatus" role="status" aria-live="polite"></span>
+    </div>
+</header>
+
+<main>
+
+<!-- =====================================
+     HOME PAGE
+===================================== -->
+
+<section id="homePage">
+
+    <div class="future-hero">
+        <div class="future-grid" aria-hidden="true"></div>
+        <div class="future-hero-inner">
+            <div class="future-copy">
+                <div class="future-eyebrow"><span class="future-status-dot"></span> YOUR POTENTIAL, IN A NEW LIGHT</div>
+                <h1>Discover Your<br><span>Future Career</span></h1>
+                <p class="future-description">Discover where your strengths can take you.<br class="future-desktop-break"> Explore career paths. Build the skills to get there.</p>
+                <div class="future-actions">
+                    <button class="future-primary" type="button" onclick="startAssessment()">Start Career Assessment <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
+                    <a class="future-secondary" href="/careers">Explore careers <span aria-hidden="true">&#8594;</span></a>
+                </div>
+                <div class="future-assessment-note"><span class="future-note-icon" aria-hidden="true">&#10003;</span> 42 questions <span aria-hidden="true">·</span> 3 parts <span aria-hidden="true">·</span> Built around you</div>
+            </div>
+            <div class="future-visual" aria-hidden="true">
+                <div class="future-orbit-label">A WORLD OF POSSIBILITIES</div>
+                <div class="future-globe-halo"></div>
+                <canvas id="futureGlobe"></canvas>
+                <div class="future-visual-cross future-cross-top">+</div>
+                <div class="future-visual-cross future-cross-bottom">+</div>
+                <div class="future-float future-float-top"><span class="future-float-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></svg></span><span>Discover your strengths<small>Start with what makes you, you.</small></span><span class="future-float-dot"></span></div>
+                <div class="future-float future-float-bottom"><span class="future-float-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 17 10 11l4 4 6-10M14 5h6v6"/></svg></span><span>Find your next direction<small>From interests to possibilities.</small></span></div>
+                <div class="future-visual-coordinate"><span class="future-status-dot"></span> EXPLORE / CONNECT / GROW</div>
+            </div>
+        </div>
+        <div class="future-hero-bottom">
+            <a class="future-scroll" href="#yourJourney"><span class="future-scroll-line" aria-hidden="true"></span> SCROLL TO EXPLORE</a>
+            <div class="future-bottom-note"><span>INTERESTS</span><i aria-hidden="true"></i><span>SKILLS</span><i aria-hidden="true"></i><span>POSSIBILITIES</span></div>
+            <span class="future-chapter">01 — THE BEGINNING</span>
+        </div>
+    </div>
+
+    <div class="future-stats" aria-label="Explore the platform">
+        <div><strong>923</strong><span>Careers to explore</span></div>
+        <div><strong>6</strong><span>Interest dimensions</span></div>
+        <div><strong>1</strong><span>Path that starts with you</span></div>
+        <a href="/careers?mode=target">Already know your goal?<br><span>Find a career <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span></a>
+    </div>
+
+    <section class="future-entry" aria-label="Career exploration options">
+        <div class="entry-choices" aria-label="Choose how to explore careers">
+            <article class="entry-choice">
+                <span class="entry-choice-kicker">EXPLORE CAREERS</span>
+                <h2 data-i18n="start_with_interests">Start with your interests</h2>
+                <p>Take the assessment for exploratory recommendations, or browse the catalogue first.</p>
+                <button onclick="startAssessment()" data-i18n="start_assessment">Start Career Assessment</button>
+                <a class="entry-choice-link" href="/careers">Browse careers without the assessment</a>
+            </article>
+            <article class="entry-choice">
+                <span class="entry-choice-kicker">I KNOW MY TARGET ROLE</span>
+                <h2 data-i18n="search_career_catalogue">Search the career catalogue</h2>
+                <p>Choose a role directly. You can review available pathway support before starting.</p>
+                <a class="entry-choice-button" href="/careers?mode=target" data-i18n="find_career">Find a career</a>
+            </article>
+        </div>
+    </section>
+
+    <section class="future-journey" id="yourJourney" aria-labelledby="futureJourneyTitle">
+        <div class="future-section-heading"><div><span class="future-section-kicker">THE WAY FORWARD</span><h2 id="futureJourneyTitle">A little clarity.<br>A world of possibility.</h2></div><p>You don’t need to have it all figured out.<br>Just a starting point. We’ll help you find yours.</p></div>
+        <div class="future-steps">
+            <article class="future-step"><div class="future-step-top"><span>01 / DISCOVER</span><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="5"/><path d="M16 1v7m0 16v7M1 16h7m16 0h7"/></svg></div><h3>Understand your strengths.</h3><p>Explore six interest dimensions with the RIASEC assessment, alongside your subject preferences and self-rated skills.</p><button class="future-text-button" type="button" onclick="startAssessment()">Discover yourself <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button></article>
+            <article class="future-step"><div class="future-step-top"><span>02 / EXPLORE</span><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="m16 3 12 7v13l-12 7L4 23V10l12-7Z"/><path d="m4 10 12 7 12-7M16 17v13M10 6.5l12 7"/></svg></div><h3>See what’s possible.</h3><p>Discover career recommendations based on your interests and preferences, and explore the roles that spark your curiosity.</p><a href="/careers">Explore careers <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a></article>
+            <article class="future-step"><div class="future-step-top"><span>03 / GROW</span><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 27V17h7v10M13 27V11h7v16M21 27V5h7v22M3 27h27"/></svg></div><h3>Make your next move.</h3><p>Turn a chosen direction into a practical learning pathway, with skill gaps, weekly tasks and progress you can see.</p><a href="/reskilling">Build your pathway <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a></article>
+        </div>
+    </section>
+
+</section>
+
+
+<!-- =====================================
+     ASSESSMENT POPUP
+===================================== -->
+
+<div
+    class="overlay"
+    id="assessmentOverlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="partTitle"
+>
+
+    <div class="modal" id="assessmentModal">
+
+        <div class="modal-header">
+
+            <span class="part-label" id="partLabel">
+                Part 1 of 3
+            </span>
+
+            <button
+                class="close-btn"
+                onclick="closeAssessment()"
+                aria-label="Close assessment"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <h2 id="partTitle"></h2>
+
+        <p id="partDescription"></p>
+
+        <section class="assessment-progress" aria-label="Assessment progress and navigation">
+        <nav class="assessment-part-nav" aria-label="Assessment sections">
+            <button type="button" data-assessment-part="0">Part A <span class="part-count">0/24</span></button>
+            <button type="button" data-assessment-part="1">Part B <span class="part-count">0/12</span></button>
+            <button type="button" data-assessment-part="2">Part C <span class="part-count">0/6</span></button>
+        </nav>
+        <div class="progress-background">
+
+            <div
+                class="progress-bar"
+                id="progressBar" role="progressbar" aria-label="Overall assessment completion"
+                aria-valuemin="0" aria-valuemax="42" aria-valuenow="0"
+            ></div>
+
+        </div>
+
+        <p id="progressText"></p>
+        <div class="assessment-progress-meta">
+            <p id="assessmentSaveStatus" role="status"></p>
+            <button type="button" id="clearAssessmentDraft">Clear saved draft</button>
+        </div>
+        <details class="assessment-question-nav" id="assessmentQuestionNav">
+            <summary>Quiz navigation <span id="assessmentPartProgress"></span></summary>
+            <div id="assessmentQuestionButtons"></div>
+            <p class="assessment-nav-legend">✓ Answered · Dot: unanswered · Outline: current</p>
+        </details>
+        </section>
+
+        <div id="questionContainer"></div>
+
+        <p
+            id="errorMessage"
+            class="error"
+            role="alert"
+        ></p>
+
+        <div class="navigation">
+
+            <button
+                class="secondary-btn"
+                id="previousButton"
+                onclick="previousPart()"
+            >
+                Previous
+            </button>
+
+            <button
+                id="nextButton"
+                onclick="nextPart()"
+            >
+                Next
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     RESULT PAGE
+===================================== -->
+
+<section id="results">
+    <div class="career-results-layout">
+      <aside class="career-results-sidebar" aria-label="Your results workspace">
+        <div class="career-results-sidebar-heading">
+          <span>YOUR WORKSPACE</span>
+          <p>Your results, then your next step.</p>
+        </div>
+        <nav aria-label="Results sections">
+          <a href="#report-overview" data-results-nav="report-overview">My career overview</a>
+          <a href="/careers">Explore careers</a>
+          <a href="/my-profile">My profile &amp; assessment</a>
+          <a href="/reskilling" id="workspacePathwayLink">My learning pathway</a>
+          <details>
+            <summary>Further exploration</summary>
+            <a href="/ai-trend">Future Job Trend</a>
+            <a href="/sdg-impact">SDG connections</a>
+          </details>
+        </nav>
+        <a class="career-results-retake" href="/" onclick="restartAssessment(); return false;">Review or retake assessment</a>
+      </aside>
+      <div class="career-results-main">
+        <h1 class="career-results-page-title">Your career possibilities</h1>
+        <div id="reportDemoControl" class="report-demo-control" hidden>
+          <label for="reportDemoScenario">Report demonstration scenario</label>
+          <select id="reportDemoScenario">
+            <option value="equal-high">Equal high</option>
+            <option value="equal-low">Equal low</option>
+            <option value="differentiated">Differentiated</option>
+            <option value="leading-tie">Leading tie</option>
+            <option value="mixed">Mixed ratings</option>
+            <option value="invalid">Invalid data</option>
+          </select>
+          <p id="reportDemoStatus" class="report-demo-status" role="status"></p>
+        </div>
+        <div class="profile-card" id="userProfile"></div>
+        <p class="disclaimer">
+          These recommendations are exploratory. Their order does not predict career success or employment outcomes.
+        </p>
+      </div>
+    </div>
+
+</section>
+
+<section class="feature-hub" aria-labelledby="featureHubTitle">
+  <style>
+    .feature-hub{max-width:1120px;margin:42px auto 10px;padding:0 20px}
+    .feature-hub h2{font-size:24px;margin:0 0 16px;color:#193331}
+    .feature-hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .feature-hub-card{display:block;min-height:175px;border-radius:18px;padding:22px;color:white;text-decoration:none;box-shadow:0 8px 22px #102a4314;transition:transform .18s ease,box-shadow .18s ease}
+    .feature-hub-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #102a4324}
+    .feature-hub-card:focus-visible{outline:3px solid #102a43;outline-offset:3px}
+    .feature-hub-card h3{font-size:20px;margin:8px 0 10px}
+    .feature-hub-card p{line-height:1.5;margin:0;color:#fff}
+    .feature-hub-card small{display:inline-block;margin-top:14px;padding:4px 9px;border-radius:999px;background:#ffffff28;font-weight:700}
+    @media(max-width:720px){.feature-hub-grid{grid-template-columns:1fr}.feature-hub{padding:0 15px}.feature-hub-card{min-height:145px}}
+  </style>
+  <div class="future-section-heading"><div><span class="future-section-kicker">KEEP YOUR CURIOSITY MOVING</span><h2 id="featureHubTitle">Explore More Features</h2></div><p>A wider perspective on work,<br>technology and the world ahead.</p></div>
+  <div class="feature-hub-grid">
+    <a class="feature-hub-card" href="/ai-trend">
+      <span class="future-feature-number">01 <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+      <h3>AI Trend Explorer</h3>
+      <p>Explore qualitative career and skill scenarios; not validated demand forecasts.</p>
+      <small>Prototype data</small>
+    </a>
+    <a class="feature-hub-card" href="/uncertainty">
+      <span class="future-feature-number">02 <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+      <h3>AI Uncertainty Lab</h3>
+      <p>Change assumptions and compare illustrative model outputs.</p>
+      <small>Rule-based simulation</small>
+    </a>
+    <a class="feature-hub-card" href="/sdg-impact">
+      <span class="future-feature-number">03 <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+      <h3>SDG alignment evidence</h3>
+      <p>Review role-to-target reasoning, sources and what the evidence cannot establish.</p>
+      <small>Task-based relevance</small>
+    </a>
+  </div>
+  <a class="future-interview-link" href="/interview-practice/"><span><span class="future-status-dot"></span> READY FOR YOUR NEXT CONVERSATION?</span><strong>Explore interview practice <span class="future-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18 18 6M6 6h12v12"/></svg></span></strong></a>
+</section>
+
+<footer class="future-footer"><a href="/" aria-label="FutureSkill AI home">FutureSkill<span>AI</span><img class="future-footer-star" src="/static/brand-forward.svg" alt="" aria-hidden="true"></a><p>Your potential. Your direction. Your next chapter.</p><span>MADE FOR WHAT’S NEXT.</span></footer>
+
+</main>
+
+
+<script src="/static/js/language.js?v=2" defer></script>
+<script src="/static/assessment-progress.js?v=2"></script>
+<script src="/static/assessment-report.js?v=2"></script>
+<script src="/static/career-ui.js?v=2"></script>
+<script>
+
+// ==========================================
+// 1. QUESTIONNAIRE DATABASE
+// ==========================================
+
+const assessmentParts = [
+
+    // =====================================
+    // PART A: 24 RIASEC QUESTIONS
+    // =====================================
+
+    {
+        title: "Part A: RIASEC Interests",
+
+        description:
+            "How much would you enjoy doing these activities?",
+
+        questions: [
+
+            // REALISTIC
+            ["R", "Build or repair a simple electronic device."],
+            ["R", "Use tools to assemble a physical product."],
+            ["R", "Test or troubleshoot a piece of equipment."],
+            ["R", "Work with machines or practical technology."],
+
+            // INVESTIGATIVE
+            ["I", "Solve challenging mathematical problems."],
+            ["I", "Investigate why a scientific phenomenon happens."],
+            ["I", "Analyse data to discover patterns."],
+            ["I", "Develop logical explanations for complex problems."],
+
+            // ARTISTIC
+            ["A", "Create an original visual design."],
+            ["A", "Write creative stories or scripts."],
+            ["A", "Develop new artistic concepts."],
+            ["A", "Express ideas through art or creative media."],
+
+            // SOCIAL
+            ["S", "Explain difficult concepts to other people."],
+            ["S", "Help someone understand a new skill."],
+            ["S", "Support people facing a problem."],
+            ["S", "Collaborate with others to help a community."],
+
+            // ENTERPRISING
+            ["E", "Lead a team to complete a project."],
+            ["E", "Persuade others to support an idea."],
+            ["E", "Start a business or new initiative."],
+            ["E", "Organise people to achieve a goal."],
+
+            // CONVENTIONAL
+            ["C", "Organise information into clear records."],
+            ["C", "Check data carefully for errors."],
+            ["C", "Follow detailed procedures accurately."],
+            ["C", "Maintain an organised database or system."]
+
+        ]
+    },
+
+
+    // =====================================
+    // PART B: 12 SUBJECT QUESTIONS
+    // =====================================
+
+    {
+        title: "Part B: Subject Preferences",
+
+        description:
+            "How interested are you in these subjects?",
+
+        questions: [
+
+            // IT
+            ["IT", "Developing software or mobile applications."],
+            ["IT", "Learning about artificial intelligence and cybersecurity."],
+
+            // MATHEMATICS
+            ["Math", "Studying advanced mathematics and statistics."],
+            ["Math", "Using mathematical models to solve real problems."],
+
+            // EDUCATION
+            ["Education", "Teaching students and explaining complex ideas."],
+            ["Education", "Designing learning activities and educational materials."],
+
+            // HEALTHCARE
+            ["Health", "Learning about medicine and human health."],
+            ["Health", "Working in healthcare or medical research."],
+
+            // BUSINESS
+            ["Business", "Studying entrepreneurship, finance and management."],
+            ["Business", "Developing business strategies and marketing plans."],
+
+            // ENGINEERING
+            ["Engineering", "Designing engineering systems and technology."],
+            ["Engineering", "Applying physics to practical engineering problems."]
+
+        ]
+    },
+
+
+    // =====================================
+    // PART C: 6 SKILL QUESTIONS
+    // =====================================
+
+    {
+        title: "Part C: Skills Self-Assessment",
+
+        description:
+            "How confident are you in your current abilities?",
+
+        questions: [
+
+            ["MathSkill", "Solving mathematical and logical problems."],
+
+            ["CodingSkill", "Writing and debugging computer programs."],
+
+            ["DataSkill", "Analysing data and interpreting results."],
+
+            ["CommunicationSkill", "Explaining information clearly to others."],
+
+            ["LeadershipSkill", "Planning projects and leading a team."],
+
+            ["CreativeSkill", "Generating original solutions to problems."]
+
+        ]
+    }
+
+];
+
+
+// ==========================================
+// 2. INITIALISE ASSESSMENT
+// ==========================================
+
+let currentPart = 0;
+
+let answers = {};
+
+const totalQuestions = assessmentParts.reduce(
+    (total, part) => total + part.questions.length,
+    0
+);
+
+function makeKey(partIndex, questionIndex) {
+
+    return `${partIndex}_${questionIndex}`;
+
+}
+
+const assessmentProgress = FutureSkillAssessmentProgress.create({
+    parts: assessmentParts,
+    getAnswers: () => answers,
+    setAnswers: value => { answers = value; },
+    getPart: () => currentPart,
+    setPart: value => { currentPart = value; },
+    render: () => displayQuestions(),
+    demo: new URLSearchParams(location.search).has("screen") ||
+        new URLSearchParams(location.search).has("report-demo"),
+});
+
+let resultReviewAnswers = null;
+
+// ==========================================
+// 3. OPEN AND CLOSE POPUP
+// ==========================================
+
+function startAssessment() {
+
+    document.getElementById(
+        "assessmentOverlay"
+    ).style.display = "flex";
+
+    document.body.style.overflow = "hidden";
+
+    displayQuestions();
+
+}
+
+function closeAssessment() {
+
+    document.getElementById(
+        "assessmentOverlay"
+    ).style.display = "none";
+
+    document.body.style.overflow = "";
+
+}
+
+
+// ==========================================
+// 4. DISPLAY CURRENT QUESTIONS
+// ==========================================
+
+function displayQuestions() {
+
+    const part = assessmentParts[currentPart];
+
+    document.getElementById(
+        "partLabel"
+    ).textContent = `Part ${currentPart + 1} of 3`;
+
+    document.getElementById(
+        "partTitle"
+    ).textContent = part.title;
+
+    document.getElementById(
+        "partDescription"
+    ).textContent = part.description;
+
+    const container = document.getElementById(
+        "questionContainer"
+    );
+
+    container.innerHTML = "";
+
+    part.questions.forEach((question, index) => {
+
+        const key = makeKey(
+            currentPart, index
+        );
+
+        const questionDiv = document.createElement(
+            "div"
+        );
+
+        questionDiv.className = "question";
+        questionDiv.id = `assessment-question-${currentPart}-${index}`;
+        questionDiv.dataset.questionIndex = String(index);
+        questionDiv.tabIndex = -1;
+
+        const title = document.createElement("div");
+
+        title.className = "question-title";
+        title.id = `assessment-question-title-${currentPart}-${index}`;
+
+        title.textContent =
+            `${index + 1}. ${question[1]}`;
+
+        const questionState = document.createElement("small");
+        questionState.className = "question-state";
+        title.appendChild(questionState);
+        questionDiv.appendChild(title);
+
+        const optionsDiv = document.createElement(
+            "div"
+        );
+
+        optionsDiv.className = "answer-options";
+        optionsDiv.setAttribute("role", "radiogroup");
+        optionsDiv.setAttribute("aria-labelledby", title.id);
+
+        for (let number = 1; number <= 5; number++) {
+
+            const label = document.createElement(
+                "label"
+            );
+
+            label.className = "answer-option";
+
+            const radio = document.createElement(
+                "input"
+            );
+
+            radio.type = "radio";
+
+            radio.name = key;
+
+            radio.value = number;
+
+            if (answers[key] === number) {
+                radio.checked = true;
+            }
+
+            radio.addEventListener(
+                "change",
+                () => {
+
+                    answers[key] = number;
+
+                    assessmentProgress.save();
+                    updateProgress();
+
+                    document.getElementById(
+                        "errorMessage"
+                    ).textContent = "";
+
+                }
+            );
+
+            label.appendChild(radio);
+
+            label.appendChild(
+                document.createTextNode(
+                    String(number)
+                )
+            );
+
+            optionsDiv.appendChild(label);
+
+        }
+
+        questionDiv.appendChild(optionsDiv);
+
+        if (index === 0) {
+
+            const guide = document.createElement(
+                "div"
+            );
+
+            guide.className = "scale-guide";
+
+            guide.innerHTML = currentPart === 2
+                ? "<span>1 = Not confident</span><span>5 = Very confident</span>"
+                : "<span>1 = Strongly dislike</span><span>5 = Strongly like</span>";
+
+            questionDiv.appendChild(guide);
+
+        }
+
+        container.appendChild(questionDiv);
+
+    });
+
+    document.getElementById(
+        "previousButton"
+    ).disabled = currentPart === 0;
+
+    document.getElementById(
+        "nextButton"
+    ).textContent = currentPart === 2
+        ? "Get Recommendations"
+        : "Next";
+
+    document.getElementById(
+        "errorMessage"
+    ).textContent = "";
+
+    updateProgress();
+
+}
+
+
+// ==========================================
+// 5. UPDATE PROGRESS BAR
+// ==========================================
+
+function updateProgress() {
+
+    const answered = Object.keys(
+        answers
+    ).length;
+
+    const percentage = (
+        answered / totalQuestions
+    ) * 100;
+
+    document.getElementById(
+        "progressBar"
+    ).style.width = `${percentage}%`;
+
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        `${answered} / ${totalQuestions} questions answered`;
+
+    document.getElementById("progressBar").setAttribute("aria-valuemax", String(totalQuestions));
+    document.getElementById("progressBar").setAttribute("aria-valuenow", String(answered));
+    assessmentProgress.update();
+}
+
+
+// ==========================================
+// 6. PREVIOUS PART
+// ==========================================
+
+function previousPart() {
+
+    if (currentPart > 0) {
+
+        assessmentProgress.goToPart(currentPart - 1);
+
+        document.getElementById(
+            "assessmentModal"
+        ).scrollTop = 0;
+
+    }
+
+}
+
+
+// ==========================================
+// 7. NEXT PART
+// ==========================================
+
+async function nextPart() {
+
+    const questions = assessmentParts[
+        currentPart
+    ].questions;
+
+    const incomplete = questions.some(
+        (_, index) => {
+
+            const key = makeKey(
+                currentPart, index
+            );
+
+            return answers[key] === undefined;
+
+        }
+    );
+
+    if (incomplete) {
+
+        assessmentProgress.showMissing(currentPart);
+        document.getElementById(
+            "errorMessage"
+        ).textContent =
+            "Please answer all questions before continuing.";
+
+        return;
+
+    }
+
+    if (currentPart < 2) {
+
+        assessmentProgress.goToPart(currentPart + 1);
+
+        document.getElementById(
+            "assessmentModal"
+        ).scrollTop = 0;
+
+    } else {
+
+        await submitAssessment();
+
+    }
+
+}
+
+
+// ==========================================
+// 8. ORGANISE QUESTIONNAIRE ANSWERS
+// ==========================================
+
+function prepareAssessmentData() {
+
+    const riasecAnswers = {};
+
+    const subjectAnswers = {};
+
+    const skillAnswers = {};
+
+    assessmentParts.forEach(
+        (part, partIndex) => {
+
+            part.questions.forEach(
+                (question, questionIndex) => {
+
+                    const category = question[0];
+
+                    const key = makeKey(
+                        partIndex,
+                        questionIndex
+                    );
+
+                    const value = answers[key];
+
+                    if (partIndex === 0) {
+
+                        if (!riasecAnswers[category]) {
+                            riasecAnswers[category] = [];
+                        }
+
+                        riasecAnswers[category].push(
+                            value
+                        );
+
+                    } else if (partIndex === 1) {
+
+                        if (!subjectAnswers[category]) {
+                            subjectAnswers[category] = [];
+                        }
+
+                        subjectAnswers[category].push(
+                            value
+                        );
+
+                    } else {
+
+                        skillAnswers[category] = value;
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+    return {
+
+        answers: riasecAnswers,
+
+        subject_answers: subjectAnswers,
+
+        skill_answers: skillAnswers
+
+    };
+
+}
+
+
+// ==========================================
+// 9. SEND RESULTS TO PYTHON BACKEND
+// ==========================================
+
+async function submitAssessment() {
+
+    for (let p = 0; p < assessmentParts.length; p++) {
+        const missing = assessmentParts[p].questions.findIndex((_, q) =>
+            answers[makeKey(p, q)] === undefined);
+        if (missing !== -1) {
+            assessmentProgress.showMissing(p);
+            document.getElementById("errorMessage").textContent =
+                "Please answer all questions in Parts A, B and C before requesting recommendations.";
+            return;
+        }
+    }
+
+    const button = document.getElementById(
+        "nextButton"
+    );
+
+    button.disabled = true;
+
+    button.textContent = "Calculating...";
+
+    try {
+
+        const questionnaireData = prepareAssessmentData();
+
+        const response = await fetch(
+            "/api/recommend",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(
+                    questionnaireData
+                )
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+
+            const message = typeof result.detail === "string"
+                ? result.detail
+                : "Unable to calculate career recommendations.";
+
+            throw new Error(message);
+
+        }
+
+        resultReviewAnswers = { ...answers };
+        displayResults(result);
+
+        closeAssessment();
+
+        document.getElementById(
+            "homePage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "results"
+        ).style.display = "block";
+
+        window.scrollTo(0, 0);
+
+    } catch (error) {
+
+        document.getElementById(
+            "errorMessage"
+        ).textContent =
+            "Error: " + error.message;
+
+        console.error(error);
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent = "Get Recommendations";
+
+    }
+
+}
+
+
+// ==========================================
+// 10. DISPLAY RIASEC RESULTS
+// ==========================================
+
+function createSdgAlignment(career) {
+    const alignment = career && career.sdg_alignment;
+    const section = document.createElement("section");
+    section.className = "sdg-alignment";
+    section.setAttribute("aria-label", "SDG alignment evidence");
+
+    const head = document.createElement("div");
+    head.className = "sdg-alignment-head";
+    const heading = document.createElement("div");
+    const kicker = document.createElement("div");
+    kicker.className = "sdg-kicker";
+    kicker.textContent = "Career pathway · SDG alignment";
+    const title = document.createElement("strong");
+    title.textContent = "Potential relationship, not proven impact";
+    heading.append(kicker, title);
+    const hasTaskCatalogue = alignment && alignment.task_data_status === "available";
+    const taskRuleCandidate = alignment && alignment.status === "task_supported";
+    const badge = document.createElement("span");
+    badge.className = "sdg-status unreviewed";
+    badge.textContent = taskRuleCandidate
+        ? "Task-rule candidate · needs review"
+        : hasTaskCatalogue ? "No task-target match" : "Task evidence unavailable";
+    head.append(heading, badge);
+    section.appendChild(head);
+
+    const body = document.createElement("div");
+    body.className = "sdg-alignment-body";
+    const mappings = alignment && Array.isArray(alignment.mappings) ? alignment.mappings : [];
+    if (mappings.length) {
+        const chips = document.createElement("div");
+        chips.className = "sdg-target-list";
+        mappings.forEach(mapping => {
+            const chip = document.createElement("span");
+            chip.className = "sdg-chip";
+            chip.textContent = `SDG ${mapping.sdg_id} · Target ${mapping.target_id}`;
+            chips.appendChild(chip);
+        });
+        body.appendChild(chips);
+        const reason = document.createElement("p");
+        reason.textContent = `${mappings[0].relevance_reason || mappings[0].target_summary || ""} This is a rule-based candidate, not an independently reviewed or measured SDG relationship.`;
+        body.appendChild(reason);
+    } else {
+        const note = document.createElement("p");
+        note.textContent = hasTaskCatalogue
+            ? "No narrow task-to-target candidate was found for this career. That does not establish that no potential connection exists."
+            : "O*NET task evidence is unavailable for this career, so this view cannot assess task-to-target candidates.";
+        body.appendChild(note);
+    }
+    const learningExamples = alignment && Array.isArray(alignment.learning_pathway_mappings)
+        ? alignment.learning_pathway_mappings : [];
+    if (learningExamples.length) {
+        const preparation = document.createElement("p");
+        const targets = [...new Set(learningExamples.map(item => item.target_id).filter(Boolean))];
+        preparation.textContent = `Separate from occupation evidence: FutureSkill has illustrative learning-preparation links${targets.length ? ` to Targets ${targets.join(" and ")}` : ""}. They describe the learning pathway, not the career's SDG contribution.`;
+        body.appendChild(preparation);
+    }
+    const caveat = document.createElement("p");
+    caveat.className = "sdg-note";
+    caveat.textContent = "A task match describes occupational wording, not an outcome. It does not establish that this career or pathway has advanced an SDG.";
+    body.appendChild(caveat);
+    const more = document.createElement("a");
+    more.className = "sdg-more";
+    more.href = `/sdg-impact?career=${encodeURIComponent(career.title || "")}`;
+    more.textContent = "Review evidence and limitations";
+    body.appendChild(more);
+    section.appendChild(body);
+    return section;
+}
+
+function displayResults(data) {
+    const params = new URLSearchParams(window.location.search);
+    const demoMode = params.has("report-demo") || params.has("screen");
+    const model = FutureSkillReport.render(document.getElementById("userProfile"), data, {
+        demo: demoMode,
+        hideJumpNavigation: true,
+        onReview: openFilledAssessmentReview
+    });
+    const careerContainer = document.getElementById("careerResults");
+    const pathwayLink = document.getElementById("resultsPathwayLink");
+    if (pathwayLink) {
+        pathwayLink.href = demoMode ? "/reskilling?demo=1&demo_scenario=fresh" : "/reskilling";
+    }
+    const workspacePathwayLink = document.getElementById("workspacePathwayLink");
+    if (workspacePathwayLink) {
+        workspacePathwayLink.href = demoMode ? "/reskilling?demo=1&demo_scenario=fresh" : "/reskilling";
+    }
+    if (!model.valid) {
+        if (careerContainer) {
+            careerContainer.textContent = "Recommendations are unavailable because this response could not be validated.";
+        }
+        return;
+    }
+    FutureSkillCareers.renderRecommendations(careerContainer, data.recommendations, {
+        personalized: true,
+        demo: demoMode
+    });
+    if (!demoMode && Array.isArray(data.recommendations)) {
+        try {
+            sessionStorage.setItem("futureskill-career-context", JSON.stringify({
+                data,
+                reviewAnswers: resultReviewAnswers || null
+            }));
+        } catch (_) {
+            // The report remains usable when session storage is blocked.
+        }
+    }
+    document.querySelectorAll("[data-results-nav]").forEach(link => {
+        link.addEventListener("click", () => {
+            document.querySelectorAll("[data-results-nav]").forEach(item => item.removeAttribute("aria-current"));
+            link.setAttribute("aria-current", "location");
+        });
+    });
+}
+
+
+// ==========================================
+// 11. RETAKE ASSESSMENT
+// ==========================================
+
+function restartAssessment() {
+    // Revisit the existing responses without clearing the saved draft or results.
+    currentPart = 0;
+    if (resultReviewAnswers) answers = { ...resultReviewAnswers };
+
+    document.getElementById(
+        "results"
+    ).style.display = "none";
+
+    document.getElementById(
+        "homePage"
+    ).style.display = "block";
+
+    startAssessment();
+
+}
+
+function openFilledAssessmentReview() {
+    if (resultReviewAnswers) answers = { ...resultReviewAnswers };
+    currentPart = 0;
+    // Keep the report behind the modal so closing review returns to its scores.
+    document.getElementById("results").style.display = "block";
+    document.getElementById("homePage").style.display = "none";
+    startAssessment();
+}
+
+// Deep links used by the development-only screen inventory. Sample answers are
+// held in memory and never submitted except for S05's real recommendation demo.
+async function openInventoryPreview() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("report-demo")) {
+        const control = document.getElementById("reportDemoControl");
+        const selector = document.getElementById("reportDemoScenario");
+        const status = document.getElementById("reportDemoStatus");
+        control.hidden = false;
+        document.getElementById("workspacePathwayLink").href =
+            "/reskilling?demo=1&demo_scenario=fresh";
+        selector.value = params.get("report-demo") || "equal-high";
+        selector.addEventListener("change", () => {
+            const next = new URL(window.location.href);
+            next.searchParams.set("report-demo", selector.value);
+            window.history.replaceState({}, "", next);
+            loadReportDemo(selector.value);
+        });
+        document.getElementById("homePage").style.display = "none";
+        document.getElementById("results").style.display = "block";
+        await loadReportDemo(selector.value);
+        return;
+    }
+    const screen = params.get("screen");
+    if (!screen) return;
+
+    const banner = document.createElement("div");
+    banner.className = "dev-inventory-banner";
+    const label = document.createElement("strong");
+    label.textContent = "DEVELOPMENT SCREEN PREVIEW";
+    const note = document.createElement("span");
+    note.textContent = "Assessment sample answers are not saved.";
+    const link = document.createElement("a");
+    link.href = "/__dev/screens";
+    link.textContent = "Back to screen inventory";
+    banner.append(label, note, link);
+    document.body.prepend(banner);
+
+    if (/^S0[2-4]$/.test(screen) || screen === "S23" || screen === "S24") {
+        for (let partIndex = 0; partIndex < assessmentParts.length; partIndex++) {
+            assessmentParts[partIndex].questions.forEach((_, questionIndex) => {
+                answers[makeKey(partIndex, questionIndex)] = 3;
+            });
+        }
+        if (screen === "S23" || screen === "S24") {
+            currentPart = 2;
+        } else {
+            currentPart = Number(screen.slice(-1)) - 2;
+        }
+        startAssessment();
+        if (screen === "S23") {
+            const button = document.getElementById("nextButton");
+            button.disabled = true;
+            button.textContent = "Calculating...";
+            document.getElementById("errorMessage").textContent =
+                "Development sample: recommendation request is still in progress.";
+        }
+        if (screen === "S24") {
+            document.getElementById("errorMessage").textContent =
+                "Sample request failed. Check your connection and try again.";
+        }
+        return;
+    }
+
+    if (screen !== "S05") return;
+    const payload = {
+        answers: {R:[4,4,3,4], I:[5,4,5,4], A:[3,4,4,3], S:[4,5,4,4], E:[4,4,5,4], C:[3,4,4,5]},
+        subject_answers: {IT:[5,4], Math:[4,5], Education:[4,4], Health:[3,3], Business:[4,4], Engineering:[4,5]},
+        skill_answers: {MathSkill:3, CodingSkill:3, DataSkill:4, CommunicationSkill:4, LeadershipSkill:3, CreativeSkill:4}
+    };
+    resultReviewAnswers = Object.fromEntries(
+        Object.entries(payload.answers).flatMap(([key, values]) =>
+            values.map((value, index) => [`0_${assessmentParts[0].questions.findIndex(q => q[0] === key) + index}`, value]))
+    );
+    assessmentParts[1].questions.forEach((question, index) => {
+        resultReviewAnswers[`1_${index}`] = payload.subject_answers[question[0]][
+            assessmentParts[1].questions.slice(0, index).filter(previous => previous[0] === question[0]).length
+        ];
+    });
+    assessmentParts[2].questions.forEach((question, index) => {
+        resultReviewAnswers[`2_${index}`] = payload.skill_answers[question[0]];
+    });
+    const button = document.getElementById("nextButton");
+    button.disabled = true;
+    button.textContent = "Calculating...";
+    try {
+        const response = await fetch("/api/recommend", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.detail || "Unable to load sample results.");
+        displayResults(result);
+        closeAssessment();
+        document.getElementById("homePage").style.display = "none";
+        document.getElementById("results").style.display = "block";
+        window.scrollTo(0, 0);
+    } catch (error) {
+        document.getElementById("errorMessage").textContent = `Sample results unavailable: ${error.message}`;
+        startAssessment();
+    }
+}
+
+async function loadReportDemo(scenario) {
+    const status = document.getElementById("reportDemoStatus");
+    const selector = document.getElementById("reportDemoScenario");
+    selector.disabled = true;
+    status.textContent = "Loading a sample report through the recommendations service…";
+    const keys = ["R", "I", "A", "S", "E", "C"];
+    const riasec = {
+        "equal-high": [5, 5, 5, 5, 5, 5],
+        "equal-low": [1, 1, 1, 1, 1, 1],
+        "differentiated": [5, 4, 3, 2, 4, 1],
+        "leading-tie": [5, 5, 3, 2, 4, 1],
+        "mixed": [4, 2, 5, 3, 1, 4]
+    };
+    const values = riasec[scenario];
+    const uniformRating = scenario === "equal-high" ? 5 : scenario === "equal-low" ? 1 : 3;
+    if (!values && scenario !== "invalid") {
+        status.textContent = "Unknown sample scenario. Choose one of the labeled demonstrations.";
+        selector.disabled = false;
+        return;
+    }
+    if (scenario === "invalid") {
+        resultReviewAnswers = null;
+        FutureSkillReport.render(document.getElementById("userProfile"), {
+            top3: "Invalid example",
+            riasec_scores: {R: "100", I: 40, A: 40, S: 40, E: 40, C: 40},
+            subject_preferences: {IT: 3, Math: 3, Education: 3, Health: 3, Business: 3, Engineering: 3},
+            skills: {MathSkill: 3, CodingSkill: 3, DataSkill: 3, CommunicationSkill: 3, LeadershipSkill: 3, CreativeSkill: 3},
+            recommendations: []
+        });
+        document.getElementById("careerResults")?.replaceChildren();
+        status.textContent = "Invalid input is shown locally; no service request was made.";
+        selector.disabled = false;
+        return;
+    }
+    const payload = {
+        answers: Object.fromEntries(keys.map((key, index) => [key, [values[index], values[index], values[index], values[index]]])),
+        subject_answers: Object.fromEntries(["IT", "Math", "Education", "Health", "Business", "Engineering"]
+            .map((key, index) => [key, scenario === "mixed" ? [index % 5 + 1, (index + 2) % 5 + 1] : [uniformRating, uniformRating]])),
+        skill_answers: Object.fromEntries(["MathSkill", "CodingSkill", "DataSkill", "CommunicationSkill", "LeadershipSkill", "CreativeSkill"]
+            .map((key, index) => [key, scenario === "mixed" ? index % 5 + 1 : uniformRating]))
+    };
+    const review = {};
+    let q = 0;
+    keys.forEach(key => payload.answers[key].forEach(value => { review[`0_${q++}`] = value; }));
+    let subjectIndex = 0;
+    assessmentParts[1].questions.forEach(question => {
+        const offset = assessmentParts[1].questions.slice(0, subjectIndex).filter(previous => previous[0] === question[0]).length;
+        review[`1_${subjectIndex}`] = payload.subject_answers[question[0]][offset];
+        subjectIndex++;
+    });
+    assessmentParts[2].questions.forEach((question, index) => { review[`2_${index}`] = payload.skill_answers[question[0]]; });
+    resultReviewAnswers = review;
+    try {
+        const response = await fetch("/api/recommend", {
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(typeof result.detail === "string" ? result.detail : "Sample results are unavailable.");
+        displayResults(result);
+        status.textContent = "Sample only. No learner answers or scores are saved.";
+    } catch (error) {
+        FutureSkillReport.render(document.getElementById("userProfile"), {
+            invalidSample: true
+        });
+        const careerResults = document.getElementById("careerResults");
+        if (careerResults) careerResults.textContent = "Sample recommendations could not be loaded.";
+        status.textContent = `Sample service request failed: ${error.message}`;
+    } finally {
+        selector.disabled = false;
+    }
+}
+
+function restoreReviewFromSession() {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("review") || params.has("screen") || params.has("report-demo")) return false;
+    try {
+        const context = JSON.parse(sessionStorage.getItem("futureskill-career-context") || "null");
+        if (!context || !FutureSkillReport.buildModel(context.data).valid) return false;
+        resultReviewAnswers = context.reviewAnswers && typeof context.reviewAnswers === "object"
+            ? { ...context.reviewAnswers }
+            : null;
+        displayResults(context.data);
+        document.getElementById("homePage").style.display = "none";
+        document.getElementById("results").style.display = "block";
+        window.scrollTo(0, 0);
+        if (resultReviewAnswers) {
+            openFilledAssessmentReview();
+        } else {
+            const note = document.createElement("p");
+            note.className = "report-note";
+            note.setAttribute("role", "status");
+            note.textContent = "Your assessment responses could not be restored from this browser session. The report is still available.";
+            document.getElementById("userProfile").prepend(note);
+        }
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+if (!restoreReviewFromSession()) openInventoryPreview();
+
+</script>
+
+</body>
+</html>
