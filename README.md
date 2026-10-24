@@ -95,64 +95,66 @@ F6. Relevant SDG Mapping: A short, justified mapping to relevant SDG targets whe
 
 ## Project Structure
 
-The tree below highlights the main application, supporting tools and submission materials.
+The project is organised into the integrated website, feature-based review folders, development resources and submission documents.
+
+The tree below shows the main directories and selected files.
 
 ```text
 .
 ├── .github/
-│   └── workflows/                   # Automated integration checks
+│   └── workflows/                   # CI workflow configuration
 ├── artifacts/
 │   └── mockup-sandbox/               # Separate UI prototyping sandbox
-├── docs/                            # Technical guides, screenshots and diagrams
-│   ├── previews/                    # UI previews and recorded visual examples
-│   ├── explain-skill-gaps.md         # Optional AI explanation configuration
+├── docs/                            # Technical guides and supporting documentation
+│   ├── previews/                    # Screenshots and UI animation examples
+│   ├── explain-skill-gaps.md
 │   ├── interview-practice-integration.md
-│   └── pycharm-local-run.md          # Chinese local setup guide
-├── repository codebase/             # Supplementary source snapshots for judging
-│   ├── 00_application/
-│   ├── 01_career_assessment/
-│   ├── 02_future_job_trend/
-│   ├── 03_employability_predictor/
-│   ├── 04_reskilling/
-│   ├── 05_sdg_mapping/
-│   ├── 06_frontend/
-│   ├── 07_multilingual/
-│   ├── 08_interview/
-│   ├── 09_tests/
-│   ├── 10_ai_explanations/
+│   └── pycharm-local-run.md
+├── repository/                      # Feature-organised code, prototypes and tests
+│   ├── 00 application/              # Application variants and browser checks
+│   ├── 01 career_assessment/        # Assessment, matching and related checks
+│   ├── 02 future_job_trend/         # Trend prototypes and reference files
+│   ├── 03 employability_predictor/  # Earlier scenario implementation
+│   ├── 04 reskilling/               # Selected learning-module files and checks
+│   ├── 05 sdg_mapping/              # SDG Python and browser checks
+│   ├── 06 frontend/                 # Theme and UI browser checks
+│   ├── 07 multilingual/             # Language files and language checks
+│   ├── 08 interview/                # Interview assets and integration checks
+│   ├── 09 tests/                    # General integration and pathway checks
+│   ├── 10_ai_explanations/          # Explanation tests and reference code
 │   └── README.md
-├── scripts/                         # O*NET import, SDG audit and export tools
-├── src/                             # Canonical runnable application
-│   ├── main.py                      # FastAPI entry point and route integration
+├── scripts/                         # Data imports, SDG audits and export utilities
+├── src/                             # Integrated website source
+│   ├── main.py                      # FastAPI application entry point
 │   ├── assessment_scoring.py        # Questionnaire scoring
 │   ├── career_engine.py             # Career matching and ranking
 │   ├── career_profiles_clean.csv    # Career catalogue
 │   ├── career_category_trends.csv
 │   ├── career_category_trends.json
 │   ├── data/                        # O*NET task and related evidence datasets
-│   ├── hr_interview/                # Flask interview-practice module
+│   ├── hr_interview/                # Mounted Flask interview-practice module
 │   │   ├── static/
 │   │   └── templates/
-│   ├── reskilling/                  # Learning plans, progress, SDG and explanation APIs
+│   ├── reskilling/                  # Learning, SDG and explanation services
 │   │   ├── api.py
 │   │   ├── catalog.py
 │   │   ├── engine.py
 │   │   ├── storage.py               # SQLite persistence
 │   │   ├── index.html
 │   │   └── static/
-│   ├── static/                      # Main HTML, CSS, JavaScript and brand assets
+│   ├── static/                      # Main pages, styles, scripts and assets
 │   │   ├── assets/
 │   │   ├── i18n/
 │   │   └── locales/
-│   └── README.md                    # Detailed application guide
+│   └── README.md
 ├── submission/
+│   ├── REPLIT PROOF OF USE.pdf
+│   ├── SDC2026_ Francium Fluoride_Preliminary_Technical Tools Declaration.pdf
 │   └── SDC2026_FranciumFluoride_Preliminary.pdf
-├── test/                            # Earlier standalone prototypes
-├── tests/                           # Python, JavaScript and browser checks
-├── tools/
-│   └── sync_codebase.py             # Submission snapshot utility
+├── test/                            # Remaining earlier standalone prototypes
 ├── .gitignore
 ├── .replit                          # Replit runtime and development workflow
+├── .replitignore
 ├── replit.md                        # Replit project notes
 ├── LICENSE
 ├── requirements.txt                 # Integrated application dependencies
@@ -160,22 +162,48 @@ The tree below highlights the main application, supporting tools and submission 
 └── README.md
 ```
 
-**Source of truth:** The running application uses `src/` and the root
-configuration files. The folders under `repository codebase/` contain selected,
-grouped source snapshots for submission review. They are supplementary copies,
-not independent applications or replacement deployment directories.
+### How the Folders Are Used
 
-Runtime databases and uploaded evidence are created separately and are excluded
-from version control.
+**`src/` — Integrated application**
+
+The root `run.py` launcher and the Replit workflow load the FastAPI application
+from `src/main.py`. The integrated website uses the modules, datasets and
+frontend assets within `src/`.
+
+**`repository/` — Feature-based organisation**
+
+This directory groups related code, prototypes, assets and tests by feature.
+Some files are earlier or alternative implementations, while others were moved
+here during repository reorganisation. These folders are not independently
+runnable replacements for the integrated application.
+
+**`docs/` — Documentation and previews**
+
+Contains setup guides, integration notes, screenshots and visual references.
+
+**`scripts/` — Data and verification utilities**
+
+Contains O*NET import tools, SDG evidence audits, exports and an optional
+explanation-service smoke check.
+
+**`submission/` — Hackathon materials**
+
+Contains the preliminary submission, technical declaration and Replit
+proof-of-use document.
+
+Folder names containing spaces must be quoted when used in terminal commands.
 
 ### Architecture
+
+The configured application architecture is:
 
 ```text
 User's browser
 HTML / CSS / JavaScript
         │
         ▼
-FastAPI application — hosted on Render
+FastAPI application — src/main.py
+Hosted on Render
         │
         ├── Assessment scoring and career matching
         │
@@ -184,9 +212,9 @@ FastAPI application — hosted on Render
         ├── Reskilling plans, scheduling and progress
         │       └── SQLite database and evidence uploads
         │
-        ├── Trend and illustrative scenario pages
+        ├── Qualitative trends and illustrative scenarios
         │
-        ├── Exploratory career-to-SDG analysis
+        ├── Exploratory occupational task-to-SDG analysis
         │
         ├── Optional skill-gap explanations ──► OpenAI API
         │
@@ -194,27 +222,48 @@ FastAPI application — hosted on Render
                 └── SQLite question-history index
 ```
 
-- **Render** hosts the integrated Python web application.
-- **Replit and PyCharm** support development and local preview.
-- **GitHub** stores the source code and version history.
-- **SQLite** stores learning profiles, tasks and interview question indexes.
-- **OpenAI integration** supports optional explanations and interview features.
-  Successful live inference depends on valid server-side configuration and
-  provider availability.
+| Component | Purpose |
+| --- | --- |
+| Render | Application hosting |
+| Replit and PyCharm | Development and preview |
+| GitHub | Source code and version control |
+| FastAPI | Main application and API integration |
+| Flask | Interview-practice module |
+| SQLite | Learning profiles, tasks and interview question indexes |
+| OpenAI API | Optional explanation and interview services |
 
 The core assessment, career matching, learning-plan generation and SDG analysis
-use rule-based logic. They do not require GPU hosting or model credentials.
-The current application does not use RunPod.
+use rule-based logic. These features do not require GPU hosting or model
+credentials.
+
+Optional AI services depend on valid server-side configuration and provider
+availability. RunPod is not used by the current application.
 
 ---
 
 ## How to Run
 
-Use **Python 3.12** for local development. Run the commands below from the
-repository root, rather than from `repository codebase/` or an individual
-feature folder.
+Use **Python 3.12** and run the following commands from the repository root.
 
-### 1. Create a virtual environment
+### Current Reorganisation Status
+
+At revision `0533ac1`, application startup is blocked by a relocated dependency:
+
+```text
+ModuleNotFoundError: No module named 'reskilling._prototype_catalog'
+```
+
+`src/reskilling/catalog.py` still imports that module from its own package,
+while the file is now located at:
+
+```text
+repository/04 reskilling/_prototype_catalog.py
+```
+
+The required runtime package layout or its imports must be repaired before the
+launch commands below can complete successfully.
+
+### 1. Create a Virtual Environment
 
 ```bash
 python -m venv .venv
@@ -232,25 +281,27 @@ Or on macOS/Linux:
 source .venv/bin/activate
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-### 3. Start the website
+### 3. Start the Application
 
 ```bash
 python run.py
 ```
 
-Open **http://127.0.0.1:5000/**.
+Once startup succeeds, open:
 
-In PyCharm, select the project's virtual environment, open the root `run.py`
-file and choose **Run**. See the
-[中文 PyCharm 本地运行指南](docs/pycharm-local-run.md) for additional instructions.
+**http://127.0.0.1:5000/**
 
-For Replit or a development server that needs an externally accessible port:
+In PyCharm, select the project's virtual environment and run the root
+`run.py` file. See the
+[中文 PyCharm 本地运行指南](docs/pycharm-local-run.md) for further instructions.
+
+For Replit or a development server requiring an externally accessible port:
 
 ```bash
 python -m uvicorn main:app --app-dir src --host 0.0.0.0 --port 5000
@@ -278,65 +329,84 @@ python -m uvicorn main:app --app-dir src --host 0.0.0.0 --port $PORT
 | `/interview-practice/` | Interview-practice interface and optional AI services |
 
 Trend scenarios, employability calculations and SDG relevance scores are
-exploratory prototype outputs, rather than validated forecasts or measured
-outcomes.
+exploratory prototype outputs. They have not been validated as employment
+forecasts or measured SDG outcomes.
 
 ### Configuration and Storage
 
-No model credentials are required for the core rule-based pages.
+Core rule-based features require no model credentials. Optional AI features
+require supported server-side configuration.
 
-Optional AI features require supported server-side credentials. See
-[skill-gap explanation configuration](docs/explain-skill-gaps.md) and
+See the [skill-gap explanation guide](docs/explain-skill-gaps.md) and
 [interview integration notes](docs/interview-practice-integration.md).
 
-The local `run.py` launcher reads an optional root `.env` file. For hosted
-deployments, configure environment variables through the hosting platform.
+The local `run.py` launcher reads an optional root `.env` file. Hosted
+deployments should configure environment variables through the hosting platform.
 
 | Variable | Purpose |
 | --- | --- |
 | `FUTURESKILL_PORT` | Local `run.py` port; defaults to `5000` |
-| `FUTURESKILL_DATA_DIR` | Private writable data directory; defaults to `src/instance/` |
+| `FUTURESKILL_DATA_DIR` | Private writable storage directory; defaults to `src/instance/` |
 | `FUTURESKILL_DEV_INVENTORY` | Set to `1` to enable development screen-inventory routes |
 | `OPENAI_API_KEY` | Credentials for the supported direct OpenAI integration |
 
-Keep credentials, database files and learner uploads out of Git.
-Hosted persistence requires durable writable storage; data on an ephemeral
-filesystem may be lost during redeployment.
+Runtime databases and uploads are created separately and excluded from version
+control. Keep credentials and private learner data out of Git.
 
-See (src/README.md) for further implementation details
-and limitations.
+Hosted persistence requires durable writable storage. Data stored on an
+ephemeral filesystem may be lost during redeployment.
+
+See [the application guide](src/README.md) for additional implementation details.
+Some older documentation still references the previous folder layout.
 
 ### Run Tests
 
-From the repository root on macOS/Linux:
+Tests are now distributed across the feature folders under `repository/`.
+
+| Test Area | Current Location |
+| --- | --- |
+| Application browser checks | `repository/00 application/` |
+| Assessment JavaScript checks | `repository/01 career_assessment/` |
+| Learning-progress check | `repository/04 reskilling/` |
+| SDG Python and browser checks | `repository/05 sdg_mapping/` |
+| Theme and UI browser checks | `repository/06 frontend/` |
+| Language checks | `repository/07 multilingual/` |
+| Interview integration checks | `repository/08 interview/` |
+| General integration and pathway checks | `repository/09 tests/` |
+| Assessment-report and explanation Python checks | `repository/10_ai_explanations/` |
+
+Run the language-pack and pathway-confirmation checks from the repository root:
 
 ```bash
-PYTHONPATH=src python -m unittest discover -s tests -v
+node "repository/07 multilingual/language_packs.test.cjs"
+node "repository/09 tests/pathway_confirmation.test.cjs"
+```
+
+After resolving runtime imports and test-relative paths, Python suites can be
+discovered by feature folder. For example, on macOS/Linux:
+
+```bash
+PYTHONPATH=src python -m unittest discover -s "repository/05 sdg_mapping" -p "test_*.py" -v
 ```
 
 On Windows PowerShell:
 
 ```powershell
 $env:PYTHONPATH = "src"
-python -m unittest discover -s tests -v
+python -m unittest discover -s "repository/05 sdg_mapping" -p "test_*.py" -v
 ```
 
-JavaScript checks require Node.js:
+Some moved tests still reference their former source or fixture locations.
+The CI workflow also still refers to the removed root `tests/` directory.
+These internal paths require updating before the full suite can be treated
+as working.
 
-```bash
-node tests/assessment_progress.test.cjs
-node tests/assessment_report.test.cjs
-node tests/language_packs.test.cjs
-node tests/pathway_confirmation.test.cjs
-node tests/test_reskilling_progress.cjs
-```
+Browser checks require Chromium, a running application and a compatible
+Node.js runtime. Consult each script for its base-URL configuration.
 
-Browser regression scripts are also available under `tests/`. They require
-Chromium, a running application and a compatible Node.js runtime. Consult each
-script for its base-URL configuration.
+Automated Python checks do not verify successful live OpenAI requests.
 
-The automated Python tests do not verify successful live OpenAI requests.
-
+---
 ---
 
 ## How We Use Replit 
