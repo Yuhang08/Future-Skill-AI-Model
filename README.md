@@ -8,7 +8,7 @@
 
 | Field                  | Details                                     |
 | ---------------------- | ------------------------------------------- |
-| **Team Name**          | Francium fluoride                           |
+| **Team Name**          | Francium Fluoride                           |
 | **Team Domain**        | Domain 1                                    |
 | **SDG Track (1–17)**   | SDG 4 — Quality education                   |
 | **Team Leader**        | Chew Yu Hang                                |
@@ -30,49 +30,40 @@
 
 ## Overview
 
-### Problem
+## Problem
 
-Fresh graduates may find it difficult to translate their current skills into the requirements of a specific career role and decide which skills to develop first. Job requirements, available learning resources, and career information can be distributed across different sources.
+Fresh graduates may face challenges when transitioning from education into employment, particularly when they must determine how their existing knowledge, skills, and experience align with the requirements of a specific career role. Although they may have developed relevant capabilities through coursework, projects, internships, or other experiences, translating these capabilities into the terminology and expectations used in job descriptions can be difficult. They may also be uncertain about which missing skills are most important, which transferable skills they already possess, and where to begin improving their employability.
 
-The team will investigate whether a structured comparison of a user's stated skills against sourced role requirements can help users understand their gaps and choose their next learning steps.
+These decisions can become more complicated when job requirements, career information, and learning resources are scattered across different sources, making it difficult to compare expectations and identify suitable learning steps systematically. Without a structured way to connect their current capabilities with role-specific requirements, users may struggle to prioritise their development efforts.
 
-This problem statement is a hypothesis to validate, not a claim that all fresh graduates experience the same difficulty.
+This project investigates whether comparing a user's stated skills with documented career requirements can help fresh graduates understand their skill gaps, make more informed career decisions, and identify practical next steps. This remains a hypothesis to validate rather than a claim that all fresh graduates experience the same difficulties.
 
-### Solution
+---
 
-[Explain how your project uses AI to solve the problem and what makes it valuable.]
-We shall develop a prototype that allows a fresh graduate to:
+## Solution
 
-S1- Enter their current skills manually or submit a CV through a tested and clearly explained workflow.
+FutureSkill AI will develop a prototype that helps fresh graduates translate their existing capabilities into a structured, role-specific reskilling plan. Users will be able to:
 
-S2- Review and correct the skills identified from their profile.
+1. **Build a skill profile** by entering skills manually or submitting a CV through a tested workflow.
+2. **Review and correct** skills extracted from their profile.
+3. **Select a target career** from a curated set of roles with sourced skill requirements.
+4. **Identify skill gaps** by comparing their reviewed profile with the selected role's requirements.
+5. **Generate a prioritised reskilling roadmap** with explanations and relevant learning resources.
+6. **Explore SDG connections** where a defensible relationship between the role and a relevant target exists.
 
-S3- Select a target role from a small, curated set of roles with sourced skill requirements.
+### How AI contributes
 
-S4- Compare their stated skills with the selected role's requirements.
+AI will assist with extracting and standardising skills from unstructured CVs or experience descriptions, interpreting related terminology and transferable skills, and generating contextual explanations. Transparent matching rules and documented role requirements will distinguish existing matches, potential gaps, and uncertain results.
 
-S5- View a prioritised reskilling roadmap with explanations and relevant learning resources.
+Using identified gaps, existing capabilities, preferred learning time, and verified learning resources, AI will help organise relevant learning steps into a personalised roadmap. Recommendations should explain which gap each step addresses; time estimates will be provided only when sufficiently supported.
 
-S6- See a concise explanation of the role's relevant SDG connection where a defensible link exists.
+For career-to-SDG explanations, AI will work within predefined target information and supporting evidence rather than generating unrestricted claims. Optional labour-market summaries may be introduced if time and reliable, dated data permit, clearly separating observed trends, published projections, and speculative scenarios.
 
-Contribution of AI to the solution is also listed as shown:
-1. AI-assisted skill extraction and normalisation
-The system analyses a user's CV or manually entered experience to identify potential skills and map different expressions of similar skills to standardised skill categories. Users can review and correct the extracted profile before it is used for recommendations.
+### Implementation principle
 
-2. Context-aware skill-gap analysis
-The system compares the user's reviewed skill profile with documented requirements for a selected career role. AI assists in interpreting related terminology and transferable skills, while transparent matching rules classify requirements as existing matches, potential gaps or uncertain. Each result is linked to the relevant role requirement.
+FutureSkill AI adopts a **hybrid approach**: AI interprets unstructured information and generates contextual explanations, while curated data and transparent rules anchor role requirements, gap classifications, learning resources, and SDG mappings. This supports traceability and helps reduce unsupported recommendations. The platform is intended to support career planning and learning decisions, not guarantee employment or replace professional career advice.
 
-3. Personalised reskilling recommendations
-Based on identified gaps, the user's existing capabilities, preferred learning time and verified learning resources, AI helps construct an ordered learning roadmap. Each recommendation explains which skill gap it addresses and why the learning step is relevant. Time estimates are presented only where sufficient information supports them.
-
-4. Evidence-grounded career and SDG explanations
-The platform provides concise explanations of how a selected role relates to relevant UN Sustainable Development Goal targets. AI may assist with explanation, but the mapping is constrained by predefined target information and supporting evidence rather than generated freely.
-
-5. Optional labour-market trend summaries
-If time and reliable data permit, the platform may summarise published reports and dated job-skill information to show reported changes in demand. These summaries will distinguish observed data and published projections from speculative scenarios; the prototype will not claim validated future-job predictions without an appropriate forecasting method and evidence.
-
-AI implementation principle
-The platform uses a hybrid approach: AI interprets unstructured information and generates contextual explanations, while curated data and transparent rules anchor role requirements, skill-gap classifications, learning resources and SDG mappings. This makes recommendations more traceable and reduces unsupported claims. The platform is intended to support career planning and learning decisions, not guarantee employment or replace professional career advice.
+---
 
 ### Key Features
 
@@ -202,13 +193,23 @@ performed by the automated Python tests.
 
 ## Challenges & Learnings
 
-- What challenges did you face, and how did you overcome them?
-- What did your team learn?
+This was our first AI hackathon, and we began with limited experience in building a functional website. Each member brought different skills and ways of understanding the project. Some needed visual prototypes to communicate ideas, while others focused on application logic and getting the code to run. Aligning these perspectives became our first major challenge.
+
+Integration was particularly difficult. We developed features across multiple versions and branches, with differences in dependencies, file structures and startup commands. A website that worked on one member’s computer would sometimes fail on another’s. Merging changes also occasionally overwrote important content or functionality, even when our AI prompts explicitly asked for them to be preserved. These setbacks showed us that clear instructions must be supported by careful code review, version control and testing.
+
+As the deadline approached, we continued adding features without leaving enough time for debugging. Resolving the accumulated issues required considerable effort. Deploying the integrated prototype on Render eventually gave us a shared, accessible version that everyone could open and review.
+
+Through this experience, we learned to treat AI-assisted development as an ongoing conversation. Clear context, screenshots, reference examples and descriptions of expected behaviour helped us communicate our ideas more effectively. Face-to-face discussions were equally valuable in keeping the team aligned.
+
+We also learned to specify which functions and content must remain intact, review changes before merging, and test the complete user journey after integration. For future development, we will prioritise a stable core workflow, make smaller changes and reserve time for testing throughout the process.
 
 ## Future Improvements
 
-- [ ] Improvement 1
-- [ ] Improvement 2
+**Add evidence-backed pathways for Malaysian careers**
+Expand the five illustrative pathway templates into detailed profiles for an initial 10 Malaysian career roles, such as Software Developer, Data Analyst and Cybersecurity Analyst. Use employer-reviewed requirements and permitted local job-market data, with a source and review date for each skill requirement. This would make recommendations more relevant to local graduates and help users understand why a skill matters.
+
+**Add skill checkpoints that adapt the learning roadmap**
+Introduce short quizzes and practical exercises before and after learning activities. For example, a learner struggling with an SQL joins exercise could receive additional practice before progressing to a database project. Store assessment results and attempt history, then adjust upcoming tasks accordingly. Keep completed activities and demonstrated understanding visible as separate measures, giving users clearer feedback beyond XP and task completion.
 
 ## Team
 
