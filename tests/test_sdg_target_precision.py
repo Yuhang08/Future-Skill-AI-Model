@@ -93,6 +93,16 @@ class SDGTargetPrecisionTests(unittest.TestCase):
         self.assertFalse(matches("4.1", "25-2021.00",
                                  sentence, "Supplemental"))
 
+    def test_kindergarten_goes_to_4_2_not_primary_secondary_4_1(self):
+        sentence = "Teach students reading and writing in kindergarten classrooms."
+        self.assertFalse(matches("4.1", "25-2012.00", sentence))
+        self.assertFalse(matches("4.1", "25-2055.00", sentence))
+        self.assertTrue(matches("4.2", "25-2012.00", sentence))
+        self.assertTrue(matches("4.2", "25-2055.00", sentence))
+        self.assertFalse(matches("4.2", "25-2031.00", sentence))
+        self.assertFalse(matches("4.1", "25-3031.00", sentence))
+        self.assertTrue(matches("4.1", "25-2021.00", sentence))
+
     def test_target_3_8_access_not_generic_healthcare(self):
         self.assertFalse(matches(
             "3.8", "29-1141.00", "Provide clinical patient care and administer medications."
