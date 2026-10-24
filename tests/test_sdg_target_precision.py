@@ -101,6 +101,83 @@ class SDGTargetPrecisionTests(unittest.TestCase):
             "3.8", "29-1141.00", "Improve patient access to healthcare services."
         ))
 
+    def test_target_10_2_inclusion_not_one_off_passenger_help(self):
+        self.assertFalse(matches(
+            "10.2", "53-2031.00",
+            "Determine special assistance needs of passengers, such as "
+            "small children, the elderly, or persons with disabilities."
+        ))
+        self.assertTrue(matches(
+            "10.2", "21-1093.00",
+            "Develop social inclusion programs and remove accessibility barriers."
+        ))
+
+    def test_target_13_2_policy_not_truck_fuel_efficiency(self):
+        # Based on the meaning of official O*NET Task ID 19923,
+        # not proof of an implemented climate policy.
+        self.assertFalse(matches(
+            "13.2", "53-3032.00",
+            "Plan or adjust routes to minimize fuel consumption and carbon emissions."
+        ))
+        self.assertTrue(matches(
+            "13.2", "19-2041.00",
+            "Develop national climate policies to integrate climate change measures."
+        ))
+
+    def test_target_6_3_direct_water_quality_not_health_lectures(self):
+        # Task ID 17219 mentions "sewage" but is PUBLIC HEALTH EDUCATION.
+        self.assertFalse(matches(
+            "6.3", "29-1229.05",
+            "Direct public health education programs dealing with water supply "
+            "safety, sewage and waste disposal, and insect control."
+        ))
+        self.assertTrue(matches(
+            "6.3", "51-8031.00",
+            "Monitor wastewater treatment to improve water quality."
+        ))
+
+    def test_target_12_3_prevent_food_loss_not_collect_food_waste(self):
+        self.assertFalse(matches(
+            "12.3", "53-7081.00",
+            "Collect and recycle food waste from collection sites."
+        ))
+        self.assertFalse(matches(
+            "12.3", "29-1229.05",
+            "Teach public health education classes about nutrition and food waste."
+        ))
+        self.assertTrue(matches(
+            "12.3", "35-2021.00",
+            "Reduce food waste by preventing spoilage of ingredients."
+        ))
+
+    def test_target_12_5_waste_prevention_not_generic_disposal(self):
+        self.assertFalse(matches(
+            "12.5", "39-4011.00",
+            "Collect waste matter from organs and process bodily waste for disposal."
+        ))
+        self.assertFalse(matches(
+            "12.5", "47-4041.00",
+            "Collect hazardous waste material for disposal."
+        ))
+        self.assertTrue(matches(
+            "12.5", "53-7062.04",
+            "Collect and sort recyclable materials for reuse."
+        ))
+        self.assertTrue(matches(
+            "12.5", "53-1042.01",
+            "Coordinate recycling collection for reusable materials."
+        ))
+
+    def test_core_scope_no_automatic_13_2_from_emissions(self):
+        self.assertFalse(matches(
+            "13.2", "49-9021.00",
+            "Implement techniques that reduce greenhouse gas emissions."
+        ))
+        self.assertFalse(matches(
+            "13.2", "53-3032.00",
+            "Develop routes to minimize carbon emissions.", "Core"
+        ))
+
     def test_staff_training_not_sdq4_career_theme(self):
         pattern = TASK_TOPICS[4][0]
         self.assertFalse(re.search(pattern,
