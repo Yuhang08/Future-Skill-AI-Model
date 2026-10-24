@@ -83,7 +83,9 @@ class SDGCareerTests(unittest.TestCase):
                 self.assertEqual(data["career"], career["title"])
                 self.assertEqual(data["mappings"], [])
                 self.assertEqual(data["task_data_status"], "not_installed")
-                self.assertTrue(data["candidate_mappings"])
+                # All occupations receive an analysis, but a defensible
+                # result may have NO SDG suggestion rather than a fake Goal 8.
+                self.assertIsInstance(data["candidate_mappings"], list)
                 self.assertEqual(data["task_profile"]["source_status"], "not_installed")
                 self.assertEqual(data["task_profile"]["representative_tasks"], [])
                 self.assertLessEqual(len(data["candidate_mappings"]), 3)
@@ -103,7 +105,8 @@ class SDGCareerTests(unittest.TestCase):
                 with self.subTest(code=code):
                     result = get_sdg_alignment_by_id(code)
                     self.assertEqual(result["career"], record["title"])
-                    self.assertTrue(result["mappings"] or result["candidate_mappings"])
+                    self.assertIsInstance(result["mappings"], list)
+                    self.assertIsInstance(result["candidate_mappings"], list)
                     self.assertIn(result["task_data_status"],
                                   ("available", "occupation_tasks_missing"))
                     self.assertIsNotNone(result["task_profile"])
@@ -138,6 +141,35 @@ class SDGCareerTests(unittest.TestCase):
                                     item.get("dwa_activities")
                                     for item in suggestion["task_evidence"]
                                 ))
+
+    def test_management_roles_are_not_all_goal_8(self):
+        from reskilling.sdg_occupation_rules import suggested_goal_ids
+        cases = {
+            "11-1011.00": ("Chief Executives", ()),
+            "11-1031.00": ("Legislators", (16,)),
+            "11-3021.00": ("Computer and Information Systems Managers", (9,)),
+            "11-3051.03": ("Biofuels Production Managers", (7,)),
+            "11-3051.04": ("Biomass Power Plant Managers", (7,)),
+            "11-3051.06": ("Hydroelectric Production Managers", (7,)),
+            "11-2022.00": ("Sales Managers", ()),
+            "11-2033.00": ("Fundraising Managers", ()),
+        }
+        for code, (title, expected) in cases.items():
+            with self.subTest(title=title):
+                ids, _ = suggested_goal_ids(code, title)
+                self.assertEqual(tuple(ids), expected)
+                self.assertNotIn(8, ids)
+
+    def test_no_generic_commercial_goal_8_without_task_evidence(self):
+        from reskilling.sdg_occupation_rules import suggested_goal_ids
+        for code, title in (
+            ("13-2011.00", "Accountants and Auditors"),
+            ("41-2031.00", "Retail Salespersons"),
+            ("43-4051.00", "Customer Service Representatives"),
+        ):
+            with self.subTest(title=title):
+                goal_ids, _ = suggested_goal_ids(code, title)
+                self.assertNotIn(8, goal_ids)
 
     def test_unknown_and_malformed_career_ids(self):
         self.assertEqual(self.search("the invalid"), [])
