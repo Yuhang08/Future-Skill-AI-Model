@@ -57,13 +57,15 @@ TARGET_RULES = (
             r"coordinat\w*|implement\w*)\b.{0,110}"
             r"\b(?:recycl\w*|reus\w*|reclaim\w*|scrap (?:metal|materials?))\b"
         ),
-        "exclude": r"\b(?:teach\w*|train\w*|educat\w*|instruct\w*|"
-                   r"curricul\w*|workshops?|seminars?|"
-                   r"awareness presentations?)\b",
-        # "prevent escape of waste matter" describes containment, not
-        # material waste prevention; "recyclable" alone is an adjective,
-        # not proof any recycling actually takes place.
-        "exclude": r"\b(?:waste matter|bodily waste|disposal-only operations?)\b",
+        # Exclude educational material and physical containment, which do
+        # not themselves reduce solid waste. A prior edit introduced a
+        # duplicate "exclude" key, silently overwriting the training filter.
+        "exclude": (
+            r"\b(?:teach\w*|train\w*|educat\w*|instruct\w*|"
+            r"curricul\w*|workshops?|seminars?|"
+            r"awareness presentations?|waste matter|bodily waste|"
+            r"disposal-only operations?)\b"
+        ),
         "core_only": True,
         "note": "Only a Core waste-prevention/reuse/recycling operation suggests "
                 "12.5. Generic waste disposal and training do not establish it.",
