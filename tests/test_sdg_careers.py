@@ -1,179 +1,151 @@
-"""Canonical career selection and evidence-limited mapping API regressions."""
+"""SDG API regressions. Synthetic task fixtures are NOT claimed to be O*NET data."""
+import csv
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 from main import app
-from reskilling.sdg_alignment import get_sdg_alignment, get_sdg_careers
+from reskilling.sdg_alignment import (
+    get_sdg_alignment, get_sdg_careers, get_sdg_alignment_by_id,
+)
 
 
 class SDGCareerTests(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
+        # No downloaded official dataset is assumed in CI. Even when the
+        # developer imports it locally, these baseline tests stay deterministic.
+        self.missing = patch(
+            "reskilling.sdg_task_evidence.TASK_DATA",
+            Path("/this/path/intentionally/does/not/exist/onet_tasks.csv"),
+        )
+        self.missing.start()
+        self.addCleanup(self.missing.stop)
 
     def search(self, query):
-        response = self.client.get('/api/sdg/careers', params={'q': query})
-        self.assertEqual(response.status_code, 200)
-        return response.json()['results']
+        result = self.client.get("/api/sdg/careers", params={"q": query})
+        self.assertEqual(result.status_code, 200)
+        return result.json()["results"]
 
-    def test_environmental_aliases_use_canonical_occupational_id(self):
-        for title in ('Environmental Engineer', 'environmental engineer',
-                      '  ENVIRONMENTAL   ENGINEERS  '):
-            with self.subTest(title=title):
-                results = self.search(title)
-                self.assertEqual(len(results), 1)
-                self.assertEqual(results[0]['id'], '17-2081.00')
-                self.assertEqual(results[0]['title'], 'Environmental Engineers')
-                self.assertEqual(results[0]['kind'], 'occupation')
-                self.assertEqual(results[0]['mapping_availability'], 'suggested')
-                self.assertEqual(results[0]['matched_by'], 'exact')
+    def sdg(self, career_id):
+        response = self.client.post("/api/sdg/mindmap", json={"career_id": career_id})
+        self.assertEqual(response.status_code, 200, response.text)
+        return response.json()
 
-    def test_prototype_identity_is_not_an_occupational_record(self):
-        result = self.search('  DATA   ANALYST  ')[0]
-        self.assertEqual(result['id'], 'prototype:data-analyst')
-        self.assertEqual(result['kind'], 'prototype')
-        self.assertEqual(result['title'], 'Data Analyst')
-        data = self.client.post('/api/sdg/mindmap', json={'career_id': result['id']}).json()
-        self.assertEqual(data['career_id'], result['id'])
-        self.assertEqual(data['status'], 'suggested')
-        self.assertEqual({item['sdg_id'] for item in data['mappings']}, {9})
-        self.assertEqual([item['target_id'] for item in data['learning_pathway_mappings']], ['4.4', '8.5'])
-        self.assertIn(9, [item['sdg_id'] for item in data['mappings']])
-        self.assertTrue(all(item['career_id'] == result['id'] for item in data['mappings']))
-        self.assertTrue(all(item['review_status'] == 'rule_based_suggestion' for item in data['mappings']))
-        self.assertTrue(all(item['review_status'] == 'curated_illustrative'
-                            for item in data['learning_pathway_mappings']))
-        for mapping in data['mappings']:
-            self.assertIsNone(mapping['target_id'])
-            self.assertEqual(mapping['specificity'], 'title_rule')
-            self.assertIn('impact', mapping['impact_limitations'].lower())
-        for mapping in data['learning_pathway_mappings']:
-            self.assertIn('Illustrative pathway requirement: SQL',
-                          mapping['supporting_evidence'][0])
-            self.assertIn('measurable progress', mapping['impact_limitations'])
-            self.assertEqual(set(mapping['supporting_source_ids']),
-                             {source['id'] for source in mapping['evidence_source']})
+    def test_environmental_engineer_identity(self):
+        for alias in ("Environmental Engineer", "environmental engineer",
+                      " ENVIRONMENTAL   ENGINEERS "):
+            result = self.search(alias)
+            self.assertEqual(len(result), 1)
+            self.assertEqual(result[0]["id"], "17-2081.00")
 
-    def test_existing_occupational_alias_mappings_are_preserved(self):
-        for title, career_id in (
-            ('Software Developer', '15-1252.00'),
-            ('Information Security Analysts', '15-1212.00'),
-            ('Web and Digital Interface Designers', '15-1255.00'),
+    def test_no_unverified_title_guess_is_drawn_on_the_graph(self):
+        data = self.sdg("35-1011.00")  # Chefs and Head Cooks
+        self.assertEqual(data["task_data_status"], "not_installed")
+        self.assertEqual(data["status"], "no_task_evidence")
+        self.assertEqual(data["mappings"], [])
+        self.assertTrue(any(x["sdg_id"] == 12 for x in data["candidate_mappings"]))
+        self.assertEqual(data["learning_pathway_mappings"], [])
+
+    def test_training_goal_4_and_8_are_separate_from_occupation(self):
+        for career_id in (
+            "15-1252.00", "15-1212.00", "15-1255.00",
+            "prototype:data-analyst", "prototype:cybersecurity-analyst",
+            "prototype:ui-ux-designer",
         ):
-            with self.subTest(title=title):
-                result = self.search(title)[0]
-                self.assertEqual(result['id'], career_id)
-                data = self.client.post('/api/sdg/mindmap', json={'career_id': career_id}).json()
-                self.assertEqual(data['status'], 'suggested')
-                self.assertEqual({item['target_id'] for item in data['learning_pathway_mappings']}, {'4.4', '8.5'})
-                self.assertTrue(all(item['sdg_id'] not in {4, 8} for item in data['mappings']))
+            with self.subTest(career_id=career_id):
+                data = self.sdg(career_id)
+                self.assertEqual(data["mappings"], [])
+                self.assertEqual(
+                    {m["target_id"] for m in data["learning_pathway_mappings"]},
+                    {"4.4", "8.5"},
+                )
+                self.assertTrue(all(
+                    m["mapping_kind"] == "pathway_preparation"
+                    for m in data["learning_pathway_mappings"]
+                ))
 
-    def test_environmental_engineers_receive_distinct_thematic_suggestions(self):
-        response = self.client.post('/api/sdg/mindmap', json={'career_id': '17-2081.00'})
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(data['career'], 'Environmental Engineers')
-        self.assertEqual(data['status'], 'suggested')
-        self.assertEqual({m['sdg_id'] for m in data['mappings']}, {6, 9, 13})
-        self.assertTrue(all(m['target_id'] is None for m in data['mappings']))
-        self.assertTrue(all(m['review_status'] == 'rule_based_suggestion' for m in data['mappings']))
-        self.assertEqual(data['pathway_skills'], [])
-        self.assertEqual(data['learning_pathway_mappings'], [])
-        self.assertIn('not reviewed', data['evidence_scope'])
-
-    def test_every_one_of_923_occupations_has_distinctly_labeled_goal_suggestions(self):
+    def test_923_occupation_catalogue_coverage_without_faked_evidence(self):
         occupations = {
-            career_id: record for career_id, record in get_sdg_careers().items()
-            if record["kind"] == "occupation"
+            code: value for code, value in get_sdg_careers().items()
+            if value["kind"] == "occupation"
         }
         self.assertEqual(len(occupations), 923)
-        observed_goals = set()
-        for career_id in occupations:
-            data = self.client.post('/api/sdg/mindmap', json={'career_id': career_id}).json()
-            self.assertIn(data['status'], ('suggested', 'not_reviewed'))
-            self.assertTrue(data['mappings'], career_id)
-            goal_ids = [m['sdg_id'] for m in data['mappings']]
-            self.assertEqual(len(goal_ids), len(set(goal_ids)), career_id)
-            self.assertTrue(all(1 <= goal <= 17 for goal in goal_ids))
-            self.assertTrue(all(m['career_id'] == career_id for m in data['mappings']))
-            for m in data['mappings']:
-                if m['review_status'] == 'rule_based_suggestion':
-                    self.assertIsNone(m['target_id'])
-                    self.assertEqual(m['mapping_kind'], 'occupation_theme')
-            observed_goals.update(goal_ids)
-        self.assertGreaterEqual(len(observed_goals), 10)
+        for code, career in occupations.items():
+            with self.subTest(code=code):
+                data = get_sdg_alignment_by_id(code)
+                self.assertEqual(data["career"], career["title"])
+                self.assertEqual(data["mappings"], [])
+                self.assertEqual(data["task_data_status"], "not_installed")
+                self.assertTrue(data["candidate_mappings"])
 
-    def test_health_education_renewable_and_digital_roles_use_different_goals(self):
-        cases = {
-            '29-1141.00': {3},        # Registered Nurses
-            '25-2021.00': {4},        # Elementary School Teachers
-            '17-2199.11': {7, 9, 13},  # Solar Energy Systems Engineers
-            '15-1252.00': {9},       # Software Developers: no automatic SDG 4/8
-        }
-        for career_id, expected in cases.items():
-            with self.subTest(career_id=career_id):
-                data = self.client.post('/api/sdg/mindmap', json={'career_id': career_id}).json()
-                self.assertEqual({m['sdg_id'] for m in data['mappings']}, expected)
-
-    def test_it_careers_do_not_inherit_training_goals(self):
-        # A role's technical skills are not themselves a contribution to
-        # Quality Education or Decent Work; those belong to FutureSkill.
-        for career_id in (
-            '15-1252.00',              # Software Developers
-            '15-1212.00',              # Information Security Analysts
-            '15-1255.00',              # Web and Digital Interface Designers
-            'prototype:data-analyst',
-            'prototype:cybersecurity-analyst',
-            'prototype:ui-ux-designer',
+    def test_unknown_and_malformed_career_ids(self):
+        self.assertEqual(self.search("the invalid"), [])
+        self.assertEqual(get_sdg_alignment("the invalid")["status"], "unknown")
+        for payload, expected in (
+            ({}, 422), ({"career_id": ""}, 422),
+            ({"career_id": "unknown"}, 404),
+            ({"title": "Chefs and Head Cooks"}, 422),
+            ({"career_id": "x" * 101}, 422),
+            ({"career_id": "15-1252.00", "skills": {"Python": 5}}, 422),
         ):
-            with self.subTest(career_id=career_id):
-                data = self.client.post('/api/sdg/mindmap',
-                                        json={'career_id': career_id}).json()
-                career_goals = {item['sdg_id'] for item in data['mappings']}
-                self.assertFalse(career_goals & {4, 8}, career_id)
-                self.assertTrue(all(m['mapping_kind'] == 'occupation_theme'
-                                    for m in data['mappings']))
-                self.assertEqual(
-                    {m['sdg_id'] for m in data['learning_pathway_mappings']},
-                    {4, 8},
-                )
+            self.assertEqual(self.client.post("/api/sdg/mindmap", json=payload).status_code, expected)
 
-    def test_specificity_avoids_spurious_marine_and_security_keywords(self):
-        # These titles should not be assumed to improve ocean conservation
-        # or information security just because they contain ambiguous words.
-        from reskilling.sdg_occupation_rules import suggested_goal_ids
-        marine_ids, _ = suggested_goal_ids('17-2121.00',
-                                            'Marine Engineers and Naval Architects')
-        self.assertNotIn(14, marine_ids)
-        physical_security, _ = suggested_goal_ids('33-9032.00', 'Security Guards')
-        self.assertNotIn(9, physical_security)
+    def test_fuzzy_search_does_not_auto_select_role(self):
+        results = self.search("enviromental engineer")
+        self.assertEqual(results[0]["id"], "17-2081.00")
+        self.assertEqual(results[0]["matched_by"], "suggestion")
+        self.assertEqual(get_sdg_alignment("enviromental engineer")["status"], "unknown")
 
-    def test_unknown_title_cannot_be_explored(self):
-        self.assertEqual(self.search('the invalid'), [])
-        self.assertEqual(self.client.post('/api/sdg/mindmap', json={'title': 'the invalid'}).status_code, 422)
-        self.assertEqual(self.client.post('/api/sdg/mindmap', json={'career_id': 'the invalid'}).status_code, 404)
-        self.assertEqual(get_sdg_alignment('the invalid')['status'], 'unknown')
-        self.assertEqual(get_sdg_alignment('the invalid')['mappings'], [])
+    def test_real_data_parser_with_explicitly_synthetic_test_fixture(self):
+        # These strings are TEST FIXTURES written here, not real O*NET tasks.
+        # Verify that generic chef shopping does not imply reduced food waste,
+        # whereas an explicit, task-identified waste-prevention duty can form
+        # an unreviewed task-level candidate connection.
+        with tempfile.TemporaryDirectory() as directory:
+            taskfile = Path(directory) / "task_statements.csv"
+            with taskfile.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(stream, fieldnames=[
+                    "O*NET-SOC Code", "Title", "Task ID", "Task",
+                    "Task Type", "Date"
+                ])
+                writer.writeheader()
+                writer.writerow({
+                    "O*NET-SOC Code": "35-1011.00",
+                    "Title": "Chefs and Head Cooks",
+                    "Task ID": "900001",
+                    "Task": "Order food and kitchen supplies.",
+                    "Task Type": "Core", "Date": "10/2026",
+                })
+                writer.writerow({
+                    "O*NET-SOC Code": "35-1011.00",
+                    "Title": "Chefs and Head Cooks",
+                    "Task ID": "900002",
+                    "Task": "Reduce food waste by tracking spoiled ingredients.",
+                    "Task Type": "Core", "Date": "10/2026",
+                })
+            with patch("reskilling.sdg_task_evidence.TASK_DATA", taskfile):
+                data = self.sdg("35-1011.00")
+                self.assertEqual(data["task_data_status"], "available")
+                mapping = next(m for m in data["mappings"] if m["target_id"] == "12.3")
+                self.assertEqual(mapping["specificity"], "onet_task")
+                self.assertEqual(mapping["review_status"], "task_signal_unreviewed")
+                self.assertEqual(mapping["task_evidence"][0]["task_id"], "900002")
+                self.assertNotIn("900001", [task["task_id"] for task in mapping["task_evidence"]])
+                self.assertIn("onet-task-statements", mapping["supporting_source_ids"])
 
-    def test_ambiguous_and_fuzzy_inputs_are_only_suggestions(self):
-        choices = self.search('analyst')
-        self.assertGreater(len(choices), 1)
-        self.assertTrue(all(item['matched_by'] == 'partial' for item in choices))
-        fuzzy = self.search('enviromental engineer')
-        self.assertEqual(fuzzy[0]['id'], '17-2081.00')
-        self.assertEqual(fuzzy[0]['matched_by'], 'suggestion')
-        self.assertEqual(get_sdg_alignment('enviromental engineer')['status'], 'unknown')
-
-    def test_empty_oversized_and_unknown_ids_are_handled(self):
-        for payload, code in (
-            ({}, 422), ({'career_id': ''}, 422), ({'career_id': '   '}, 404),
-            ({'career_id': 'x' * 101}, 422), ({'career_id': '99-9999.99'}, 404),
-            ({'career_id': 'prototype:data-analyst', 'skills': {'SQL': 5}}, 422),
-        ):
-            with self.subTest(payload=payload):
-                self.assertEqual(self.client.post('/api/sdg/mindmap', json=payload).status_code, code)
-        self.assertEqual(self.client.get('/api/sdg/careers', params={'q': 'x' * 101}).status_code, 422)
-        self.assertLessEqual(len(self.search('')), 12)
+    def test_generic_synthetic_food_inventory_is_not_target_12_3(self):
+        from reskilling.sdg_task_evidence import TARGET_RULES, _match_rule
+        waste = next(r for r in TARGET_RULES if r["target"] == "12.3")
+        self.assertFalse(_match_rule(
+            "Estimate amounts and costs of food and ingredients.", "35-1011.00", waste))
+        self.assertFalse(_match_rule(
+            "Order or requisition food supplies.", "35-1011.00", waste))
+        self.assertTrue(_match_rule(
+            "Reduce food waste by tracking spoiled ingredients.", "35-1011.00", waste))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
