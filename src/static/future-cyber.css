@@ -65,3 +65,78 @@ html[data-futureskill-page="home"] .feature-hub { background: transparent; }
 @media(forced-colors:active) {
   html[data-futureskill-page] body::before, .fs-cyber-field { display: none; }
 }
+
+/* FutureSkill AI navbar logo */
+.fs-site-nav .fs-site-brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    width: 220px !important;
+    min-width: 220px !important;
+    height: 52px !important;
+    overflow: visible !important;
+}
+
+.fs-site-nav .fs-site-brand img {
+    display: block !important;
+    width: 220px !important;
+    height: 52px !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+}
+
+@media (max-width: 768px) {
+    .fs-site-nav .fs-site-brand {
+        width: 160px !important;
+        min-width: 160px !important;
+    }
+
+    .fs-site-nav .fs-site-brand img {
+        width: 160px !important;
+        height: 40px !important;
+    }
+}
+
+/* FutureSkill AI - exact brand logo size */
+html[data-futureskill-page] .fs-site-nav .fs-site-brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    height: 55px !important;
+    flex-shrink: 0 !important;
+    overflow: visible !important;
+}
+
+html[data-futureskill-page] .fs-site-nav .fs-site-brand img {
+    display: block !important;
+    width: 260px !important;
+    height: 55px !important;
+    min-width: 260px !important;
+    max-width: none !important;
+    max-height: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    filter: none !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+    flex: none !important;
+}
+
+@media (max-width: 768px) {
+    html[data-futureskill-page] .fs-site-nav .fs-site-brand {
+        width: 190px !important;
+        min-width: 190px !important;
+    }
+
+    html[data-futureskill-page] .fs-site-nav .fs-site-brand img {
+        width: 190px !important;
+        min-width: 190px !important;
+        height: 45px !important;
+    }
+}
