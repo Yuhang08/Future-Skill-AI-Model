@@ -22,53 +22,72 @@ GOAL_NAMES = {
 # Standard Occupational Classification major groups: *theme*, not SDG evidence.
 # Every SOC major group present in career_profiles_clean.csv is included.
 MAJOR_GROUP_THEMES = {
-    "11": ((8,), "management and organisational activity"),
+    # These are broad DISCOVERY THEMES. They are not verified target links.
+    "11": ((8,), "management and business operations"),
     "13": ((8,), "business and financial operations"),
-    "15": ((9,), "computing, mathematical methods and innovation"),
-    "17": ((9,), "engineering and infrastructure"),
-    "19": ((9,), "research, science and technical innovation"),
-    "21": ((10,), "community and social services"),
-    "23": ((16,), "law and access to justice"),
-    "25": ((4,), "teaching and education"),
-    "27": ((11,), "arts, cultural communication and communities"),
+    "15": ((9,), "computer and mathematical occupations"),
+    "17": ((9,), "architecture and engineering"),
+    "19": ((9,), "scientific research and investigation"),
+    "21": ((10,), "social and community support"),
+    "23": ((16,), "legal services and justice institutions"),
+    "25": ((4,), "education and instruction"),
+    "27": ((11,), "arts, design and cultural activity"),
     "29": ((3,), "healthcare practice"),
     "31": ((3,), "healthcare support"),
-    "33": ((16,), "public and protective services"),
-    "35": ((12,), "food preparation and responsible resource use"),
-    "37": ((11,), "building and grounds services"),
-    "39": ((8,), "personal and client-facing services"),
-    "41": ((8,), "sales and commercial activity"),
-    "43": ((8,), "administrative and office operations"),
-    "45": ((2, 15), "food systems and land-based resources"),
+    "33": ((16,), "protective and public services"),
+    "35": ((12,), "food preparation and consumption"),
+    "37": ((11,), "building and grounds maintenance"),
+    "39": ((8,), "personal and client services"),
+    "41": ((8,), "sales and commercial operations"),
+    "43": ((8,), "office and administrative support"),
+    "45": ((2, 15), "farming, fisheries and natural resources"),
     "47": ((9, 11), "construction and the built environment"),
-    "49": ((9, 12), "equipment maintenance and resource efficiency"),
+    "49": ((9, 12), "installation, repair and maintenance"),
     "51": ((9, 12), "manufacturing and production"),
-    "53": ((9, 11), "transportation and infrastructure"),
-    "55": ((16,), "public institutions and security"),
+    "53": ((9, 11), "transport and material movement"),
 }
 
 # More specific titles take priority over the broad occupational major group.
 # Ordered from more specific to more general; return at most three theme goals.
 TITLE_THEMES = (
-    (r"\benvironmental engineer(?:ing|s)?\b", (6, 9, 13), "environmental engineering"),
-    (r"\b(?:water|wastewater|sanitation|hydrolog(?:y|ist|ical)|sewage)\b", (6, 9), "water systems and sanitation"),
-    (r"\b(?:solar|wind energy|wind turbine|renewable energy|biofuels?)\b", (7, 9, 13), "renewable energy"),
-    (r"\b(?:climate|global warming|carbon emission)\b", (13, 9), "climate-related work"),
-    (r"\b(?:sustainab(?:ility|le)|environmental protection|pollution control)\b", (12, 13), "sustainability and pollution prevention"),
-    (r"\b(?:marine biology|oceanograph(?:y|er)|fishery|fisheries|aquacultur(?:e|al))\b", (14, 15), "aquatic ecosystems"),
-    (r"\b(?:marine|ocean|seafar|sailor)\b", (14, 9), "marine systems"),
-    (r"\b(?:forestry|forest|wildlife|ecolog(?:y|ist)|conservation|botan(?:y|ist))\b", (15, 13), "land ecosystems and biodiversity"),
-    (r"\b(?:agricultur(?:e|al)|farm(?:er|ing|worker)?s?|crop|livestock|soil|horticultur(?:e|al))\b", (2, 15), "agriculture and food production"),
-    (r"\b(?:equal opportunity|disability support|rehabilitation counselor)\b", (10, 16), "inclusion and equal access"),
-    (r"\b(?:women's|gender equality|women and girls)\b", (5, 10), "gender equality"),
-    (r"\b(?:international development|international relations|foreign aid)\b", (17, 16), "international partnerships"),
-    (r"\b(?:social worker|social and human service|poverty|housing assistance)\b", (1, 10), "social support and economic inclusion"),
-    (r"\b(?:biomedical|medical equipment|health informatics)\b", (3, 9), "medical and healthcare technology"),
-    (r"\b(?:teacher|instructor|professor|tutor|educat(?:or|ion))\b", (4,), "education and skills development"),
-    (r"\b(?:cybersecurity|cyber security|information security|security analyst)\b", (9, 16), "digital infrastructure and information security"),
-    (r"\b(?:software|computer programmer|data analyst|data scientist|database|artificial intelligence|machine learning)\b", (9,), "digital systems and technical innovation"),
-    (r"\b(?:user experience|ui\/ux|web and digital interface|graphic design)\b", (9, 10), "digital design and access"),
-    (r"\b(?:digital marketing|advertising|marketing specialist)\b", (8, 12), "commercial communication and consumer choices"),
+    # Specific occupational specialties take precedence over SOC fallback.
+    (r"\benvironmental engineers?\b", (6, 9, 13), "environmental engineering"),
+    (r"\b(?:water/wastewater|wastewater|water treatment|sewage|sanitation|hydrolog(?:ist|y|ical))\b",
+     (6,), "water resource protection and sanitation"),
+    (r"\b(?:solar|wind energy|wind turbine|renewable energy|biofuel)\b",
+     (7, 9, 13), "renewable energy technologies"),
+    (r"\b(?:climate change|climatolog(?:ist|y)|carbon emissions?|greenhouse gas)\b",
+     (13,), "climate analysis or mitigation"),
+    (r"\b(?:sustainability|sustainable development|pollution control|environmental protection)\b",
+     (12, 13), "sustainability and pollution control"),
+    (r"\b(?:marine biolog(?:ist|y)|oceanograph(?:er|y)|aquacultur(?:e|al)|fisheries)\b",
+     (14,), "aquatic ecosystems and resources"),
+    (r"\b(?:wildlife|forestry|forest conservation|ecolog(?:ist|y)|conservation scientist|botan(?:ist|y))\b",
+     (15,), "terrestrial ecosystems and biodiversity"),
+    (r"\b(?:agricultur(?:e|al)|farm(?:er|workers?|ing)|crop|livestock|horticultur(?:e|al))\b",
+     (2, 15), "food systems and land stewardship"),
+    (r"\b(?:equal opportunity|civil rights|disability services)\b",
+     (10, 16), "inclusion and equal access"),
+    (r"\b(?:gender equality|women's rights|women and girls)\b",
+     (5, 10), "gender equality"),
+    (r"\b(?:international development|international aid|foreign aid)\b",
+     (17,), "international development partnerships"),
+    (r"\b(?:social worker|social and human service|poverty reduction|housing assistance)\b",
+     (1, 10), "social services and economic inclusion"),
+    (r"\b(?:biomedical engineer|health informatics|medical equipment)\b",
+     (3, 9), "healthcare technology"),
+    (r"\b(?:registered nurses?|nurse practitioner|physician|dentist|therapist)\b",
+     (3,), "clinical care and health services"),
+    (r"\b(?:teachers?|instructors?|professors?|tutors?|education administrators?)\b",
+     (4,), "teaching and learning"),
+    (r"\b(?:cybersecurity|cyber security|information security)\b",
+     (9, 16), "digital security and resilient information systems"),
+    (r"\b(?:software develop|computer programm|data analyst|data scientist|database|artificial intelligence|machine learning)\b",
+     (9,), "software, data and technological innovation"),
+    (r"\b(?:user experience|ui/ux|web and digital interface)\b",
+     (9,), "digital interface development"),
+    (r"\b(?:digital marketing|advertising|marketing specialist)\b",
+     (8,), "marketing and commercial activity"),
 )
 
 LIMITATIONS = (
@@ -80,67 +99,87 @@ LIMITATIONS = (
 )
 
 
-def suggested_goal_ids(career_id, career_title):
-    """Return (goal IDs, explicit classification basis) for a known catalogue role."""
-    title = str(career_title or "")
+def _suggestion(career_id, career_title):
+    """Return (goal_ids, basis, specificity) without assuming SDG impact."""
+    title = str(career_title or "").strip()
     for pattern, goals, theme in TITLE_THEMES:
         if re.search(pattern, title, flags=re.IGNORECASE):
-            return goals, "title theme: " + theme
+            return goals, "occupation title: " + theme, "title_rule"
     major_group = str(career_id or "")[:2]
     if major_group in MAJOR_GROUP_THEMES:
         goals, theme = MAJOR_GROUP_THEMES[major_group]
-        return goals, "SOC major group: " + theme
-    # Namespaced prototype titles without a recognisable specialist title.
-    return (8,), "general career-preparation theme (no SOC classification)"
+        return goals, "broad SOC group: " + theme, "soc_group"
+    # Do not invent SDG 8 when a prototype or code is unrecognised.
+    return (), "insufficient occupational information", "unassessed"
+
+
+def suggested_goal_ids(career_id, career_title):
+    """Backwards-compatible (ids, basis) helper, not a causal impact estimator."""
+    goals, basis, _ = _suggestion(career_id, career_title)
+    return goals, basis
 
 
 def infer_occupation_sdg_mappings(career_id, career_title):
-    """Create explainable *goal-level suggestions*, never reviewed target links."""
-    goal_ids, basis = suggested_goal_ids(career_id, career_title)
+    """Occupation *theme* suggestions, separate from FutureSkill training links."""
+    ids, basis, specificity = _suggestion(career_id, career_title)
     mappings = []
-    for goal_id in dict.fromkeys(goal_ids):
+    for goal_id in dict.fromkeys(ids):
+        # A SOC-group fallback is deliberately weaker than a title-specific
+        # specialty, and neither has been verified against actual job tasks.
+        qualification = (
+            "Occupation-title thematic suggestion; requires task-level verification."
+            if specificity == "title_rule" else
+            "Broad SOC-group exploration only; this occupation may not contribute "
+            "directly to the goal. Requires task-level verification."
+        )
         mappings.append({
             "sdg_id": goal_id,
             "sdg_name": GOAL_NAMES[goal_id],
-            "target_id": None,  # No invented target-level occupational evidence.
-            "target_summary": (
-                "Possible occupational theme; no specific UN target has been "
-                "validated for this career."
-            ),
+            "target_id": None,
+            "target_summary": "Possible theme only; no occupation-to-target verification.",
             "career_id": career_id,
             "review_status": "rule_based_suggestion",
             "mapping_kind": "occupation_theme",
+            "specificity": specificity,
             "match_basis": basis,
             "relevance_reason": (
-                f"The occupation '{career_title}' is grouped under {basis}. "
-                f"This suggests a possible thematic connection to SDG {goal_id} "
-                f"({GOAL_NAMES[goal_id]}), not proof of SDG impact."
+                f"{career_title} matches the {basis} classification. This gives a "
+                f"possible connection to SDG {goal_id} ({GOAL_NAMES[goal_id]}). "
+                + qualification
             ),
+            # These are TRACEABILITY NOTES, not scientific proof of impact.
             "supporting_evidence": [
-                f"Occupation in the FutureSkill catalogue: {career_title} "
-                f"(ID: {career_id}).",
-                f"Transparent classification rule: {basis}.",
+                f"Catalogued occupation: {career_title} (O*NET ID: {career_id}).",
+                f"Rule used: {basis}.",
+                qualification,
             ],
             "evidence_source": [
                 {
                     "id": "onet-soc-taxonomy",
-                    "label": "O*NET · Occupational taxonomy",
+                    "label": "O*NET · Occupation classification",
                     "url": "https://www.onetcenter.org/taxonomy.html",
-                    "scope": "Occupation identity and taxonomy only; not SDG evidence.",
+                    "scope": "Occupational classification, not evidence of SDG impacts.",
                 },
                 {
                     "id": f"un-sdg-goal-{goal_id}",
                     "label": f"United Nations · SDG {goal_id}",
                     "url": f"https://sdgs.un.org/goals/goal{goal_id}",
-                    "scope": "Official definition of the goal, not a verified occupation link.",
+                    "scope": "Goal definition only, not proof of occupational contribution.",
+                },
+                {
+                    "id": "onet-tasks-documentation",
+                    "label": "O*NET · Task Statements (recommended verification data)",
+                    "url": "https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html",
+                    "scope": "Documentation only. Task statements are NOT loaded in this prototype.",
                 },
             ],
             "supporting_source_ids": [
                 "onet-soc-taxonomy", f"un-sdg-goal-{goal_id}",
+                "onet-tasks-documentation",
             ],
             "user_action": (
-                "Check this occupation's actual tasks, identify an SDG-relevant "
-                "activity and verify its possible outcomes using independent sources."
+                "Check this career's published O*NET tasks and the exact SDG "
+                "target before treating this thematic suggestion as an alignment."
             ),
             "impact_limitations": LIMITATIONS,
         })
