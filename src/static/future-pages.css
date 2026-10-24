@@ -242,8 +242,7 @@ html[data-futureskill-page="sdg"] .mapping-drawer-close { background: var(--fs-r
 html[data-futureskill-page="sdg"] .evidence-stat,
 html[data-futureskill-page="sdg"] .evidence-box,
 html[data-futureskill-page="sdg"] .evidence-detail,
-html[data-futureskill-page="sdg"] .evidence-node,
-html[data-futureskill-page="sdg"] .goal-info-dialog { background: var(--fs-raised-alt); color: var(--fs-ink-soft); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .evidence-node { background: var(--fs-raised-alt); color: var(--fs-ink-soft); border-color: var(--fs-line); }
 html[data-futureskill-page="sdg"] .evidence-stat span,
 html[data-futureskill-page="sdg"] .field-label,
 html[data-futureskill-page="sdg"] .drawer-target { color: var(--fs-muted); }
@@ -270,27 +269,95 @@ html[data-futureskill-page="sdg"] .not-assessed a { color: var(--fs-accent); }
 html[data-futureskill-page="sdg"] .empty-card { background: var(--fs-raised); border-color: var(--fs-line-strong); color: var(--fs-muted); }
 html[data-futureskill-page="sdg"] .empty-card strong { color: var(--fs-ink); }
 html[data-futureskill-page="sdg"] .footnote { border-color: var(--fs-line); color: var(--fs-muted); }
-html[data-futureskill-page="sdg"] .mindmap-shell { background: var(--fs-raised-alt); border-color: var(--fs-line); }
-html[data-futureskill-page="sdg"] .map-legend,
-html[data-futureskill-page="sdg"] .map-caption { color: var(--fs-muted); }
-html[data-futureskill-page="sdg"] .legend-dot { background: var(--fs-accent); }
-html[data-futureskill-page="sdg"] .legend-dot.muted { background: var(--fs-dim); }
-html[data-futureskill-page="sdg"] .map-lines line { stroke: var(--fs-accent); }
-html[data-futureskill-page="sdg"] .career-center { background: var(--fs-accent-ink); border-color: var(--fs-accent); }
-html[data-futureskill-page="sdg"] .career-center small { color: #d7ebf5; }
-html[data-futureskill-page="sdg"][data-future-theme="dark"] .career-center {
-  background: var(--fs-accent-soft);
+html[data-futureskill-page="sdg"] .goal-explorer {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+}
+html[data-futureskill-page="sdg"] .goal-explorer-heading h2 { color: var(--fs-ink); }
+html[data-futureskill-page="sdg"] .goal-explorer-heading p { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] summary.goal-explorer-heading {
+  cursor: pointer;
+  list-style: none;
+  margin-bottom: 0;
+  align-items: center;
+  min-height: 52px;
+}
+html[data-futureskill-page="sdg"] summary.goal-explorer-heading::-webkit-details-marker { display: none; }
+html[data-futureskill-page="sdg"] summary.goal-explorer-heading::after {
+  content: "+";
+  color: var(--fs-accent-ink);
+  font-size: 24px;
+  flex: 0 0 24px;
+  text-align: center;
+}
+html[data-futureskill-page="sdg"] .goal-explorer[open] > summary { margin-bottom: 18px; }
+html[data-futureskill-page="sdg"] .goal-explorer[open] > summary::after { content: "−"; }
+html[data-futureskill-page="sdg"] summary.goal-explorer-heading:focus-visible {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 5px;
+  border-radius: 4px;
+}
+html[data-futureskill-page="sdg"] .goal-list-item { min-width: 0; }
+html[data-futureskill-page="sdg"] .goal-node { background: var(--fs-surface); color: var(--fs-ink); border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .goal-node:hover {
+  background: var(--fs-raised);
+  border-color: color-mix(in srgb, var(--goal-color) 58%, var(--fs-line));
+  box-shadow: var(--fs-shadow-small);
+}
+html[data-futureskill-page="sdg"] .goal-node:focus-visible {
+  outline: 3px solid var(--fs-accent);
+  outline-offset: 3px;
+}
+html[data-futureskill-page="sdg"] .goal-node.linked { border-color: color-mix(in srgb, var(--goal-color) 58%, var(--fs-line)); }
+html[data-futureskill-page="sdg"] .goal-node.tentative { border-style: dashed; }
+html[data-futureskill-page="sdg"] .goal-node .goal-node-status { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .goal-node { min-height: 92px; }
+html[data-futureskill-page="sdg"] .goal-name { font-size: 14px; line-height: 1.4; }
+html[data-futureskill-page="sdg"] .goal-index { color: var(--fs-ink-soft); font-size: 10px; }
+html[data-futureskill-page="sdg"] .goal-node-status { font-size: 12px; line-height: 1.4; }
+html[data-futureskill-page="sdg"] .goal-evidence-drawer {
+  width: min(790px, 100vw);
+  max-width: 100vw;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--fs-line);
+  border-radius: 0;
   color: var(--fs-ink);
 }
-html[data-futureskill-page="sdg"][data-future-theme="dark"] .career-center small {
-  color: var(--fs-accent-ink);
+html[data-futureskill-page="sdg"] .goal-evidence-drawer .mapping-drawer-panel { overscroll-behavior: contain; }
+html[data-futureskill-page="sdg"] .goal-evidence-drawer p,
+html[data-futureskill-page="sdg"] .goal-evidence-drawer .field-label { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .goal-evidence-drawer .drawer-visual-copy h3,
+html[data-futureskill-page="sdg"] .goal-evidence-drawer .drawer-visual-copy p { color: var(--sdg-on-color); }
+html[data-futureskill-page="sdg"] .goal-evidence-drawer .drawer-photo-credit {
+  color: #ffffff;
+  background: rgba(0,0,0,.82);
 }
-html[data-futureskill-page="sdg"] .goal-node { background: var(--fs-surface); color: var(--fs-ink); border-color: var(--fs-line); }
-html[data-futureskill-page="sdg"] .goal-node:hover { background: var(--fs-raised); }
-html[data-futureskill-page="sdg"] .goal-node-status { color: var(--fs-muted); }
-html[data-futureskill-page="sdg"] .goal-info-dialog { color: var(--fs-ink); }
-html[data-futureskill-page="sdg"] .goal-info-heading h2 { color: var(--fs-ink); }
-html[data-futureskill-page="sdg"] .goal-info-heading p { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .goal-evidence-status,
+html[data-futureskill-page="sdg"] .goal-ranking-evidence,
+html[data-futureskill-page="sdg"] .pathway-evidence {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="sdg"] .pathway-evidence { border-left-color: var(--fs-amber); }
+html[data-futureskill-page="sdg"] .pathway-evidence ul { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .goal-explorer,
+html[data-futureskill-page="sdg"] .goal-evidence-drawer,
+html[data-futureskill-page="sdg"] .mapping-drawer-panel,
+html[data-futureskill-page="sdg"] .mapping-drawer-header { color: var(--fs-ink); }
+@media (max-width: 520px) {
+  html[data-futureskill-page="sdg"] .goal-grid { grid-template-columns: 1fr; }
+  html[data-futureskill-page="sdg"] .goal-evidence-drawer {
+    inset: auto 0 0;
+    width: 100vw;
+    height: min(92dvh, 900px);
+    max-height: 92dvh;
+    border-left: 0;
+    border-top: 1px solid var(--fs-line);
+    border-radius: 16px 16px 0 0;
+  }
+}
 html[data-futureskill-page="sdg"] .task-goal-rankings {
   background: var(--fs-raised-alt);
   border-color: var(--fs-line);
@@ -318,7 +385,6 @@ html[data-futureskill-page="sdg"] .score-review-status {
   color: var(--fs-accent-ink);
 }
 html[data-futureskill-page="sdg"] .goal-score-line { color: var(--fs-ink-soft); }
-html[data-futureskill-page="sdg"] .goal-info-link { margin-right: 14px; }
 html[data-futureskill-page="sdg"] .skeleton { background: linear-gradient(90deg, var(--fs-raised-alt), var(--fs-surface), var(--fs-raised-alt)); }
 
 /* SDG career combobox · tokenized surfaces, readable statuses, and resilient wrapping. */

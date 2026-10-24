@@ -123,12 +123,14 @@ class IntegratedWebTests(unittest.TestCase):
         sdg_page = self.client.get('/sdg-impact').text
         self.assertIn('Potential alignment is not impact', sdg_page)
         self.assertIn('Show more', sdg_page)
-        self.assertIn('node(article, "dialog"', sdg_page)
+        self.assertIn('class="mapping-drawer goal-evidence-drawer"', sdg_page)
         self.assertIn('mapping-drawer-panel', sdg_page)
         self.assertIn('Official SDG icon from the United Nations', sdg_page)
-        for element_id in ('goalGrid', 'mapLines', 'goalInfoDialog', 'careerCenter'):
+        for element_id in ('goalGrid', 'allGoals', 'goalInfoDialog', 'goalInfoContent'):
             self.assertIn(f'id="{element_id}"', sdg_page)
-        self.assertIn('Read all occupation task statements', sdg_page)
+        for removed_id in ('mapLines', 'careerCenter', 'mindmapStage'):
+            self.assertNotIn(f'id="{removed_id}"', sdg_page)
+        self.assertIn('Read full wording for all displayed evidence statements', sdg_page)
         self.assertIn('evidence-map', sdg_page)
         self.assertIn('/static/assets/sdg/sdg-4-education.jpg', sdg_page)
         self.assertIn('/static/assets/sdg/sdg-8-work.jpg', sdg_page)

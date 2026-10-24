@@ -77,13 +77,27 @@ async function career(title) {
   const canonicalTitle = await evaluate(`document.querySelector('#careerOptions .career-option-title').textContent`);
   await activate('#careerOptions [role=option]');
   await evaluate(`document.getElementById('careerForm').requestSubmit()`);
-  await waitFor(`document.getElementById('mapCareerName')?.textContent === ${JSON.stringify(canonicalTitle)} &&
+  await waitFor(`document.getElementById('roleTitle')?.textContent === ${JSON.stringify(canonicalTitle)} &&
     !document.getElementById('submitButton').disabled &&
     document.querySelectorAll('.goal-node').length === 17`, `career refreshed: ${title}`);
 }
 
 async function typeSearch(title) {
   await evaluate(`document.getElementById('career').focus();document.getElementById('career').value=${JSON.stringify(title)};document.getElementById('career').dispatchEvent(new Event('input',{bubbles:true}))`);
+}
+
+async function openGoal(id) {
+  await evaluate(`document.getElementById('allGoals').open=true`);
+  await activate(`.goal-node[data-sdg-id="${id}"]`);
+  await waitFor(`document.getElementById('goalInfoDialog').open`, `shared evidence drawer for goal ${id}`);
+  assert.equal(await evaluate(`document.querySelector('dialog[open]').id`), 'goalInfoDialog');
+  assert.equal(await evaluate(`document.querySelectorAll('dialog.mapping-drawer').length`), 1,
+    'all goals and target cards reuse one native evidence drawer');
+  assert.equal(await evaluate(`!!document.querySelector('#goalInfoDialog .drawer-visual') &&
+    !!document.querySelector('#goalInfoDialog .mapping-content') &&
+    !!document.querySelector('#goalInfoDialog .limit-box') &&
+    !!document.querySelector('#goalInfoDialog .action-box')`), true);
+  assert.equal(await evaluate(`document.querySelector('#goalInfoDialog .goal-definition').textContent.includes(goals[${id - 1}][2])`), true);
 }
 
 async function key(key, code, virtualKey, text) {
@@ -155,6 +169,21 @@ async function capture(name) {
     await send('Page.navigate', { url: `${base}/sdg-impact?career=Data%20Analyst` });
     await waitFor(`document.querySelectorAll('.goal-node').length === 17 &&
       document.querySelector('#careerOptions [role=option]')`, 'initial independent goals and career suggestion');
+    assert.equal(await evaluate(`document.getElementById('allGoals').open`), false);
+    await evaluate(`document.querySelector('#allGoals > summary').focus()`);
+    await key('Enter', 'Enter', 13, '\r');
+    assert.equal(await evaluate(`document.getElementById('allGoals').open`), true,
+      'the complete list expands with native keyboard activation');
+    assert.equal(await evaluate(`!!document.querySelector('#mapLines, .mindmap-stage')`), false);
+    assert.equal(await evaluate(`document.querySelectorAll('#goalGrid [role=listitem]').length`), 17);
+    for (let id=1; id<=17; id++) {
+      await openGoal(id);
+      assert.match(await evaluate(`document.querySelector('#goalInfoDialog .goal-evidence-status').textContent`), /No career selected/);
+      assert.equal(await evaluate(`!!document.querySelector('#goalInfoDialog a[href*="onetonline.org"]')`), false);
+      await escapeDialog();
+      assert.equal(await evaluate(`document.activeElement.dataset.sdgId`), String(id));
+    }
+    console.log('PASS: collapsed list expands by keyboard; all 17 unselected goals share the rich drawer and restore focus');
     assert.equal(await evaluate(`document.getElementById('submitButton').disabled`), true);
     assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 0);
     await evaluate(`document.getElementById('career').focus()`);
@@ -170,7 +199,6 @@ async function capture(name) {
     assert.deepEqual(mindmapRequests.at(-1), { career_id: 'prototype:data-analyst' });
     assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 0);
     assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 0);
-    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line.tentative-line').length`), 1);
     assert.equal(await evaluate(`document.querySelector('.goal-node[data-sdg-id="9"]').classList.contains('tentative')`), true);
     assert.equal(await evaluate(`document.querySelector('#candidateSuggestions').hidden`), false);
     assert.equal(await evaluate(`document.querySelector('#learningContribution').hidden`), false);
@@ -184,18 +212,41 @@ async function capture(name) {
     assert.match(await evaluate(`document.querySelector('#assessmentStatus a').getAttribute('href')`), /career=Data%20Analyst/);
     await waitFor(`Array.from(document.querySelectorAll('.goal-node img')).every(img => img.complete && img.naturalWidth > 0)`, 'all 17 official goal icons');
     assert.equal(await evaluate(`document.querySelector('details.about').open`), false);
-    console.log('PASS: prototype has dashed classification-only suggestion, never a solid task-backed link');
+    console.log('PASS: prototype has a classification-only suggestion, never a task-backed claim');
 
-    await activate('.goal-node[data-sdg-id="9"]');
-    await waitFor(`document.getElementById('goalInfoDialog').open`, 'goal is not misleadingly highlighted');
-    assert.match(await evaluate(`document.getElementById('goalInfoCopy').textContent`), /UNVERIFIED CANDIDATE/);
+    await openGoal(9);
+    assert.match(await evaluate(`document.querySelector('#goalInfoDialog .goal-evidence-status').textContent`), /Classification-only guess/);
+    assert.equal(await evaluate(`!!document.querySelector('#goalInfoDialog a[href*="/prototype"]')`), false,
+      'a prototype ID must not become an invented O*NET occupation URL');
     await escapeDialog();
     assert.equal(await evaluate(`document.activeElement.dataset.sdgId`), '9');
+    const analyst = await evaluate(`fetch('/api/sdg/mindmap',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({career_id:'prototype:data-analyst'})}).then(r=>r.json())`);
+    for (const mapping of analyst.learning_pathway_mappings) {
+      await openGoal(mapping.sdg_id);
+      const copy = await evaluate(`document.querySelector('#goalInfoDialog .pathway-evidence').textContent`);
+      for (const statement of mapping.supporting_evidence) assert.ok(copy.includes(statement));
+      assert.ok(copy.includes(mapping.relevance_reason));
+      assert.ok(copy.includes(mapping.impact_limitations));
+      assert.ok(copy.includes(mapping.user_action));
+      const ids = await evaluate(`[...document.querySelectorAll('#goalInfoDialog .pathway-evidence [data-source-id]')].map(a=>a.dataset.sourceId)`);
+      assert.deepEqual(ids, mapping.evidence_source.map(source=>source.id));
+      assert.match(await evaluate(`document.querySelector('#goalInfoDialog .goal-evidence-status').textContent`), /missing evidence|No occupational Target/);
+      await capture(`sdg-pathway-evidence-${mapping.sdg_id}-desktop`);
+      if (mapping.sdg_id===4) {
+        await send('Emulation.setDeviceMetricsOverride',{width:390,height:1000,deviceScaleFactor:1,mobile:true});
+        assert.equal(await evaluate(`document.getElementById('goalInfoDialog').scrollWidth<=document.getElementById('goalInfoDialog').clientWidth+1`),true);
+        await capture('sdg-pathway-evidence-4-mobile');
+        await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});
+      }
+      await escapeDialog();
+    }
+    console.log('PASS: Goal 4/8 drawers retain exact separate pathway rationale, skills/practice, sources, limitations and actions');
     await send('Emulation.setDeviceMetricsOverride', {
       width: 390, height: 844, deviceScaleFactor: 1, mobile: true,
     });
     await sleep(200);
     assert.equal(await evaluate(`document.documentElement.scrollWidth <= window.innerWidth + 1`), true);
+    assert.equal(await evaluate(`getComputedStyle(document.getElementById('goalGrid')).gridTemplateColumns.split(' ').length`), 1);
     await capture('sdg-no-task-evidence-mobile');
     console.log('PASS: no-evidence mobile layout');
 
@@ -224,6 +275,10 @@ async function capture(name) {
         await checkTextContrast('.goal-rank-card h3, .score-review-status');
         backgrounds.push(await evaluate(`getComputedStyle(document.querySelector('.goal-rank-card')).backgroundColor`));
         await capture(`sdg-task-ranking-${width}-${theme}`);
+        await evaluate(`document.getElementById('allGoals').open=true;document.getElementById('allGoals').scrollIntoView({behavior:'instant',block:'start'})`);
+        await checkTextContrast('.goal-name, .goal-node-status');
+        assert.equal(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`), true);
+        await capture(`sdg-goals-list-${width}-${theme}`);
       }
       assert.notEqual(backgrounds[0],backgrounds[1],'new ranking cards follow the shared theme');
     }
@@ -237,8 +292,9 @@ async function capture(name) {
     await waitFor(`!!document.querySelector('.mapping-drawer[open]')`,'task evidence drawer');
     await activate('.mapping-drawer[open] .evidence-node');
     assert.equal(await evaluate(`document.querySelector('.mapping-drawer[open] .evidence-detail').textContent`),solar.mappings[0].supporting_evidence[0]);
-    assert.deepEqual(await evaluate(`[...document.querySelectorAll('.mapping-drawer[open] [data-source-id]')].map(x=>x.dataset.sourceId)`),
-      solar.mappings[0].evidence_source.map(source=>source.id));
+    const sourceLinks = await evaluate(`[...document.querySelectorAll('.mapping-drawer[open] [data-source-id]')].map(x=>({id:x.dataset.sourceId,url:x.getAttribute('href')}))`);
+    for (const source of solar.mappings[0].evidence_source)
+      assert.ok(sourceLinks.some(link=>link.id===source.id && link.url===source.url));
     assert.match(await evaluate(`document.querySelector('.mapping-drawer[open]').textContent`),/human review|Human review/);
     for (const [width,label] of [[1440,'desktop'],[390,'mobile']]) {
       await send('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:width<600});
@@ -248,6 +304,51 @@ async function capture(name) {
     await escapeDialog();
     assert.equal(await evaluate(`document.activeElement.classList.contains('mapping-details-trigger')`),true);
     console.log('PASS: target drawer wording, task IDs, source IDs and focus restoration match real API records');
+    for (let id=1; id<=17; id++) {
+      await openGoal(id);
+      const score = solar.goal_scores.find(entry=>entry.sdg_id===id);
+      const copy = await evaluate(`document.querySelector('#goalInfoDialog .goal-ranking-evidence:not(.goal-definition)').textContent`);
+      assert.ok(copy.includes(`${score.relevance_index}/100`));
+      for (const task of score.task_evidence) {
+        assert.ok(copy.includes(`Task ID ${task.task_id}`));
+        assert.ok(copy.includes(task.task));
+      }
+      await checkTextContrast('#goalInfoDialog .drawer-visual-copy h3, #goalInfoDialog .drawer-visual-copy p');
+      assert.equal(await evaluate(`document.getElementById('goalInfoDialog').scrollWidth <= document.getElementById('goalInfoDialog').clientWidth+1`), true);
+      await escapeDialog();
+      assert.equal(await evaluate(`document.activeElement.dataset.sdgId`), String(id));
+    }
+    console.log('PASS: every occupational Goal opens the same drawer with exact API task evidence and unchanged numeric values');
+    for (const width of [1440,390]) {
+      await send('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:width<600});
+      for (const theme of ['light','dark']) {
+        await evaluate(`FutureSkillTheme.setPreference(${JSON.stringify(theme)})`);
+        await openGoal(7);
+        assert.equal(await evaluate(`document.getElementById('goalInfoDialog').scrollWidth<=document.getElementById('goalInfoDialog').clientWidth+1`),true);
+        await checkTextContrast('#goalInfoDialog .goal-evidence-status, #goalInfoDialog .pathway-evidence p');
+        await key('Tab','Tab',9);
+        assert.equal(await evaluate(`!!document.activeElement.closest('#goalInfoDialog')`),true);
+        await capture(`sdg-unified-evidence-${width}-${theme}`);
+        await escapeDialog();
+      }
+    }
+    console.log('PASS: shared occupational evidence drawer is responsive in both themes and retains modal keyboard focus');
+
+    // Browser-only missing-source fixture; no application data or source CSV is changed.
+    const missing = {...solar, goal_scores:[],top_goal_scores:[],mappings:[],candidate_mappings:[],
+      task_data_status:'not_installed',task_profile:{representative_tasks:[],occupation_task_count:0}};
+    await evaluate(`window.__sdgOriginalFetch=window.fetch;
+      window.fetch=(url,options)=>String(url)==='/api/sdg/mindmap'
+        ? Promise.resolve(new Response(${JSON.stringify(JSON.stringify(missing))},{status:200,headers:{'Content-Type':'application/json'}}))
+        : window.__sdgOriginalFetch(url,options);
+      document.getElementById('careerForm').requestSubmit()`);
+    await waitFor(`!document.getElementById('submitButton').disabled && document.getElementById('taskGoalRankings').hidden`, 'explicit missing-source state');
+    await openGoal(1);
+    assert.match(await evaluate(`document.querySelector('#goalInfoDialog .goal-evidence-status').textContent`), /not installed/);
+    assert.equal(await evaluate(`document.querySelectorAll('#goalInfoDialog .task-score-evidence').length`), 0);
+    await escapeDialog();
+    await evaluate(`window.fetch=window.__sdgOriginalFetch;delete window.__sdgOriginalFetch`);
+    console.log('PASS: missing occupational source is explicit, with no invented task evidence or ranking');
     await career('Environmental Engineer');
     assert.match(await evaluate(`document.getElementById('candidateList').textContent`), /Goal 13/);
     assert.equal(await evaluate(`document.getElementById('pathway').hidden`), true);
@@ -273,7 +374,7 @@ async function capture(name) {
     await evaluate(`document.getElementById('careerForm').requestSubmit()`);
     assert.match(await evaluate(`document.getElementById('message').textContent`), /Select a supported career/);
     assert.equal(await evaluate(`document.getElementById('submitButton').disabled`), true);
-    assert.equal(await evaluate(`document.getElementById('mapCareerName').textContent`), 'Choose a supported career');
+    assert.equal(await evaluate(`document.getElementById('roleTitle').textContent`), 'Explore all 17 goals');
     assert.equal(mindmapRequests.length, attemptsBeforeInvalid);
     assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 0);
     console.log('PASS: arbitrary text cannot select a career, make a model request, or receive fallback links');
@@ -304,7 +405,11 @@ async function capture(name) {
     assert.equal(await evaluate(`document.getElementById('submitButton').disabled`), true);
     await send('Network.setBlockedURLs', { urls: [] });
     await career('Environmental Engineer');
-    assert.equal(await evaluate(`document.getElementById('mapCareerName').textContent`), 'Environmental Engineers');
+    assert.equal(await evaluate(`document.getElementById('roleTitle').textContent`), 'Environmental Engineers');
+    await openGoal(1);
+    await typeSearch('Data Analyst');
+    assert.equal(await evaluate(`document.getElementById('goalInfoDialog').open`), false,
+      'invalidating a career closes stale occupational evidence');
     console.log('PASS: search network failure is explicit and a later real search recovers');
 
     // Deliberately reverse two search responses. The response bodies come from
@@ -332,7 +437,7 @@ async function capture(name) {
         await typeSearch('environmental engineering');
         await waitFor(`!!document.querySelector('#careerOptions [role=option]')`, 'long occupational title');
         await sleep(250);
-        await checkTextContrast('.career-option-title, .career-option-status, #mapCareerName');
+        await checkTextContrast('.career-option-title, .career-option-status, #roleTitle');
         assert.equal(await evaluate(`document.documentElement.scrollWidth <= innerWidth + 1`), true);
         assert.equal(await evaluate(`[...document.querySelectorAll('#careerOptions [role=option]')].every(el=>el.getBoundingClientRect().height>=44)`), true);
         await capture(`sdg-search-${width}-${theme}`);
@@ -344,10 +449,16 @@ async function capture(name) {
     console.log('All SDG browser checks passed. Open-state screenshots: /tmp/sdg-drawer-{desktop,mobile}.png');
   } finally {
     if (socket) socket.close();
+    const exited = browser.exitCode === null
+      ? new Promise(resolve=>browser.once('exit',resolve)) : Promise.resolve();
     browser.kill('SIGTERM');
     for (const item of pending.values()) clearTimeout(item.timer);
-    await sleep(250);
-    fs.rmSync(profile, { recursive: true, force: true, maxRetries: 3 });
+    await exited;
+    try {
+      await fs.promises.rm(profile, {recursive:true,force:true,maxRetries:5,retryDelay:100});
+    } catch (error) {
+      console.warn('Temporary Chromium profile cleanup:',error.code);
+    }
   }
 })().catch(error => {
   console.error(error.stack || error);

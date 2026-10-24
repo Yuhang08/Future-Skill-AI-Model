@@ -12,9 +12,9 @@
 4. **Learning-preparation examples** describe FutureSkill practice activities
    under Targets 4.4 and 8.5, not occupational SDG contributions.
 
-The diagram preserves these distinctions. Solid edges are unreviewed narrow
-Target hypotheses; dashed edges are exploratory rankings or tentative ideas.
-Displaying an index for every Goal does not assign every occupation to it.
+The expandable 17-Goal list labels these distinctions in text. Tentative
+styling is only a visual aid, not evidence. Displaying an index for every Goal
+does not assign every occupation to it.
 
 ## Reproducible heuristic
 
@@ -68,8 +68,10 @@ Prototype roles have explicit IDs and do not receive invented occupation tasks.
 Unknown IDs return 404; arbitrary free text is not a selected career.
 
 The page keeps comparison indices concise. “Why this ranking?” disclosures,
-Goal dialogs and Target drawers provide the task wording, sources, rationale
-and limitations. Existing learning pathways remain available independently
+All Goal buttons and Target cards open one shared rich evidence drawer with
+the task wording, sources, rationale and limitations. Goals 4 and 8 retain
+separately labeled learning-preparation explanations where supported.
+Existing learning pathways remain available independently
 of whether an occupation has a narrow task-to-Target match.
 
 ## Official source records
