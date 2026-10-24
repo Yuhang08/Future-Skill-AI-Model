@@ -234,6 +234,29 @@ class SDGTargetPrecisionTests(unittest.TestCase):
                 self.assertEqual([t["task_id"] for t in match["task_evidence"]],
                                  ["900005"])
 
+    def test_task_ids_from_report_not_wrong_target_if_official_csv_installed(self):
+        # These task IDs appeared in the user's 83-record audit.
+        # Exact original texts are loaded from O*NET, never invented.
+        if not TASK_DATA.is_file():
+            self.skipTest("Official O*NET 31.0 task data not installed")
+        from reskilling.sdg_task_evidence import _read_index
+        index = _read_index(str(TASK_DATA), TASK_DATA.stat().st_mtime_ns)
+        suspicious = (
+            ("53-2031.00", "9643", "10.2"),   # One-off passenger assistance
+            ("53-3032.00", "19923", "13.2"),  # Lower-carbon route planning
+            ("29-1229.05", "17219", "6.3"),  # Public health education
+            ("29-1229.05", "17219", "12.3"), # Food sanitation lectures
+        )
+        for career_id, task_id, target in suspicious:
+            with self.subTest(task_id=task_id, target=target):
+                tasks = [row for row in index.get(career_id, [])
+                         if row["id"] == task_id]
+                self.assertEqual(len(tasks), 1,
+                                 f"Expected exactly one original O*NET Task ID {task_id}")
+                task = tasks[0]
+                self.assertFalse(_match_rule(task["task"], career_id,
+                                             RULES[target], task["type"]))
+
     def test_real_onet_regressions_if_installed(self):
         # This catches regressions against the repository's *real* O*NET data.
         if not TASK_DATA.is_file():
