@@ -8,6 +8,7 @@ import re
 
 from . import sdg_task_evidence as evidence
 from .sdg_occupation_rules import GOAL_NAMES, infer_occupation_sdg_mappings
+from .sdg_onet_context import get_context, importance_sort_key, sources_available, DWA_DOC, RATINGS_DOC
 
 # Distinctive multiword task themes. Matching means "possible topic", not
 # target achievement. Avoid misleading generic tokens: jobs, food, education
@@ -61,17 +62,20 @@ def _task_rows(career_id):
         str(evidence.TASK_DATA), evidence.TASK_DATA.stat().st_mtime_ns
     )
     rows = table.get(str(career_id), [])
-    return sorted(rows, key=lambda row: (row["type"].lower() != "core", row["id"])), (
+    return sorted(rows, key=lambda row: importance_sort_key(career_id, row)), (
         "available" if rows else "occupation_tasks_missing"
     )
 
 
-def _evidence(row):
+def _evidence(row, career_id):
+    context = get_context(career_id, row["id"])
     return {
         "task_id": row["id"],
         "task": row["task"],
         "task_type": row["type"],
         "date": row.get("date", ""),
+        "dwa_activities": context["dwas"],
+        "task_ratings": context["task_ratings"],
     }
 
 
@@ -82,7 +86,8 @@ def occupation_task_profile(career_id):
         "source_status": status,
         "occupation_task_count": len(rows),
         "core_task_count": sum(row["type"].lower() == "core" for row in rows),
-        "representative_tasks": [_evidence(row) for row in rows[:3]],
+        "representative_tasks": [_evidence(row, career_id) for row in rows[:3]],
+        "supporting_data_available": sources_available(),
         "source_url": f"https://www.onetonline.org/link/details/{career_id}"
             if rows else evidence.ONET_DOC,
         "evidence_scope": (
@@ -93,55 +98,93 @@ def occupation_task_profile(career_id):
 
 
 def _topic_candidates(career_id, title, rows):
-    """Conservative multiword phrase matches from genuine occupation tasks."""
+    """Use task phrases first; matching DWA names is explicitly weaker.
+
+    DWAs and O*NET ratings are occupational evidence, NOT validated SDG
+    crosswalks. A general activity must never be presented as a proven target.
+    """
     grouped = {}
     for row in rows:
+        dwas = get_context(career_id, row["id"])["dwas"]
         for goal_id, expressions in TASK_TOPICS.items():
-            if any(re.search(regex, row["task"], re.IGNORECASE) for regex in expressions):
-                grouped.setdefault(goal_id, []).append(row)
-    ranked = sorted(
-        grouped.items(),
-        key=lambda pair: (
-            -sum(row["type"].lower() == "core" for row in pair[1]),
-            -len(pair[1]), pair[0]
-        ),
-    )
+            task_match = any(re.search(pattern, row["task"], re.IGNORECASE)
+                             for pattern in expressions)
+            dwa_match = not task_match and any(
+                re.search(pattern, dwa["name"], re.IGNORECASE)
+                for dwa in dwas for pattern in expressions
+            )
+            if task_match or dwa_match:
+                grouped.setdefault(goal_id, []).append(
+                    (row, "task_topic" if task_match else "dwa_topic")
+                )
+    ranked = sorted(grouped.items(), key=lambda pair: (
+        -sum(row["type"].lower() == "core" for row, _ in pair[1]),
+        -sum(kind == "task_topic" for _, kind in pair[1]),
+        -len(pair[1]), pair[0]
+    ))
     suggestions = []
     for goal_id, matched_rows in ranked[:3]:
-        evidence_rows = [_evidence(row) for row in matched_rows[:2]]
+        task_hits = [row for row, kind in matched_rows if kind == "task_topic"]
+        dwa_only = not task_hits
+        selected = (task_hits or [row for row, _ in matched_rows])[:2]
+        candidate_tier = "dwa_topic" if dwa_only else "task_topic"
+        evidence_rows = [_evidence(row, career_id) for row in selected]
         explanation = (
-            f"The official O*NET tasks for {title} mention a specific activity "
-            f"potentially relevant to SDG {goal_id}. A task-topic overlap is "
-            "NOT a verified UN target alignment or measurable impact."
+            f"O*NET 31.0 lists occupation-specific duties for {title}. "
+            + (
+                f"A linked Detailed Work Activity (DWA) names a theme related "
+                f"to SDG {goal_id}; the original task may not mention the theme."
+                if dwa_only else
+                f"The actual Task Statement text includes a phrase potentially "
+                f"related to SDG {goal_id}."
+            ) +
+            " This is a goal-level research hypothesis, NOT an established "
+            "UN Target alignment or evidence of measurable SDG impact."
         )
+        sources = [
+            {"id": "onet-task-statements", "label": "O*NET 31.0 Task Statements",
+             "url": evidence.ONET_DOC,
+             "scope": "Occupation task wording and ID only."},
+            {"id": f"un-sdg-goal-{goal_id}", "label": f"UN SDG {goal_id}",
+             "url": f"https://sdgs.un.org/goals/goal{goal_id}",
+             "scope": "UN goal definition; no occupational impact claim."},
+        ]
+        if dwa_only:
+            sources.append({
+                "id": "onet-task-dwa", "label": "O*NET 31.0 Tasks to DWAs",
+                "url": DWA_DOC,
+                "scope": "The DWA activity is joined using the exact occupation and Task ID."
+            })
         suggestions.append({
-            "career_id": career_id, "sdg_id": goal_id,
+            "career_id": career_id,
+            "sdg_id": goal_id,
             "sdg_name": GOAL_NAMES[goal_id],
             "target_id": None,
             "mapping_kind": "task_context_candidate",
             "review_status": "human_review_required",
-            "specificity": "onet_task_topic",
-            "candidate_tier": "task_topic",
-            "match_basis": "Task topic in actual O*NET occupation statement",
+            "specificity": "onet_dwa_topic" if dwa_only else "onet_task_topic",
+            "candidate_tier": candidate_tier,
+            "match_basis": (
+                "Official O*NET DWA linked to occupation Task ID" if dwa_only
+                else "Phrase found in occupation's official Task Statement"
+            ),
             "relevance_reason": explanation,
             "task_evidence": evidence_rows,
             "supporting_evidence": [
-                f"O*NET Task ID {e['task_id']}: {e['task']}" for e in evidence_rows
+                f"O*NET Task ID {e['task_id']}: {e['task']}"
+                for e in evidence_rows
             ],
-            "evidence_source": [
-                {"id": "onet-task-statements", "label": "O*NET 31.0 official Task Statements",
-                 "url": evidence.ONET_DOC,
-                 "scope": "Exact task wording, no SDG effect measured."},
-                {"id": f"un-sdg-goal-{goal_id}", "label": f"UN SDG {goal_id}",
-                 "url": f"https://sdgs.un.org/goals/goal{goal_id}",
-                 "scope": "Official goal definition; association needs independent review."},
-            ],
-            "supporting_source_ids": ["onet-task-statements", f"un-sdg-goal-{goal_id}"],
+            "evidence_source": sources,
+            "supporting_source_ids": [item["id"] for item in sources],
             "impact_limitations": (
-                "Preliminary candidate from the occupation's actual task wording. "
-                "NOT a validated UN target mapping; no SDG impact or causal claim."
+                "Preliminary thematic candidate using genuine O*NET duties or "
+                "linked work activities. NOT a validated UN target link, "
+                "impact assessment or probability estimate."
             ),
-            "user_action": "Read the underlying Task ID, compare to the precise UN target, and review evidence.",
+            "user_action": (
+                "Inspect the exact O*NET Task and DWA IDs, compare the actual "
+                "UN target wording, and seek independent outcome evidence."
+            ),
         })
     return suggestions
 
@@ -149,9 +192,9 @@ def _topic_candidates(career_id, title, rows):
 def candidate_mappings_for_occupation(career_id, title, confirmed_task_goals=()):
     """Return ranked, auditable ideas for each of 923 occupations.
 
-    Tier 1: distinctive phrases in actual task descriptions (still unreviewed).
-    Tier 2: broad occupational-title/SOC guess, with task descriptions shown as
-    context *only*, not falsely cited as evidence of the proposed SDG.
+    Tier 1: distinctive task-topic phrases; linked DWA-topic clues are weaker.
+    Tier 2: broad title/SOC classification ONLY, with task profile as context.
+    No tier measures verified SDG impact or an objective match probability.
     """
     rows, _ = _task_rows(career_id)
     strict_goals = set(confirmed_task_goals)
