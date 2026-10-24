@@ -41,12 +41,15 @@ class SDGCareerTests(unittest.TestCase):
             self.assertEqual(len(result), 1)
             self.assertEqual(result[0]["id"], "17-2081.00")
 
-    def test_no_unverified_title_guess_is_drawn_on_the_graph(self):
+    def test_chef_has_unverified_but_explicitly_lower_tier_suggestion(self):
         data = self.sdg("35-1011.00")  # Chefs and Head Cooks
         self.assertEqual(data["task_data_status"], "not_installed")
         self.assertEqual(data["status"], "no_task_evidence")
         self.assertEqual(data["mappings"], [])
         self.assertTrue(any(x["sdg_id"] == 12 for x in data["candidate_mappings"]))
+        self.assertTrue(all(x["candidate_tier"] == "classification_only"
+                            for x in data["candidate_mappings"]))
+        self.assertEqual(data["task_profile"]["occupation_task_count"], 0)
         self.assertEqual(data["learning_pathway_mappings"], [])
 
     def test_training_goal_4_and_8_are_separate_from_occupation(self):
@@ -80,6 +83,9 @@ class SDGCareerTests(unittest.TestCase):
                 self.assertEqual(data["mappings"], [])
                 self.assertEqual(data["task_data_status"], "not_installed")
                 self.assertTrue(data["candidate_mappings"])
+                self.assertEqual(data["task_profile"]["source_status"], "not_installed")
+                self.assertEqual(data["task_profile"]["representative_tasks"], [])
+                self.assertLessEqual(len(data["candidate_mappings"]), 3)
 
     def test_unknown_and_malformed_career_ids(self):
         self.assertEqual(self.search("the invalid"), [])
@@ -135,6 +141,39 @@ class SDGCareerTests(unittest.TestCase):
                 self.assertEqual(mapping["task_evidence"][0]["task_id"], "900002")
                 self.assertNotIn("900001", [task["task_id"] for task in mapping["task_evidence"]])
                 self.assertIn("onet-task-statements", mapping["supporting_source_ids"])
+                self.assertEqual(data["task_profile"]["occupation_task_count"], 2)
+                self.assertEqual({x["task_id"] for x in
+                                  data["task_profile"]["representative_tasks"]},
+                                 {"900001", "900002"})
+                self.assertTrue(all(x["sdg_id"] != 12 for x in
+                                    data["candidate_mappings"]))
+
+    def test_task_topic_is_not_promoted_to_a_verified_target(self):
+        # Synthetic test ONLY. An IT role describing educational software can
+        # have a lower-tier SDG 4 suggestion without inventing Target 4.1.
+        with tempfile.TemporaryDirectory() as folder:
+            p = Path(folder) / "task_statements.csv"
+            with p.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(stream, fieldnames=[
+                    "O*NET-SOC Code", "Title", "Task ID", "Task", "Task Type", "Date"])
+                writer.writeheader()
+                writer.writerow({
+                    "O*NET-SOC Code": "15-1252.00",
+                    "Title": "Software Developers",
+                    "Task ID": "990011",
+                    "Task": "Design educational software for students.",
+                    "Task Type": "Core", "Date": "10/2026",
+                })
+            with patch("reskilling.sdg_task_evidence.TASK_DATA", p):
+                response = self.sdg("15-1252.00")
+                self.assertFalse(any(x["target_id"] == "4.1"
+                                     for x in response["mappings"]))
+                candidate = next(x for x in response["candidate_mappings"]
+                                 if x["sdg_id"] == 4)
+                self.assertEqual(candidate["candidate_tier"], "task_topic")
+                self.assertIsNone(candidate["target_id"])
+                self.assertEqual(candidate["task_evidence"][0]["task_id"], "990011")
+                self.assertEqual(response["task_profile"]["core_task_count"], 1)
 
     def test_generic_synthetic_food_inventory_is_not_target_12_3(self):
         from reskilling.sdg_task_evidence import TARGET_RULES, _match_rule
