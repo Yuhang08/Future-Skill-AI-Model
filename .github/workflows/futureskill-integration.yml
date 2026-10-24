@@ -1,0 +1,36 @@
+name: FutureSkill SDG and Learning Progress
+on:
+  push:
+    branches:
+      - feature/all-923-career-sdg-mapping
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Python requirements
+        run: python -m pip install -r requirements.txt
+      - name: SDG model and regression tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -p 'test_sdg*.py' -v
+      - name: Site integration tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -p 'test_integration.py' -v
+      - name: Level progress unit tests and JavaScript syntax
+        run: |
+          node --check src/reskilling/static/app.js
+          node --check src/static/sdg-career-search.js
+          node tests/test_reskilling_progress.cjs
