@@ -207,6 +207,30 @@ def task_supported_mappings(career_id, title):
             }
             for item, _ in selected
         ]
+        actual_sources = [
+            {"id": "onet-task-statements",
+             "label": "O*NET 31.0 · Occupation-specific Task Statements",
+             "url": ONET_DOC,
+             "scope": "Original task text and ID; no demonstrated SDG outcome."},
+            {"id": f"un-sdg-target-{target}",
+             "label": f"United Nations · SDG Target {target}",
+             "url": f"https://sdgs.un.org/goals/goal{goal}",
+             "scope": "Official target definition; mapping is a FutureSkill heuristic."},
+        ]
+        if any(row["task_ratings"] for row in evidence):
+            actual_sources.append({
+                "id": "onet-task-ratings",
+                "label": "O*NET 31.0 Task Ratings",
+                "url": RATINGS_DOC,
+                "scope": "Importance/relevance of actual job tasks; not SDG confidence.",
+            })
+        if any(row["dwa_activities"] for row in evidence):
+            actual_sources.append({
+                "id": "onet-task-dwa",
+                "label": "O*NET 31.0 Tasks to DWAs",
+                "url": DWA_DOC,
+                "scope": "Actual detailed work activity linked by job code and Task ID.",
+            })
         mappings.append({
             "career_id": career_id,
             "sdg_id": goal,
@@ -227,28 +251,8 @@ def task_supported_mappings(career_id, title):
                 f"Official O*NET 31.0 Task ID {x['task_id']} ({x['task_type'] or 'unclassified'}): {x['task']}"
                 for x in evidence
             ],
-            "evidence_source": [
-                {"id": "onet-task-statements",
-                 "label": "O*NET 31.0 · Occupation-specific Task Statements",
-                 "url": ONET_DOC,
-                 "scope": f"Actual task text and ID for {career_id}; not evidence of achieved SDG impact."},
-                {"id": f"un-sdg-target-{target}",
-                 "label": f"United Nations · SDG Target {target}",
-                 "url": f"https://sdgs.un.org/goals/goal{goal}",
-                 "scope": "Target definition only; relationship is a project-authored heuristic."},
-                {"id": "onet-task-ratings",
-                 "label": "O*NET 31.0 Task Ratings (where available)",
-                 "url": RATINGS_DOC,
-                 "scope": "Occupational task importance/relevance, not SDG confidence."},
-                {"id": "onet-task-dwa",
-                 "label": "O*NET 31.0 Tasks to DWAs (where available)",
-                 "url": DWA_DOC,
-                 "scope": "Detailed work activities joined by occupation and Task ID."},
-            ],
-            "supporting_source_ids": [
-                "onet-task-statements", f"un-sdg-target-{target}",
-                "onet-task-ratings", "onet-task-dwa"
-            ],
+            "evidence_source": actual_sources,
+            "supporting_source_ids": [row["id"] for row in actual_sources],
             "user_action": (
                 "Check the O*NET Task ID and UN target. Human review and evidence "
                 "of actual outcomes are required before claiming SDG impact."
