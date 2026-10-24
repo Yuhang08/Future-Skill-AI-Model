@@ -21,8 +21,11 @@
     while ((node = walker.nextNode())) {
       const parent = node.parentElement;
       if (!parent || parent.closest("script,style,textarea,[data-i18n-ignore]")) continue;
-      const original = originalText.has(node) ? originalText.get(node) : node.nodeValue;
-      if (!originalText.has(node)) originalText.set(node, original);
+      let original = originalText.has(node) ? originalText.get(node) : node.nodeValue;
+      if (originalText.has(node) && node.nodeValue !== localized(original) && node.nodeValue !== original) {
+        original = node.nodeValue; // App updated a dynamic text node: preserve the new value.
+      }
+      originalText.set(node, original);
       const desired = localized(original);
       if (node.nodeValue !== desired) node.nodeValue = desired;
     }
