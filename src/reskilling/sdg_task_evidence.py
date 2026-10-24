@@ -45,13 +45,13 @@ TARGET_RULES = (
         # hazardous materials does not prove waste generation is reduced.
         "topic": r"\b(?:wast\w*|recycl\w*|reus\w*|scrap|"
                  r"reclaim\w*|recover\w*)\b",
-        "action": r"\b(?:reduc\w*|prevent\w*|recycl\w*|reus\w*|"
+        "action": r"\b(?:reduc\w*|prevent\w*|recycl(?:e|es|ed|ing)|reus(?:e|es|ed|ing)|"
                   r"recover\w*|reclaim\w*|collect\w*|sort\w*|"
                   r"implement\w*|manag\w*|process\w*|coordinat\w*)\b",
         "operational_pattern": (
             r"\b(?:reduc\w*|prevent\w*|minimi[sz]\w*)\b.{0,110}"
             r"\b(?:wast\w*|scrap|discards?)\b|"
-            r"\b(?:recycl\w*|reus\w*|reclaim\w*|recover\w*)\b"
+            r"\b(?:recycl(?:e|es|ed|ing)|reus(?:e|es|ed|ing)|reclaim\w*|recover\w*)\b"
             r".{0,110}\b(?:wast\w*|scrap|materials?|products?)\b|"
             r"\b(?:collect\w*|sort\w*|process\w*|manag\w*|"
             r"coordinat\w*|implement\w*)\b.{0,110}"
@@ -60,6 +60,10 @@ TARGET_RULES = (
         "exclude": r"\b(?:teach\w*|train\w*|educat\w*|instruct\w*|"
                    r"curricul\w*|workshops?|seminars?|"
                    r"awareness presentations?)\b",
+        # "prevent escape of waste matter" describes containment, not
+        # material waste prevention; "recyclable" alone is an adjective,
+        # not proof any recycling actually takes place.
+        "exclude": r"\b(?:waste matter|bodily waste|disposal-only operations?)\b",
         "core_only": True,
         "note": "Only a Core waste-prevention/reuse/recycling operation suggests "
                 "12.5. Generic waste disposal and training do not establish it.",
@@ -149,7 +153,8 @@ TARGET_RULES = (
                   r"improv|operat|design|remediat|filter)\w*\b",
         # Training the public about sewage risks is not directly improving
         # wastewater treatment or water quality.
-        "exclude": r"\b(?:public health education|health education programs?|"
+        "exclude": r"\b(?:boiler water|boiler feedwater|steam boiler water|"
+                   r"public health education|health education programs?|"
                    r"train\w*|teach\w*|educat\w*|lectur\w*|"
                    r"public presentations?|workshops?)\b",
         "core_only": True,
