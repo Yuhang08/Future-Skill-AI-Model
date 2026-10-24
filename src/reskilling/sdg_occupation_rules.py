@@ -20,11 +20,10 @@ GOAL_NAMES = {
 }
 
 # Standard Occupational Classification major groups: *theme*, not SDG evidence.
-# Every SOC major group present in career_profiles_clean.csv is included.
+# NOT every SOC group is assigned an SDG. A broad job type is not evidence of
+# actual SDG contribution; do NOT assign Goal 8 merely because a job exists.
 MAJOR_GROUP_THEMES = {
     # These are broad DISCOVERY THEMES. They are not verified target links.
-    "11": ((8,), "management and business operations"),
-    "13": ((8,), "business and financial operations"),
     "15": ((9,), "computer and mathematical occupations"),
     "17": ((9,), "architecture and engineering"),
     "19": ((9,), "scientific research and investigation"),
@@ -37,9 +36,6 @@ MAJOR_GROUP_THEMES = {
     "33": ((16,), "protective and public services"),
     "35": ((12,), "food preparation and consumption"),
     "37": ((11,), "building and grounds maintenance"),
-    "39": ((8,), "personal and client services"),
-    "41": ((8,), "sales and commercial operations"),
-    "43": ((8,), "office and administrative support"),
     "45": ((2, 15), "farming, fisheries and natural resources"),
     "47": ((9, 11), "construction and the built environment"),
     "49": ((9, 12), "installation, repair and maintenance"),
@@ -50,11 +46,20 @@ MAJOR_GROUP_THEMES = {
 # More specific titles take priority over the broad occupational major group.
 # Ordered from more specific to more general; return at most three theme goals.
 TITLE_THEMES = (
+    # Explicit specialist/industry titles are still only topic hypotheses.
+    # Governance and renewable-energy managers should NOT inherit SDG 8.
+    (r"\blegislators?\b", (16,), "legislative governance"),
+    (r"\bcomputer and information systems managers?\b",
+     (9,), "digital infrastructure and information systems"),
+    (r"\b(?:biofuels? production|biomass power plant|hydroelectric production) managers?\b",
+     (7,), "renewable power operations"),
+    (r"\b(?:social and community service managers?)\b",
+     (10,), "community and social inclusion services"),
     # Specific occupational specialties take precedence over SOC fallback.
     (r"\benvironmental engineers?\b", (6, 9, 13), "environmental engineering"),
     (r"\b(?:water/wastewater|wastewater|water treatment|sewage|sanitation|hydrolog(?:ist|y|ical))\b",
      (6,), "water resource protection and sanitation"),
-    (r"\b(?:solar|wind energy|wind turbine|renewable energy|biofuel)\b",
+    (r"\b(?:solar|wind energy|wind turbine|renewable energy|biofuels?)\b",
      (7, 9, 13), "renewable energy technologies"),
     (r"\b(?:climate change|climatolog(?:ist|y)|carbon emissions?|greenhouse gas)\b",
      (13,), "climate analysis or mitigation"),
@@ -109,8 +114,9 @@ def _suggestion(career_id, career_title):
     if major_group in MAJOR_GROUP_THEMES:
         goals, theme = MAJOR_GROUP_THEMES[major_group]
         return goals, "broad SOC group: " + theme, "soc_group"
-    # Do not invent SDG 8 when a prototype or code is unrecognised.
-    return (), "insufficient occupational information", "unassessed"
+    # No arbitrary default Goal 8 for generic management/business roles.
+    # The app may still show the real O*NET tasks without inventing a goal.
+    return (), "no occupation-specific SDG rule", "unassessed"
 
 
 def suggested_goal_ids(career_id, career_title):
