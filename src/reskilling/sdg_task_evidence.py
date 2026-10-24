@@ -24,28 +24,45 @@ ONET_DOC = "https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html"
 TARGET_RULES = (
     {
         "target": "12.3", "goal": 12,
-        "topic": r"\b(?:food|ingredients?|meals?|perishable)\b",
-        "action": r"\b(?:reduc\w*|prevent\w*|minimi[sz]\w*|avoid\w*|divert\w*|donat\w*|reus\w*|recycl\w*)\b",
-        "object": r"\b(?:wast\w*|spoil\w*|discard\w*|leftovers?|surplus)\b",
-        "note": "Food-waste prevention may relate to Target 12.3; measured food waste reduction is not established.",
+        # Target 12.3 is about *preventing/reducing* food loss and waste;
+        # collecting or recycling already-discarded food is not by itself
+        # the same outcome. Require an explicit prevention/reduction action.
+        "topic": r"\b(?:food|ingredients?|meals?|perishable|edible)\b",
+        "action": r"\b(?:reduc\w*|prevent\w*|minimi[sz]\w*|avoid\w*|"
+                  r"donat\w*)\b",
+        "object": r"\b(?:wast\w*|spoil\w*|discard\w*|leftovers?|surplus|"
+                  r"food loss(?:es)?)\b",
+        "exclude": r"\b(?:curricul\w*|train\w*|teach\w*|"
+                   r"educat\w*|workshops?|seminars?)\b",
+        "core_only": True,
+        "note": "Explicit Core duties preventing/reducing food loss or food "
+                "waste may relate to 12.3. Collecting food waste alone does not.",
     },
     {
         "target": "12.5", "goal": 12,
-        # Waste treatment/recycling as an actual occupation task; mentioning
-        # recycling in a presentation or a TRAINING curriculum is not proof
-        # the occupation undertakes waste reduction.
-        "topic": r"\b(?:wast\w*|recycl\w*|scrap materials?|"
-                 r"reusable materials?|resource recovery)\b",
+        # A recycling/reuse or real waste-prevention operation is required.
+        # Disposing of waste, removing waste from a body, or mere handling of
+        # hazardous materials does not prove waste generation is reduced.
+        "topic": r"\b(?:wast\w*|recycl\w*|reus\w*|scrap|"
+                 r"reclaim\w*|recover\w*)\b",
         "action": r"\b(?:reduc\w*|prevent\w*|recycl\w*|reus\w*|"
-                  r"recover\w*|collect\w*|sort\w*|operat\w*|"
+                  r"recover\w*|reclaim\w*|collect\w*|sort\w*|"
                   r"implement\w*|manag\w*|process\w*|coordinat\w*)\b",
-        "object": r"\b(?:wast\w*|recycl\w*|scrap|reus\w*|recovery)\b",
+        "operational_pattern": (
+            r"\b(?:reduc\w*|prevent\w*|minimi[sz]\w*)\b.{0,110}"
+            r"\b(?:wast\w*|scrap|discards?)\b|"
+            r"\b(?:recycl\w*|reus\w*|reclaim\w*|recover\w*)\b"
+            r".{0,110}\b(?:wast\w*|scrap|materials?|products?)\b|"
+            r"\b(?:collect\w*|sort\w*|process\w*|manag\w*|"
+            r"coordinat\w*|implement\w*)\b.{0,110}"
+            r"\b(?:recycl\w*|reus\w*|reclaim\w*|scrap (?:metal|materials?))\b"
+        ),
         "exclude": r"\b(?:teach\w*|train\w*|educat\w*|instruct\w*|"
                    r"curricul\w*|workshops?|seminars?|"
                    r"awareness presentations?)\b",
         "core_only": True,
-        "note": "A core operational recycling/waste-prevention task may "
-                "relate to Target 12.5; discussion or training alone does not.",
+        "note": "Only a Core waste-prevention/reuse/recycling operation suggests "
+                "12.5. Generic waste disposal and training do not establish it.",
     },
     {
         "target": "1.3", "goal": 1,
@@ -106,9 +123,18 @@ TARGET_RULES = (
     },
     {
         "target": "6.3", "goal": 6,
-        "topic": r"\b(?:wastewater|sewage|water pollution|water treatment|water quality)\b",
-        "action": r"\b(?:treat|purif|test|monitor|remov|control|assess|improv|operat|design)\w*\b",
-        "note": "Water treatment and pollution management may connect to Target 6.3.",
+        "topic": r"\b(?:wastewater|sewage|water pollution|water treatment|"
+                 r"water quality|water contamination)\b",
+        "action": r"\b(?:treat|purif|test|monitor|remov|control|assess|"
+                  r"improv|operat|design|remediat|filter)\w*\b",
+        # Training the public about sewage risks is not directly improving
+        # wastewater treatment or water quality.
+        "exclude": r"\b(?:public health education|health education programs?|"
+                   r"train\w*|teach\w*|educat\w*|lectur\w*|"
+                   r"public presentations?|workshops?)\b",
+        "core_only": True,
+        "note": "Core water-quality or wastewater intervention may suggest 6.3; "
+                "public-health lectures mentioning sewage do not prove it.",
     },
     {
         "target": "7.2", "goal": 7,
@@ -143,9 +169,17 @@ TARGET_RULES = (
     },
     {
         "target": "10.2", "goal": 10,
-        "topic": r"\b(?:persons with disabilities|people with disabilities|disability access|social inclusion|accessibility barriers)\b",
-        "action": r"\b(?:provid|improv|facilitat|develop|assess|assist|support|design|remov)\w*\b",
-        "note": "Disability inclusion/accessibility services may connect to Target 10.2.",
+        # Target 10.2 is promoting inclusion. One-off customer assistance
+        # (including passengers with disabilities) does not establish this.
+        "topic": r"\b(?:disability inclusion|social inclusion|"
+                 r"accessibility barriers?|inclusive services?|"
+                 r"equitable access|social integration|"
+                 r"disability rights|equal access to (?:services?|employment|education))\b",
+        "action": r"\b(?:improv|facilitat|develop|implement|"
+                  r"remov|promot|expand|increas|design|advoc)\w*\b",
+        "core_only": True,
+        "note": "Explicit Core activities promoting systematic social/economic "
+                "inclusion may suggest 10.2. Routine passenger assistance does not.",
     },
     {
         "target": "11.2", "goal": 11,
@@ -155,9 +189,21 @@ TARGET_RULES = (
     },
     {
         "target": "13.2", "goal": 13,
-        "topic": r"\b(?:climate chang\w*|greenhouse gas|carbon emissions?|climate adaptation)\b",
-        "action": r"\b(?:assess|reduc|mitigat|develop|model|plan|monitor|analys|analyz|control)\w*\b",
-        "note": "Explicit climate mitigation/adaptation tasks may connect to Target 13.2.",
+        "topic": r"\b(?:climate chang\w*|greenhouse gas|"
+                 r"carbon emissions?|climate adaptation|climate mitigation)\b",
+        "action": r"\b(?:integrat|formulat|develop|implement|"
+                  r"coordinat|draft|revis|design|plan)\w*\b",
+        # UN 13.2 specifically concerns integrating measures into policies,
+        # strategies and planning. Driver route planning is NOT climate policy.
+        "policy_scope": r"\b(?:climate polic(?:y|ies)|"
+                        r"national (?:climate |environmental )?strateg(?:y|ies)|"
+                        r"(?:national|public|government) polic(?:y|ies)|"
+                        r"climate action plans?|climate strateg(?:y|ies)|"
+                        r"(?:adaptation|mitigation) strateg(?:y|ies)|"
+                        r"climate-related (?:strategic|land-use) planning)\b",
+        "core_only": True,
+        "note": "Core climate policy/strategy integration duties may suggest "
+                "Target 13.2. Fuel-efficient route planning is a different scope.",
     },
     {
         "target": "14.2", "goal": 14,
@@ -192,6 +238,9 @@ def _match_rule(task, code, rule, task_type=None):
             return False
     if rule.get("exclude") and re.search(rule["exclude"], task, re.IGNORECASE):
         return False
+    for key in ("policy_scope", "operational_pattern"):
+        if rule.get(key) and not re.search(rule[key], task, re.IGNORECASE):
+            return False
     for key in ("topic", "action", "object"):
         if rule.get(key) and not re.search(rule[key], task, re.IGNORECASE):
             return False
