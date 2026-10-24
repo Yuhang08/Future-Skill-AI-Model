@@ -54,7 +54,8 @@ class SDGCareerTests(unittest.TestCase):
                 self.assertIn('not independently validated', limitations)
             else:
                 self.assertIn('impact', limitations)
-                self.assertIn('not verified', limitations)
+                self.assertIn('no un target', limitations)
+                self.assertIn('measured impact', limitations)
 
     def test_existing_occupational_alias_mappings_are_preserved(self):
         for title, career_id in (
