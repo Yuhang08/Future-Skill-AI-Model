@@ -116,12 +116,28 @@ class SDGCareerTests(unittest.TestCase):
                         self.assertEqual(result["task_data_status"],
                                          "occupation_tasks_missing")
                     for suggestion in result["candidate_mappings"]:
-                        self.assertIn(suggestion["candidate_tier"], (
-                            "task_topic", "classification_only"))
-                        if suggestion["candidate_tier"] == "classification_only":
+                        tier = suggestion["candidate_tier"]
+                        self.assertIn(tier, (
+                            "task_topic", "dwa_topic", "classification_only"))
+                        if tier == "classification_only":
+                            # Broad classification guesses must NOT fabricate
+                            # occupation-specific task evidence.
                             self.assertEqual(suggestion["task_evidence"], [])
                         else:
+                            # Both text-topic and DWA-topic candidates must
+                            # reference genuine O*NET occupation task IDs.
                             self.assertTrue(suggestion["task_evidence"])
+                            self.assertTrue(all(
+                                item["task_id"].isdigit()
+                                for item in suggestion["task_evidence"]
+                            ))
+                            if tier == "dwa_topic":
+                                # The DWA association must come from the
+                                # exact occupational task, not a job-title guess.
+                                self.assertTrue(any(
+                                    item.get("dwa_activities")
+                                    for item in suggestion["task_evidence"]
+                                ))
 
     def test_unknown_and_malformed_career_ids(self):
         self.assertEqual(self.search("the invalid"), [])
