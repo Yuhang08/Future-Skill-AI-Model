@@ -5,6 +5,7 @@ from difflib import SequenceMatcher
 from functools import lru_cache
 
 from .catalog import CAREERS
+from .sdg_occupation_rules import infer_occupation_sdg_mappings
 from career_engine import load_careers
 
 
@@ -162,7 +163,7 @@ def search_sdg_careers(query="", limit=12):
             "id": career_id,
             "title": career["title"],
             "kind": career["kind"],
-            "mapping_availability": "curated" if career_id in curated_ids else "not_reviewed",
+            "mapping_availability": "curated" if career_id in curated_ids else "suggested",
             "matched_by": matched_by,
         }
 
@@ -258,12 +259,13 @@ def _build_alignment(career_id, current_skills=None):
             "career": career["title"],
             "career_id": career_id,
             "pathway_career": None,
-            "status": "not_reviewed",
-            "mappings": [],
+            "status": "suggested",
+            "mappings": infer_occupation_sdg_mappings(career_id, career["title"]),
             "pathway_skills": [],
             "evidence_scope": (
-                "This supported career has not been reviewed against the current "
-                "curated SDG targets. No target relationship is inferred."
+                "These are rule-based thematic suggestions from the occupation "
+                "title or SOC major group, not reviewed target links or evidence "
+                "that this career causes measurable SDG impact."
             ),
         }
 
@@ -326,6 +328,14 @@ def _build_alignment(career_id, current_skills=None):
             "impact_limitations": REVIEWED_SCOPE,
         })
 
+    # Keep the five reviewed *preparation* pathways unchanged, while adding
+    # clearly distinct occupational-theme suggestions for specialist roles.
+    # Never replace a curated target mapping or duplicate its goal icon.
+    reviewed_goal_ids = {item["sdg_id"] for item in mappings}
+    mappings.extend(
+        mapping for mapping in infer_occupation_sdg_mappings(career_id, career["title"])
+        if mapping["sdg_id"] not in reviewed_goal_ids
+    )
     return {
         "career": career["title"],
         "career_id": career_id,
