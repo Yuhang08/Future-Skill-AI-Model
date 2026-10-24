@@ -1317,9 +1317,13 @@ function createSdgAlignment(career) {
     const title = document.createElement("strong");
     title.textContent = "Potential relationship, not proven impact";
     heading.append(kicker, title);
+    const hasTaskCatalogue = alignment && alignment.task_data_status === "available";
+    const taskRuleCandidate = alignment && alignment.status === "task_supported";
     const badge = document.createElement("span");
-    badge.className = `sdg-status${alignment && alignment.status === "curated" ? "" : " unreviewed"}`;
-    badge.textContent = alignment && alignment.status === "curated" ? "Potential alignment" : "Not yet reviewed";
+    badge.className = "sdg-status unreviewed";
+    badge.textContent = taskRuleCandidate
+        ? "Task-rule candidate · needs review"
+        : hasTaskCatalogue ? "No task-target match" : "Task evidence unavailable";
     head.append(heading, badge);
     section.appendChild(head);
 
@@ -1337,16 +1341,26 @@ function createSdgAlignment(career) {
         });
         body.appendChild(chips);
         const reason = document.createElement("p");
-        reason.textContent = mappings[0].relevance_reason || mappings[0].target_summary || "";
+        reason.textContent = `${mappings[0].relevance_reason || mappings[0].target_summary || ""} This is a rule-based candidate, not an independently reviewed or measured SDG relationship.`;
         body.appendChild(reason);
     } else {
         const note = document.createElement("p");
-        note.textContent = "No curated role-to-target mapping is available for this career yet.";
+        note.textContent = hasTaskCatalogue
+            ? "No narrow task-to-target candidate was found for this career. That does not establish that no potential connection exists."
+            : "O*NET task evidence is unavailable for this career, so this view cannot assess task-to-target candidates.";
         body.appendChild(note);
+    }
+    const learningExamples = alignment && Array.isArray(alignment.learning_pathway_mappings)
+        ? alignment.learning_pathway_mappings : [];
+    if (learningExamples.length) {
+        const preparation = document.createElement("p");
+        const targets = [...new Set(learningExamples.map(item => item.target_id).filter(Boolean))];
+        preparation.textContent = `Separate from occupation evidence: FutureSkill has illustrative learning-preparation links${targets.length ? ` to Targets ${targets.join(" and ")}` : ""}. They describe the learning pathway, not the career's SDG contribution.`;
+        body.appendChild(preparation);
     }
     const caveat = document.createElement("p");
     caveat.className = "sdg-note";
-    caveat.textContent = "Alignment describes a reasoned connection to a target. It does not establish that this career or pathway has advanced an SDG.";
+    caveat.textContent = "A task match describes occupational wording, not an outcome. It does not establish that this career or pathway has advanced an SDG.";
     body.appendChild(caveat);
     const more = document.createElement("a");
     more.className = "sdg-more";

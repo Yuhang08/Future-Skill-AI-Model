@@ -1,34 +1,44 @@
+> **Current implementation:** The explorer distinguishes task-derived Goal
+> rankings, narrow task-to-Target rule candidates, weaker exploratory
+> suggestions, and FutureSkill learning-preparation examples. None is a
+> reviewed or measured SDG outcome. See
+> [sdg-923-rule-based.md](sdg-923-rule-based.md) for the ranking method.
+
 # SDG career explorer: diagnosis and selection contract
 
 ## Workspace diagnosis
 
-- `static/sdg-impact.html` is the current page; it renders all 17 goals, compact
-  mapping cards, evidence drawers and the optional learning pathway.
+- `static/sdg-impact.html` is the current page; it renders the 17 Goal scores,
+  task evidence, evidence drawers and the separate learning pathway.
 - `reskilling/extra_features.py` serves `POST /api/sdg/mindmap`.
-- `reskilling/sdg_alignment.py` contains the curated, illustrative target links.
-  It does not use a keyword mapper or an LLM to generate target relationships.
+- `reskilling/sdg_alignment.py` keeps task-to-Target rule candidates,
+  exploratory occupation suggestions and learning-pathway examples separate.
+  The ranking is deterministic; it does not call an LLM.
 - `career_profiles_clean.csv` supplies 923 occupational names and O*NET-SOC
   identifiers. Its interest ratings are not occupational requirement evidence.
 - `reskilling/catalog.py` supplies the existing illustrative pathway skills
   and practice activities. This change does not alter targets, scoring,
   saved profiles or scheduling.
+- `data/onet_task_statements.csv` supplies O*NET 31.0 task statements. These
+  describe occupation duties; the Goal-ranking and matching rules are
+  FutureSkill-created and are not endorsed by O*NET or the UN.
 
 The previous UI accepted arbitrary nonempty text as a displayed career. The
 mapping service already avoided a default SDG 8 link, but did not distinguish
 an unknown phrase from a supported career without a reviewed mapping.
 
-According to the supplied reference findings, the GitHub/older Render screenshots
-represent a different implementation:
-their Environmental Engineer links to SDGs 13 and 9 must not be treated as
-evidence or copied into this workspace. Data Analyst here retains its existing
-illustrative Target 4.4 and 8.5 preparation links.
+Learning-preparation links that existed before the task model remain under
+`learning_pathway_mappings`; they are not occupation mappings. A task-derived
+score does not upgrade a pathway example or weak suggestion into a verified
+relationship.
 
 ## Canonical selection
 
 `GET /api/sdg/careers?q=...` returns up to 12 suggestions containing:
 
 - `id`, `title`, `kind` (`occupation` or `prototype`)
-- `mapping_availability` (`curated` or `not_reviewed`)
+- `mapping_availability: suggested` (a search suggestion, not a reviewed
+  relationship)
 - `matched_by` (`exact`, `partial`, `suggestion`, or `featured`)
 
 Names normalize case, punctuation and whitespace. Singular Environmental
@@ -59,63 +69,47 @@ only for a matching pathway; no fabricated skill ratings are sent.
 
 ## Mapping and evidence states
 
-- Unknown text cannot become a selected career or obtain a mapping.
-- Known but unreviewed careers return `status: not_reviewed`, canonical title
-  and ID, no target links and no pathway requirements.
-- Curated links retain their original rationale, full evidence wording,
-  target IDs, source URLs and limitations. Additional metadata records
-  canonical `career_id`, `review_status: curated_illustrative`,
-  `mapping_kind`, source IDs and each source's scope.
-- UN goal pages define targets; they do not establish occupational links.
-  The pathway catalogue remains explicitly illustrative.
-- All 17 goals are independently browsable before selection and after a failed
-  request. “Not reviewed” never means “no possible SDG connection.”
+- Unknown text cannot become a selected career or obtain a mapping. Requests
+  accept a canonical catalogue ID; unsupported IDs return 404.
+- For a real occupation, `goal_scores` contains all 17 deterministic,
+  task-derived thematic indices (0–100); `top_goal_scores` is the top three.
+  An index is not a probability, percentage, impact measure, certification or
+  official UN mapping. Weak exploratory rankings are labeled as such.
+- `mappings` contains narrow O*NET task-to-Target rule candidates only. Each
+  includes original Task IDs and wording, the matching rationale, source IDs
+  and limitations. `task_signal_unreviewed` means candidate, not human-verified
+  relationship.
+- `candidate_mappings` distinguishes task-topic, DWA-topic and
+  classification-only suggestions. These are weaker than a strict task rule;
+  title/SOC similarity alone is not task evidence.
+- `learning_pathway_mappings` is a separate FutureSkill learning-preparation
+  example, retaining its target, rationale and source links. Its
+  `curated_illustrative` label does not mean independent occupational or
+  impact review.
+- `task_data_status` describes data availability; `status` distinguishes a
+  task-supported candidate, no task-to-Target candidate, and unknown career.
+  No match does not prove that a career has no possible connection.
+- O*NET records describe duties; UN Goal pages define goals/targets. Neither
+  source independently supports the FutureSkill matching rules or proves an
+  occupational outcome. The ranking runs only for real O*NET occupations;
+  catalogue prototypes do not receive invented task scores.
+
+The reskilling page also displays completed practice milestones derived from
+completed learning-task hours. The count is capped by the existing self-rating
+gap and estimated practice hours. It does not change skill ratings, targets,
+gaps, saved task records or XP, and it is not evidence of proficiency.
 
 ## Remaining evidence gap
 
-This workspace has no reviewed, target-level occupational evidence supporting
-Environmental Engineers → SDG 13/9. Its occupational CSV record proves catalogue
-membership, not that relationship. It therefore remains explicitly unreviewed;
-legacy keyword suggestions are not promoted to curated mappings.
-
-Existing pathway-based links also remain illustrative, not independently
-validated occupational or social-impact claims. No new external evidence is
-invented by this repair.
+The strict task rules and broad scoring vocabulary are heuristic and have not
+been independently benchmarked or human-reviewed as occupation-to-Target
+relationships. Do not present candidates as curated or verified. Future review
+requires documented criteria and evidence of what was and was not established.
+Existing pathway links remain illustrative.
 
 ## Verification
 
-Run `python -B -m unittest discover -s tests -p 'test_*.py' -q`,
-`node tests/sdg_browser.cjs`, and `node tests/theme_browser.cjs`.
-The SDG browser suite checks real catalogue/API requests, keyboard selection,
-editing, ambiguous/fuzzy choices, API errors, evidence drawers and mobile/theme
-layout. Its stale-search race uses real API bodies with controlled delivery
-order. Browser screenshots are kept in `/tmp`, not shipped with the app.
-
-Completed verification:
-
-- 42 Python tests passed, including 7 dedicated career identity/evidence tests.
-- 11 SDG browser check groups passed, including native keyboard input, stale
-  search responses, real network-error recovery and evidence-source parity.
-- Shared theme regression checks passed across 6 routes in desktop/mobile,
-  light/dark modes.
-- Preview was visually checked, including the new search and dark mobile layout.
-  Search labels and the career-center label are checked at >=4.5:1 contrast.
-
-## Exact changed files
-
-- `reskilling/extra_features.py`
-- `reskilling/sdg_alignment.py`
-- `static/sdg-impact.html`
-- `static/sdg-career-search.js`
-- `static/future-pages.css`
-- `tests/test_sdg_careers.py`
-- `tests/test_integration.py`
-- `tests/sdg_browser.cjs`
-- `tests/theme_browser.cjs`
-- `artifacts/mockup-sandbox-preview/scripts/extract-futureskill.py`
-- `docs/sdg-career-explorer.md`
-- `.agents/memory/sdg-disclosure-scope.md` (durable evidence-policy context only)
-
-No occupational CSV, assessment scoring, profile storage, scheduling, model
-provider configuration or deployment files were changed. Preview remains
-running; no publish or remote push was performed.
+Automated checks cover career selection/API states, task score output, source
+IDs, strict Target precision and completed-practice-level calculation. Record
+their latest results separately from browser screenshots and any provider
+inference; the deterministic SDG endpoints do not call an LLM.

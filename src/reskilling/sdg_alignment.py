@@ -5,6 +5,11 @@ from difflib import SequenceMatcher
 from functools import lru_cache
 
 from .catalog import CAREERS
+from .sdg_candidate_ranker import candidate_mappings_for_occupation, occupation_task_profile
+from .sdg_task_evidence import task_supported_mappings
+from . import sdg_task_evidence as task_source
+from .sdg_onet_context import DWA_CSV, RATINGS_CSV
+from .sdg_task_goal_model import score_career_goals
 from career_engine import load_careers
 
 
@@ -154,7 +159,7 @@ def search_sdg_careers(query="", limit=12):
     normalized = _normalize_name(query)
     records = get_sdg_careers()
     aliases = _career_aliases()
-    curated_ids = set(ROLE_BY_ID)
+    pathway_ids = set(ROLE_BY_ID)
 
     def result(career_id, matched_by):
         career = records[career_id]
@@ -162,7 +167,7 @@ def search_sdg_careers(query="", limit=12):
             "id": career_id,
             "title": career["title"],
             "kind": career["kind"],
-            "mapping_availability": "curated" if career_id in curated_ids else "not_reviewed",
+            "mapping_availability": "suggested",
             "matched_by": matched_by,
         }
 
@@ -197,7 +202,7 @@ def search_sdg_careers(query="", limit=12):
     featured = sorted(
         records,
         key=lambda career_id: (
-            career_id not in curated_ids,
+            career_id not in pathway_ids,
             records[career_id]["title"].casefold(),
         ),
     )
@@ -242,28 +247,60 @@ def _unknown_alignment(title):
         "career_id": None,
         "pathway_career": None,
         "status": "unknown",
+        "task_data_status": "unknown",
+        "task_profile": None,
+        "goal_scores": [],
+        "top_goal_scores": [],
+        "goal_scoring_method": None,
         "mappings": [],
+        "candidate_mappings": [],
+        "learning_pathway_mappings": [],
         "pathway_skills": [],
         "evidence_scope": "This title is not in the supported career catalogue.",
     }
 
 
-def _build_alignment(career_id, current_skills=None):
+def _build_alignment(career_id, current_skills=None, include_goal_scores=False):
     career = get_sdg_careers().get(career_id)
     if career is None:
         return _unknown_alignment("")
     career_name = ROLE_BY_ID.get(career_id)
+    # Real occupational task records, not job titles, drive highlighted nodes.
+    task_mappings, task_data_status = task_supported_mappings(career_id, career["title"])
+    # Each role has an independently inspectable O*NET task profile and up to
+    # three ranked candidate goals. Never confuse them with verified impacts.
+    task_profile = occupation_task_profile(career_id)
+    # Ranking is an on-demand feature: the 923-row legacy audit/tests remain
+    # fast and stable, while the website can show 17 scored goals per role.
+    scored = {}
+    if include_goal_scores and career["kind"] == "occupation":
+        stamp = tuple(
+            (str(p), p.stat().st_mtime_ns if p.is_file() else None)
+            for p in (task_source.TASK_DATA, DWA_CSV, RATINGS_CSV)
+        )
+        scored = score_career_goals(career_id, stamp)
+    candidate_mappings = candidate_mappings_for_occupation(
+        career_id, career["title"], {m["sdg_id"] for m in task_mappings}
+    )
     if career_name is None or career_name not in CAREERS:
         return {
             "career": career["title"],
             "career_id": career_id,
             "pathway_career": None,
-            "status": "not_reviewed",
-            "mappings": [],
+            "status": "task_supported" if task_mappings else "no_task_evidence",
+            "task_data_status": task_data_status,
+            "task_profile": task_profile,
+            "goal_scores": scored.get("goal_scores", []),
+            "top_goal_scores": scored.get("top_goal_scores", []),
+            "goal_scoring_method": scored.get("method"),
+            "mappings": task_mappings,
+            "candidate_mappings": candidate_mappings,
+            "learning_pathway_mappings": [],
             "pathway_skills": [],
             "evidence_scope": (
-                "This supported career has not been reviewed against the current "
-                "curated SDG targets. No target relationship is inferred."
+                "Only explicit rule matches in genuine O*NET 31.0 task statements "
+                "are shown on the career map. Title/SOC fallback is for browsing "
+                "only; neither supplies verified SDG outcome evidence."
             ),
         }
 
@@ -279,7 +316,7 @@ def _build_alignment(career_id, current_skills=None):
         )
         evidence.append(f"Practice activity: {skill['project']}.")
 
-    mappings = []
+    learning_mappings = []
     for target_id in ("4.4", "8.5"):
         target = TARGETS[target_id]
         if target_id == "4.4":
@@ -294,7 +331,7 @@ def _build_alignment(career_id, current_skills=None):
                 "with a potential occupation. This is a preparation link to Target 8.5, "
                 "not evidence that the learner will obtain decent work."
             )
-        mappings.append({
+        learning_mappings.append({
             "sdg_id": target["sdg_id"],
             "sdg_name": target["sdg_name"],
             "target_id": target["target_id"],
@@ -326,20 +363,35 @@ def _build_alignment(career_id, current_skills=None):
             "impact_limitations": REVIEWED_SCOPE,
         })
 
+    # This distinction is essential: FutureSkill's training may relate to
+    # UN 4.4 / 8.5, but it does not make every IT career an SDG 4/8 occupation.
     return {
         "career": career["title"],
         "career_id": career_id,
         "pathway_career": career_name,
-        "status": "curated",
-        "mappings": mappings,
+        "status": "task_supported" if task_mappings else "no_task_evidence",
+        "task_data_status": task_data_status,
+        "task_profile": task_profile,
+        "goal_scores": scored.get("goal_scores", []),
+        "top_goal_scores": scored.get("top_goal_scores", []),
+        "goal_scoring_method": scored.get("method"),
+        "mappings": task_mappings,
+        "candidate_mappings": candidate_mappings,
+        "learning_pathway_mappings": learning_mappings,
         "pathway_skills": skills,
-        "evidence_scope": REVIEWED_SCOPE,
+        "evidence_scope": (
+            "Career graph: narrow rule matches in real O*NET 31.0 job tasks, "
+            "not measured SDG impacts. Broad title and SOC themes are clearly "
+            "separate. Training Targets 4.4 and 8.5 describe only FutureSkill."
+        ),
     }
 
 
-def get_sdg_alignment_by_id(career_id, current_skills=None):
-    """Resolve only canonical catalogue IDs; unreviewed IDs never get guessed links."""
-    return _build_alignment(str(career_id or "").strip(), current_skills)
+def get_sdg_alignment_by_id(career_id, current_skills=None, include_goal_scores=False):
+    """Return a verified catalogue identity and optional task-derived ranking."""
+    return _build_alignment(
+        str(career_id or "").strip(), current_skills, include_goal_scores
+    )
 
 
 def get_sdg_alignment(career_title, current_skills=None):

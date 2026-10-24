@@ -164,83 +164,98 @@ async function capture(name) {
     await key('Enter', 'Enter', 13, '\r');
     assert.equal(await evaluate(`careerSearch.selection().id`), 'prototype:data-analyst');
     await evaluate(`document.getElementById('careerForm').requestSubmit()`);
-    await waitFor(`document.querySelectorAll('.mapping').length===2 &&
-      document.querySelectorAll('.goal-node.linked').length===2 &&
-      !document.getElementById('submitButton').disabled`, 'selected canonical Data Analyst mapping');
+    await waitFor(`document.getElementById('reviewStatus').textContent.includes('0 task-target') &&
+      !document.getElementById('results').hidden &&
+      !document.getElementById('submitButton').disabled`, 'prototype role without official O*NET task ID');
     assert.deepEqual(mindmapRequests.at(-1), { career_id: 'prototype:data-analyst' });
-    assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 2);
-    assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 2);
-    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line').length`), 2);
+    assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 0);
+    assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 0);
+    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line.tentative-line').length`), 1);
+    assert.equal(await evaluate(`document.querySelector('.goal-node[data-sdg-id="9"]').classList.contains('tentative')`), true);
+    assert.equal(await evaluate(`document.querySelector('#candidateSuggestions').hidden`), false);
+    assert.equal(await evaluate(`document.querySelector('#learningContribution').hidden`), false);
+    assert.match(await evaluate(`document.getElementById('candidateList').textContent`), /Goal 9/);
+    assert.match(await evaluate(`document.getElementById('candidateList').textContent`), /CLASSIFICATION-ONLY GUESS/);
+    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 4\.4/);
+    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 8\.5/);
+    assert.equal(await evaluate(`document.getElementById('pathway').hidden`), false,
+      'the existing pathway must remain available without an occupational target match');
+    assert.equal(await evaluate(`document.querySelectorAll('#skillsList .skill-row').length`), 6);
+    assert.match(await evaluate(`document.querySelector('#assessmentStatus a').getAttribute('href')`), /career=Data%20Analyst/);
+    await waitFor(`Array.from(document.querySelectorAll('.goal-node img')).every(img => img.complete && img.naturalWidth > 0)`, 'all 17 official goal icons');
     assert.equal(await evaluate(`document.querySelector('details.about').open`), false);
-    assert.equal(await evaluate(`document.getElementById('pathway').open`), false);
-    assert.equal(await evaluate(`document.querySelectorAll('dialog[open]').length`), 0);
-    assert.equal(await evaluate(`Array.from(document.querySelectorAll('.mapping-head p')).every(p => p.textContent.length < 110)`), true);
-    await waitFor(`Array.from(document.querySelectorAll('.goal-node img')).every(img => img.complete && img.naturalWidth > 0)`, 'all official goal icons');
-    console.log('PASS: concise default view, 17 official icons, only 2 reviewed links');
+    console.log('PASS: prototype has dashed classification-only suggestion, never a solid task-backed link');
 
-    await activate('.goal-node[data-sdg-id="1"]');
-    await waitFor(`document.getElementById('goalInfoDialog').open`, 'unassessed goal information');
-    assert.match(await evaluate(`document.getElementById('goalInfoCopy').textContent`), /No reviewed career-to-target link/);
-    assert.equal(await evaluate(`document.getElementById('goalInfoLink').href`), 'https://sdgs.un.org/goals/goal1');
+    await activate('.goal-node[data-sdg-id="9"]');
+    await waitFor(`document.getElementById('goalInfoDialog').open`, 'goal is not misleadingly highlighted');
+    assert.match(await evaluate(`document.getElementById('goalInfoCopy').textContent`), /UNVERIFIED CANDIDATE/);
     await escapeDialog();
-    assert.equal(await evaluate(`document.activeElement.dataset.sdgId`), '1');
-    console.log('PASS: unassessed goal is honest, Escape closes, focus returns');
-
-    await activate('.mapping-details-trigger');
-    await waitFor(`document.querySelector('.mapping-drawer').open`, 'reviewed mapping drawer');
-    await waitFor(`document.querySelector('.mapping-drawer .drawer-photo').naturalWidth > 0`, 'real photograph');
-    assert.deepEqual(
-      await evaluate(`[...document.querySelectorAll('.mapping-drawer[open] [data-source-id]')].map(link=>link.dataset.sourceId).sort()`),
-      await evaluate(`[...activeMappings[0].supporting_source_ids].sort()`),
-      'drawer source IDs match the API mapping');
-    assert.equal(await evaluate(`document.querySelector('.mapping-drawer details.evidence-full').open`), false);
-    assert.equal(await evaluate(`document.querySelectorAll('.mapping-drawer[open] .evidence-node').length`), 6);
-    assert.match(await evaluate(`document.querySelector('.mapping-drawer[open] .evidence-detail').textContent`), /Select a skill or practice/);
-    assert.equal(await evaluate(`document.querySelector('.mapping-drawer[open] .evidence-root img').naturalWidth > 0`), true);
-    await activate('.mapping-drawer[open] .evidence-node');
-    assert.equal(await evaluate(`document.querySelector('.mapping-drawer[open] .evidence-node').getAttribute('aria-pressed')`), 'true');
-    assert.match(await evaluate(`document.querySelector('.mapping-drawer[open] .evidence-detail').innerText`), /Illustrative pathway requirement: SQL/);
-    await activate('.mapping-drawer[open] .evidence-node.practice');
-    assert.equal(await evaluate(`document.querySelectorAll('.mapping-drawer[open] .evidence-node[aria-pressed="true"]').length`), 1);
-    assert.match(await evaluate(`document.querySelector('.mapping-drawer[open] .evidence-detail').innerText`), /Practice activity:/);
-    assert.equal(await evaluate(`document.querySelectorAll('.mapping-drawer[open] .evidence-detail').length`), 1);
-    await activate('.mapping-drawer[open] details.evidence-full summary');
-    assert.equal(await evaluate(`document.querySelector('.mapping-drawer[open] details.evidence-full').open`), true);
-    assert.equal(await evaluate(`document.querySelectorAll('.mapping-drawer[open] details.evidence-full li').length`), 6);
-    await activate('.mapping-drawer[open] details.evidence-full summary');
-    await capture('sdg-drawer-desktop');
-    await activate('.mapping-drawer .mapping-drawer-close');
-    assert.equal(await evaluate(`document.activeElement.classList.contains('mapping-details-trigger')`), true);
-    console.log('PASS: drawer, photo, evidence selection, full-text disclosure, focus return');
-
-    await activate('.goal-node[data-sdg-id="8"]');
-    await waitFor(`document.querySelector('dialog[open] .drawer-target')?.textContent.includes('8.5')`, 'reviewed goal opens corresponding drawer');
-    await escapeDialog();
+    assert.equal(await evaluate(`document.activeElement.dataset.sdgId`), '9');
     await send('Emulation.setDeviceMetricsOverride', {
       width: 390, height: 844, deviceScaleFactor: 1, mobile: true,
     });
     await sleep(200);
     assert.equal(await evaluate(`document.documentElement.scrollWidth <= window.innerWidth + 1`), true);
-    await activate('.mapping-details-trigger');
-    assert.equal(await evaluate(`document.querySelector('dialog[open]').getBoundingClientRect().width <= window.innerWidth + 1`), true);
-    await capture('sdg-drawer-mobile');
-    await escapeDialog();
-    console.log('PASS: reviewed node navigation and mobile layout without page overflow');
+    await capture('sdg-no-task-evidence-mobile');
+    console.log('PASS: no-evidence mobile layout');
 
     await career('Environmental Engineer');
-    assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`), 0);
-    assert.equal(await evaluate(`document.querySelectorAll('.goal-node.linked').length`), 0);
-    assert.equal(await evaluate(`document.querySelectorAll('#mapLines line').length`), 0);
-    assert.equal(await evaluate(`document.getElementById('pathway').hidden`), true);
-    await activate('.goal-node[data-sdg-id="4"]');
-    assert.match(await evaluate(`document.getElementById('goalInfoCopy').textContent`), /Environmental Engineers/);
-    await escapeDialog();
-    await career('Software Developer');
+    const environment = await evaluate(`fetch('/api/sdg/mindmap',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({career_id:'17-2081.00'})}).then(r=>r.json())`);
+    assert.equal(environment.career_id, '17-2081.00');
+    assert.equal(environment.goal_scores.length, 17);
+    assert.equal(await evaluate(`document.querySelectorAll('.goal-rank-card').length`), 3);
+    assert.deepEqual(await evaluate(`[...document.querySelectorAll('.rank-number')].map(x=>x.textContent)`),
+      environment.top_goal_scores.map(score=>`${score.relevance_index}/100`));
+    assert.equal(await evaluate(`document.querySelectorAll('.goal-rank-evidence[open]').length`), 0);
+    await activate('.goal-rank-evidence summary');
+    const firstScore = environment.top_goal_scores[0];
+    for (const task of firstScore.task_evidence)
+      assert.ok((await evaluate(`document.querySelector('.goal-rank-evidence').textContent`)).includes(task.task));
+    assert.equal(await evaluate(`document.querySelector('.goal-rank-evidence .sources a').href`), firstScore.occupation_source);
+    await activate('.all-goal-scores summary');
+    assert.equal(await evaluate(`document.querySelectorAll('.goal-score-line').length`), 17);
+    assert.equal(await evaluate(`document.querySelectorAll('.goal-score-line [role=meter]').length`), 17);
+    for (const width of [1440,390]) {
+      await send('Emulation.setDeviceMetricsOverride', {width,height:1000,deviceScaleFactor:1,mobile:width<600});
+      const backgrounds = [];
+      for (const theme of ['light','dark']) {
+        await evaluate(`FutureSkillTheme.setPreference(${JSON.stringify(theme)});document.getElementById('taskGoalRankings').scrollIntoView({behavior:'instant',block:'start'})`);
+        assert.equal(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`), true);
+        await checkTextContrast('.goal-rank-card h3, .score-review-status');
+        backgrounds.push(await evaluate(`getComputedStyle(document.querySelector('.goal-rank-card')).backgroundColor`));
+        await capture(`sdg-task-ranking-${width}-${theme}`);
+      }
+      assert.notEqual(backgrounds[0],backgrounds[1],'new ranking cards follow the shared theme');
+    }
+    console.log('PASS: real task-based Top 3 and all 17 indices match the API; source tasks, disclosure, mobile and both themes');
+
+    await career('Solar Energy Systems Engineers');
+    const solar = await evaluate(`fetch('/api/sdg/mindmap',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({career_id:'17-2199.11'})}).then(r=>r.json())`);
+    assert.ok(solar.mappings.length>0,'use a genuine strict task-rule candidate for drawer checks');
+    assert.equal(await evaluate(`document.querySelectorAll('.mapping').length`),solar.mappings.length);
     await activate('.mapping-details-trigger');
-    assert.match(await evaluate(`document.querySelector('.mapping-drawer').textContent`), /Python Basics/);
-    assert.doesNotMatch(await evaluate(`document.querySelector('.mapping-drawer').textContent`), /SQL/);
+    await waitFor(`!!document.querySelector('.mapping-drawer[open]')`,'task evidence drawer');
+    await activate('.mapping-drawer[open] .evidence-node');
+    assert.equal(await evaluate(`document.querySelector('.mapping-drawer[open] .evidence-detail').textContent`),solar.mappings[0].supporting_evidence[0]);
+    assert.deepEqual(await evaluate(`[...document.querySelectorAll('.mapping-drawer[open] [data-source-id]')].map(x=>x.dataset.sourceId)`),
+      solar.mappings[0].evidence_source.map(source=>source.id));
+    assert.match(await evaluate(`document.querySelector('.mapping-drawer[open]').textContent`),/human review|Human review/);
+    for (const [width,label] of [[1440,'desktop'],[390,'mobile']]) {
+      await send('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:width<600});
+      assert.equal(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`),true);
+      await capture(`sdg-drawer-${label}`);
+    }
     await escapeDialog();
-    console.log('PASS: career changes clear stale mappings and evidence');
+    assert.equal(await evaluate(`document.activeElement.classList.contains('mapping-details-trigger')`),true);
+    console.log('PASS: target drawer wording, task IDs, source IDs and focus restoration match real API records');
+    await career('Environmental Engineer');
+    assert.match(await evaluate(`document.getElementById('candidateList').textContent`), /Goal 13/);
+    assert.equal(await evaluate(`document.getElementById('pathway').hidden`), true);
+    await career('Software Developer');
+    assert.equal(await evaluate(`document.querySelector('.goal-node[data-sdg-id="4"]').classList.contains('linked')`), false);
+    assert.equal(await evaluate(`document.querySelector('.goal-node[data-sdg-id="8"]').classList.contains('linked')`), false);
+    assert.match(await evaluate(`document.getElementById('learningContributionList').textContent`), /Target 4\.4/);
+    console.log('PASS: career switching never turns FutureSkill learning links into occupation evidence');
 
     await send('Network.setBlockedURLs', { urls: ['*/api/sdg/mindmap'] });
     await evaluate(`document.getElementById('careerForm').requestSubmit()`);

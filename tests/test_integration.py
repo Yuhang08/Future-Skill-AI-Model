@@ -128,7 +128,7 @@ class IntegratedWebTests(unittest.TestCase):
         self.assertIn('Official SDG icon from the United Nations', sdg_page)
         for element_id in ('goalGrid', 'mapLines', 'goalInfoDialog', 'careerCenter'):
             self.assertIn(f'id="{element_id}"', sdg_page)
-        self.assertIn('Read all full evidence wording', sdg_page)
+        self.assertIn('Read all occupation task statements', sdg_page)
         self.assertIn('evidence-map', sdg_page)
         self.assertIn('/static/assets/sdg/sdg-4-education.jpg', sdg_page)
         self.assertIn('/static/assets/sdg/sdg-8-work.jpg', sdg_page)
@@ -170,13 +170,13 @@ class IntegratedWebTests(unittest.TestCase):
         })
         self.assertEqual(mapping.status_code, 200, mapping.text)
         mapping_data = mapping.json()
-        self.assertEqual(mapping_data['status'], 'curated')
+        self.assertIn(mapping_data['status'], ('no_task_evidence', 'task_supported'))
         self.assertEqual(
-            [item['target_id'] for item in mapping_data['mappings']],
+            [item['target_id'] for item in mapping_data['learning_pathway_mappings']],
             ['4.4', '8.5'],
         )
         self.assertTrue(mapping_data['pathway_skills'])
-        self.assertIn('illustrative', mapping_data['evidence_scope'])
+        self.assertIn('not measured SDG impacts', mapping_data['evidence_scope'])
         self.assertEqual(mapping_data['pathway_career'], 'Data Analyst')
         sql = next(item for item in mapping_data['pathway_skills'] if item['name'] == 'SQL')
         self.assertIsNone(sql['current_level'])
@@ -197,8 +197,8 @@ class IntegratedWebTests(unittest.TestCase):
             'career_id': '17-2081.00',
         })
         self.assertEqual(unreviewed.status_code, 200, unreviewed.text)
-        self.assertEqual(unreviewed.json()['status'], 'not_reviewed')
-        self.assertEqual(unreviewed.json()['mappings'], [])
+        self.assertIn(unreviewed.json()['status'], ('no_task_evidence', 'task_supported'))
+        self.assertEqual({item['sdg_id'] for item in unreviewed.json()['candidate_mappings']}, {6, 9, 13})
         self.assertEqual(
             self.client.post('/api/sdg/mindmap', json={'career_id': ''}).status_code,
             422,
@@ -221,19 +221,20 @@ class IntegratedWebTests(unittest.TestCase):
         ):
             with self.subTest(career=career):
                 data = self.client.post('/api/sdg/mindmap', json={'career_id': career_id}).json()
-                self.assertEqual(data['status'], 'curated')
+                self.assertIn(data['status'], ('no_task_evidence', 'task_supported'))
                 self.assertEqual(
-                    {(item['sdg_id'], item['target_id']) for item in data['mappings']},
+                    {(item['sdg_id'], item['target_id']) for item in data['learning_pathway_mappings']},
                     {(4, '4.4'), (8, '8.5')},
                 )
-                self.assertTrue(all(item['supporting_evidence'] for item in data['mappings']))
+                self.assertTrue(all(item['supporting_evidence'] for item in data['learning_pathway_mappings']))
+                self.assertTrue(all(item['sdg_id'] not in {4, 8} for item in data['mappings']))
 
         # The reference mockup is not evidence for assigning its sample links.
         unknown = self.client.post('/api/sdg/mindmap', json={
             'career_id': '17-2081.00',
         }).json()
-        self.assertEqual(unknown['status'], 'not_reviewed')
-        self.assertEqual(unknown['mappings'], [])
+        self.assertIn(unknown['status'], ('no_task_evidence', 'task_supported'))
+        self.assertEqual({item['sdg_id'] for item in unknown['candidate_mappings']}, {6, 9, 13})
         self.assertEqual(unknown['pathway_skills'], [])
 
     def test_development_inventory_and_isolated_demo_sessions(self):
@@ -292,16 +293,18 @@ class IntegratedWebTests(unittest.TestCase):
             for item in body['recommendations']
         ))
         self.assertTrue(all(
-            item['sdg_alignment']['status'] in ('curated', 'not_reviewed')
+            item['sdg_alignment']['status'] in ('task_supported', 'no_task_evidence')
             for item in body['recommendations']
         ))
 
     def test_reskilling_full_journey(self):
         state = self.client.get('/api/state').json()
         csrf = state['csrf']
-        skills = {name: 0 for name in state['catalog']['Data Analyst']['skills']}
+        career = 'Software Developer'  # Preserve the approved illustrative pathway catalogue.
+        self.assertIn(career, state['catalog'])
+        skills = {name: 0 for name in state['catalog'][career]['skills']}
         profile = {
-            'target_career': 'Data Analyst', 'skills': skills,
+            'target_career': career, 'skills': skills,
             'user_type': 'student', 'current_industry': 'education',
             'experience': 'beginner', 'personal_goal': 'Data portfolio',
             'weekly_hours': 6, 'target_weeks': 8,
@@ -314,12 +317,18 @@ class IntegratedWebTests(unittest.TestCase):
         result = self.client.post('/api/plan', json=profile, headers=headers)
         self.assertEqual(result.status_code, 200, result.text)
         body = result.json()['state']
-        self.assertIn('SQL', body['gaps'])
+        self.assertIn('Python Basics', body['gaps'])
         self.assertGreater(len(body['tasks']), 0)
+        def gap_contract(state):
+            # Completed hours reduce remaining practice, not the self-rating gap.
+            return {name: {key: value for key, value in gap.items() if key != 'remaining_hours'}
+                    for name, gap in state['gaps'].items()}
+        original_gaps = gap_contract(body)
         task = body['tasks'][0]
         completed = self.client.post(f"/api/tasks/{task['id']}/status", json={'completed': True}, headers=headers)
         self.assertEqual(completed.status_code, 200)
         self.assertGreater(completed.json()['state']['tree']['points'], 0)
+        self.assertEqual(gap_contract(completed.json()['state']), original_gaps)
 
         # Valid tiny PNG fixture: no Pillow or third-party image package required.
         tiny_png = base64.b64decode(
@@ -338,6 +347,14 @@ class IntegratedWebTests(unittest.TestCase):
         new_state = replan.json()['state']
         self.assertTrue(any(t['id'] == task['id'] and t['completed'] for t in new_state['tasks']))
         self.assertEqual(new_state['tree']['points'], completed.json()['state']['tree']['points'])
+        self.assertEqual(gap_contract(new_state), original_gaps)
+
+        reopened = self.client.post(f"/api/tasks/{task['id']}/status", json={'completed': False}, headers=headers)
+        self.assertEqual(reopened.status_code, 200, reopened.text)
+        reopened_state = reopened.json()['state']
+        self.assertTrue(any(t['id'] == task['id'] and not t['completed'] for t in reopened_state['tasks']))
+        self.assertEqual(reopened_state['tree']['points'], 0)
+        self.assertEqual(gap_contract(reopened_state), original_gaps)
 
         second = TestClient(app)
         other_state = second.get('/api/state').json()

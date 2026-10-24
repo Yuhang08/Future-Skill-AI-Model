@@ -1,7 +1,9 @@
 """Frozen API baselines captured before the results-only UI refinement.
 
-These are complete-response digests, not snapshots of the new report copy.
-Changing UI must not change calculated scores or recommendation order/content.
+The original complete-response digests included the old SDG metadata. During the
+task-SDG integration, the original helper reproduced every stored digest; removing
+only that intentionally replaced metadata produced the core baselines below.
+Scores and recommendation order/content must continue to match those baselines.
 """
 import hashlib
 import json
@@ -36,6 +38,14 @@ BASELINES = {
     "mixed": "53caf0807a4d94c9a08c2bdba5772c41dc906ae3035ea36e492ca6b9ad78c1ed",
 }
 
+CORE_BASELINES = {
+    "equal-high": "f3141b4f6f7ba6f3b8eb84456c97de785fcb5217192f9d80352a2beff4b590ff",
+    "equal-low": "1374871e3138e202e090c606e3620a7f4f55ece82f05f398e37d2f58317535fa",
+    "differentiated": "3eee2b9b6d30cd47c0afcd61d413a12efb820ca218d77382d91e365a414a2086",
+    "leading-tie": "8f716f0818e69f8bc81032ecdfde9aa5d03db8bce6285fd44d1dda2289577d77",
+    "mixed": "f6c613f6dceba475e353dce2781dac6a03a3456df43f58fa0d7dfb9156ae1d72",
+}
+
 
 def payload_for(name):
     interests, subjects, skills = PROFILES[name]
@@ -50,14 +60,14 @@ class AssessmentReportRegressionTests(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
 
-    def test_complete_responses_match_pre_refinement_baselines(self):
-        for name, expected in BASELINES.items():
+    def test_scores_and_recommendations_match_pre_refinement_baselines(self):
+        for name, expected in CORE_BASELINES.items():
             with self.subTest(profile=name):
                 response = self.client.post("/api/recommend", json=payload_for(name))
                 self.assertEqual(response.status_code, 200)
                 legacy_contract = response.json()
                 for career in legacy_contract["recommendations"]:
-                    for additive_key in ("id", "pathway_career", "pathway_status"):
+                    for additive_key in ("id", "pathway_career", "pathway_status", "sdg_alignment"):
                         career.pop(additive_key, None)
                 canonical = json.dumps(legacy_contract, sort_keys=True, separators=(",", ":"))
                 self.assertEqual(hashlib.sha256(canonical.encode()).hexdigest(), expected)

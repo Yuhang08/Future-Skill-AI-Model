@@ -291,6 +291,34 @@ html[data-futureskill-page="sdg"] .goal-node-status { color: var(--fs-muted); }
 html[data-futureskill-page="sdg"] .goal-info-dialog { color: var(--fs-ink); }
 html[data-futureskill-page="sdg"] .goal-info-heading h2 { color: var(--fs-ink); }
 html[data-futureskill-page="sdg"] .goal-info-heading p { color: var(--fs-muted); }
+html[data-futureskill-page="sdg"] .task-goal-rankings {
+  background: var(--fs-raised-alt);
+  border-color: var(--fs-line);
+  color: var(--fs-ink);
+}
+html[data-futureskill-page="sdg"] .task-goal-rankings .score-disclaimer,
+html[data-futureskill-page="sdg"] .goal-rank-card p { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .goal-rank-card {
+  background: var(--fs-surface);
+  border-color: var(--fs-line);
+}
+html[data-futureskill-page="sdg"] .goal-rank-card .rank-header,
+html[data-futureskill-page="sdg"] .task-score-evidence span,
+html[data-futureskill-page="sdg"] .task-score-evidence strong { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .task-score-evidence {
+  background: var(--fs-raised-alt);
+  color: var(--fs-ink-soft);
+}
+html[data-futureskill-page="sdg"] .goal-score-meter { background: var(--fs-raised); }
+html[data-futureskill-page="sdg"] .goal-score-meter-fill { background: var(--fs-accent); }
+html[data-futureskill-page="sdg"] .all-goal-scores { border-color: var(--fs-line); }
+html[data-futureskill-page="sdg"] .all-goal-scores summary { color: var(--fs-accent-ink); }
+html[data-futureskill-page="sdg"] .score-review-status {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent-ink);
+}
+html[data-futureskill-page="sdg"] .goal-score-line { color: var(--fs-ink-soft); }
+html[data-futureskill-page="sdg"] .goal-info-link { margin-right: 14px; }
 html[data-futureskill-page="sdg"] .skeleton { background: linear-gradient(90deg, var(--fs-raised-alt), var(--fs-surface), var(--fs-raised-alt)); }
 
 /* SDG career combobox · tokenized surfaces, readable statuses, and resilient wrapping. */

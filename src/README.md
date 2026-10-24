@@ -59,7 +59,7 @@ files out of Git. Use a separate writable data directory for testing.
 
 - `/ai-trend` displays ten qualitative category scenarios. The upstream data cites the World Economic Forum Future of Jobs Report 2025 without page-level citations; the page labels the scenario data as unvalidated.
 - `/uncertainty` runs the upstream hand-set scenario formula. Its starting value and coefficients are illustrative assumptions, not labor-market forecasts.
-- `/sdg-impact` shows limited potential alignments to UN SDG targets 4.4 and 8.5 for five explicitly mapped reskilling pathways. The role skills and practice activities come from FutureSkill's illustrative catalogue; unsupported roles remain unreviewed, and no employment or measured SDG impact is claimed.
+- `/sdg-impact` scores **all 17 SDG Goals for each real O*NET occupation** from O*NET 31.0 Task Statements and available linked activities (no job-group SDG 8 default). Goal-level 0–100 thematic-relevance indices use FutureSkill-authored phrase/lexical rules and available task metadata. Clicking a Goal reveals exact contributing Task IDs and source links. The top three are exploratory rankings; narrow task-to-Target rule candidates and the separate learning-preparation examples remain distinct. None is human-reviewed or evidence of measured SDG outcomes, probability, or UN certification. Export 15,691 career × Goal rows using `python scripts/export_923_task_goal_rankings.py`. See `docs/sdg-923-rule-based.md` for the formula and limitations.
 - All three are linked from the homepage under **Explore More Features**. No RunPod model or external API key is required for these prototype pages.
 
 ## Technical layout
@@ -87,6 +87,7 @@ src/
 
 - The original career matching formula and 42 questions are unchanged.
 - The existing 6 skill self-reports are broad skills **not** the occupational competencies used for each pathway. Pathway users are asked to self-rate specific skills; we do not falsely equate interest scores with mastery.
+- Reskilling per-skill progress bars count completed learning-task hours toward estimated practice milestones. They preserve self-ratings, example targets, calculated gaps and XP; they are not proficiency assessments.
 - Career selection and assessment context used by the career workspace are browser-session context; browsing a role does not overwrite a saved pathway.
 - Sample skill demands, scheduling time estimates and learning resources are a **rule-based prototype**, not trained AI or verified forecasts.
 - This demo uses an anonymous signed browser cookie, not a real account. Clear cookies and you may lose access to earlier tasks. Photos and SQLite remain locally under `instance/`.

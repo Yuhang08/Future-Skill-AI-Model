@@ -30,7 +30,7 @@
       input.value = item.title;
       input.removeAttribute("aria-invalid");
       submit.disabled = false;
-      status.textContent = `${item.title} · ${item.kind === "occupation" ? `O*NET ${item.id}` : "FutureSkill prototype role"} · ${item.mapping_availability === "curated" ? "Curated mapping available" : "Not yet reviewed"}.`;
+      status.textContent = `${item.title} · ${item.kind === "occupation" ? `O*NET ${item.id}` : "FutureSkill prototype role"} · ${"Occupation SDG suggestions (unverified)"}.`;
       onSelect?.(item);
       input.focus();
     }
@@ -57,7 +57,7 @@
         title.textContent = item.title;
         const label = document.createElement("span");
         label.className = "career-option-status";
-        label.textContent = item.mapping_availability === "curated" ? "Curated mapping available" : "Not yet reviewed";
+        label.textContent = "Unverified career themes";
         option.append(title, label);
         option.addEventListener("pointerdown", event => event.preventDefault());
         option.addEventListener("click", () => choose(item));
@@ -83,7 +83,7 @@
         if (!Array.isArray(results) || results.length > 12 || results.some(item =>
           !item || typeof item.id !== "string" || typeof item.title !== "string" ||
           !["occupation", "prototype"].includes(item.kind) ||
-          !["curated", "not_reviewed"].includes(item.mapping_availability))) {
+          !["curated", "suggested"].includes(item.mapping_availability))) {
           throw new Error("Career search returned an invalid response.");
         }
         if (!results.length) announce("No matching careers. Try another search.");
