@@ -1,3 +1,114 @@
+# Task-to-SDG Relevance Ranking v5 — all 923 O*NET occupations
+
+## What changed, in response to the "398 unmapped occupations" request?
+
+Rather than forcing the 398 occupations into arbitrary SDG categories or
+showing an empty mindmap, FutureSkill now **scores every real occupational Task
+Statement against each of the 17 SDG GOALS**. Each occupation has a **Top 3
+exploratory ranking** plus a score for all 17 goals, with underlying original
+O*NET Task IDs and text. The previous stricter UN *Target*-level rules still
+exist separately, and are NOT promoted or fabricated by the new ranking.
+
+This is not a UN-approved occupation-to-SDG mapping and does NOT measure
+actual SDG achievement, outcomes, job creation, equality, or success.
+
+## Auditable formula (domain-specific prototype, not trained ML)
+
+For a specific O*NET Task `t` and SDG Goal `g`:
+
+```
+TextSignal(t,g) =
+    1.00 × min(2, direct task-phrase hits)
+  + 0.42 × min(2, officially linked DWA phrase hits)
+  + 0.45 × bounded word/character lexical overlap
+
+TaskWeight(t) =
+    1.00 if O*NET Task Type is Core else 0.70
+  × (0.70 + 0.30 × importance/5)
+  × (0.80 + 0.20 × relevance/100)
+
+TaskGoalEvidence(t,g) = TextSignal(t,g) × TaskWeight(t)
+
+CareerRaw(g) =
+    mean of the three highest TaskGoalEvidence scores
+  + 0.035 × ln(1 + number of task scores >= 0.08)
+
+GoalRelevanceIndex(g) = 100 × CareerRaw(g) / (1.50 + CareerRaw(g))
+```
+
+Note: The displayed implementation applies the Core factor to the two
+occupational rating factors; when source importance/relevance are missing,
+neutral assumptions (0.6, 0.7) are used *for ordering only*, not represented
+as observed O*NET ratings. Neither ratings nor displayed relevance index
+should ever be called a probability of sustainable impact. Phrase banks and
+weights are **FutureSkill's authored modelling assumptions** and subject to
+human semantic review.
+
+This is a **goal-level similarity rank**, NOT a certified correspondence to
+any of the 169 specific UN SDG Targets. It can give low but nonzero scores
+from weak lexical overlap, and top three results are provided even for jobs
+whose real tasks have no distinctive SDG terminology. Such cases are marked
+`weak_exploratory_ranking`, not verified alignment.
+
+## UI and API
+
+- `POST /api/sdg/mindmap` with body `{"career_id": "17-2199.11"}` returns:
+  `goal_scores`: 17 entries (rank, 0–100 relevance index, evidence basis,
+  Task IDs/text/individual task contributions);
+  `top_goal_scores`: first three entries;
+  `goal_scoring_method`: transparent limitations.
+- The `/sdg-impact` webpage displays top 3 scored goals and all 17 bars.
+  Clicking **any** Goal reveals its official task evidence.
+- Previous `mappings` are still the narrow rule-based **Target** hypotheses
+  (solid connections); previous `candidate_mappings` remain for other
+  consumers but are hidden from the primary task-score graph.
+- `get_sdg_alignment_by_id(..., include_goal_scores=True)` activates ranking
+  explicitly. Default false preserves existing audits and assessment
+  integrations. Non-O*NET prototype names do not invent job tasks.
+
+## Run on user's existing repository in PyCharm / PowerShell
+
+```powershell
+git switch feature/all-923-career-sdg-mapping
+git pull --ff-only origin feature/all-923-career-sdg-mapping
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests -p "test_sdg_task_goal*.py" -v
+python -m unittest discover -s tests -p "test_sdg_careers.py" -v
+python scripts/export_923_task_goal_rankings.py
+python -m uvicorn main:app --app-dir src --reload --port 5000
+```
+
+Inspect `http://127.0.0.1:5000/sdg-impact` and test a solar engineer,
+water/wastewater operator, an elementary school teacher, a generic manager
+and a less-easily classified role. Ranking must use **real occupational
+tasks**, not a SOC 11 → 8 fallback.
+
+The export `reports/sdg_task_goal_rankings_923.csv` includes exactly
+**923 × 17 = 15,691 rows**, with source Task IDs, Goal-level relevance
+indices and explicit evidence labels. This job may be CPU-intensive because
+it scores every task across the complete catalogue; it never downloads or
+fabricates occupational records.
+
+## Limitations / sources
+
+- O*NET Task Statements/DWA/Task Ratings are **U.S. occupational data**,
+  and are not themselves Malaysia-specific nor SDG impact indicators.
+- UN Goal texts: https://sdgs.un.org/goals
+- O*NET 31.0 Task Statements:
+  https://www.onetcenter.org/dictionary/31.0/csv/task_statements.html
+- O*NET 31.0 Tasks-to-DWAs:
+  https://www.onetcenter.org/dictionary/31.0/csv/tasks_to_dwas.html
+- O*NET 31.0 Task Ratings:
+  https://www.onetcenter.org/dictionary/31.0/csv/task_ratings.html
+- Attribution: O*NET 31.0 Database, USDOL/ETA, CC BY 4.0.
+- Scores have **not** been empirically calibrated. To claim real precision,
+  create a human-labeled benchmark across low- and high-scoring occupations,
+  validate precision@3, false positives and missed goals, then revise the
+  algorithm transparently. 100% ranking coverage does **not** imply
+  100% correct mappings.
+
+---
+
 ## Fix: remove unsupported broad SOC suggestions in the latest five-role check
 
 The user confirmed the **strict** corrections worked: Embalmers have no SDG,
