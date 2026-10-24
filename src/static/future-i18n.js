@@ -43,7 +43,7 @@
   }
   async function loadPack(code) {
     if (loaded.has(code)) return loaded.get(code);
-    const pending = fetch(`/static/locales/${code}.json`, { credentials: "same-origin" })
+    const pending = fetch(`/static/locales/${code}.json?v=20261024-nav-fix`, { credentials: "same-origin", cache: "no-store" })
       .then(response => {
         if (!response.ok) throw new Error("Language pack unavailable");
         return response.json();

@@ -1,4 +1,34 @@
 /* FutureSkill AI: zero-library frontend for the Python stdlib backend. */
+const CAREER_TRANSLATION_ENDPOINT = '/static/i18n/data-terms.json';
+let careerDisplayTerms = {};
+function localizedCareer(name) {
+  const lang = localStorage.getItem('futureskill_language') || 'en';
+  return careerDisplayTerms[lang]?.[name] || name;
+}
+function relabelCareerOptions() {
+  const select = $('targetCareer');
+  if (!select) return;
+  for (const option of select.options) {
+    option.textContent = localizedCareer(option.value);
+  }
+  const workspace = $('workspaceTarget');
+  if (workspace && appState?.profile?.target_career) {
+    workspace.textContent = localizedCareer(appState.profile.target_career);
+  }
+}
+async function loadCareerDisplayTerms() {
+  try {
+    const response = await fetch(CAREER_TRANSLATION_ENDPOINT);
+    if (response.ok) careerDisplayTerms = await response.json();
+  } catch (error) { console.warn('Career translations unavailable', error); }
+  relabelCareerOptions();
+}
+document.addEventListener('change', (event) => {
+  if (event.target?.matches('#reskilling-language-select')) {
+    setTimeout(relabelCareerOptions, 0);
+  }
+});
+
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const $ = (id) => document.getElementById(id);
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (s) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
@@ -745,6 +775,7 @@ async function init() {
     targetSelect.innerHTML = Object.entries(response.catalog).map(([name,career])=>
       `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
     showApp(response);
+    loadCareerDisplayTerms();
     showCareerBridge(response, pageParams.get('career'));
     openInventoryScreen(pageParams.get('screen'));
     if (pageParams.get('editProfile') === '1') openLearningProfile();
