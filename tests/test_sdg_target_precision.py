@@ -5,6 +5,7 @@ official O*NET Task Statements dataset contains these exact sentences.
 These tests prevent recurring false positives; they do not measure empirical
 accuracy of all 923 occupation-to-SDG suggestions.
 """
+import ast
 import csv
 import re
 import tempfile
@@ -26,6 +27,26 @@ def matches(target, code, sentence, task_type="Core"):
 
 
 class SDGTargetPrecisionTests(unittest.TestCase):
+    def test_no_duplicate_keys_in_sdg_target_rules(self):
+        # A duplicate dictionary key is accepted by Python, but the second
+        # value silently replaces the first (the cause of the 12.5 bug).
+        import reskilling.sdg_task_evidence as module
+        tree = ast.parse(Path(module.__file__).read_text(encoding="utf-8"))
+        variables = (
+            stmt.value for stmt in tree.body
+            if isinstance(stmt, ast.Assign)
+            and any(isinstance(name, ast.Name) and name.id == "TARGET_RULES"
+                    for name in stmt.targets)
+        )
+        definitions = next(variables)
+        self.assertIsInstance(definitions, ast.Tuple)
+        for rule in definitions.elts:
+            self.assertIsInstance(rule, ast.Dict)
+            keys = [key.value for key in rule.keys
+                    if isinstance(key, ast.Constant) and isinstance(key.value, str)]
+            self.assertEqual(len(keys), len(set(keys)),
+                             "Duplicate key in an SDG Target rule: " + repr(keys))
+
     def test_target_1_3_social_protection_not_bank_loans(self):
         self.assertFalse(matches(
             "1.3", "13-2072.00",
