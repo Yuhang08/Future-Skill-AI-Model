@@ -155,7 +155,7 @@ def search_sdg_careers(query="", limit=12):
     normalized = _normalize_name(query)
     records = get_sdg_careers()
     aliases = _career_aliases()
-    curated_ids = set(ROLE_BY_ID)
+    pathway_ids = set(ROLE_BY_ID)
 
     def result(career_id, matched_by):
         career = records[career_id]
@@ -163,7 +163,7 @@ def search_sdg_careers(query="", limit=12):
             "id": career_id,
             "title": career["title"],
             "kind": career["kind"],
-            "mapping_availability": "curated" if career_id in curated_ids else "suggested",
+            "mapping_availability": "suggested",
             "matched_by": matched_by,
         }
 
@@ -198,7 +198,7 @@ def search_sdg_careers(query="", limit=12):
     featured = sorted(
         records,
         key=lambda career_id: (
-            career_id not in curated_ids,
+            career_id not in pathway_ids,
             records[career_id]["title"].casefold(),
         ),
     )
@@ -244,6 +244,7 @@ def _unknown_alignment(title):
         "pathway_career": None,
         "status": "unknown",
         "mappings": [],
+        "learning_pathway_mappings": [],
         "pathway_skills": [],
         "evidence_scope": "This title is not in the supported career catalogue.",
     }
@@ -261,6 +262,7 @@ def _build_alignment(career_id, current_skills=None):
             "pathway_career": None,
             "status": "suggested",
             "mappings": infer_occupation_sdg_mappings(career_id, career["title"]),
+            "learning_pathway_mappings": [],
             "pathway_skills": [],
             "evidence_scope": (
                 "These are rule-based thematic suggestions from the occupation "
@@ -281,7 +283,7 @@ def _build_alignment(career_id, current_skills=None):
         )
         evidence.append(f"Practice activity: {skill['project']}.")
 
-    mappings = []
+    learning_mappings = []
     for target_id in ("4.4", "8.5"):
         target = TARGETS[target_id]
         if target_id == "4.4":
@@ -296,7 +298,7 @@ def _build_alignment(career_id, current_skills=None):
                 "with a potential occupation. This is a preparation link to Target 8.5, "
                 "not evidence that the learner will obtain decent work."
             )
-        mappings.append({
+        learning_mappings.append({
             "sdg_id": target["sdg_id"],
             "sdg_name": target["sdg_name"],
             "target_id": target["target_id"],
@@ -328,22 +330,23 @@ def _build_alignment(career_id, current_skills=None):
             "impact_limitations": REVIEWED_SCOPE,
         })
 
-    # Keep the five reviewed *preparation* pathways unchanged, while adding
-    # clearly distinct occupational-theme suggestions for specialist roles.
-    # Never replace a curated target mapping or duplicate its goal icon.
-    reviewed_goal_ids = {item["sdg_id"] for item in mappings}
-    mappings.extend(
-        mapping for mapping in infer_occupation_sdg_mappings(career_id, career["title"])
-        if mapping["sdg_id"] not in reviewed_goal_ids
-    )
+    # Education / job-readiness links belong to the *learning product*, not
+    # to an occupation's direct social/environmental contribution. Do not
+    # highlight Goals 4/8 on the OCCUPATION mind map for this reason.
+    occupation_mappings = infer_occupation_sdg_mappings(career_id, career["title"])
     return {
         "career": career["title"],
         "career_id": career_id,
         "pathway_career": career_name,
-        "status": "curated",
-        "mappings": mappings,
+        "status": "suggested" if occupation_mappings else "not_reviewed",
+        "mappings": occupation_mappings,
+        "learning_pathway_mappings": learning_mappings,
         "pathway_skills": skills,
-        "evidence_scope": REVIEWED_SCOPE,
+        "evidence_scope": (
+            "Occupation mappings are unverified, rule-based themes only. "
+            "Learning-pathway Target 4.4 / 8.5 links describe the FutureSkill "
+            "learning product, not an occupation's SDG contribution."
+        ),
     }
 
 
